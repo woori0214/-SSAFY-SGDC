@@ -1,7 +1,7 @@
 <template>
-  <div>
-    
-  </div>
+    <div>
+        <h1>마이페이지 수정</h1>
+    </div>
 </template>
 
 <script setup>
