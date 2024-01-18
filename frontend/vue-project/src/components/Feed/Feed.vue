@@ -1,7 +1,11 @@
 <template>
   <div class="feed_frame">
     <div class="feed_profile">
-      <div class="feed_user_name">{{ userName }}</div>
+      <div class="user_profile">
+        <img :src="feedImage" class="feed_profile_image" />
+        <img :src="feedImage" class="feed_profile_badge" />
+        <div class="feed_user_name">{{ userName }}</div>
+      </div>
       <button>신고하기</button>
     </div>
     <div class="feed_content">{{ content }}</div>
@@ -54,10 +58,24 @@ export default {
 .feed_frame {
   /* border: 2px solid skyblue; */
 }
-.feed_profile{
-    /* border: 2px solid skyblue; */
+.feed_profile {
+  /* border: 2px solid skyblue; */
+  display: flex;
+  justify-content: space-between;
+}
+.user_profile{
     display: flex;
-    justify-content: space-between;
+    gap: 10px;
+}
+.feed_profile_image {
+  border: 2px solid gray;
+  border-radius: 100%;
+  width: 50px;
+  height: 50px;
+}
+.feed_profile_badge {
+  width: 50px;
+  height: 50px;
 }
 .feed_user_name {
   /* border: 2px solid purple; */

@@ -193,7 +193,7 @@ const feeds = ref([
 .feed_container {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: 50px;
   margin: 20px;
 }
 </style>
