@@ -1,6 +1,11 @@
 <template>
     <div class="feed_board">
-        <h1>알려드립니다</h1>
+        <div class="more_feed">
+            <h1>알려드립니다</h1>
+            <div>
+                <button @click="more_feed">+더보기</button>
+            </div>
+        </div>
         <div class="feed_list">
             <div v-for="feed_item in feedlist" :key="feed_item.id" class="feed_item">
                 <p class="context">{{ feed_item.context }}</p>
@@ -11,6 +16,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
 
 const feedlist = ref([
     { id: 1, context: '파이어스톤 님이 기상챌린지 를 성공하셨습니다.' },
@@ -25,10 +33,19 @@ const feedlist = ref([
     { id: 10, context: '파이어스톤 님이 운동챌린지 를 성공하셨습니다.' },
 ]);
 
+const more_feed = () => {
+    router.push({ name: 'Feed'})
+}
 
 </script>
 
 <style scoped>
+.more_feed {
+    border: 1px rgb(193, 49, 90) solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 .feed_board {
     border: 2px blue solid;
 }

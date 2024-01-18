@@ -36,7 +36,7 @@ const compet = () => {
     flex-grow: 1;
     margin: 0 3px;
     padding: 10px 0;
-    height: 100px;
+    height: 50px;
     color: #fff;
     border-radius: 5px;
     cursor: pointer;

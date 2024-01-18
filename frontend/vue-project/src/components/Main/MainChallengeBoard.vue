@@ -26,13 +26,13 @@
                                 <div class="player1">
                                     <img :src="item.imageUrl1" alt="...">
                                     <p>{{ item.name1 }}</p>
-                                    <button>{{ item.challenge_status }}</button>
+                                    <button>{{ item.challenge_status1 }}</button>
                                 </div>
                                 <h1>vs</h1>
                                 <div class="player2">
                                     <img :src="item.imageUrl2" alt="...">
                                     <p>{{ item.name2 }}</p>
-                                    <button>{{ item.challenge_status }}</button>
+                                    <button>{{ item.challenge_status2 }}</button>
                                 </div>
                             </div>
                             <div class="carousel-item">
@@ -83,12 +83,12 @@ export default {
 
         const items = ref([
             {
-                index: 1, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status: '진행중',
-                name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status: '인증 완료',
+                index: 1, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+                name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status2: '인증 완료',
             },
             {
-                index: 2, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status: '진행중',
-                name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status: '진행중',
+                index: 2, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+                name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status2: '진행중',
             },
         ]);
 
