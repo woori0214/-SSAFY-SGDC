@@ -12,23 +12,24 @@
     </div>
 
     <div id="matching_btn_list">
-      <!-- <button id="matching_btn">랜덤 매치</button>
+      <button id="matching_btn" @click="randomMatching()">랜덤 매치</button>
       <div class="matching_btn_gap"></div>
-      <button id="matching_btn">친구와 매치</button> -->
+      <button id="matching_btn" @click="friendMatching()">친구와 매치</button>
 
-      <router-link :to="{ name: 'Main' }" class="matching_btn router-link-button">
+      <!-- <router-link :to="{ name: 'Main' }" class="matching_btn router-link-button">
         랜덤 매치
       </router-link>
       <div class="matching_btn_gap"></div>
       <router-link :to="{ name: 'Main' }" class="matching_btn router-link-button">
         친구와 매치
-      </router-link>
+      </router-link> -->
     </div>
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const MyCategories = ref([
   "식단",
@@ -38,6 +39,19 @@ const MyCategories = ref([
   "절제",
   "운동",
 ]);
+
+const router = useRouter();
+const randomMatching = () => {
+    router.push({
+        path:"/",
+    });
+};
+const friendMatching = () => {
+    router.push({
+        path:"/",
+    });
+};
+
 </script>
 
 <style scoped>
