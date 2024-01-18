@@ -1,46 +1,99 @@
 <template>
-    <div id="main-box">
-        <div>매칭 시작하기</div>
-        <div>
-            <button id="categori-btn" v-for="categori in MyCategories" :key="categori">
-                    {{ categori }}
-             </button>
-        </div>
-
-        <div id="matching-btn-list">
-            <button id="matching-btn">랜덤 매치</button>
-            <button id="matching-btn">친구와 매치</button>
-        </div>
+  <div id="main_box">
+    <div>매칭 시작하기</div>
+    <div class="categori_list">
+      <button
+        id="categori_btn"
+        v-for="categori in MyCategories"
+        :key="categori"
+      >
+        {{ categori }}
+      </button>
     </div>
+
+    <div id="matching_btn_list">
+      <!-- <button id="matching_btn">랜덤 매치</button>
+      <div class="matching_btn_gap"></div>
+      <button id="matching_btn">친구와 매치</button> -->
+
+      <router-link :to="{ name: 'Main' }" class="matching_btn router-link-button">
+        랜덤 매치
+      </router-link>
+      <div class="matching_btn_gap"></div>
+      <router-link :to="{ name: 'Main' }" class="matching_btn router-link-button">
+        친구와 매치
+      </router-link>
+    </div>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 
-const MyCategories = ref(["식단", "스터디", "알고리즘", "기상", "절제", "운동"]);
+const MyCategories = ref([
+  "식단",
+  "스터디",
+  "알고리즘",
+  "기상",
+  "절제",
+  "운동",
+]);
 </script>
 
 <style scoped>
-#main-box{
-    border: 2px solid greenyellow;
-    width: 95%;
-    
-    margin: auto;
+#main_box {
+  border: 2px solid greenyellow;
+  width: 95%;
+
+  display: flex;
+  flex-direction: column;
+
+  margin: auto;
 }
 
-#categori-btn{
-    margin-left: 8px;
+.categori_list {
+  /* border: 2px solid purple; */
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 10px;
+  margin-bottom: 10px;
 }
 
-#matching-btn-list{
-    border: 2px solid orange;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
+#categori_btn {
+  flex: 1;
 }
 
-#matching-btn{
-    width: fit-content;
-    height: 50px;
+#matching_btn_list {
+  border: 2px solid orange;
+  display: flex;
+  justify-content: center;
+}
+
+#matching_btn {
+  width: fit-content;
+  height: 50px;
+  flex: 13;
+}
+
+.matching_btn_gap {
+  flex: 2;
+}
+
+
+
+.router-link-button {
+  display: inline-block;
+  padding: 10px 15px;
+  background-color: #3498db;
+  color: #fff;
+  text-decoration: none;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.router-link-button:hover {
+  background-color: #2980b9;
 }
 </style>
