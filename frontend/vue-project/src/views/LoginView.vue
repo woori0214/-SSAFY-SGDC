@@ -56,8 +56,6 @@ form {
     max-width: 300px;
     margin: auto;
 }
-
-</style>
 label {
     display: block;
     margin-bottom: 8px;
