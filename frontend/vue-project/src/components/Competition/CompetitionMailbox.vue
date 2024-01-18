@@ -1,46 +1,197 @@
 <template>
-    <div id="main-box">
-        <div>매칭 시작하기</div>
-        <div>
-            <button id="categori-btn" v-for="categori in MyCategories" :key="categori">
-                    {{ categori }}
-             </button>
-        </div>
-
-        <div id="matching-btn-list">
-            <button id="matching-btn">랜덤 매치</button>
-            <button id="matching-btn">친구와 매치</button>
-        </div>
+  <div class="main_box">
+    <div>받은 도전장함  [ {{ mail_parameters.length }} / 20 ]</div>
+    <div class="mail_box">
+      <CompetitionMail
+        v-for="(item, index) in mail_parameters"
+        :key="index"
+        :mail_text="item.sender_name"
+        :mail_remain_time="item.remaind_time"
+      ></CompetitionMail>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
+import CompetitionMail from "./CompetitionMailboxItem.vue";
 
-const MyCategories = ref(["식단", "스터디", "알고리즘", "기상", "절제", "운동"]);
+const mail_parameters = ref([
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+  {
+    sender_name: "김태범",
+    remaind_time: "[12:40]",
+  },
+  {
+    sender_name: "오화석",
+    remaind_time: "[01:31]",
+  },
+  {
+    sender_name: "홍지은",
+    remaind_time: "[02:43]",
+  },
+  {
+    sender_name: "박현춘",
+    remaind_time: "[01:23]",
+  },
+]);
 </script>
 
 <style scoped>
-#main-box{
-    border: 2px solid greenyellow;
-    width: 95%;
-    
-    margin: auto;
+.main_box {
+  border: 2px solid blue;
+  width: 95%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
-
-#categori-btn{
-    margin-left: 8px;
-}
-
-#matching-btn-list{
-    border: 2px solid orange;
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-#matching-btn{
-    width: fit-content;
-    height: 50px;
+.mail_box {
+  border: 2px solid skyblue;
+  flex: 1;
+  overflow: auto;
 }
 </style>
