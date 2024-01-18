@@ -1,6 +1,5 @@
 <template>
     <div>
-        <h1>모드 버튼</h1>
         <button>솔로 모드</button> 
         <button>경쟁 모드</button> 
     </div>
