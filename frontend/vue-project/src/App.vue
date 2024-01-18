@@ -28,7 +28,6 @@ import { RouterLink, RouterView } from "vue-router";
   border: 2px solid gainsboro;
 
   max-width: 1000px;
-  height: 95vh;
   margin: auto;
 
   display: flex;
