@@ -1,11 +1,9 @@
 <template>
-    <div>
-        <h1>메인페이지</h1>
+    <div class="main_view">
         <MainFeedList />
         <MainChallengeBoard />
         <MainRanking />
         <MainModeButton />
-
     </div>
 </template>
 
@@ -19,5 +17,17 @@ import MainModeButton from '@/components/Main/MainModeButton.vue';
 </script>
 
 <style scoped>
+.main_view {
+    border: 2px solid red;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.main_view2 {
+    border: 2px solid rgb(106, 238, 130);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 </style>
