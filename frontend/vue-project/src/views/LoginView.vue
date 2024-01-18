@@ -57,7 +57,6 @@ form {
     margin: auto;
 }
 
-</style>
 label {
     display: block;
     margin-bottom: 8px;
