@@ -40,6 +40,8 @@ a {
   padding-inline: 10px;
 }
 nav {
+  display: flex;
   margin-top: 10px;
+  flex-wrap: wrap;
 }
 </style>
