@@ -62,9 +62,9 @@ import { ref } from 'vue';
 import { useSignupStore } from "@/stores/signup";
 
 
-const signUp = useSignupStore();
 export default {
     setup() {
+        const signUp = useSignupStore();
         const id = ref('');
         const email = ref('');
         const password = ref('');
@@ -84,7 +84,7 @@ export default {
                 .then(() => {
                     console.log('인증 완료');
                     submitted.value = true;
-                    c
+                    
                 })
                 .catch(() => {
                     console.log('싸피생이 아닙니다')

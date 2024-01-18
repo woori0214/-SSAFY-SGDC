@@ -4,6 +4,8 @@
         <MainFeedList />
         <MainChallengeBoard />
         <MainRanking />
+        <MainModeButton />
+
     </div>
 </template>
 
@@ -11,6 +13,7 @@
 import MainChallengeBoard from '@/components/Main/MainChallengeBoard.vue';
 import MainFeedList from '@/components/Main/MainFeedList.vue';
 import MainRanking from '@/components/Main/MainRanking.vue';
+import MainModeButton from '@/components/Main/MainModeButton.vue';
 
 
 </script>
