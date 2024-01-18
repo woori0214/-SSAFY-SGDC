@@ -191,7 +191,7 @@ const mail_parameters = ref([
 }
 .mail_box {
   border: 2px solid skyblue;
-  flex: 1;
+  max-height: 400px;
   overflow: auto;
 }
 </style>
