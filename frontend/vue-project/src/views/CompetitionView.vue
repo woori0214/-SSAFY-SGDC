@@ -1,31 +1,32 @@
 <template>
-    <div class="view_body">
-        <h1>경쟁모드</h1>
-        <CompetitionSelect class="select_body"></CompetitionSelect>
-        <CompetitionMailbox class="mail_box_body"></CompetitionMailbox>
+  <div class="view_body">
+    <h1>경쟁모드</h1>
+    <div class="select_body">
+      <CompetitionSelect></CompetitionSelect>
     </div>
+    <div class="mail_box_body">
+      <CompetitionMailbox></CompetitionMailbox>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import CompetitionMailbox from '@/components/Competition/CompetitionMailbox.vue';
-import CompetitionSelect from '@/components/Competition/CompetitionSelect.vue';
+import CompetitionMailbox from "@/components/Competition/CompetitionMailbox.vue";
+import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 </script>
 
 <style scoped>
-.view_body{
-    border: 2px solid red;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    height: 700px;
+.view_body {
+  border: 2px solid red;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-.select_body{
-    border: 2px solid rgb(32, 29, 255);
-    flex: 1 1 auto;
+.select_body {
+  border: 2px solid rgb(32, 29, 255);
 }
-.mail_box_body{
-    border: 2px solid pink;
-    flex: 1 1 auto;
-    /* height: 550px; */
+.mail_box_body {
+  border: 2px solid pink;
+  max-height: 520px;
 }
 </style>

@@ -93,21 +93,4 @@ const friendMatching = () => {
 .matching_btn_gap {
   flex: 2;
 }
-
-
-
-.router-link-button {
-  display: inline-block;
-  padding: 10px 15px;
-  background-color: #3498db;
-  color: #fff;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.router-link-button:hover {
-  background-color: #2980b9;
-}
 </style>
