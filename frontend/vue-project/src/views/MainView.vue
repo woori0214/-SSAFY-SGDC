@@ -22,6 +22,9 @@ import MainModeButton from '@/components/Main/MainModeButton.vue';
     display: flex;
     flex-direction: column;
     gap: 10px;
+
+    /* test ccs */
+    padding-bottom: 60px;
 }
 
 .main_view2 {
