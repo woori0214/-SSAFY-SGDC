@@ -9,7 +9,9 @@
       <button>신고하기</button>
     </div>
     <div class="feed_content">{{ content }}</div>
-    <div class="feed_image_frame" @click="routeDetailFeed()">
+    <div class="feed_image_frame" @click="routeDetailFeed(
+
+    )">
       <img :src="feedImage" class="feed_image" />
     </div>
     <div class="feed_footbar">
@@ -21,7 +23,7 @@
 
 <script>
 export default {
-  name: "feed-item",
+  name: "feed_item",
   props: {
     userName: {
       type: String,
@@ -33,21 +35,28 @@ export default {
     },
     feedImage: {
       type: String,
-      default: "@/FeedImage/search_mushimegane.png",
+      default: "/src/components/Feed/FeedImage/no_image_logo.png",
     },
     heartCnt: {
-      type: Number,
+      type: String,
       default: "heartCnt",
     },
     viewCnt: {
-      type: Number,
+      type: String,
       default: "viewCnt",
     },
   },
   methods: {
     routeDetailFeed() {
       this.$router.push({
-        path: "/",
+        name: "FeedDetail",
+        params: {
+          userName_d: this.userName,
+          content_d: this.content,
+          feedImage_d: this.feedImage,
+          heartCnt_d: this.heartCnt,
+          viewCnt_d: this.viewCnt,
+        }
       });
     },
   },
