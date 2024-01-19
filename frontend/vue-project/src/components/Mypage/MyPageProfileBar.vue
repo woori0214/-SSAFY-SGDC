@@ -85,9 +85,10 @@ const user = {
     margin: 2px;
 }
 
-.friend_btn{
+.friend_btn {
     margin: 10px;
 }
+
 .user_img_badge {
     display: flex;
     align-items: center;
@@ -115,5 +116,33 @@ const user = {
 
 .follow_div {
     margin: 0 50px;
+}
+
+@media (max-width: 768px) {
+    .top {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .complain_img {
+        width: 20px;
+        height: 20px;
+        margin: 2px;
+    }
+
+    .middle {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .user_img {
+        width: 100px;
+        height: 100px;
+        margin: 10px;
+    }
+
+    .follow_cnt {
+        margin: 10px;
+    }
 }
 </style>

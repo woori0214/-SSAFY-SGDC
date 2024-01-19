@@ -4,9 +4,6 @@
         <div class="profile_body"> 
             <MyPageProfileBar />
         </div>
-        <div class="mycategory_body">
-            <MyPageCategory />
-        </div>
         <div class="compet_body">
             <MyPageCompetitionRecord />
         </div>
@@ -31,7 +28,6 @@
 <script setup>
 import MyPageAnalysis from '@/components/Mypage/MyPageAnalysis.vue';
 import MyPageBadgeList from '@/components/Mypage/MyPageBadgeList.vue';
-import MyPageCategory from '@/components/Mypage/MyPageCategory.vue';
 import MyPageChallengeBoard from '@/components/Mypage/MyPageChallengeBoard.vue';
 import MyPageCompetitionRecord from '@/components/Mypage/MyPageCompetitionRecord.vue';
 import MyPageProfileBar from '@/components/Mypage/MyPageProfileBar.vue';
@@ -51,11 +47,6 @@ import MyPageSsallow from '@/components/Mypage/MyPageSsallow.vue';
 
 .profile_body {
     border: 1px solid rgb(51, 0, 255);
-    
-}
-
-.mycategory_body {
-    border: 1px solid rgb(0, 255, 76);
     
 }
 
