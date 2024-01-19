@@ -9,7 +9,7 @@
                         <canvas ref="myChart" width="150" height="150"></canvas>
                     </div>
                     <div class="categories">
-                        <button v-for="category in categories" :key="category.id" :class="{ 'active': category.isActive }"
+                        <button class="category_btn" v-for="category in categories" :key="category.id" :class="{ 'active': category.isActive }"
                             @click="navigateToPage(category)">
                             <p>{{ category.name }}</p>
                         </button>
@@ -24,28 +24,18 @@
                             <!-- Carousel 아이템 -->
                             <div class="carousel-item" v-for="(item, index) in items" :key="index">
                                 <div class="player1">
-                                    <img :src="item.imageUrl1" alt="...">
+                                    <img :src="item.imageUrl1" alt="..." class="player_img">
                                     <p>{{ item.name1 }}</p>
                                     <button>{{ item.challenge_status1 }}</button>
                                 </div>
-                                <h1>vs</h1>
+                                <div>
+                                    <h1>{{ item.category }}</h1>    
+                                    <h1>vs</h1>
+                                </div>
                                 <div class="player2">
-                                    <img :src="item.imageUrl2" alt="...">
+                                    <img :src="item.imageUrl2" alt="..." class="player_img">
                                     <p>{{ item.name2 }}</p>
                                     <button>{{ item.challenge_status2 }}</button>
-                                </div>
-                            </div>
-                            <div class="carousel-item">
-                                <div class="player1">
-                                    <img :src="items[currentIndex].imageUrl1" alt="...">
-                                    <p>{{ items[currentIndex].name1 }}</p>
-                                    <button>{{ items[currentIndex].challenge_status }}</button>
-                                </div>
-                                <h1>vs</h1>
-                                <div class="player2">
-                                    <img :src="items[currentIndex].imageUrl2" alt="...">
-                                    <p>{{ items[currentIndex].name2 }}</p>
-                                    <button>{{ items[currentIndex].challenge_status }}</button>
                                 </div>
                             </div>
                         </div>
@@ -83,11 +73,11 @@ export default {
 
         const items = ref([
             {
-                index: 1, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+                index: 1, category: '기상', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
                 name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status2: '인증 완료',
             },
             {
-                index: 2, name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+                index: 2, category: '알고리즘', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
                 name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status2: '진행중',
             },
         ]);
@@ -216,7 +206,7 @@ export default {
     justify-content: center;
 }
 
-button {
+.category_btn {
     width: 100px;
     height: 50px;
     border-radius: 20px;
@@ -231,9 +221,9 @@ button {
     color: #ababab;
 }
 
-img {
-    width: 50px;
-    height: 50px;
+.player_img {
+    width: 100px;
+    height: 100px;
 }
 
 .carousel-item {
