@@ -45,14 +45,17 @@ const more_feed = () => {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 10px;
 }
 .feed_board {
     border: 2px blue solid;
+    padding: 10px;
 }
 
 .feed_list {
     border: 2px rgb(234, 255, 0) solid;
     margin: 5px;
+    padding: 10px;
 }
 
 .feed_item {
@@ -62,6 +65,8 @@ const more_feed = () => {
     border-radius: 30px;
     margin: 10px;
     padding: 10px;
+    flex-direction: column;
+
 }
 
 .feed_content {
@@ -72,5 +77,15 @@ const more_feed = () => {
     margin: 0;
     font-size: 16px;
     color: #333;
+}
+
+@media (max-width: 768px) {
+  .more_feed {
+    flex-direction: column; /* 작은 화면에서 세로로 정렬 */
+  }
+
+  .more_feed button {
+    margin-top: 10px; /* 버튼과 텍스트 사이 간격 추가 */
+  }
 }
 </style>

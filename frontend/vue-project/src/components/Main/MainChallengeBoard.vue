@@ -9,9 +9,9 @@
                         <canvas ref="myChart" width="150" height="150"></canvas>
                     </div>
                     <div class="categories">
-                        <button class="category_btn" v-for="category in categories" :key="category.id" :class="{ 'active': category.isActive }"
-                            @click="navigateToPage(category)">
-                            <p>{{ category.name }}</p>
+                        <button class="category_btn" v-for="category in categories" :key="category.id"
+                            :class="{ 'active': category.isActive }" @click="navigateToPage(category)">
+                            {{ category.name }}
                         </button>
                     </div>
                 </div>
@@ -19,17 +19,17 @@
             <div class="compet">
                 <h2>경쟁 모드 현황</h2>
                 <div class="compet_board">
-                    <div class="carousel-container">
-                        <div class="carousel-slide" :style="slideStyle">
+                    <div class="carousel_container">
+                        <div class="carousel_slide" :style="slideStyle">
                             <!-- Carousel 아이템 -->
-                            <div class="carousel-item" v-for="(item, index) in items" :key="index">
+                            <div class="carousel_item" v-for="(item, index) in items" :key="index">
                                 <div class="player1">
                                     <img :src="item.imageUrl1" alt="..." class="player_img">
                                     <p>{{ item.name1 }}</p>
                                     <button>{{ item.challenge_status1 }}</button>
                                 </div>
                                 <div>
-                                    <h1>{{ item.category }}</h1>    
+                                    <h1>{{ item.category }}</h1>
                                     <h1>vs</h1>
                                 </div>
                                 <div class="player2">
@@ -226,9 +226,11 @@ export default {
     height: 100px;
 }
 
-.carousel-item {
+.carousel_item {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: space-around;
+    text-align: center;
 }
 
 .compet_board {
@@ -237,7 +239,7 @@ export default {
     /* carousel 이 해당 영역을 넘어가지 않도록 */
 }
 
-.carousel-container {
+.carousel_container {
     position: relative;
     overflow: hidden;
     /* 필요에 따라 여기도 추가할 수 있습니다 */
@@ -247,16 +249,44 @@ export default {
     /* 가운데 정렬 */
 }
 
-.carousel-slide {
+.carousel_slide {
     display: flex;
     transition: transform 0.3s ease;
 }
 
-.carousel-item {
+.carousel_item {
     flex: 0 0 auto;
     /* 각 아이템의 너비를 자동으로 설정 */
     width: 100%;
     /* 부모 컨테이너의 100% 너비를 가짐 */
+}
+
+@media (max-width: 768px) {
+    .current_board {
+        flex-direction: column;
+    }
+
+    .solo,
+    .compet {
+        width: 100%;
+    }
+
+    .carousel_item {
+        flex-direction: row;
+        align-items: center;
+        text-align: center;
+    }
+
+    .player1,
+    .player2 {
+        margin-bottom: 10px;
+    }
+
+    .player_img {
+        width: 70px;
+        /* 변경된 부분: 이미지 크기를 작게 조정 */
+        height: 70px;
+    }
 }
 </style>
   

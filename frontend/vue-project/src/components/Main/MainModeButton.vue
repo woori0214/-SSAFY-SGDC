@@ -29,12 +29,12 @@ const compet = () => {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin: auto;
+
 }
 
 .mode_button {
     flex-grow: 1;
-    margin: 0 3px;
+
     padding: 10px 0;
     height: 50px;
     color: #fff;
