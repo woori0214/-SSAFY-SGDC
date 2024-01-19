@@ -365,4 +365,47 @@ export default {
     max-height: 50px;
     margin-top: 5px; /* 이미지와 다른 입력란 간격 조절 */
 }
+
+@media only screen and (max-width: 600px) {
+    .toggle_switch {
+        width: 20px;
+        height: 10px;
+    }
+    
+    .toggle_switch label:after {
+        width: 9px;
+        height: 9px;
+    }
+    
+    .thumbnail {
+        max-width: 30px;
+        max-height: 30px;
+    }
+    
+    h1 {
+        font-size: 1.5em; /* Smaller font size for smaller screens */
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    button {
+        width: 100%; /* Full width on small screens */
+        margin: 0; /* Remove margins */
+        box-sizing: border-box; /* Include padding in width calculation */
+    }
+    
+    .input_error,
+    .success_message,
+    .confirmation_message {
+        font-size: 0.8em; /* Smaller font size for error messages */
+    }
+    
+    /* Adjust padding and margin for smaller screens */
+    div {
+        padding: 5px;
+    }
+}
+
+/* You can add more media queries for different breakpoints */
 </style>
