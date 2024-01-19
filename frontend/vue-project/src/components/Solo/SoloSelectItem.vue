@@ -71,8 +71,7 @@
   <style scoped>
   .category_grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive grid with minimum width of 200px */
     gap: 16px;
   }
   
@@ -106,14 +105,21 @@
     bottom: 10px;
     width: 100%;
     text-align: center;
-    color: black; /* Adjust the color as needed */
+    color: black;
     transform: translateX(-50%);
     left: 50%;
   }
   
   .extra_text {
-    margin-top: 5px; /* Adjust the margin as needed */
-    color: black; /* Adjust the color as needed */
+    margin-top: 5px;
+    color: black;
+  }
+  
+  /* Media query for small screens */
+  @media screen and (max-width: 600px) {
+    .category_grid {
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust as needed */
+    }
   }
   </style>
   
