@@ -3,6 +3,7 @@ import MainView from '@/views/MainView.vue'
 import CompetitionView from '@/views/CompetitionView.vue'
 import SoloView from '@/views/SoloView.vue'
 import FeedView from '@/views/FeedView.vue'
+import FeedDetailView from '@/views/FeedDetailView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPageUpdateView from '@/views/MyPageUpdateView.vue'
 import LoginView from '@/views/LoginView.vue'
@@ -30,6 +31,12 @@ const router = createRouter({
       path: '/feed',
       name: 'Feed',
       component: FeedView,
+    },
+    {
+      path: '/feeddetail',
+      name: 'FeedDetail',
+      component: FeedDetailView,
+      props: true,
     },
     {
       path: '/mypage',

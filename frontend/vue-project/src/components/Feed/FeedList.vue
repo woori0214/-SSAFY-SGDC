@@ -44,8 +44,8 @@ const feeds = ref([
     userName: "김메달",
     // userBadge: "./..",
     content: "[카테고리]를 [12:43]에 성공 하였습니다!",
-    feedImage:
-      "/src/components/Feed/FeedImage/KakaoTalk_20240112_103126424.jpg",
+    // feedImage:
+    //   "/src/components/Feed/FeedImage/KakaoTalk_20240112_103126424.jpg",
     heartCnt: 1520,
     viewCnt: 130,
   },

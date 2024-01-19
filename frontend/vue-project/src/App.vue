@@ -8,6 +8,7 @@
           <RouterLink to="/competition">Competiton</RouterLink>
           <RouterLink to="/solo">Solo</RouterLink>
           <RouterLink to="/feed">Feed</RouterLink>
+          <RouterLink to="/feeddetail">FeedDetail</RouterLink>
           <RouterLink to="/mypage">MyPage</RouterLink>
           <RouterLink to="/login">Login</RouterLink>
           <RouterLink to="/signup">SignUp</RouterLink>
