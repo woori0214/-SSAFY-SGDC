@@ -5,13 +5,14 @@
         <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
       </div>
       <div class="accordion-content" :class="{ 'open': isOpen }">
-        <p>도전 현황</p>
+        <MainChallengeBoard />
       </div>
     </div>
   </template>
   
   <script setup>
   import { ref } from 'vue';
+import MainChallengeBoard from '../Main/MainChallengeBoard.vue';
   
   const isOpen = ref(true);
   

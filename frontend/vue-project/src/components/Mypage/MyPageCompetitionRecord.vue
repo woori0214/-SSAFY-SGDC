@@ -65,7 +65,7 @@ const compet_records = [
     padding: 10px;
     border: 1px solid #ccc;
     border-top: none;
-    overflow: hidden;
+    overflow: auto;
     max-height: 0;
     transition: max-height 0.3s ease;
 }
