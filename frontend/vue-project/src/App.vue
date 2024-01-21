@@ -2,7 +2,10 @@
   <div id="main-body">
     <header>
       <div class="wrapper">
-        <h2>Router For Development</h2>
+        <div class="headbar">
+          <h2>Router For Development</h2>
+          <BackGroundMusic></BackGroundMusic>
+        </div>
         <nav>
           <RouterLink to="/">Main</RouterLink>
           <RouterLink to="/competition">Competiton</RouterLink>
@@ -15,17 +18,18 @@
         </nav>
       </div>
     </header>
-  <br>
+    <br />
     <RouterView />
   </div>
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
+import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
 </script>
 
 <style scoped>
-#main-body{
+#main-body {
   border: 2px solid gainsboro;
 
   max-width: 1000px;
@@ -44,5 +48,10 @@ nav {
   display: flex;
   margin-top: 10px;
   flex-wrap: wrap;
+}
+.headbar {
+  display: flex;
+  flex-flow: wrap;
+  gap: 20px;
 }
 </style>
