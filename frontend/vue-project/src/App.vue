@@ -1,31 +1,34 @@
 <template>
-  <div id="main-body">
-    <header>
-      <div class="wrapper">
-        <div class="headbar">
-          <h2>Router For Development</h2>
-          <BackGroundMusic></BackGroundMusic>
+  <div class="back-ground-img">
+    <div id="main-body">
+      <header>
+        <div class="wrapper">
+          <div class="headbar">
+            <h2>Router For Development</h2>
+            <BackGroundMusic></BackGroundMusic>
+          </div>
+          <nav>
+            <RouterLink to="/">Main</RouterLink>
+            <RouterLink to="/competition">Competiton</RouterLink>
+            <RouterLink to="/solo">Solo</RouterLink>
+            <RouterLink to="/feed">Feed</RouterLink>
+            <RouterLink to="/feeddetail">FeedDetail</RouterLink>
+            <RouterLink to="/mypage">MyPage</RouterLink>
+            <RouterLink to="/login">Login</RouterLink>
+            <RouterLink to="/signup">SignUp</RouterLink>
+          </nav>
         </div>
-        <nav>
-          <RouterLink to="/">Main</RouterLink>
-          <RouterLink to="/competition">Competiton</RouterLink>
-          <RouterLink to="/solo">Solo</RouterLink>
-          <RouterLink to="/feed">Feed</RouterLink>
-          <RouterLink to="/feeddetail">FeedDetail</RouterLink>
-          <RouterLink to="/mypage">MyPage</RouterLink>
-          <RouterLink to="/login">Login</RouterLink>
-          <RouterLink to="/signup">SignUp</RouterLink>
-        </nav>
-      </div>
-    </header>
-    <br />
-    <RouterView />
+      </header>
+      <br />
+      <RouterView />
+    </div>
   </div>
 </template>
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
+import BackGroundImg from "./assets/pixil_background.png";
 </script>
 
 <style scoped>
@@ -38,7 +41,13 @@ import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
   display: flex;
   flex-direction: column;
 }
-
+.back-ground-img {
+  margin: 0;
+  padding: 0;
+  background-image: url("./assets/pixil_background.png");
+  background-size: 600px;
+  background-repeat: repeat-x;
+}
 a {
   border: 1px solid green;
   margin: 5px;
