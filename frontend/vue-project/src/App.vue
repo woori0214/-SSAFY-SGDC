@@ -1,5 +1,7 @@
 <template>
-  <div class="back-ground-img">
+  <div>
+    <div class="back-ground-body">
+    </div>
     <div id="main-body">
       <header>
         <div class="wrapper">
@@ -34,6 +36,8 @@ import BackGroundImg from "./assets/pixil_background.png";
 <style scoped>
 #main-body {
   border: 2px solid gainsboro;
+  /* background-color: rgba(255, 255, 255, 1.0); */
+  z-index: 1;
 
   max-width: 1000px;
   margin: auto;
@@ -41,12 +45,16 @@ import BackGroundImg from "./assets/pixil_background.png";
   display: flex;
   flex-direction: column;
 }
-.back-ground-img {
-  margin: 0;
-  padding: 0;
+.back-ground-body{
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+
   background-image: url("./assets/pixil_background.png");
-  background-size: 600px;
+  background-size: 700px;
   background-repeat: repeat-x;
+  background-position: bottom;
 }
 a {
   border: 1px solid green;
