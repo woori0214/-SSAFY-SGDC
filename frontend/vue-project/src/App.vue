@@ -1,6 +1,12 @@
 <template>
-  <div>
+  <div class="mother-body">
     <div class="back-ground-body">
+      <div class="back-side-item">
+        <img src="./assets/jitensya_kuma.png" alt="" class="bear">
+      </div>
+      <div class="back-side-item">
+        <img src="./assets/pinokio.png" alt="" class="pinokio">
+      </div>
     </div>
     <div id="main-body">
       <header>
@@ -34,16 +40,34 @@ import BackGroundImg from "./assets/pixil_background.png";
 </script>
 
 <style scoped>
+.pinokio{
+  position: fixed;
+  width: 350px;
+  bottom: 100px;
+  right: -30px;
+}
+.bear{
+  position: fixed;
+  width: 200px;
+  bottom: 100px;
+  transform: scaleX(-1);
+}
 #main-body {
-  border: 2px solid gainsboro;
+  /* border: 2px solid gainsboro; */
   /* background-color: rgba(255, 255, 255, 1.0); */
   z-index: 1;
 
   max-width: 1000px;
+  height: calc(100vh - 139px);
   margin: auto;
 
   display: flex;
   flex-direction: column;
+
+  overflow: auto;
+}
+#main-body::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
 .back-ground-body{
   position: fixed;
@@ -51,10 +75,14 @@ import BackGroundImg from "./assets/pixil_background.png";
   height: 100vh;
   z-index: -1;
 
+  background-color: rgb(243, 238, 230);
   background-image: url("./assets/pixil_background.png");
   background-size: 700px;
   background-repeat: repeat-x;
   background-position: bottom;
+
+  display: flex;
+  justify-content: space-between;
 }
 a {
   border: 1px solid green;

@@ -27,9 +27,10 @@ const compet = () => {
     width: 100%;
     max-width: 1000px;
     display: flex;
+    gap: 20px;
     justify-content: space-around;
     align-items: center;
-
+    margin-bottom: 10px;
 }
 
 .mode_button {

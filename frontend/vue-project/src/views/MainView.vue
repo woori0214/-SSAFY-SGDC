@@ -18,7 +18,7 @@ import MainModeButton from '@/components/Main/MainModeButton.vue';
 
 <style scoped>
 .main_view {
-    border: 2px solid red;
+    /* border: 2px solid red; */
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -28,7 +28,7 @@ import MainModeButton from '@/components/Main/MainModeButton.vue';
 }
 
 .main_view2 {
-    border: 2px solid rgb(106, 238, 130);
+    /* border: 2px solid rgb(106, 238, 130); */
     display: flex;
     flex-direction: column;
     gap: 10px;
