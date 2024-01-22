@@ -5,7 +5,9 @@
         <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
       </div>
       <div class="accordion-content" :class="{ 'open': isOpen }">
-        <p>뱃지 리스트</p>
+        <div v-for="badge in badges" :key="badge.name" class="badge_img">
+          <img src="" alt="">
+        </div>
       </div>
     </div>
   </template>
@@ -18,6 +20,10 @@
   const toggleAccordion = () => {
     isOpen.value = !isOpen.value;
   };
+
+  const badges = ref[{
+
+  }]
   </script>
   
   <style scoped>
