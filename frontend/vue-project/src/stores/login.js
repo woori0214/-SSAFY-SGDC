@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 
-export const useLoginStore = defineStore('login', ()=>{
+export const useLoginStore = defineStore('login', () => {
     const URL = 'http://localhost:8080/user/login';
     const isLogin = function (login) {
         console.log('되고있나');
@@ -25,5 +25,6 @@ export const useLoginStore = defineStore('login', ()=>{
 
         );
     }
-    return {isLogin}
+    
+    return { isLogin }
 })

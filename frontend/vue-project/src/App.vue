@@ -2,10 +2,10 @@
   <div class="mother-body">
     <div class="back-ground-body">
       <div class="back-side-item">
-        <img src="./assets/jitensya_kuma.png" alt="" class="bear">
+        <img src="./assets/jitensya_kuma.png" alt="" class="bear" />
       </div>
       <div class="back-side-item">
-        <img src="./assets/pinokio.png" alt="" class="pinokio">
+        <img src="./assets/pinokio.png" alt="" class="pinokio" />
       </div>
     </div>
     <div id="main-body">
@@ -37,16 +37,24 @@
 import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
 import BackGroundImg from "./assets/pixil_background.png";
+import { useUserStorageStore } from "./stores/userStorage";
+
+window.addEventListener("beforeunload", function (event) {
+  const userStorage = useUserStorageStore();
+
+  userStorage.delateAllStorage();
+  this.alert("Good bye~~");
+});
 </script>
 
 <style scoped>
-.pinokio{
+.pinokio {
   position: fixed;
   width: 350px;
   bottom: 100px;
   right: -30px;
 }
-.bear{
+.bear {
   position: fixed;
   width: 200px;
   bottom: 100px;
@@ -67,9 +75,9 @@ import BackGroundImg from "./assets/pixil_background.png";
   overflow: auto;
 }
 #main-body::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
-.back-ground-body{
+.back-ground-body {
   position: fixed;
   width: 100vw;
   height: 100vh;

@@ -69,7 +69,6 @@
                 <input type="checkbox" id="alert_toggle" v-model="isAlert" @input="toggleAlert" />
                 <label for="alert_toggle"></label>
             </div>
-
         </div>
         <button @click="submitForm2" :disabled="hasAnyError">회원가입</button>
     </div>
