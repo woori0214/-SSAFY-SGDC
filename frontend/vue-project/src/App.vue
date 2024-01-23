@@ -3,9 +3,13 @@
     <div class="back-ground-body">
       <div class="back-side-item">
         <img src="./assets/jitensya_kuma.png" alt="" class="bear">
+        <img src="./assets/cloud_side_left.png" alt="" class="cloud_left">
+        <img src="./assets/coster.png" alt="" class="coster">
       </div>
       <div class="back-side-item">
         <img src="./assets/pinokio.png" alt="" class="pinokio">
+        <img src="./assets/cloud_side_right.png" alt="" class="cloud_right">
+        <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel">
       </div>
     </div>
     <div id="main-body">
@@ -36,10 +40,36 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
-import BackGroundImg from "./assets/pixil_background.png";
+import BackGroundImg from "./assets/pixil_background_winter.png";
 </script>
 
 <style scoped>
+.coster{
+  position: fixed;
+  width: 400px;
+  bottom: 132px;
+  left: 0px;
+  z-index: -1;
+}
+.ferris_wheel{
+  position: fixed;
+  width: 400px;
+  bottom: 132px;
+  right: 0px;
+  z-index: -1;
+}
+.cloud_left{
+  position: fixed;
+  width: 350px;
+  top: 0px;
+  left: -20px;
+}
+.cloud_right{
+  position: fixed;
+  width: 350px;
+  top: 0px;
+  right: 0px;
+}
 .pinokio{
   position: fixed;
   width: 350px;
@@ -50,6 +80,7 @@ import BackGroundImg from "./assets/pixil_background.png";
   position: fixed;
   width: 200px;
   bottom: 100px;
+  left: 0px;
   transform: scaleX(-1);
 }
 #main-body {
@@ -76,8 +107,8 @@ import BackGroundImg from "./assets/pixil_background.png";
   z-index: -1;
 
   background-color: rgb(243, 238, 230);
-  background-image: url("./assets/pixil_background.png");
-  background-size: 700px;
+  background-image: url("./assets/pixil_background_winter.png");
+  background-size: 220px;
   background-repeat: repeat-x;
   background-position: bottom;
 
