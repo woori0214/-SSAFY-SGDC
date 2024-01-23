@@ -1,13 +1,13 @@
 <template>
   <div class="mother-body">
     <div class="back-ground-body">
-      <div class="back-side-item">
-        <img src="./assets/jitensya_kuma.png" alt="" class="bear">
+      <div class="back-side-item" v-if="web_width > 1070">
+        <img src="./assets/jitensya_kuma.png" alt="" class="bear" v-if="web_width > 1470">
         <img src="./assets/cloud_side_left.png" alt="" class="cloud_left">
         <img src="./assets/coster.png" alt="" class="coster">
       </div>
-      <div class="back-side-item">
-        <img src="./assets/pinokio.png" alt="" class="pinokio">
+      <div class="back-side-item" v-if="web_width > 1070">
+        <img src="./assets/pinokio.png" alt="" class="pinokio" v-if="web_width > 1470">
         <img src="./assets/cloud_side_right.png" alt="" class="cloud_right">
         <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel">
       </div>
@@ -17,6 +17,7 @@
         <div class="wrapper">
           <div class="headbar">
             <h2>Router For Development</h2>
+            <div>{{ web_width }}</div>
             <BackGroundMusic></BackGroundMusic>
           </div>
           <nav>
@@ -41,6 +42,17 @@
 import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
 import BackGroundImg from "./assets/pixil_background_winter.png";
+import { ref, onMounted } from "vue";
+
+const web_width = ref(window.innerWidth);
+
+const handleWidth = () => {
+  web_width.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleWidth);
+})
 </script>
 
 <style scoped>
