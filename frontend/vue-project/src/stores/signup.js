@@ -90,7 +90,21 @@ export const useSignupStore = defineStore('signup', () => {
     
         );
     }
-    return {isid, isnickname, isssafy, isstudentnum}
+    const submitNewUser = function(NewUser){
+        console.log('회원가입완료')
+        return new Promise((resolve, reject) =>{
+            axios
+                .post(`${URL}`)
+                .then((response)=>{
+                    resolve(response);
+                })
+                .catch((e)=>{
+                    console.log(e)
+                    reject(e);
+                })
+        })
+    }
+    return {isid, isnickname, isssafy, isstudentnum, submitNewUser}
 })
 
 
