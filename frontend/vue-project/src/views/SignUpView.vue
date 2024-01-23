@@ -243,7 +243,7 @@ export default {
                 isAlert: isAlert.value ? '활성' : '비활성',
                 userImg: userImg.value,
             };
-
+            
             signUp.submitNewUser(newUser)
                 .then(() => {
                     console.log('회원가입 완료');
