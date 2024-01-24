@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="top">
-            <h2>{{ user.nickname }} 님</h2>
+            <h2>{{ user.user_nickname }} 님</h2>
             <div>
                 <img v-for="complain in user.complain_cnt" :key="complain" src="@/assets/pinno.png" alt="pinno"
                     class="complain_img">
@@ -10,21 +10,21 @@
         <div class="middle">
             <div class="middle1">
                 <div class="user_img_badge">
-                    <img :src="user.img" alt="use_img" class="user_img">
+                    <img :src="user.user_img" alt="use_img" class="user_img">
                     <p>{{ user.badge_id }}</p>
                 </div>
                 <div>
                     <button class="friend_btn">도전장 보내기</button>
-                    <button class="friend_btn">쌀로우 신청</button>
+                    <button class="friend_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
                 </div>
             </div>
             <div class="follow_cnt">
                 <div class="follow_div">
-                    <h1>{{ user.ssallower_friends.length }}</h1>
+                    <h1>{{ ssallower.length }}</h1>
                     <h3>쌀로워 수</h3>
                 </div>
                 <div class="follow_div">
-                    <h1>{{ user.ssallowing_friends.length }}</h1>
+                    <h1>{{ ssallowing.length }}</h1>
                     <h3>쌀로잉 수</h3>
                 </div>
             </div>
@@ -33,37 +33,27 @@
     </div>
 </template>
 
-<script setup>
-const user = {
-    nickname: '우리다',
-    img: './src/assets/image1.png',
-    ssallower_friends: [
-        {
-            id: 1,
-            name: '화석'
-        },
-        {
-            id: 2,
-            name: '태범'
-        },
-        {
-            id: 3,
-            name: '지은'
-        },
-    ],
-    ssallowing_friends: [
-        {
-            id: 1,
-            name: '현춘'
-        },
-        {
-            id: 2,
-            name: '수안'
-        },
-    ],
-    complain_cnt: 2,
-    badge_id: '분조장'
+<script>
+import { ref } from 'vue';
 
+const user = ref([])
+
+export default {
+    props: ['userData', 'ssallowingData', 'ssallowerData',],
+    
+    setup(props, {emit}) {
+        const user = ref(props.userData)
+        const ssallowing = ref(props.ssallowingData)
+        const ssallower = ref(props.ssallowerData)
+        // console.log(user.value)
+
+        const sendSsallowingRequest = () => {
+            const ssallowing = {user_id: user.value.user_id, following_id: user.value.user_id}
+            // 클릭 이벤트 발생 시 plusSsallowing 함수 호출
+            emit('ssallowing-request', ssallowing);
+        };
+        return {user, ssallowing, ssallower, sendSsallowingRequest}
+    }
 }
 </script>
 
