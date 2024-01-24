@@ -98,7 +98,8 @@ export const useSignupStore = defineStore('signup', () => {
         console.log('submitNewUser 되고있나')
 
         return new Promise((resolve, reject) => {
-            axios.post(URL, UserSignupInformation)
+            axios
+                .post(URL, UserSignupInformation)
                 .then(response => {
 
                     resolve(response);

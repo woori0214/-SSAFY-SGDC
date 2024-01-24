@@ -25,6 +25,10 @@
 export default {
   name: "feed_item",
   props: {
+    feed_id: {
+      type: Number,
+      default: 0,
+    },
     userName: {
       type: String,
       default: "XXX",
@@ -51,11 +55,7 @@ export default {
       this.$router.push({
         name: "FeedDetail",
         params: {
-          userName_d: this.userName,
-          content_d: this.content,
-          feedImage_d: this.feedImage,
-          heartCnt_d: this.heartCnt,
-          viewCnt_d: this.viewCnt,
+          feed_id: this.feed_id, 
         }
       });
     },
