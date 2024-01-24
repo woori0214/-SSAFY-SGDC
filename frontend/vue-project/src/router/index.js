@@ -47,9 +47,10 @@ const router = createRouter({
       props: true,
     },
     {
-      path: '/mypage',
+      path: '/mypage/:userId',
       name: 'MyPage',
       component: MyPageView,
+      props: true,
     },
     {
       path: '/mypageupdate',

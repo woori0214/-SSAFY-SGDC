@@ -110,19 +110,20 @@ export default {
     //       console.error('Error fetching soloTodayData:', error);
     //     });
     // });
-
+    
+    // 확인 모달창
     const openModal = (category) => {
       // console.log(category)
       selectedCategory.value = category;
       console.log(selectedCategory)
       isModalOpen.value = true;
     };
-
+    // 확인 모달창
     const closeModal = () => {
       isModalOpen.value = false;
     };
 
-
+    // 현황
     const soloStatusMap = computed(() => {
       const statusMap = {};
       soloTodayData.forEach(item => {
@@ -131,6 +132,7 @@ export default {
       return statusMap;
     });
 
+    // 솔로모드 도전
     const confirmChallenge = () => {
       if (selectedCategory.value) {
         const challenge = { user_id: user_id, category_id: selectedCategory.value.id };
@@ -140,14 +142,17 @@ export default {
       closeModal();
     };
 
+    // 인증 모달창
     const openTestModal = () => {
       isTestModalOpen.value = true;
     };
 
+    // 인증 모달창
     const closeTestModal = () => {
       isTestModalOpen.value = false;
     };
-    console.log(selectedCategory)
+
+    // 이미지 업로드
     const handleImageUpload = (uploadedImageSrc) => {
       // 이미지 업로드 이벤트 핸들러
       console.log('이미지 업로드 완료:', uploadedImageSrc);
@@ -162,9 +167,11 @@ export default {
       closeTestModal();
     };
 
+    // 버튼 활성화
     const isActive = (categoryId) => {
       return soloStatusMap.value[categoryId] === 1;
     };
+    
     return {
       categories,
       openModal,

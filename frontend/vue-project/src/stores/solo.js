@@ -42,7 +42,11 @@ export const useSoloStore = defineStore('solo', () => {
         },
     ])
 
+    // 솔로 모드 내역(전체) 저장
+    const soloData = ref([])
+
     // 솔로 모드 내역 표시(오늘) 함수
+    // 한번 테스트 해봐야함
     const soloToday = function (userId) {
         return new Promise((resolve, reject) => {
             axios
@@ -58,7 +62,7 @@ export const useSoloStore = defineStore('solo', () => {
                         };
                     });
 
-                    soloData.value = formattedData;
+                    soloTodayData.value = formattedData;
 
                     resolve(formattedData);
                 })
@@ -86,13 +90,13 @@ export const useSoloStore = defineStore('solo', () => {
     }
 
     //솔로모드 인증
-    const soloAuth = function (soloauth) {
+    const soloAuth = function (challengeData) {
 
-        const solo_auth = { solo_id: soloauth.id, solo_img: soloauth.img }
+        const solo_auth = { user_id: challengeData.user_id, category_id: challengeData.category_id, solo_img: challengeData.uploadedImage }
 
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URL}/${solo_auth.solo_id}/challenge-auth`, solo_auth.solo_img)
+                .patch(`${URL}/solo/${solo_auth.user_id}/${solo_auth.category_id}/challenge-auth`, solo_auth.solo_img)
                 .then((res) => {
                     resolve(res)
                     console.log('업로드 완료')
@@ -102,7 +106,34 @@ export const useSoloStore = defineStore('solo', () => {
                 })
         })
     }
-    return { soloTodayData, soloToday, soloChallenge, soloAuth }
+
+    //솔로모드 내역(전체 리스트)
+    const soloList = function (userId) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/challenge-list/${userId}`)
+                .then((res) => {
+
+                    const formattedData = {};
+                    res.data.forEach(item => {
+                        formattedData[item.solo_id] = {
+                            solo_status: item.solo_status,
+                            solo_result: item.solo_result,
+                            category_id: item.category_id
+                        };
+                    });
+
+                    soloData.value = formattedData;
+
+                    resolve(formattedData);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
+    }
+    return { soloTodayData, soloData, soloToday, soloChallenge, soloAuth, soloList }
 })
 
 

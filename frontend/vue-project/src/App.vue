@@ -25,7 +25,7 @@
             <RouterLink to="/solo">Solo</RouterLink>
             <RouterLink to="/feed">Feed</RouterLink>
             <RouterLink to="/feeddetail">FeedDetail</RouterLink>
-            <RouterLink to="/mypage">MyPage</RouterLink>
+            <RouterLink :to="{ name: 'MyPage', params: { userId: user_id } }">MyPage</RouterLink>
             <RouterLink to="/login">Login</RouterLink>
             <RouterLink to="/signup">SignUp</RouterLink>
           </nav>
@@ -42,6 +42,13 @@ import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
 import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
+import { useLoginStore } from "./stores/login";
+
+//로그인된 유저 정보
+const login = useLoginStore()
+
+// const user_id = login.loginUser
+const user_id = 1
 
 const web_width = ref(window.innerWidth);
 
