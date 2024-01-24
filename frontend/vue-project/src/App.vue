@@ -89,7 +89,7 @@ onMounted(() => {
   bottom: 100px;
   right: -30px;
 }
-.bear{
+.bear {
   position: fixed;
   width: 200px;
   bottom: 100px;
@@ -111,9 +111,9 @@ onMounted(() => {
   overflow: auto;
 }
 #main-body::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  display: none; /* 크롬, 사파리, 오페라, 엣지 */
 }
-.back-ground-body{
+.back-ground-body {
   position: fixed;
   width: 100vw;
   height: 100vh;
