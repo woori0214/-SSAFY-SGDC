@@ -3,7 +3,7 @@
     <div class="category_grid">
       <div v-for="category in categories" :key="category.id" class="category_item">
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
-        <button @click="openModal(category)" class="solo_btn">
+        <button @click="openModal(category)" class="solo_btn" :class="{ 'active': isActive(category.id) }" :disabled="isActive(category.id)">
           <img :src="category.img" alt="category">
           <div class="category_text">
             <div>{{ category.name }}</div>
@@ -24,15 +24,13 @@
 
     <!-- PopUpProofPicture.vue 모달로 추가 -->
     <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleImageUpload"
-      :selectedCategory="selectedCategory" 
-      :isSoloMode="true"  
-      />
+      :selectedCategory="selectedCategory" :isSoloMode="true" />
 
   </div>
 </template>
   
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useSoloStore } from '@/stores/solo';
 import { useLoginStore } from '@/stores/login';
 
@@ -57,7 +55,9 @@ export default {
     const isTestModalOpen = ref(false);
     const selectedCategory = ref(null);
     const user_id = login.loginUser;
+    const soloTodayData = solo.soloTodayData
 
+    console.log(soloTodayData)
     // 카테고리
     const categories = ref([
       {
@@ -98,22 +98,43 @@ export default {
       },
     ]);
 
+    // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
+    // onMounted(() => {
+    //   solo
+    //     .soloToday(user_id)
+    //     .then(() => {
+    //       // Now soloTodayData should be updated in the store
+    //       console.log(solo.soloTodayData)
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error fetching soloTodayData:', error);
+    //     });
+    // });
+
     const openModal = (category) => {
+      // console.log(category)
       selectedCategory.value = category;
+      console.log(selectedCategory)
       isModalOpen.value = true;
     };
 
     const closeModal = () => {
-      selectedCategory.value = null;
       isModalOpen.value = false;
     };
 
+
+    const soloStatusMap = computed(() => {
+      const statusMap = {};
+      soloTodayData.forEach(item => {
+        statusMap[item.category_id] = item.solo_status;
+      });
+      return statusMap;
+    });
+
     const confirmChallenge = () => {
-      console.log(selectedCategory.value);
       if (selectedCategory.value) {
         const challenge = { user_id: user_id, category_id: selectedCategory.value.id };
-        // solo.soloChallenge(challenge);
-        console.log(`Go to ${selectedCategory.value.name} category`);
+        solo.soloChallenge(challenge);
         openTestModal()
       }
       closeModal();
@@ -126,22 +147,24 @@ export default {
     const closeTestModal = () => {
       isTestModalOpen.value = false;
     };
-
+    console.log(selectedCategory)
     const handleImageUpload = (uploadedImageSrc) => {
       // 이미지 업로드 이벤트 핸들러
       console.log('이미지 업로드 완료:', uploadedImageSrc);
       const challengeData = {
         user_id: user_id,
-        category_id: selectedCategory.value,
+        category_id: selectedCategory.value.id,
         isSoloMode: true,
         uploadedImage: uploadedImageSrc,
       };
       solo.soloAuth(challengeData);
       console.log(challengeData)
-      console.log('업로드 완료')
       closeTestModal();
     };
 
+    const isActive = (categoryId) => {
+      return soloStatusMap.value[categoryId] === 1;
+    };
     return {
       categories,
       openModal,
@@ -153,9 +176,9 @@ export default {
       closeTestModal,
       handleImageUpload,
       selectedCategory,
+      isActive,
     };
   },
-  components: { PopUpProofPicture }
 };
 </script>
   
