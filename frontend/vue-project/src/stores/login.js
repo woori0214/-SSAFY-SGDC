@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
-import { useLoginStore } from "@/stores/login";
+import { useUserStorageStore } from "@/stores/userStorage";
 import axios from 'axios';
 
 export const useLoginStore = defineStore('login', () => {

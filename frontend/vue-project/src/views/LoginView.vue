@@ -18,8 +18,8 @@
 <script>
 import { ref, computed } from "vue";
 
-import { useUserStorageStore } from "@/stores/userStorage";
-// import { useLoginStore } from "@/stores/login";
+// import { useUserStorageStore } from "@/stores/userStorage";
+import { useLoginStore } from "@/stores/login";
 
 
 export default {
@@ -28,7 +28,7 @@ export default {
     const password = ref("");
     const isSubmitButtonDisabled = ref(false);
     const loginUser = useLoginStore();
-    const userStorage = useUserStorageStore();
+    // const userStorage = useUserStorageStore();
 
     const login = () => {
       if (userId.value == "" || password.value == "") {
