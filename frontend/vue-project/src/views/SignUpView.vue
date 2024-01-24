@@ -160,7 +160,7 @@ export default {
                     console.log('error');
                 });
         };
-
+        
         const checkNickAvailability = () => {
             signUp.isnickname(nickname.value)
                 .then((response) => {

@@ -6,6 +6,8 @@ import axios from 'axios';
 
 export const useLoginStore = defineStore('login', ()=>{
     const URL = 'http://localhost:8080/user/login';
+    
+    const loginUser = ref();
     const isLogin = function (login) {
         console.log('되고있나');
 
@@ -15,6 +17,7 @@ export const useLoginStore = defineStore('login', ()=>{
                 .then((response) => {
 
                     resolve(response);
+                    loginUser = response.data.user;
                 })
                 .catch((e) => {
                     console.log(e)
@@ -25,5 +28,18 @@ export const useLoginStore = defineStore('login', ()=>{
 
         );
     }
-    return {isLogin}
+    const getLoginUserInfo = function (userId) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${USER}/user-info/${userId}`)
+                .then((response) => {
+                    resolve(response.data.user);
+                })
+                .catch((error) => {
+                    console.error(error);
+                    reject(error);
+                });
+        });
+    };
+    return {isLogin, loginUser,getLoginUserInfo}
 })
