@@ -17,7 +17,6 @@
         <div class="wrapper">
           <div class="headbar">
             <h2>Router For Development</h2>
-            <div>{{ web_width }}</div>
             <BackGroundMusic></BackGroundMusic>
           </div>
           <nav>
@@ -61,26 +60,28 @@ onMounted(() => {
   width: 400px;
   bottom: 132px;
   left: 0px;
-  z-index: -1;
+  z-index: -2;
 }
 .ferris_wheel{
   position: fixed;
   width: 400px;
   bottom: 132px;
   right: 0px;
-  z-index: -1;
+  z-index: -2;
 }
 .cloud_left{
   position: fixed;
   width: 350px;
   top: 0px;
   left: -20px;
+  z-index: -3;
 }
 .cloud_right{
   position: fixed;
   width: 350px;
   top: 0px;
   right: 0px;
+  z-index: -3;
 }
 .pinokio{
   position: fixed;
