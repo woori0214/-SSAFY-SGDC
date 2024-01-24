@@ -1,4 +1,9 @@
 FROM openjdk:17
-ARG JAR_FILE=*.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
+
+WORKDIR /usr/src/app
+
+ARG JAR_PATH=./build/libs
+
+COPY ${JAR_PATH}/sgdc-0.0.1-SNAPSHOT.jar ${JAR_PATH}/sgdc-0.0.1-SNAPSHOT.jar
+
+CMD ["java","-jar","./build/libs/sgdc-0.0.1-SNAPSHOT.jar"]
