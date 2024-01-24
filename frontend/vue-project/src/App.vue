@@ -1,11 +1,15 @@
 <template>
   <div class="mother-body">
     <div class="back-ground-body">
-      <div class="back-side-item">
-        <img src="./assets/jitensya_kuma.png" alt="" class="bear" />
+      <div class="back-side-item" v-if="web_width > 1070">
+        <img src="./assets/jitensya_kuma.png" alt="" class="bear" v-if="web_width > 1470">
+        <img src="./assets/cloud_side_left.png" alt="" class="cloud_left">
+        <img src="./assets/coster.png" alt="" class="coster">
       </div>
-      <div class="back-side-item">
-        <img src="./assets/pinokio.png" alt="" class="pinokio" />
+      <div class="back-side-item" v-if="web_width > 1070">
+        <img src="./assets/pinokio.png" alt="" class="pinokio" v-if="web_width > 1470">
+        <img src="./assets/cloud_side_right.png" alt="" class="cloud_right">
+        <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel">
       </div>
     </div>
     <div id="main-body">
@@ -36,19 +40,50 @@
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
-import BackGroundImg from "./assets/pixil_background.png";
-import { useUserStorageStore } from "./stores/userStorage";
+import BackGroundImg from "./assets/pixil_background_winter.png";
+import { ref, onMounted } from "vue";
 
-window.addEventListener("beforeunload", function (event) {
-  const userStorage = useUserStorageStore();
+const web_width = ref(window.innerWidth);
 
-  userStorage.delateAllStorage();
-  this.alert("Good bye~~");
-});
+const handleWidth = () => {
+  web_width.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', handleWidth);
+})
 </script>
 
 <style scoped>
-.pinokio {
+.coster{
+  position: fixed;
+  width: 400px;
+  bottom: 132px;
+  left: 0px;
+  z-index: -2;
+}
+.ferris_wheel{
+  position: fixed;
+  width: 400px;
+  bottom: 132px;
+  right: 0px;
+  z-index: -2;
+}
+.cloud_left{
+  position: fixed;
+  width: 350px;
+  top: 0px;
+  left: -20px;
+  z-index: -3;
+}
+.cloud_right{
+  position: fixed;
+  width: 350px;
+  top: 0px;
+  right: 0px;
+  z-index: -3;
+}
+.pinokio{
   position: fixed;
   width: 350px;
   bottom: 100px;
@@ -58,6 +93,7 @@ window.addEventListener("beforeunload", function (event) {
   position: fixed;
   width: 200px;
   bottom: 100px;
+  left: 0px;
   transform: scaleX(-1);
 }
 #main-body {
@@ -84,8 +120,8 @@ window.addEventListener("beforeunload", function (event) {
   z-index: -1;
 
   background-color: rgb(243, 238, 230);
-  background-image: url("./assets/pixil_background.png");
-  background-size: 700px;
+  background-image: url("./assets/pixil_background_winter.png");
+  background-size: 220px;
   background-repeat: repeat-x;
   background-position: bottom;
 
