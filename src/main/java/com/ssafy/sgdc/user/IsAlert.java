@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.domain.entity.enums;
+package com.ssafy.sgdc.user;
 
 import java.awt.*;
 
