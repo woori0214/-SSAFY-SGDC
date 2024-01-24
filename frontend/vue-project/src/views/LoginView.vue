@@ -17,9 +17,11 @@
   
 <script>
 import { ref, computed } from "vue";
-import { useUserStorageStore } from "@/stores/userStorage";
 
-import { useLoginStore } from "@/stores/login";
+import { useUserStorageStore } from "@/stores/userStorage";
+// import { useLoginStore } from "@/stores/login";
+
+
 export default {
   setup() {
     const userId = ref("");
@@ -44,7 +46,7 @@ export default {
       loginUser
         .isLogin(User)
         .then(() => {
-          userStorage.setUserInformation(User);
+          // userStorage.setUserInformation(User);
 
           console.log("로그인 성공");
           router.push("/");
