@@ -17,6 +17,8 @@ export const useLoginStore = defineStore('login', () => {
             axios
                 .post(`${URL}/login`, login_id)
                 .then((response) => {
+                    // 스토리지 로그인 정보 등록
+                    //        로그인 정보를 등록하기 전에 전에 남아있는 정보가 있나 확인 해야되나..?
                     userStorage.setUserInformation(response);
                     resolve(response);
                 })
@@ -38,6 +40,7 @@ export const useLoginStore = defineStore('login', () => {
             axios
                 .post(`${URL}/logout`, token)
                 .then((response) => {
+                    // 스토리지 로그인 정보 전부 삭제
                     userStorage.deleteAllStorage();
                     resolve(response);
                 })
