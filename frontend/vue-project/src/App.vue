@@ -1,6 +1,7 @@
 <template>
   <div class="mother-body">
     <div class="back-ground-body">
+      <!-- <img src="./assets/backimg1.png" class="back-main-item"> -->
       <div class="back-side-item" v-if="web_width > 1070">
         <img src="./assets/jitensya_kuma.png" alt="" class="bear" v-if="web_width > 1470">
         <img src="./assets/cloud_side_left.png" alt="" class="cloud_left">
@@ -120,11 +121,17 @@ onMounted(() => {
 #main-body::-webkit-scrollbar {
   display: none;
 }
+.back-main-item{
+  position: fixed;
+  width: 100vw;
+  height: calc(100vh - 139px);;
+
+  z-index: -6;
+}
 .back-ground-body {
   position: fixed;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
 
   background-color: rgb(243, 238, 230);
   background-image: url("./assets/pixil_background_winter.png");
@@ -132,6 +139,7 @@ onMounted(() => {
   background-repeat: repeat-x;
   background-position: bottom;
 
+  z-index: -2;
   display: flex;
   justify-content: space-between;
 }
