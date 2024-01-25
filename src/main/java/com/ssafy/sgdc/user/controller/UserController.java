@@ -29,10 +29,11 @@ public class UserController {
         return "회원가입완료";
     }
 
+    // 아이디 중복체크
     @RequestMapping(value = "/signup/check-id/{loginId}", method = RequestMethod.GET)
     public ResponseEntity<Map<String, String>> checkId(@PathVariable String loginId){
         Map<String, String> response = new HashMap<>();
-        System.out.println("중복체크");
+        System.out.println("아이디 중복체크");
         boolean result = userService.checkId(loginId);   // 중복시 true, 중복X false
 
         response.put("result", String.valueOf(!result)); // ID 사용가능 result : true
@@ -40,5 +41,16 @@ public class UserController {
 
     }
 
+    // 닉네임 중복체크
+    @RequestMapping(value = "/signup/check-nick/{userNickname}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> checkNickname(@PathVariable String userNickname){
+        Map<String, String> response = new HashMap<>();
+        System.out.println("닉네임 중복체크");
+        boolean result = userService.checkNickname(userNickname);   // 중복시 true, 중복X false
+
+        response.put("result", String.valueOf(!result)); // 닉네임 사용가능 result : true
+        return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
+
+    }
 
 }

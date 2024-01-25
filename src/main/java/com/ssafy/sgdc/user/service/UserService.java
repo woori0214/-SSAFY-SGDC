@@ -46,4 +46,11 @@ public class UserService {
         return loginIdDulicate;
     }
 
+    @Transactional
+    public boolean checkNickname(String userNickname){
+        boolean nickNameDulicate = userRepo.existsByUserNickname(userNickname);
+        System.out.println(nickNameDulicate);
+        return nickNameDulicate;
+    }
+
 }
