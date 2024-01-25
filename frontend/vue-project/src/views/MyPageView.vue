@@ -6,10 +6,10 @@
             @ssallowing-request="handleSsallowingRequest"/>
         </div>
         <div class="compet_body">
-            <MyPageCompetitionRecord />
+            <MyPageCompetitionRecord :userId="userId"/>
         </div>
         <div class="solo_body">
-            <MyPageSoloRecord />
+            <MyPageSoloRecord :userId="userId"/>
         </div>
         <div class="analysis_body">
             <MyPageAnalysis />
@@ -46,7 +46,7 @@ const user = useUserStore()
 const follow = useFollowStore()
 const route = useRoute()
 
-const userId = ref(null);  // userId를 저장할 ref 추가
+const userId = ref(1);  // userId를 저장할 ref 추가
 // const userData = ref({})
 // const ssallowingData = ref([])
 // const ssallowerData = ref([])

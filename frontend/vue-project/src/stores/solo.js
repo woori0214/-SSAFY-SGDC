@@ -42,9 +42,6 @@ export const useSoloStore = defineStore('solo', () => {
         },
     ])
 
-    // 솔로 모드 내역(전체) 저장
-    const soloData = ref([])
-
     // 솔로 모드 내역 표시(오늘) 함수
     // 한번 테스트 해봐야함
     const soloToday = function (userId) {
@@ -52,19 +49,7 @@ export const useSoloStore = defineStore('solo', () => {
             axios
                 .get(`${URL}/today-list/${userId}`)
                 .then((res) => {
-
-                    const formattedData = {};
-                    res.data.forEach(item => {
-                        formattedData[item.solo_id] = {
-                            solo_status: item.solo_status,
-                            solo_result: item.solo_result,
-                            category_id: item.category_id
-                        };
-                    });
-
-                    soloTodayData.value = formattedData;
-
-                    resolve(formattedData);
+                    resolve(res);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -80,7 +65,7 @@ export const useSoloStore = defineStore('solo', () => {
             axios
                 .post(`${URL}/${category.category_id}`, category)
                 .then((res) => {
-                    resolve(res)
+                    resolve(res);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -98,7 +83,7 @@ export const useSoloStore = defineStore('solo', () => {
             axios
                 .patch(`${URL}/solo/${solo_auth.user_id}/${solo_auth.category_id}/challenge-auth`, solo_auth.solo_img)
                 .then((res) => {
-                    resolve(res)
+                    resolve(res);
                     console.log('업로드 완료')
                 })
                 .catch((err) => {
@@ -113,19 +98,7 @@ export const useSoloStore = defineStore('solo', () => {
             axios
                 .get(`${URL}/challenge-list/${userId}`)
                 .then((res) => {
-
-                    const formattedData = {};
-                    res.data.forEach(item => {
-                        formattedData[item.solo_id] = {
-                            solo_status: item.solo_status,
-                            solo_result: item.solo_result,
-                            category_id: item.category_id
-                        };
-                    });
-
-                    soloData.value = formattedData;
-
-                    resolve(formattedData);
+                    resolve(res);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -133,7 +106,7 @@ export const useSoloStore = defineStore('solo', () => {
                 });
         });
     }
-    return { soloTodayData, soloData, soloToday, soloChallenge, soloAuth, soloList }
+    return { soloTodayData, soloToday, soloChallenge, soloAuth, soloList }
 })
 
 

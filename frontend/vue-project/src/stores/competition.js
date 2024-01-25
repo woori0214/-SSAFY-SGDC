@@ -93,6 +93,21 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
 
+    //종료 경쟁 목록 조회
+    const competitionFinish = function (userId) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/finish-compet-list/${userId}`)
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err);
+                });
+        })
+    };
+
     //종료 경쟁 정보 상세 조회
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
@@ -160,6 +175,7 @@ export const useCompetionStore = defineStore('competition', () => {
         friendAccept,
         competitionMailbox,
         competitionImage,
+        competitionFinish,
         competitionFinishDetail,
         competitionProgressDetail,
         competitionFriendList,
