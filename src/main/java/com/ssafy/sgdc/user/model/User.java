@@ -71,4 +71,6 @@ public class User {
     @Column(name = "complain_cnt")
     private int complainCnt;
 
+    @Column(name = "token")
+    private int token;
 }
