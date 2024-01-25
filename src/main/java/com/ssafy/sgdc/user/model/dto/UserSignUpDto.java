@@ -5,12 +5,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
-public class UserSigUpDto {
+public class UserSignUpDto {
     private String loginId;
     private String userEmail;
     private int userSsafyId;
@@ -21,10 +19,10 @@ public class UserSigUpDto {
     private String userPhone;
     private Boolean kakaoPush;
 
-    public UserSigUpDto() {
+    public UserSignUpDto() {
     }
 
-    public UserSigUpDto(String loginId, String userEmail, int userSsafyId, String userNickname, String userName, String userPassword, String userImg, String userPhone, Boolean kakaoPush) {
+    public UserSignUpDto(String loginId, String userEmail, int userSsafyId, String userNickname, String userName, String userPassword, String userImg, String userPhone, Boolean kakaoPush) {
         this.loginId = loginId;
         this.userEmail = userEmail;
         this.userSsafyId = userSsafyId;

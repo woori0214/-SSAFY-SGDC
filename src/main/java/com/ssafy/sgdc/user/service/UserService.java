@@ -1,5 +1,11 @@
-package com.ssafy.sgdc.user;
+package com.ssafy.sgdc.user.service;
 
+import com.ssafy.sgdc.user.model.IsAlert;
+import com.ssafy.sgdc.user.model.User;
+import com.ssafy.sgdc.user.model.dto.UserLoginDto;
+import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
+import com.ssafy.sgdc.user.model.UserRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +17,7 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    public User signUp(UserSigUpDto userSignDto){
+    public User signUp(UserSignUpDto userSignDto){
         User user = User.builder()
                 .userId(0)
                 .loginId(userSignDto.getLoginId())
@@ -32,6 +38,12 @@ public class UserService {
         System.out.println("ssafy_user 확인===>");
         System.out.println(userRepo.save(user));
         return userRepo.save(user);
+    }
+    @Transactional
+    public boolean checkId(String loginId){
+        boolean loginIdDulicate = userRepo.existsByLoginId(loginId);
+        System.out.println(loginIdDulicate);
+        return loginIdDulicate;
     }
 
 }
