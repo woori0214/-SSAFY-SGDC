@@ -41,16 +41,28 @@ public class UserService {
     }
     @Transactional
     public boolean checkId(String loginId){
-        boolean loginIdDulicate = userRepo.existsByLoginId(loginId);
-        System.out.println(loginIdDulicate);
-        return loginIdDulicate;
+        boolean loginIdDuplicate = userRepo.existsByLoginId(loginId);
+        System.out.println(loginIdDuplicate);
+        return loginIdDuplicate;
     }
 
     @Transactional
     public boolean checkNickname(String userNickname){
-        boolean nickNameDulicate = userRepo.existsByUserNickname(userNickname);
-        System.out.println(nickNameDulicate);
-        return nickNameDulicate;
+        boolean nickNameDuplicate = userRepo.existsByUserNickname(userNickname);
+        System.out.println(nickNameDuplicate);
+        return nickNameDuplicate;
     }
 
+    @Transactional
+    public boolean checkSsafyId(int userSsafyId){
+        boolean ssafyIdDuplicate = userRepo.existsByUserSsafyId(userSsafyId);
+        System.out.println(ssafyIdDuplicate);
+        return ssafyIdDuplicate;
+    }
+    @Transactional
+    public boolean checkPhone(String userPhone){
+        boolean userPhoneDuplicate = userRepo.existsByUserPhone(userPhone);
+        System.out.println(userPhoneDuplicate);
+        return userPhoneDuplicate;
+    }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/user")
 public class UserController {
+
     @Autowired
     private UserService userService;
 
@@ -48,9 +49,31 @@ public class UserController {
         System.out.println("닉네임 중복체크");
         boolean result = userService.checkNickname(userNickname);   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(!result)); // 닉네임 사용가능 result : true
+        response.put("result", String.valueOf(result)); // 닉네임 사용가능 result : true
         return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
 
+    }
+
+    // 싸피 학번중복체크
+    @RequestMapping(value = "/signup/check-student-num/{userSsafyId}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> checkSsafyId(@PathVariable String userSsafyId){
+        Map<String, String> response = new HashMap<>();
+        System.out.println("학번체크");
+        boolean result = userService.checkSsafyId(Integer.parseInt(userSsafyId));
+
+        response.put("result", String.valueOf(!result));
+        return ResponseEntity.ok(response);
+    }
+
+    // 싸피 핸드폰인증
+    @RequestMapping(value = "/signup/check-phone/{userPhone}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> checkPhone(@PathVariable String userPhone){
+        Map<String, String> response = new HashMap<>();
+        System.out.println("폰 번호 체크");
+        boolean result = userService.checkPhone(String.valueOf(userPhone));
+
+        response.put("result", String.valueOf(!result));
+        return ResponseEntity.ok(response);
     }
 
 }
