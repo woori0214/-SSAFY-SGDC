@@ -65,4 +65,25 @@ public class UserService {
         System.out.println(userPhoneDuplicate);
         return userPhoneDuplicate;
     }
+
+    public User login(UserLoginDto userLoginDto){
+        User userLoginId = userRepo.findByLoginId(userLoginDto.getLoginId());
+
+        if(userLoginId==null){
+            System.out.println("아이디 못찾음");
+            return null;
+        }
+        else{ //아이디 존재
+            if(userLoginId.getUserPassword().equals(userLoginDto.getUserPassword())){
+                System.out.println("로그인 성공");
+                return userLoginId;
+
+            }
+            else{
+                System.out.println("아이디와 패스워드가 맞지 않습니다.");
+            }
+
+            return null;
+        }
+    }
 }

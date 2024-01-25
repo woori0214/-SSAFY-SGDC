@@ -4,6 +4,7 @@ import com.ssafy.sgdc.user.model.User;
 import com.ssafy.sgdc.user.model.dto.UserLoginDto;
 import com.ssafy.sgdc.user.service.UserService;
 import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class UserController {
         System.out.println("닉네임 중복체크");
         boolean result = userService.checkNickname(userNickname);   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(result)); // 닉네임 사용가능 result : true
+        response.put("result", String.valueOf(!result)); // 닉네임 사용가능 result : true
         return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
 
     }
@@ -59,10 +60,10 @@ public class UserController {
     public ResponseEntity<Map<String, String>> checkSsafyId(@PathVariable String userSsafyId){
         Map<String, String> response = new HashMap<>();
         System.out.println("학번체크");
-        boolean result = userService.checkSsafyId(Integer.parseInt(userSsafyId));
+        boolean result = userService.checkSsafyId(Integer.parseInt(userSsafyId));   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(!result));
-        return ResponseEntity.ok(response);
+        response.put("result", String.valueOf(!result)); // 학번 사용가능 result : true
+        return ResponseEntity.ok(response);              // 학번 사용불가 result : false
     }
 
     // 싸피 핸드폰인증
@@ -70,10 +71,43 @@ public class UserController {
     public ResponseEntity<Map<String, String>> checkPhone(@PathVariable String userPhone){
         Map<String, String> response = new HashMap<>();
         System.out.println("폰 번호 체크");
-        boolean result = userService.checkPhone(String.valueOf(userPhone));
+        boolean result = userService.checkPhone(String.valueOf(userPhone));   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(!result));
-        return ResponseEntity.ok(response);
+        response.put("result", String.valueOf(!result)); // 번호 사용가능 result : true
+        return ResponseEntity.ok(response);              // 번호 사용불가 result : false
     }
 
+    // 로그인
+    @RequestMapping(value = "/login/" ,method = RequestMethod.POST)
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginDto userLoginDto){
+        Map<String, String> response = new HashMap<>();
+
+        User user = userService.login(userLoginDto);
+
+        if(user==null){
+            if(ResponseEntity.badRequest().equals("500")){
+                return null;
+            }
+            return null;
+//            return (ResponseEntity<Map<String, String>>) ResponseEntity.badRequest();
+        }
+        else{
+            response.put("user_id", String.valueOf(user.getUserId()));
+            response.put("login_id", user.getLoginId());
+            response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
+            response.put("user_email", user.getUserEmail());
+            response.put("user_nickname", user.getUserNickname());
+            response.put("user_name", user.getUserName());
+
+            return ResponseEntity.ok(response);
+        }
+    }
 }
+
+
+// 로그아웃
+//@RequestMapping(value = "/logout/", method = RequestMethod.POST)
+//public String logout(HttpSession session){
+//    session.invalidate();
+//    return null;
+//}
