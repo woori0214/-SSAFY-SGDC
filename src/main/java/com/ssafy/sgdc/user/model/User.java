@@ -72,5 +72,5 @@ public class User {
     private int complainCnt;
 
     @Column(name = "token")
-    private int token;
+    private String token;
 }
