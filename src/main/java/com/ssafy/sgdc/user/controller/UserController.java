@@ -1,6 +1,7 @@
 package com.ssafy.sgdc.user.controller;
 
 import com.ssafy.sgdc.user.model.User;
+import com.ssafy.sgdc.user.model.dto.UserInfoDto;
 import com.ssafy.sgdc.user.model.dto.UserLoginDto;
 import com.ssafy.sgdc.user.service.UserService;
 import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
@@ -102,12 +103,21 @@ public class UserController {
             return ResponseEntity.ok(response);
         }
     }
+
+    // 마이페이지 사용자 정보 표시
+    @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, String>> userInfo(UserInfoDto userInfoDto){
+        Map<String, String > response = new HashMap<>();
+
+        User user = userService.userInfo(userInfoDto);
+        response.put("user_id", String.valueOf(user.getUserId()));
+        response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
+        response.put("user_nickname", user.getUserNickname());
+        response.put("user_img", user.getUserImg());
+        response.put("badge_id", String.valueOf(user.getBadgeId()));
+        response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
+        response.put("complain_cnt", String.valueOf(user.getComplainCnt()));
+
+        return ResponseEntity.ok(response);
+    }
 }
-
-
-// 로그아웃
-//@RequestMapping(value = "/logout/", method = RequestMethod.POST)
-//public String logout(HttpSession session){
-//    session.invalidate();
-//    return null;
-//}

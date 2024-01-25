@@ -1,7 +1,7 @@
 package com.ssafy.sgdc.user.service;
 
-import com.ssafy.sgdc.user.model.IsAlert;
 import com.ssafy.sgdc.user.model.User;
+import com.ssafy.sgdc.user.model.dto.UserInfoDto;
 import com.ssafy.sgdc.user.model.dto.UserLoginDto;
 import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
 import com.ssafy.sgdc.user.model.UserRepo;
@@ -28,7 +28,6 @@ public class UserService {
                 .userPhone(userSignDto.getUserPhone())
                 .userPassword(userSignDto.getUserPassword())
                 .userImg(null) //보류
-                .isAlert(IsAlert.ACTIVE)
                 .createAt(LocalDateTime.now())
                 .signOut(false)
                 .badgeId(0) //보류
@@ -86,4 +85,11 @@ public class UserService {
             return null;
         }
     }
+
+    public User userInfo(UserInfoDto userInfoDto){
+        User userInfo = userRepo.findByUserId(userInfoDto.getUserId());
+        return userInfo;
+    }
+
+
 }
