@@ -11,6 +11,7 @@ export const useSignupStore = defineStore('signup', () => {
     const ssafyurl = 'https://project.ssafy.com/ssafy/api/auth/signin';
     const URL = 'http://localhost:8080/user/signup';
     // 사용자 프로젝트 싸피 인증
+
     const isssafy = function (ssafy) {
         console.log('isssafy 되고있나');
 
@@ -32,12 +33,12 @@ export const useSignupStore = defineStore('signup', () => {
     }
 
     // 아이디 중복 확인
-    const isid = function (IdData) {
+    const isid = function (loginId) {
         console.log('isid 되고있나')
 
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/check-id/${IdData}`)
+                .get(`${URL}/check-id/${loginId}`)
                 .then((response) => {
 
                     resolve(response);

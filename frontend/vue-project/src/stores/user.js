@@ -89,7 +89,7 @@ export const useUserStore = defineStore('user', () => {
         });
     }
 
-    return(userData, userUpdate, mainBadge, findAllfriends, findMyfriends)
+    return{userData, userUpdate, mainBadge, findAllfriends, findMyfriends}
 })
 
 

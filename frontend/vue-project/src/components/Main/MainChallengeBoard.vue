@@ -22,20 +22,28 @@
                     <div class="carousel_container">
                         <div class="carousel_slide" :style="slideStyle">
                             <!-- Carousel 아이템 -->
-                            <div class="carousel_item" v-for="(item, index) in items" :key="index">
+                            <div class="carousel_item" v-for="(item, index) in competData" :key="index">
+                                <!--sender부분-->
                                 <div class="player1">
-                                    <img :src="item.imageUrl1" alt="..." class="player_img">
-                                    <p>{{ item.name1 }}</p>
-                                    <button>{{ item.challenge_status1 }}</button>
+                                    <img :src="item.sender_user_img" alt="sender image" class="player_img">
+                                    <p>{{ item.sender_user_nickname }}</p>
+                                    <button v-if="item.sender_isCurrentUser && !item.sender_authenticated"
+                                        @click="authenticate('sender', item)">인증하기</button>
+                                    <div v-else-if="item.sender_authenticated">인증 완료</div>
+                                    <div v-else>진행중</div>
                                 </div>
                                 <div>
-                                    <h1>{{ item.category }}</h1>
+                                    <h1>{{ item.category_id }}</h1>
                                     <h1>vs</h1>
                                 </div>
+                                <!--receiver부분-->
                                 <div class="player2">
-                                    <img :src="item.imageUrl2" alt="..." class="player_img">
-                                    <p>{{ item.name2 }}</p>
-                                    <button>{{ item.challenge_status2 }}</button>
+                                    <img :src="item.receiver_user_img" alt="receiver image" class="player_img">
+                                    <p>{{ item.receiver_user_nickname }}</p>
+                                    <button v-if="item.receiver_isCurrentUser && !item.receiver_authenticated"
+                                        @click="authenticate('receiver', item)">인증하기</button>
+                                    <div v-else-if="item.receiver_authenticated">인증 완료</div>
+                                    <div v-else>진행중</div>
                                 </div>
                             </div>
                         </div>
@@ -54,110 +62,129 @@
     </div>
 </template>
   
-<script>
+<script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCompetionStore } from '@/stores/competition';
+import { useLoginStore } from '@/stores/login';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
+const loginStore = useLoginStore();
+const loggedInUserId = loginStore.userId; // 로그인한 사용자의 ID를 가져옴
+const competitionStore = useCompetionStore();
+const categories = ref([
+    { id: 1, name: '기상', isActive: false },
+    { id: 2, name: '알고리즘', isActive: false },
+    { id: 3, name: '운동', isActive: false },
+    { id: 4, name: '식단', isActive: false },
+    { id: 5, name: '스터디', isActive: false },
+    { id: 6, name: '절제', isActive: false },
+]);
 
-export default {
-    setup() {
-        const categories = ref([
-            { id: 1, name: '기상', isActive: false },
-            { id: 2, name: '알고리즘', isActive: false },
-            { id: 3, name: '운동', isActive: false },
-            { id: 4, name: '식단', isActive: false },
-            { id: 5, name: '스터디', isActive: false },
-            { id: 6, name: '절제', isActive: false },
-        ]);
+const items = ref([
+    {
+        index: 1, category: '기상', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+        name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status2: '인증 완료',
+    },
+    {
+        index: 2, category: '알고리즘', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
+        name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status2: '진행중',
+    },
+]);
+const competData = ref([]);
+const currentIndex = ref(0);
+const router = useRouter();
+const chartRef = ref(null);
+// 인증 상태를 확인하는 함수
+const isAuthenticated = (authImage) => {
+    return authImage !== null && authImage !== '';
+};
 
-        const items = ref([
-            {
-                index: 1, category: '기상', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
-                name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status2: '인증 완료',
-            },
-            {
-                index: 2, category: '알고리즘', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
-                name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status2: '진행중',
-            },
-        ]);
+// 사용자가 sender인지 receiver인지 확인하는 함수
+const isCurrentUser = (userId) => {
+    return loggedInUserId === userId;
+};
 
-        const currentIndex = ref(0);
-        const router = useRouter();
-        const chartRef = ref(null);
-
-
-        const fetchData = async () => {
-            // Fetch your data here and update categories if needed
-            // 예를 들어:
-            // const response = await axios.get('/your-endpoint');
-            // categories.value = response.data;
-        };
-
-        const navigateToPage = (category) => {
-            if (category.isActive == false) {
-                // Navigate to the desired route
-                // 예를 들어:
-                // router.push({ name: 'CategoryPage', params: { id: category.id } });
-                router.push({ name: 'Competiton' })
-            }
-        };
-
-        const prev = () => {
-            currentIndex.value = (currentIndex.value - 1 + items.value.length) % items.value.length;
-        };
-
-        const next = () => {
-            currentIndex.value = (currentIndex.value + 1) % items.value.length;
-        };
-
-        const goTo = (index) => {
-            currentIndex.value = index;
-        };
-
-        const slideStyle = computed(() => {
-            return {
-                transform: `translateX(-${currentIndex.value * 100}%)`
-            };
-        });
-        onMounted(() => {
-            fetchData();
-            if (chartRef.value) {
-                const ctx = chartRef.value.getContext('2d');
-                new Chart(ctx, {
-                    type: 'doughnut',
-                    data: {
-                        labels: ['Category 1'],
-                        datasets: [
-                            {
-                                data: [60, 40],
-                                backgroundColor: ['lightblue', 'transparent'],
-                            },
-                        ],
-                    },
-                    options: {
-                        cutout: '60%',
-                        responsive: true,
-                        maintainAspectRatio: false,
-                    },
-                });
-            }
-        });
-
-        return {
-            categories,
-            items,
-            currentIndex,
-            slideStyle,
-            chartRef,
-            navigateToPage,
-            prev,
-            next,
-            goTo
-        };
-
+// 인증하기 버튼의 클릭 이벤트 핸들러
+const authenticate = (role, item) => {
+    // 인증 프로세스를 구현...
+};
+const fetchCompetitionData = async () => {
+    try {
+        const response = await competitionStore.competitionProgressDetail(loggedInUserId);
+        if (response.status === 200 && response.data.compet) {
+            competData.value = response.data.compet.map(compet => ({
+                ...compet,
+                sender_isCurrentUser: isCurrentUser(compet.sender_user_id),
+                receiver_isCurrentUser: isCurrentUser(compet.receiver_user_id),
+                sender_authenticated: isAuthenticated(compet.sender_auth_image),
+                receiver_authenticated: isAuthenticated(compet.receiver_auth_image),
+            }));
+        }
+    } catch (error) {
+        console.error('Error fetching competition data:', error);
     }
 };
+
+const fetchData = async () => {
+    // Fetch your data here and update categories if needed
+    // 예를 들어:
+    // const response = await axios.get('/your-endpoint');
+    // categories.value = response.data;
+};
+
+const navigateToPage = (category) => {
+    if (category.isActive == false) {
+        // Navigate to the desired route
+        // 예를 들어:
+        // router.push({ name: 'CategoryPage', params: { id: category.id } });
+        router.push({ name: 'Competiton' })
+    }
+};
+
+const prev = () => {
+    currentIndex.value = (currentIndex.value - 1 + items.value.length) % items.value.length;
+};
+
+const next = () => {
+    currentIndex.value = (currentIndex.value + 1) % items.value.length;
+};
+
+const goTo = (index) => {
+    currentIndex.value = index;
+};
+
+const slideStyle = computed(() => {
+    return {
+        transform: `translateX(-${currentIndex.value * 100}%)`
+    };
+});
+onMounted(() => {
+    fetchCompetitionData();
+    fetchData();
+    if (chartRef.value) {
+        const ctx = chartRef.value.getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Category 1'],
+                datasets: [
+                    {
+                        data: [60, 40],
+                        backgroundColor: ['lightblue', 'transparent'],
+                    },
+                ],
+            },
+            options: {
+                cutout: '60%',
+                responsive: true,
+                maintainAspectRatio: false,
+            },
+        });
+    }
+});
+
+
 </script>
   
 
