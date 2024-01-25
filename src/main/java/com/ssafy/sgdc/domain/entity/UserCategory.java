@@ -1,6 +1,7 @@
 package com.ssafy.sgdc.domain.entity;
 
 import com.ssafy.sgdc.domain.entity.enums.CategoryStatus;
+import com.ssafy.sgdc.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
