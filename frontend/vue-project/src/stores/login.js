@@ -10,12 +10,12 @@ export const useLoginStore = defineStore('login', () => {
     const userStorage = useUserStorageStore();
 
     // 로그인 함수
-    const isLogin = function (login_id) {
+    const isLogin = function (loginData) {
         console.log('isLogin 되고있나');
 
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/login`, login_id)
+                .post(`${URL}/login`, loginData)
                 .then((response) => {
                     // 스토리지 로그인 정보 등록
                     //        로그인 정보를 등록하기 전에 전에 남아있는 정보가 있나 확인 해야되나..?

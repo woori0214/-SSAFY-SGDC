@@ -22,6 +22,7 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
 
+
     //랜덤도전장수락하기
     const randomAccept = function (randomAccept) {
         return new Promise((resolve, reject) => {
@@ -51,10 +52,10 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
     //친구도전장 수락하기
-    const friendAccept = function (friendSend) {
+    const friendAccept = function (friendAccept) {
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/friend-send`, friendSend)
+                .post(`${URL}/friend-send`, friendAccept)
                 .then((response) => {
                     resolve(response);
                 })
@@ -78,6 +79,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    
     //경쟁인증
     const competitionImage = function (image) {
         return new Promise((resolve, reject) => {
