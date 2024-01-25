@@ -12,7 +12,7 @@
             <MyPageSoloRecord :userId="userId"/>
         </div>
         <div class="analysis_body">
-            <MyPageAnalysis />
+            <MyPageAnalysis :userId="userId"/>
         </div>
         <div class="challenge_body">
             <MyPageChallengeBoard />

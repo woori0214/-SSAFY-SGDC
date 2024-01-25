@@ -158,7 +158,7 @@ export const useCompetionStore = defineStore('competition', () => {
     const competitionAnalysis = function (userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/${userId}`)
+                .get(`${URL}/analysis/${userId}`)
                 .then((response) => {
                     resolve(response);
                 })

@@ -85,16 +85,16 @@ export default {
 
 
     // 페이지 열었을 때 정보 가져오기
-    // onMounted(() => {
-    //   solo.soloList(userId)
-    //     .then((res) => {
-    //       console.log(res)
-    //       soloListData.value = res.solo_id
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching soloTodayData:', error);
-    //     });
-    // });
+    onMounted(() => {
+      solo.soloList(userId)
+        .then((res) => {
+          console.log(res)
+          soloListData.value = res.solo_id
+        })
+        .catch((error) => {
+          console.error('Error fetching soloTodayData:', error);
+        });
+    });
     
     // 이미지 매칭
     const getImageUrl = (categoryId) => {
