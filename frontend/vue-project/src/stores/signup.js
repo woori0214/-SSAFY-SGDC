@@ -94,17 +94,35 @@ export const useSignupStore = defineStore('signup', () => {
         );
     }
 
+    const submitNewUser = function (UserSignupInformation) {
+        console.log('submitNewUser 되고있나')
+
+        return new Promise((resolve, reject) => {
+            axios
+                .post(URL, UserSignupInformation)
+                .then(response => {
+
+                    resolve(response);
+                })
+                .catch((e) => {
+
+                    reject(e);
+                });
+        })
+    }
+
     // 전화번호 인증(방법 미정)
     const authphone = function (phoneNum) {
 
     }
 
     return {
-        isid, 
-        isnickname, 
-        isssafy, 
+        isid,
+        isnickname,
+        isssafy,
         isstudentnum,
         authphone,
+        submitNewUser,
     }
 })
 

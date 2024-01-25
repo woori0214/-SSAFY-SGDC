@@ -139,10 +139,10 @@
 import { ref, computed } from "vue";
 
 import { useSignupStore } from "@/stores/signup";
+import { useLoginStore } from "@/stores/login";
 
 export default {
   setup() {
-    
     const id = ref("");
     const userImg = ref("");
     const fileInputRef = ref(null);
@@ -303,6 +303,30 @@ export default {
       isAlert.value = !isAlert.value;
     };
 
+    // 회원가입 성공시 가입 정보로 자동 로그인하는 함수
+    const autoLoginForSignup = (signupInformation) => {
+      const User = {
+        loginId: signupInformation.loginId,
+        userPassword: signupInformation.userPassword,
+      };
+
+      loginUser
+        .isLogin(User)
+        .then(() => {
+          // userStorage.setUserInformation(User);
+
+          console.log("로그인 성공");
+          router.push("/");
+        })
+        .catch(() => {
+          console.log("로그인 실패");
+        })
+        .finally(() => {
+          console.log("Hello");
+          isSubmitButtonDisabled.value = false;
+        });
+    };
+
     // 회원가입 최종 제출 검사 및 회원가입
     const submitForm2 = () => {
       if (hasAnyError.value || ssafyidExists.value) {
@@ -326,6 +350,8 @@ export default {
         .then(() => {
           console.log("회원가입 완료");
           submitted.value = true;
+
+          autoLoginForSignup(newUser);
           router.push("/");
         })
         .catch(() => {
@@ -382,6 +408,7 @@ export default {
       handleFileUpload,
       fileUploadError,
       isVerificationSuccess,
+      autoLoginForSignup,
     };
   },
 };
