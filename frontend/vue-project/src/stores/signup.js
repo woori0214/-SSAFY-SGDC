@@ -101,7 +101,7 @@ export const useSignupStore = defineStore('signup', () => {
         return new Promise((resolve, reject) => {
             axios
                 .post(URL, UserSignupInformation)
-                .then(response => {
+                .then(response => {d
 
                     resolve(response);
                 })
@@ -112,9 +112,22 @@ export const useSignupStore = defineStore('signup', () => {
         })
     }
 
-    // 전화번호 인증(방법 미정)
+    // 전화번호 인증(방법 미정) << 임시로 중복확인만
     const authphone = function (phoneNum) {
+        console.log('authphone 되고있나')
 
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/${phoneNum}`)
+                .then(response => {
+
+                    resolve(response);
+                })
+                .catch((e) => {
+
+                    reject(e);
+                });
+        })
     }
 
     return {

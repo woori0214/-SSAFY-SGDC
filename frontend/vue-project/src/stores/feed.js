@@ -25,8 +25,6 @@ export const useFeedStore = defineStore('feed', () => {
     //게시물 조회수 업데이트
 
     const updateFeedView = function (feedId) {
-
-
         return new Promise((resolve, reject) => {
             axios
                 .patch(`${URI}/feed-views/${feedId}`,{})
@@ -56,10 +54,10 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 리스트(페이지 당 10개씩)
-    const getFeedListPage = function(){
+    const getFeedListPage = function(page){
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/feed-list/pages`)
+                .get(`${URI}/feed-list/pages`, page)
                 .then((response) => {
                     resolve(response);
                 })
