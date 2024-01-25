@@ -118,6 +118,13 @@
       <p v-if="phonenumberError" class="input_error">
         유효한 전화번호를 입력하세요.
       </p>
+      <button @click="checkPhoneNumAvailability">중복확인</button>
+      <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
+        중복된 아이디가 있습니다.
+      </p>
+      <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
+        사용 가능한 아이디입니다.
+      </p>
     </div>
     <div>
       <label for="alert">랜덤 도전장 수신 여부</label>
@@ -153,16 +160,25 @@ export default {
     const ssafyid = ref("");
     const name = ref("");
     const nickname = ref("");
+
     const phonenumber = ref("");
+    const phonenumberExists = ref(false);
+    const phonenumberAvailable = ref(false);
+
     const isAlert = ref(false);
     const idExists = ref(false);
+
     const idAvailable = ref(false);
+
     const nicknameExists = ref(false);
     const nicknameAvailable = ref(false);
+
     const nameExists = ref(false);
     const nameAvailable = ref(false);
+
     const ssafyidExists = ref(false);
     const ssafyidAvailable = ref(false);
+
     const isVerificationSuccess = ref(false);
 
     const signUp = useSignupStore();
@@ -185,6 +201,8 @@ export default {
         !nicknameAvailable.value ||
         ssafyidExists.value ||
         !ssafyidAvailable.value ||
+        phonenumberExists.value ||
+        !phonenumberAvailable.value ||
         submitted.value
       );
     });
@@ -255,6 +273,24 @@ export default {
           } else {
             ssafyidExists.value = false;
             ssafyidAvailable.value = true;
+          }
+        })
+        .catch(() => {
+          console.log("error");
+        });
+    };
+
+    // 전화번호 중복 확인
+    const checkPhoneNumAvailability = () => {
+      signUp
+        .authphone(phonenumber.value)
+        .then((response) => {
+          if (response.result) {
+            phonenumberExists.value = true;
+            phonenumberAvailable.value = false;
+          } else {
+            phonenumberExists.value = false;
+            phonenumberAvailable.value = true;
           }
         })
         .catch(() => {
@@ -409,6 +445,9 @@ export default {
       fileUploadError,
       isVerificationSuccess,
       autoLoginForSignup,
+      phonenumberExists,
+      phonenumberAvailable,
+      checkPhoneNumAvailability,
     };
   },
 };
