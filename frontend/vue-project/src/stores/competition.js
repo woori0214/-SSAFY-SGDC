@@ -2,12 +2,12 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { compileTemplate } from 'vue/compiler-sfc';
+
 
 export const useCompetionStore = defineStore('competition', () => {
     const URL = 'http://localhost:8080/compet';
     const URL2 = 'http://localhost:8080';
-
+    //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {
             axios
@@ -22,6 +22,7 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
 
+    //랜덤도전장수락하기
     const randomAccept = function (randomAccept) {
         return new Promise((resolve, reject) => {
             axios
@@ -35,6 +36,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    //친구에게 도전장 보내기
     const friendSend = function (friendSend) {
         return new Promise((resolve, reject) => {
             axios
@@ -48,6 +50,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    //친구도전장 수락하기
     const friendAccept = function (friendSend) {
         return new Promise((resolve, reject) => {
             axios
@@ -61,6 +64,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
             axios
@@ -74,6 +78,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    //경쟁인증
     const competitionImage = function (image) {
         return new Promise((resolve, reject) => {
             axios
@@ -87,6 +92,8 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+
+    //종료 경쟁 정보 상세 조회
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
             axios
@@ -100,6 +107,8 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+
+    //경쟁모드인증현황
     const competitionProgressDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
             axios
@@ -113,10 +122,13 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+
+
+    //친구 리스트 조회
     const competitionFriendList = function (userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/friend/list/${userId}`)
+                .get(`${URL2}/friend/list/${userId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -126,6 +138,8 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+
+    //사용자경쟁모드 분석
     const competitionAnalysis = function (userId) {
         return new Promise((resolve, reject) => {
             axios
