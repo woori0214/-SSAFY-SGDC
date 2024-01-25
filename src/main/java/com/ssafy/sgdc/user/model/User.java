@@ -44,10 +44,6 @@ public class User {
     @Column(name = "user_img", length = 200)
     private String userImg;
 
-    @Column(name = "is_alert")
-    @Enumerated(EnumType.STRING)
-    private IsAlert isAlert;
-
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
