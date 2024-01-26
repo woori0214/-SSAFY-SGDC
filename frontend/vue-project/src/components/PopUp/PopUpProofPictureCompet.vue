@@ -49,26 +49,16 @@ export default {
             this.$emit('update:show', false);
         },
         handleFileChange(event) {
-            console.log('파일이 선택되었습니다:', event.target.files[0]);
             const file = event.target.files[0];
-            if (file) {
-                if (file.type.startsWith('image/')) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        console.log('FileReader가 로딩되었습니다:', e.target.result);
-                        this.currentImageSrc = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                } else {
-                    console.log('유효하지 않은 파일 형식입니다. 이미지를 선택하세요.');
-                }
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = (e) => this.currentImageSrc = e.target.result;
+                reader.readAsDataURL(file);
             }
         },
         uploadImage() {
-            console.log('이미지 업로드 로직을 실행합니다.');
-            // 여기에 이미지 업로드 로직을 추가하세요.
             this.$emit('uploadImage', this.currentImageSrc);
-
+            this.close();
         },
     },
 };
