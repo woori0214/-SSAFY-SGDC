@@ -31,34 +31,18 @@ import { ref, onMounted, computed } from 'vue';
 import { useCompetionStore } from '@/stores/competition';
 import { useSoloStore } from '@/stores/solo';
 
-
-import timerImage from '@/assets/timer.png';
-import algoImage from '@/assets/algo.png';
-import dietImage from '@/assets/diet.png';
-import fightingImage from '@/assets/fighting.png';
-import studyImage from '@/assets/study.png';
-import healthImage from '@/assets/health.png';
-
 export default {
-  props: ['userId',],
+  props: ['userId', 'categories'],
 
   setup(props) {
     const userId = ref(props.userId)
+    const categories = ref(props.categories)
     const compet = useCompetionStore()
     const solo = useSoloStore();
 
     let maxCount = 0;
     let mostFrequentId = null;
-    
-    const categories = ref([
-      { id: 1, name: "기상", img: timerImage },
-      { id: 2, name: '알고리즘', img: algoImage },
-      { id: 3, name: '운동', img: healthImage },
-      { id: 4, name: '스터디', img: studyImage },
-      { id: 5, name: '식단', img: dietImage },
-      { id: 6, name: '절제', img: fightingImage },
-    ]);
-    
+  
     const compet_analysis = ref([
       {
         userCategoryId: 1,

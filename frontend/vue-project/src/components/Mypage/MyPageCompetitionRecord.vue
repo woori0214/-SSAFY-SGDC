@@ -5,47 +5,99 @@
             <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
         </div>
         <div class="com_accordion-content" :class="{ 'open': isOpen }">
-            <!-- <div v-for="competdata in competList" :key="competdata.compet_id" class="result_div">
-                <div class="result_img_div">
-                    <PopUpCompetTooltip :imageSrc="competdata.compet_result === 1 ? winimg : loseimg"
-                        :competdata="competdata" :userId="userId" />
-                    <p>{{ competdata.sender_nickname }} vs {{ competdata.receiver_nickname }}</p>
-                </div>
-                <div v-if="competdata.compet_result === 1" class="result_img_div">
-                    <img src="@/assets/pose_win_boy.png" alt="" class="win_img">
-                    <p>{{ competdata.sender_nickname }} vs {{ competdata.receiver_nickname }}</p>
-                </div>
-                <div v-else-if="competdata.compet_result === 0" class="result_img_div">
-                    <img src="@/assets/pose_lose_boy.png" alt="" class="lose_img">
-                    <p>{{ competdata.sender_nickname }} vs {{ competdata.receiver_nickname }}</p>
-                </div>
-            </div> -->
+            <!--승패에 따라 이미지 다르게 보여주기-->
             <div v-for="competdata in competList" :key="competdata.compet_id" class="result_div">
                 <div class="result_img_div">
                     <img :src="competdata.compet_result === 1 ? winimg : loseimg" alt="" class="result_img"
-                        @mouseover="competdata.showTooltip = true" @mouseleave="competdata.showTooltip = false">
-                    <div v-if="competdata.showTooltip" class="tooltip-content">{{ competdata.tooltipInfo }}</div>
+                        @click="openPopup(competdata)">
                 </div>
             </div>
+
+            <!-- 경기 상세 정보-->
+            <div v-if="showPopup" class="popup">
+                <div class="popup-content">
+                    <!-- Time -->
+                    <div class="time">{{ formatTime(selectedMatchingData[0].compet_expiration_time) }}</div>
+
+                    <!-- Sender and Receiver with Images -->
+                    <div class="match-details">
+                        <div class="sender">
+                            <img :src="getAuthImage(popupdata.sender_id)" alt="Sender Image">
+                            <span>{{ popupdata.sender_nickname }}</span>
+                        </div>
+                        <div class="category">
+                            <span>{{ getCategoryName(popupdata.category_id) }}</span>
+                        </div>
+                        <div class="receiver">
+                            <img :src="getAuthImage(popupdata.receiver_id)" alt="Receiver Image">
+                            <span>{{ popupdata.receiver_nickname }}</span>
+                        </div>
+                    </div>
+
+                    <!-- Result -->
+                    <div class="result">{{ popupdata.compet_result === 1 ? '승리' : '패배' }}</div>
+
+                    <!-- Close Button -->
+                    <button @click="showPopup = false">닫기</button>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
   
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useCompetionStore } from '@/stores/competition';
 
 import winimg from '@/assets/pose_win_boy.png';
 import loseimg from '@/assets/pose_lose_boy.png';
+import authimg from '@/assets/camera.png'
 
 export default {
-    props: ['userId',],
-    // components: {
-    //     PopUpCompetTooltip,
-    // },
+    props: ['userId', 'categories'],
+
     setup(props) {
-        const userId = ref(props.userId)
+        const userId = ref(props.userId);
+        const categories = ref(props.categories);
         const compet = useCompetionStore()
+        const showPopup = ref(false);
+        const popupdata = ref(null)
+        const selectedMatchingData = ref([
+            {
+                "matcing_id": 1,
+                "send_id": 1,
+                "category_id": 1,
+                "compet_kind": "친구",
+                "is_sender": "Y",
+                "compet_expiration_time": "2024-01-25T12:00:00"
+            },
+            {
+                "matcing_id": 1,
+                "send_id": 2,
+                "category_id": 1,
+                "compet_kind": "친구",
+                "is_sender": "N",
+                "compet_expiration_time": "2024-01-25T12:00:00"
+            },
+        ]);
+
+        const selectedAuthData = ref([
+            {
+                "auth_id": 1,
+                "auth_img": authimg,
+                "create_at": "2024-01-20T15:00:00",
+                "matcing_id": 1,
+                "compet_id": 1
+            },
+            {
+                "auth_id": 2,
+                "auth_img": authimg,
+                "create_at": "2024-01-20T15:00:00",
+                "matcing_id": 1,
+                "compet_id": 1
+            },
+        ]);
 
         const competList = ref([
             {
@@ -75,6 +127,48 @@ export default {
 
         ])
 
+        // 팝업창
+        const openPopup = (competdata) => {
+            // compet.competitionFinishDetail(userId, competdata.compet_id)
+            //     .then((res) => {
+            //         console.log(res)
+            //         selectedMatchingData.value = res.matchings;
+            //         selectedAuthData.value = res.image_auths;
+            //         showPopup.value = true;
+            //     })
+            //     .catch((err) => {
+            //         console.log(err)
+            //     })
+            popupdata.value = competdata
+            showPopup.value = true;
+        };
+
+        // 시간 포맷 변경
+        const formatTime = (timeString) => {
+            console.log(timeString)
+            const date = new Date(timeString);
+            // 유효한 날짜인지 확인
+            if (!isNaN(date.getTime())) {
+                // 날짜가 유효한 경우, 원하는 형식으로 변환하여 반환
+                return date.toLocaleDateString();
+            } else {
+                // 날짜가 유효하지 않은 경우, 에러 메시지 반환
+                return "Invalid time";
+            }
+        };
+
+        // 인증 이미지 가져오기
+        const getAuthImage = (authId) => {
+            const auth = selectedAuthData.value.find(auth => auth.auth_id === authId);
+            return auth ? auth.auth_img : '';
+        };
+
+        // 카테고리 이름 가져오기
+        const getCategoryName = (categoryId) => {
+            const category = categories.value.find(cat => cat.id === categoryId);
+            return category ? categories.name : '';
+        };
+
         // 페이지 열었을 때 정보 가져오기
         // onMounted(() => {
         //   compet.competitionFinish(userId)
@@ -94,8 +188,23 @@ export default {
             isOpen.value = !isOpen.value;
         };
 
-        const showTooltip = ref(true);
-        return { userId, compet, winimg, loseimg, competList, isOpen, toggleAccordion, showTooltip }
+        return {
+            userId,
+            categories,
+            popupdata,
+            winimg, loseimg,
+            compet,
+            competList,
+            isOpen,
+            selectedMatchingData,
+            selectedAuthData,
+            showPopup,
+            formatTime,
+            getAuthImage,
+            getCategoryName,
+            toggleAccordion,
+            openPopup
+        }
     }
 
 }
@@ -170,22 +279,59 @@ export default {
     width: 100px;
 }
 
-.tooltip-content {
-    position: absolute;
-    background-color: #555;
-    color: white;
-    text-align: center;
-    border-radius: 6px;
-    padding: 5px 0;
-    z-index: 1;
-    bottom: 125%;
-    left: 50%;
-    transform: translateX(-50%);
-    visibility: hidden;
+.popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
 }
 
-.result_img_div:hover .tooltip-content {
-    visibility: visible;
+.popup-content {
+    background-color: aliceblue;
+    width: 80%;
+    /* 변경 */
+    max-width: 80%;
+    /* 추가 */
+    max-height: 80%;
+    /* 추가 */
+    overflow: auto;
+    /* 추가 */
+    text-align: center;
 }
-</style>
+
+.time,
+.match-details,
+.result {
+    margin-bottom: 20px;
+}
+
+.match-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sender,
+.receiver {
+    display: flex;
+    flex-direction: column;
+}
+
+.match-details img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.result {
+    font-size: 1.5em;
+    color: rgb(255, 0, 0);
+    /* Or red based on result */
+}</style>
   

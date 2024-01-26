@@ -18,18 +18,12 @@
 import { ref, onMounted } from 'vue';
 import { useSoloStore } from '@/stores/solo';
 
-import timerImage from '@/assets/timer.png';
-import algoImage from '@/assets/algo.png';
-import dietImage from '@/assets/diet.png';
-import fightingImage from '@/assets/fighting.png';
-import studyImage from '@/assets/study.png';
-import healthImage from '@/assets/health.png';
-
 export default {
-  props: ['userId',],
+  props: ['userId', 'categories'],
 
   setup(props) {
-    const userId = ref(props.userId)
+    const userId = ref(props.userId);
+    const categories = ref(props.categories);
     const solo = useSoloStore();
     const soloListData = ref([
       {
@@ -73,16 +67,6 @@ export default {
         category_id: 2,
       },
     ]);
-
-    const categories = ref([
-      { id: 1, name: "기상", img: timerImage },
-      { id: 2, name: '알고리즘', img: algoImage },
-      { id: 3, name: '운동', img: healthImage },
-      { id: 4, name: '스터디', img: studyImage },
-      { id: 5, name: '식단', img: dietImage },
-      { id: 6, name: '절제', img: fightingImage },
-    ]);
-
 
     // 페이지 열었을 때 정보 가져오기
     onMounted(() => {

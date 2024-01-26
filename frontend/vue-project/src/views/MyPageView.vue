@@ -2,23 +2,23 @@
     <div class="mypageview_body">
         <h1>프로필페이지</h1>
         <div class="profile_body">
-            <MyPageProfileBar :userData="userData" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData" 
-            @ssallowing-request="handleSsallowingRequest"/>
+            <MyPageProfileBar :userData="userData" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData"
+                @ssallowing-request="handleSsallowingRequest" />
         </div>
         <div class="compet_body">
-            <MyPageCompetitionRecord :userId="userId"/>
+            <MyPageCompetitionRecord :userId="userId" :categories="categories"/>
         </div>
         <div class="solo_body">
-            <MyPageSoloRecord :userId="userId"/>
+            <MyPageSoloRecord :userId="userId" :categories="categories"/>
         </div>
         <div class="analysis_body">
-            <MyPageAnalysis :userId="userId"/>
+            <MyPageAnalysis :userId="userId" :categories="categories"/>
+        </div>
+        <div class="badge_body">
+            <MyPageBadgeList :userId="userId" />
         </div>
         <div class="challenge_body">
             <MyPageChallengeBoard />
-        </div>
-        <div class="badge_body">
-            <MyPageBadgeList />
         </div>
         <div class="ssallow_body">
             <MyPageSsallow />
@@ -41,6 +41,12 @@ import { useFollowStore } from '@/stores/follow';
 import { ref, onMounted } from 'vue';
 // 유저 이미지 가져오는 거 변경해야함
 import userimg from '@/assets/image1.png';
+import timerImage from '@/assets/timer.png';
+import algoImage from '@/assets/algo.png';
+import dietImage from '@/assets/diet.png';
+import fightingImage from '@/assets/fighting.png';
+import studyImage from '@/assets/study.png';
+import healthImage from '@/assets/health.png';
 
 const user = useUserStore()
 const follow = useFollowStore()
@@ -51,6 +57,14 @@ const userId = ref(1);  // userId를 저장할 ref 추가
 // const ssallowingData = ref([])
 // const ssallowerData = ref([])
 
+const categories = ref([
+    { id: 1, name: "기상", img: timerImage },
+    { id: 2, name: '알고리즘', img: algoImage },
+    { id: 3, name: '운동', img: healthImage },
+    { id: 4, name: '스터디', img: studyImage },
+    { id: 5, name: '식단', img: dietImage },
+    { id: 6, name: '절제', img: fightingImage },
+]);
 
 const userData = {
     user_id: 1,
