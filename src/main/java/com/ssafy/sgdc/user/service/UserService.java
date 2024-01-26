@@ -29,6 +29,7 @@ public class UserService {
                 .userPassword(userSignDto.getUserPassword())
                 .userImg(null) //보류
                 .createAt(LocalDateTime.now())
+                .updateAt(LocalDateTime.now())
                 .signOut(false)
                 .badgeId(0) //보류
                 .kakaoPush(userSignDto.getKakaoPush())
@@ -41,27 +42,23 @@ public class UserService {
     @Transactional
     public boolean checkId(String loginId){
         boolean loginIdDuplicate = userRepo.existsByLoginId(loginId);
-        System.out.println(loginIdDuplicate);
         return loginIdDuplicate;
     }
 
     @Transactional
     public boolean checkNickname(String userNickname){
         boolean nickNameDuplicate = userRepo.existsByUserNickname(userNickname);
-        System.out.println(nickNameDuplicate);
         return nickNameDuplicate;
     }
 
     @Transactional
     public boolean checkSsafyId(int userSsafyId){
         boolean ssafyIdDuplicate = userRepo.existsByUserSsafyId(userSsafyId);
-        System.out.println(ssafyIdDuplicate);
         return ssafyIdDuplicate;
     }
     @Transactional
     public boolean checkPhone(String userPhone){
         boolean userPhoneDuplicate = userRepo.existsByUserPhone(userPhone);
-        System.out.println(userPhoneDuplicate);
         return userPhoneDuplicate;
     }
 
