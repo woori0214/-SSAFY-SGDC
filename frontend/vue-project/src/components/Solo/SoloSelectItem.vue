@@ -100,11 +100,10 @@ export default {
 
     // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
     // onMounted(() => {
-    //   solo
-    //     .soloToday(user_id)
-    //     .then(() => {
-    //       // Now soloTodayData should be updated in the store
+    //   solo.soloToday(user_id)
+    //     .then((res) => {
     //       console.log(solo.soloTodayData)
+    //       soloTodayData.value = res.solo_id
     //     })
     //     .catch((error) => {
     //       console.error('Error fetching soloTodayData:', error);
