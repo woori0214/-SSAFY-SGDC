@@ -1,70 +1,151 @@
 <template>
-    <div>
-      <div class="accordion-header" @click="toggleAccordion">
-        <h2>보유 뱃지</h2>
-        <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
-      </div>
-      <div class="accordion-content" :class="{ 'open': isOpen }">
-        <div v-for="badge in badges" :key="badge.name" class="badge_img">
-          <img src="" alt="">
-        </div>
+  <div>
+    <div class="accordion-header" @click="toggleAccordion">
+      <h2>보유 뱃지</h2>
+      <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
+    </div>
+    <div class="accordion-content" :class="{ 'open': isOpen }">
+      <div v-for="badge in badge_list" :key="badge.badge_name" class="badge">
+        <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
+        <h3>{{ badge.badge_name }}</h3>
+        <p>{{ badge.badge_detail }}</p>
       </div>
     </div>
-  </template>
+  </div>
+</template>
   
-  <script setup>
-  import { ref } from 'vue';
-  
-  const isOpen = ref(true);
-  
-  const toggleAccordion = () => {
-    isOpen.value = !isOpen.value;
-  };
+<script>
+import { ref, onMounted } from 'vue';
+import { useBadgeStore } from '@/stores/badge';
+import badgeimg from '@/assets/badge.png';
+import nobadgeimg from '@/assets/no_badge.png';
 
-  const badges = ref[{
 
-  }]
-  </script>
-  
-  <style scoped>
-  /* 아코디언 헤더 스타일링 */
-  .accordion-header {
-    display: flex;
-    align-items: center;
-    background-color: #f1f1f1;
-    padding: 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
+export default {
+  props: ['userId',],
+
+  setup(props) {
+    const userId = ref(props.userId)
+    const badge = useBadgeStore();
+    const badge_list = badge.badgeList
+    const user_badge = ref([
+      {
+        badge_name: "기린이",
+        badge_detail: "기상 챌린지",
+        badge_img: badgeimg
+      },
+      {
+        badge_name: "코끼리",
+        badge_detail: "식단 챌린지",
+        badge_img: badgeimg
+      },
+      {
+        badge_name: "짐종국",
+        badge_detail: "운동 챌린지",
+        badge_img: badgeimg
+      },
+      {
+        badge_name: "참자",
+        badge_detail: "절제 챌린지",
+        badge_img: badgeimg
+      },
+    ]);
+
+    // 사용자의 뱃지 이미지를 반환하는 함수
+    const getUserBadgeImage = (badge) => {
+      // 사용자의 뱃지 리스트를 순회하면서 뱃지 이름이 일치하는지 확인
+      const userBadge = user_badge.value.find(userBadge => userBadge.badge_name === badge.badge_name);
+      // 일치하는 뱃지가 있으면 해당 이미지를 반환, 없으면 기본 이미지 반환
+      return userBadge ? userBadge.badge_img : nobadgeimg;
+    };
+
+    // 페이지 열었을 때 정보 가져오기(유저 뱃지 리스트)
+    onMounted(() => {
+      badge.getBadgeList()
+        .then((res) => {
+          console.log(res)
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+
+      badge.getUserBadgeList(userId)
+        .then((res) => {
+          console.log(res)
+          user_badge.value = res.badge_List
+        })
+        .catch((err) => {
+          console.log(err)
+        });
+    });
+
+    // 아코디언 펼치기/접기
+    const isOpen = ref(true);
+
+    const toggleAccordion = () => {
+      isOpen.value = !isOpen.value;
+    };
+
+
+    return { userId, badge, badge_list, user_badge, isOpen, getUserBadgeImage, toggleAccordion }
   }
+};
+
+
+
+</script>
   
-  .rotate-icon {
-    transition: transform 0.3s ease;
-    margin-left: auto; /* 화살표를 헤더의 오른쪽에 위치시키기 위한 스타일 */
-  }
-  
-  .rotate-icon::before {
-    content: '\25BC'; /* 기본 화살표 아래 방향 유니코드 */
-    display: inline-block;
-  }
-  
-  .rotate-icon.rotate::before {
-    content: '\25B2'; /* 화살표 위 방향 유니코드 */
-  }
-  
-  /* 아코디언 내용 스타일링 */
-  .accordion-content {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-top: none;
-    overflow: hidden;
-    max-height: 0;
-    transition: max-height 0.3s ease;
-  }
-  
-  /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
-  .accordion-content.open {
-    max-height: 1000px; /* 충분한 크기로 조절하거나, 실제 내용의 높이에 따라 조절해주세요. */
-    transition: max-height 0.3s ease;
-  }
-  </style>
+<style scoped>
+.badge {
+  text-align: center;
+}
+.badge_img {
+  width: 100px;
+  margin: 20px;
+}
+/* 아코디언 헤더 스타일링 */
+.accordion-header {
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.rotate-icon {
+  transition: transform 0.3s ease;
+  margin-left: auto;
+  /* 화살표를 헤더의 오른쪽에 위치시키기 위한 스타일 */
+}
+
+.rotate-icon::before {
+  content: '\25BC';
+  /* 기본 화살표 아래 방향 유니코드 */
+  display: inline-block;
+}
+
+.rotate-icon.rotate::before {
+  content: '\25B2';
+  /* 화살표 위 방향 유니코드 */
+}
+
+/* 아코디언 내용 스타일링 */
+.accordion-content {
+  display: flex;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-top: none;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.3s ease;
+}
+
+/* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
+.accordion-content.open {
+  max-height: 1000px;
+  /* 충분한 크기로 조절하거나, 실제 내용의 높이에 따라 조절해주세요. */
+  transition: max-height 0.3s ease;
+}
+</style>
   
