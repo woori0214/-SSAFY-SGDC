@@ -59,6 +59,7 @@
                 </div>
             </div>
         </div>
+        <Modal v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
     </div>
 </template>
   
@@ -67,7 +68,7 @@ import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCompetionStore } from '@/stores/competition';
 import { useLoginStore } from '@/stores/login';
-import axios from 'axios';
+import proofCompet from '@/components/PopUp/PopUpProofPictureCompet.vue';
 import Chart from 'chart.js/auto';
 const loginStore = useLoginStore();
 const loggedInUserId = loginStore.userId; // 로그인한 사용자의 ID를 가져옴
@@ -107,7 +108,8 @@ const isCurrentUser = (userId) => {
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
 const authenticate = (role, item) => {
-    // 인증 프로세스를 구현...
+    showModal.value = true;
+    selectedCompetItem.value = item;
 };
 const fetchCompetitionData = async () => {
     try {
@@ -159,6 +161,18 @@ const slideStyle = computed(() => {
         transform: `translateX(-${currentIndex.value * 100}%)`
     };
 });
+const handleUpload = (imageSrc) => {
+    const data = {
+        user_id: selectedCompetItem.value.userId,
+        compet_id: selectedCompetItem.value.competId,
+        auth_img: imageSrc
+    };
+    competitionStore.competitionImage(data).then(response => {
+        console.log('이미지 업로드 성공:', response);
+    }).catch(error => {
+        console.error('이미지 업로드 실패:', error);
+    });
+};
 onMounted(() => {
     fetchCompetitionData();
     fetchData();

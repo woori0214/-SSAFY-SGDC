@@ -120,10 +120,10 @@
       </p>
       <button @click="checkPhoneNumAvailability">중복확인</button>
       <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
-        중복된 아이디가 있습니다.
+        중복된 전화번호가 있습니다.
       </p>
       <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
-        사용 가능한 아이디입니다.
+        사용 가능한 번호입니다.
       </p>
     </div>
     <!-- <div>
@@ -165,10 +165,12 @@ export default {
     const phonenumberExists = ref(false);
     const phonenumberAvailable = ref(false);
 
-    // const isAlert = ref(false);
-    const idExists = ref(false);
 
+    const isAlert = ref(false);
+
+    const idExists = ref(false);
     const idAvailable = ref(false);
+    
 
     const nicknameExists = ref(false);
     const nicknameAvailable = ref(false);
