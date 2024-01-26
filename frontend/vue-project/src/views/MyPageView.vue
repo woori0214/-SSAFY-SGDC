@@ -6,13 +6,13 @@
                 @ssallowing-request="handleSsallowingRequest" />
         </div>
         <div class="compet_body">
-            <MyPageCompetitionRecord :userId="userId" :categories="categories"/>
+            <MyPageCompetitionRecord :userId="userId" :categories="categories" />
         </div>
         <div class="solo_body">
-            <MyPageSoloRecord :userId="userId" :categories="categories"/>
+            <MyPageSoloRecord :userId="userId" :categories="categories" />
         </div>
         <div class="analysis_body">
-            <MyPageAnalysis :userId="userId" :categories="categories"/>
+            <MyPageAnalysis :userId="userId" :categories="categories" />
         </div>
         <div class="badge_body">
             <MyPageBadgeList :userId="userId" />
@@ -21,7 +21,7 @@
             <MyPageChallengeBoard />
         </div>
         <div class="ssallow_body">
-            <MyPageSsallow />
+            <MyPageSsallow :userId="userId" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData" />
         </div>
     </div>
 </template>
@@ -87,37 +87,33 @@ const userData = {
 
 const ssallowingData = ref([
     {
-        following_id: {
-            user_id: 1,
-            user_nickname: "화석"
-        }
+        user_nickname: "지은",
+        user_id: 2,
+        user_img: userimg,
     },
     {
-        following_id: {
-            user_id: 2,
-            user_nickname: "태범"
-        }
+        user_nickname: "화석",
+        user_id: 3,
+        user_img: userimg,
     },
     {
-        following_id: {
-            user_id: 3,
-            user_nickname: "지은"
-        }
+        user_nickname: "태범",
+        user_id: 4,
+        user_img: userimg,
     },
+
 ])
 
 const ssallowerData = ref([
     {
-        use_id: {
-            user_id: 1,
-            user_nickname: "현춘"
-        }
+        user_nickname: "현춘",
+        user_id: 5,
+        user_img: userimg,
     },
     {
-        use_id: {
-            user_id: 2,
-            user_nickname: "수안"
-        }
+        user_nickname: "수안",
+        user_id: 6,
+        user_img: userimg,
     },
 ])
 
@@ -145,7 +141,7 @@ onMounted(() => {
     // user 정보
     user.userData(userId)
         .then((res) => {
-            userData.value = res.data
+            userData.value = res.user
         })
         .catch((err) => {
             console.log(err)
@@ -154,7 +150,7 @@ onMounted(() => {
     // 쌀로우
     follow.ssallowing(userId)
         .then((res) => {
-            ssallowingData.value = res.data
+            ssallowingData.value = res.ssafy_friend
         })
         .catch((err) => {
             console.log(err)
@@ -163,7 +159,7 @@ onMounted(() => {
     // 쌀로워
     follow.ssallower(userId)
         .then((res) => {
-            ssallowerData.value = res.data
+            ssallowerData.value = res.ssafy_friend
         })
         .catch((err) => {
             console.log(err)

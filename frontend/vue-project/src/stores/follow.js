@@ -43,15 +43,9 @@ export const useFollowStore = defineStore('follow', () => {
 
     // 쌀로잉 추가
     const plusSsallowing = function (ssallowingData) {
-
-        const ssallowing = {
-                user_id: ssallowingData.user_id,
-                following_id: ssallowingData.following_id
-        }
-
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/following/${ssallowing.user_id}`, ssallowing)
+                .post(`${URL}/following/${ssallowingData.user_id}`, ssallowingData)
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -66,7 +60,7 @@ export const useFollowStore = defineStore('follow', () => {
     const deleteSsallowing = function (ssallowing) {
         return new Promise((resolve, reject) => {
             axios
-                .delete(`${URL}/${ssallowing.value.user_id}/${ssallowing.value.following_id}`)
+                .delete(`${URL}/${ssallowing.user_id}/${ssallowing.following_id}`)
                 .then((res) => {
                     console.log(res);
                     resolve(res);
