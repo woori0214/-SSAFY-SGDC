@@ -126,7 +126,7 @@
         사용 가능한 아이디입니다.
       </p>
     </div>
-    <div>
+    <!-- <div>
       <label for="alert">랜덤 도전장 수신 여부</label>
       <div class="toggle_switch">
         <input
@@ -137,7 +137,7 @@
         />
         <label for="alert_toggle"></label>
       </div>
-    </div>
+    </div> -->
     <button @click="submitForm2" :disabled="hasAnyError">회원가입</button>
   </div>
 </template>
@@ -165,7 +165,7 @@ export default {
     const phonenumberExists = ref(false);
     const phonenumberAvailable = ref(false);
 
-    const isAlert = ref(false);
+    // const isAlert = ref(false);
     const idExists = ref(false);
 
     const idAvailable = ref(false);
@@ -228,13 +228,16 @@ export default {
 
     //아이디 중복 확인
     const checkIdAvailability = () => {
+      console.log('아이디 중복 확인 함수 실행' + id.value);
       signUp
         .isid(id.value)
         .then((response) => {
           if (response.status === 200) {
+            console.log('아이디 중복 확인 통과');
             idExists.value = true;
             idAvailable.value = false;
           } else {
+            console.log('아이디 중복 확인 오류');
             idExists.value = false;
             idAvailable.value = true;
           }
@@ -377,7 +380,7 @@ export default {
         userSsafyId: ssafyid.value,
         userPhone: phonenumber.value,
         userName: name.value,
-        isAlert: isAlert.value ? "활성" : "비활성",
+        // isAlert: isAlert.value ? "활성" : "비활성",
         userImg: userImg.value,
       };
 
@@ -414,7 +417,7 @@ export default {
       name,
       nickname,
       phonenumber,
-      isAlert,
+      // isAlert,
       checkIdAvailability,
       checkNickAvailability,
       checkStudentnumAvailability,
