@@ -119,10 +119,16 @@
         유효한 전화번호를 입력하세요.
       </p>
       <button @click="checkPhoneNumAvailability">중복확인</button>
-      <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
+      <p
+        v-show="phonenumberExists && !phonenumberAvailable"
+        class="input_error"
+      >
         중복된 전화번호가 있습니다.
       </p>
-      <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
+      <p
+        v-show="!phonenumberExists && phonenumberAvailable"
+        class="success_message"
+      >
         사용 가능한 번호입니다.
       </p>
     </div>
@@ -144,12 +150,16 @@
   
 <script>
 import { ref, computed } from "vue";
+import { useRouter } from 'vue-router';
 
 import { useSignupStore } from "@/stores/signup";
 import { useLoginStore } from "@/stores/login";
 
 export default {
   setup() {
+    const router = useRouter();
+
+
     const id = ref("");
     const userImg = ref("");
     const fileInputRef = ref(null);
@@ -165,12 +175,10 @@ export default {
     const phonenumberExists = ref(false);
     const phonenumberAvailable = ref(false);
 
-
     const isAlert = ref(false);
 
     const idExists = ref(false);
     const idAvailable = ref(false);
-    
 
     const nicknameExists = ref(false);
     const nicknameAvailable = ref(false);
@@ -197,13 +205,13 @@ export default {
       // console.log('nicknameError' + !nicknameError.value);
       // console.log(!phonenumberError.value);
       // console.log(!idExists.value);
-      // console.log(!nicknameExists.value); 
-      // console.log(idAvailable.value); 
+      // console.log(!nicknameExists.value);
+      // console.log(idAvailable.value);
       // console.log(nicknameAvailable.value);
       // console.log(!ssafyidExists.value);
-      // console.log(ssafyidAvailable.value); 
+      // console.log(ssafyidAvailable.value);
       // console.log(!phonenumberExists.value);
-      // console.log(phonenumberAvailable.value); 
+      // console.log(phonenumberAvailable.value);
       // console.log(submitted.value);
       // console.log('End');
 
@@ -245,12 +253,12 @@ export default {
 
     //아이디 중복 확인
     const checkIdAvailability = () => {
-      console.log('아이디 중복 확인 함수 실행' + id.value);
+      console.log("아이디 중복 확인 함수 실행" + id.value);
       signUp
         .isid(id.value)
-        .then((response) => {          
+        .then((response) => {
           console.log(response);
-          if (!response.data.result == 'true') {
+          if (!(response.data.result == "true")) {
             idExists.value = true;
             idAvailable.value = false;
           } else {
@@ -268,7 +276,7 @@ export default {
       signUp
         .isnickname(nickname.value)
         .then((response) => {
-          if (!response.data.result == 'true') {
+          if (!(response.data.result == "true")) {
             nicknameExists.value = true;
             nicknameAvailable.value = false;
           } else {
@@ -286,7 +294,7 @@ export default {
       signUp
         .isstudentnum(ssafyid.value)
         .then((response) => {
-          if (!response.data.result == 'true') {
+          if (!(response.data.result == "true")) {
             ssafyidExists.value = true;
             ssafyidAvailable.value = false;
           } else {
@@ -301,11 +309,11 @@ export default {
 
     // 전화번호 중복 확인
     const checkPhoneNumAvailability = () => {
-      console.log('전화번호 인증: ' + phonenumber.value);
+      console.log("전화번호 인증: " + phonenumber.value);
       signUp
         .authphone(phonenumber.value)
         .then((response) => {
-          if (!response.data.result == 'true') {
+          if (!(response.data.result == "true")) {
             phonenumberExists.value = true;
             phonenumberAvailable.value = false;
           } else {
@@ -372,7 +380,11 @@ export default {
           // userStorage.setUserInformation(User);
 
           console.log("로그인 성공");
-          router.push("/");
+          try {
+            router.push({ name: "Main" });
+          } catch (error) {
+            alert('라우팅 에러발생함' + error);
+          }
         })
         .catch(() => {
           console.log("로그인 실패");
@@ -410,10 +422,13 @@ export default {
         .then((response) => {
           console.log("회원가입 완료");
           console.log(response);
-          submitted.value = true;
 
           //autoLoginForSignup(newUser);
-          router.push("/");
+          try {
+            router.push({ name: 'Main' });
+          } catch (error) {
+            alert('라우팅 에러발생함' + error);
+          }
         })
         .catch(() => {
           console.log("회원가입 실패");
