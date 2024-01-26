@@ -19,7 +19,7 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .post(ssafyurl, ssafy)
                 .then((response) => {
-
+        
                     resolve(response);
                 })
                 .catch((e) => {
@@ -40,10 +40,11 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .get(`${URL}/check-id/${loginId}`)
                 .then((response) => {
-                    console.log(response);
+                    console.log('아이디 중복 확인');
                     resolve(response);
                 })
                 .catch((e) => {
+                    console.log('아이디 중복 에러');
                     console.log(e)
                     reject(e);
 

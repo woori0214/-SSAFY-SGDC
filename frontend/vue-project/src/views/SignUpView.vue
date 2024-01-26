@@ -231,13 +231,12 @@ export default {
       console.log('아이디 중복 확인 함수 실행' + id.value);
       signUp
         .isid(id.value)
-        .then((response) => {
-          if (response.status === 200) {
-            console.log('아이디 중복 확인 통과');
+        .then((response) => {          
+          console.log(response);
+          if (!response.data.result == 'true') {
             idExists.value = true;
             idAvailable.value = false;
           } else {
-            console.log('아이디 중복 확인 오류');
             idExists.value = false;
             idAvailable.value = true;
           }
@@ -252,7 +251,7 @@ export default {
       signUp
         .isnickname(nickname.value)
         .then((response) => {
-          if (response.status === 200) {
+          if (!response.data.result == 'true') {
             nicknameExists.value = true;
             nicknameAvailable.value = false;
           } else {
@@ -270,7 +269,7 @@ export default {
       signUp
         .isstudentnum(ssafyid.value)
         .then((response) => {
-          if (response.status === 200) {
+          if (!response.data.result == 'true') {
             ssafyidExists.value = true;
             ssafyidAvailable.value = false;
           } else {
@@ -288,7 +287,7 @@ export default {
       signUp
         .authphone(phonenumber.value)
         .then((response) => {
-          if (response.result) {
+          if (!response.data.result == 'true') {
             phonenumberExists.value = true;
             phonenumberAvailable.value = false;
           } else {
