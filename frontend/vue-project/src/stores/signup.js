@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export const useSignupStore = defineStore('signup', () => {
 
-    const ssafyurl = 'http://project.ssafy.com/ssafy/api/auth/signin';
+    const ssafyurl = 'https://project.ssafy.com/ssafy/api/auth/signin';
     const URL = 'http://localhost:8080/user/signup';
     // 사용자 프로젝트 싸피 인증
 
@@ -19,7 +19,7 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .post(ssafyurl, ssafy)
                 .then((response) => {
-        
+
                     resolve(response);
                 })
                 .catch((e) => {
@@ -96,13 +96,14 @@ export const useSignupStore = defineStore('signup', () => {
         );
     }
 
-    const submitNewUser = function (UserSignupInformation) {
-        console.log('submitNewUser 되고있나')
+    const submitNewUser = function (newUser) {
+        console.log('submitNewUser 되고있나');
+        console.log(newUser);
 
         return new Promise((resolve, reject) => {
             axios
-                .post(URL, UserSignupInformation)
-                .then(response => {d
+                .post(`${URL}/`, newUser)
+                .then(response => {
 
                     resolve(response);
                 })
@@ -114,18 +115,18 @@ export const useSignupStore = defineStore('signup', () => {
     }
 
     // 전화번호 인증(방법 미정) << 임시로 중복확인만
-    const authphone = function (phoneNum) {
-        console.log('authphone 되고있나')
+    const authphone = function (userPhone) {
+        console.log('authphone 되고있나' + userPhone);
 
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/check-phoneNum/${phoneNum}`)
+                .get(`${URL}/check-phone/${userPhone}`)
                 .then(response => {
-
+                    console.log(response);
                     resolve(response);
                 })
                 .catch((e) => {
-
+                    console.log(response);
                     reject(e);
                 });
         })

@@ -138,7 +138,7 @@
         <label for="alert_toggle"></label>
       </div>
     </div> -->
-    <button @click="submitForm2" :disabled="hasAnyError">회원가입</button>
+    <button @click="submitForm2" :disabled="hasAnyError.value">회원가입</button>
   </div>
 </template>
   
@@ -190,19 +190,34 @@ export default {
 
     // 모든 정보가 입력되었는지 검사하는 함수
     const hasAnyError = computed(() => {
+      // console.log('idError:' + !idError.value);
+      // console.log('nameError:' +!nameError.value);
+      // console.log('nicknameError' + !nicknameError.value);
+      // console.log(!phonenumberError.value);
+      // console.log(!idExists.value);
+      // console.log(!nicknameExists.value); 
+      // console.log(idAvailable.value); 
+      // console.log(nicknameAvailable.value);
+      // console.log(!ssafyidExists.value);
+      // console.log(ssafyidAvailable.value); 
+      // console.log(!phonenumberExists.value);
+      // console.log(phonenumberAvailable.value); 
+      // console.log(submitted.value);
+      // console.log('End');
+
       return (
-        idError.value ||
-        nameError.value ||
-        nicknameError.value ||
-        phonenumberError.value ||
-        idExists.value ||
-        nicknameExists.value ||
-        !idAvailable.value ||
-        !nicknameAvailable.value ||
-        ssafyidExists.value ||
-        !ssafyidAvailable.value ||
-        phonenumberExists.value ||
-        !phonenumberAvailable.value ||
+        !idError.value ||
+        !nameError.value ||
+        !nicknameError.value ||
+        !phonenumberError.value ||
+        !idExists.value ||
+        !nicknameExists.value ||
+        idAvailable.value ||
+        nicknameAvailable.value ||
+        !ssafyidExists.value ||
+        ssafyidAvailable.value ||
+        !phonenumberExists.value ||
+        phonenumberAvailable.value ||
         submitted.value
       );
     });
@@ -284,6 +299,7 @@ export default {
 
     // 전화번호 중복 확인
     const checkPhoneNumAvailability = () => {
+      console.log('전화번호 인증: ' + phonenumber.value);
       signUp
         .authphone(phonenumber.value)
         .then((response) => {
@@ -296,7 +312,7 @@ export default {
           }
         })
         .catch(() => {
-          console.log("error");
+          console.log("error~~");
         });
     };
 
@@ -367,29 +383,34 @@ export default {
 
     // 회원가입 최종 제출 검사 및 회원가입
     const submitForm2 = () => {
-      if (hasAnyError.value || ssafyidExists.value) {
+      console.log(hasAnyError.value);
+      console.log(hasAnyError);
+      console.log(ssafyidExists.value);
+      if (!hasAnyError.value && ssafyidExists.value) {
         alert("양식을 올바르게 입력해주세요.");
         return;
       }
-      const newUser = {
+      const newUser = ref({
         loginId: id.value,
         userEmail: email.value,
-        userNickname: nickname.value,
-        userPassword: password.value,
         userSsafyId: ssafyid.value,
-        userPhone: phonenumber.value,
+        userNickname: nickname.value,
         userName: name.value,
-        // isAlert: isAlert.value ? "활성" : "비활성",
+        userPassword: password.value,
         userImg: userImg.value,
-      };
+        userPhone: phonenumber.value,
+        // isAlert: isAlert.value ? "활성" : "비활성",
+        kakaoPush: false,
+      });
 
       signUp
-        .submitNewUser(newUser)
-        .then(() => {
+        .submitNewUser(newUser.value)
+        .then((response) => {
           console.log("회원가입 완료");
+          console.log(response);
           submitted.value = true;
 
-          autoLoginForSignup(newUser);
+          //autoLoginForSignup(newUser);
           router.push("/");
         })
         .catch(() => {
