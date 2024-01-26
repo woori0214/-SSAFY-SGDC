@@ -8,7 +8,7 @@ import axios from 'axios';
 
 export const useSignupStore = defineStore('signup', () => {
 
-    const ssafyurl = 'https://project.ssafy.com/ssafy/api/auth/signin';
+    const ssafyurl = 'http://project.ssafy.com/ssafy/api/auth/signin';
     const URL = 'http://localhost:8080/user/signup';
     // 사용자 프로젝트 싸피 인증
 
@@ -19,7 +19,7 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .post(ssafyurl, ssafy)
                 .then((response) => {
-
+        
                     resolve(response);
                 })
                 .catch((e) => {
@@ -40,10 +40,11 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .get(`${URL}/check-id/${loginId}`)
                 .then((response) => {
-
+                    console.log('아이디 중복 확인');
                     resolve(response);
                 })
                 .catch((e) => {
+                    console.log('아이디 중복 에러');
                     console.log(e)
                     reject(e);
 
@@ -118,7 +119,7 @@ export const useSignupStore = defineStore('signup', () => {
 
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/${phoneNum}`)
+                .get(`${URL}/check-phoneNum/${phoneNum}`)
                 .then(response => {
 
                     resolve(response);
