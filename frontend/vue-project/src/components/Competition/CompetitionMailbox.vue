@@ -17,11 +17,12 @@
 <script setup>
 import { ref } from 'vue';
 import { useCompetionStore } from '@/stores/competition';
-import { useLoginStore } from '@/stores/login'
+
+import { useUserStorageStore } from '@/stores/userStorage';
 import CompetitionMailboxItem from './CompetitionMailboxItem.vue';
 
 const competitionStore = useCompetionStore();
-const login = useLoginStore();
+const login = useUserStorageStore();
 const mailParameters = ref([
   {
     is_sender: 'John Doe',
@@ -34,8 +35,9 @@ const mailParameters = ref([
     compet_expiration_time: '02:00',
   },
 ]);
+const userInformation = userStorage.getUserInformation();
+const userId = userInformation.user_Id;
 
-const userId = login.loginUser;
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {

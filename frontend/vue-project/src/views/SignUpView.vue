@@ -5,13 +5,7 @@
     <h1>회원가입</h1>
     <div>
       <label for="userImg">프로필 사진</label>
-      <input
-        type="file"
-        accept="image/*"
-        @change="handleFileUpload"
-        id="userImg"
-        ref="fileInputRef"
-      />
+      <input type="file" accept="image/*" @change="handleFileUpload" id="userImg" ref="fileInputRef" />
       <p v-if="fileUploadError" class="input_error">{{ fileUploadError }}</p>
 
       <img v-if="userImg" :src="userImg" alt="프로필 사진" class="thumbnail" />
@@ -19,12 +13,7 @@
 
     <div>
       <label for="id">아이디</label>
-      <input
-        type="text"
-        v-model="id"
-        @input="idCheck"
-        placeholder="아이디를 입력하세요"
-      />
+      <input type="text" v-model="id" @input="idCheck" placeholder="아이디를 입력하세요" />
       <p v-if="idError" class="input_error">
         아이디는 4자 이상 20자 이하의 대소문자로 시작하는 조합으로 입력해야
         합니다.
@@ -39,27 +28,15 @@
     </div>
     <div>
       <label for="email">이메일</label>
-      <input
-        type="email"
-        v-model="email"
-        placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
-      />
+      <input type="email" v-model="email" placeholder="싸피프로젝트 사이트 이메일을 입력하세요." />
     </div>
     <div>
       <label for="password">비밀번호</label>
-      <input
-        type="password"
-        v-model="password"
-        placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요."
-      />
+      <input type="password" v-model="password" placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요." />
     </div>
     <div>
       <label for="ssafyid">ssafy학번</label>
-      <input
-        type="text"
-        v-model="ssafyid"
-        placeholder="ssafy학번을 입력하세요"
-      />
+      <input type="text" v-model="ssafyid" placeholder="ssafy학번을 입력하세요" />
       <button @click="checkStudentnumAvailability">중복확인</button>
       <p v-show="ssafyidExists" class="input_error">중복된 학번입니다.</p>
       <p v-show="ssafyidAvailable" class="success_message">
@@ -76,12 +53,7 @@
 
     <div>
       <label for="name">이름</label>
-      <input
-        type="text"
-        v-model="name"
-        @input="nameCheck"
-        placeholder="이름을 입력하세요"
-      />
+      <input type="text" v-model="name" @input="nameCheck" placeholder="이름을 입력하세요" />
       <p v-if="nameError" class="input_error">
         이름은 2자 이상, 10자 이하의 한글이어야 합니다.
       </p>
@@ -89,12 +61,7 @@
 
     <div>
       <label for="nickname">닉네임</label>
-      <input
-        type="text"
-        v-model="nickname"
-        @input="nicknameCheck"
-        placeholder="닉네임을 입력하세요"
-      />
+      <input type="text" v-model="nickname" @input="nicknameCheck" placeholder="닉네임을 입력하세요" />
       <p v-if="nicknameError" class="input_error">
         닉네임은 2자 이상, 10자 이하의 한글이어야 합니다.
       </p>
@@ -109,26 +76,15 @@
 
     <div>
       <label for="phonenumber">전화번호</label>
-      <input
-        type="text"
-        v-model="phonenumber"
-        @input="phonenumberCheck"
-        placeholder="-를 제외하고 입력해주세요."
-      />
+      <input type="text" v-model="phonenumber" @input="phonenumberCheck" placeholder="-를 제외하고 입력해주세요." />
       <p v-if="phonenumberError" class="input_error">
         유효한 전화번호를 입력하세요.
       </p>
       <button @click="checkPhoneNumAvailability">중복확인</button>
-      <p
-        v-show="phonenumberExists && !phonenumberAvailable"
-        class="input_error"
-      >
+      <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
         중복된 전화번호가 있습니다.
       </p>
-      <p
-        v-show="!phonenumberExists && phonenumberAvailable"
-        class="success_message"
-      >
+      <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
         사용 가능한 번호입니다.
       </p>
     </div>
@@ -422,6 +378,7 @@ export default {
         .then((response) => {
           console.log("회원가입 완료");
           console.log(response);
+          console.log(userImg.value);
 
           //autoLoginForSignup(newUser);
           try {
@@ -436,13 +393,21 @@ export default {
     };
 
     // 유저 프로필 사진 업로드
+    // 유저 프로필 사진 업로드
     const handleFileUpload = () => {
       const file = fileInputRef.value.files[0];
       if (file) {
-        userImg.value = URL.createObjectURL(file);
-        fileUploadError.value = null;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          // `event.target.result`에는 base64로 인코딩된 이미지가 포함됩니다.
+          userImg.value = event.target.result;
+          fileUploadError.value = null;
+        };
+        // 파일을 데이터 URL로 읽어옵니다 (base64로 인코딩)
+        reader.readAsDataURL(file);
       }
     };
+
 
     return {
       id,
@@ -530,17 +495,20 @@ export default {
   transition: 0.3s;
 }
 
-.toggle_switch input:checked + label {
+.toggle_switch input:checked+label {
   background-color: #2196f3;
 }
 
-.toggle_switch input:checked + label:after {
+.toggle_switch input:checked+label:after {
   transform: translateX(15px);
 }
+
 .thumbnail {
-  max-width: 50px; /* 원하는 크기로 조절하세요 */
+  max-width: 50px;
+  /* 원하는 크기로 조절하세요 */
   max-height: 50px;
-  margin-top: 5px; /* 이미지와 다른 입력란 간격 조절 */
+  margin-top: 5px;
+  /* 이미지와 다른 입력란 간격 조절 */
 }
 
 @media only screen and (max-width: 600px) {
@@ -560,22 +528,27 @@ export default {
   }
 
   h1 {
-    font-size: 1.5em; /* Smaller font size for smaller screens */
+    font-size: 1.5em;
+    /* Smaller font size for smaller screens */
   }
 
   input[type="text"],
   input[type="email"],
   input[type="password"],
   button {
-    width: 100%; /* Full width on small screens */
-    margin: 0; /* Remove margins */
-    box-sizing: border-box; /* Include padding in width calculation */
+    width: 100%;
+    /* Full width on small screens */
+    margin: 0;
+    /* Remove margins */
+    box-sizing: border-box;
+    /* Include padding in width calculation */
   }
 
   .input_error,
   .success_message,
   .confirmation_message {
-    font-size: 0.8em; /* Smaller font size for error messages */
+    font-size: 0.8em;
+    /* Smaller font size for error messages */
   }
 
   /* Adjust padding and margin for smaller screens */

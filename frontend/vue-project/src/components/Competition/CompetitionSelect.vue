@@ -16,7 +16,7 @@
 
     <PopUpRequestMessage :showModal="isRandomMatchingModalVisible || isFriendMatchingModalVisible" :close="closeModal"
       :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
-      :user_id="login.loginUser" />
+      :user_id="userId" />
   </div>
 </template>
 
@@ -25,7 +25,8 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import PopUpRequestMessage from '@/components/PopUp/PopUpRequestMessage.vue';
 import { useCompetionStore } from '@/stores/competition';
-import { useLoginStore } from '@/stores/login';
+
+import { useUserStorageStore } from '@/stores/userStorage';
 
 const MyCategories = ref([
   {
@@ -61,13 +62,15 @@ const modalType = ref('');
 const selectedCategory = ref(null);
 
 const competSelect = useCompetionStore();
-const login = useLoginStore();
+const userStorage = useUserStorageStore();
+const userInformation = userStorage.getUserInformation();
+const userId = userInformation.user_Id;
 
 const openRandomMatchingModal = () => {
   if (selectedCategory !== null) {
     const randomSendData = {
       category_id: selectedCategory.value,
-      user_id: login.loginUser,
+      user_id: userId,
     };
     console.log('도전장', randomSendData);
     // Add logic to handle the random matching modal
