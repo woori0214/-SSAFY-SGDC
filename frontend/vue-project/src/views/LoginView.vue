@@ -17,10 +17,7 @@
   
 <script>
 import { ref, computed } from "vue";
-import { useRouter } from 'vue-router';
-
-
-// import { useUserStorageStore } from "@/stores/userStorage";
+import router from "@/router";
 import { useLoginStore } from "@/stores/login";
 
 
@@ -30,8 +27,6 @@ export default {
     const password = ref("");
     const isSubmitButtonDisabled = ref(false);
     const loginUser = useLoginStore();
-    const router = useRouter();
-    // const userStorage = useUserStorageStore();
 
     const login = () => {
       if (userId.value == "" || password.value == "") {
@@ -41,16 +36,14 @@ export default {
       }
       isSubmitButtonDisabled.value = true;
 
-      const User = {
+      const User = ref({
         loginId: userId.value,
         userPassword: password.value,
-      };
+      });
 
       loginUser
-        .isLogin(User)
+        .isLogin(User.value)
         .then(() => {
-          // userStorage.setUserInformation(User);
-
           console.log("로그인 성공");
           router.push("/");
         })
@@ -59,9 +52,6 @@ export default {
           console.log(e);
         })
         .finally(() => {
-          console.log("Hello");
-          console.log(userId.value);
-          console.log(password.value)
           isSubmitButtonDisabled.value = false;
         });
     };
