@@ -25,6 +25,10 @@ export const useUserStorageStore = defineStore('userStorage', () => {
   // 유저 로그인 정보 등록하기 
   // { user_id, user_name, token }
   const setUserInformation = function (data) {
+    // console.log('data:');
+    // console.log(data);
+    // console.log('data.user_id:');
+    // console.log(data.user_id);
     localStorage.setItem("user_id", data.user_id);
     localStorage.setItem("user_name", data.user_name);
     localStorage.setItem("token", data.token);
