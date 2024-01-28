@@ -21,7 +21,7 @@ export const useLoginStore = defineStore('login', () => {
                     //        로그인 정보를 등록하기 전에 전에 남아있는 정보가 있나 확인 해야되나..?
                     userStorage.setUserInformation(response);
                     resolve(response);
-                    loginUser = response.data.user;
+                   
                 })
                 .catch((e) => {
                     console.log(e)

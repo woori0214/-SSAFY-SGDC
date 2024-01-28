@@ -17,6 +17,8 @@
   
 <script>
 import { ref, computed } from "vue";
+import { useRouter } from 'vue-router';
+
 
 // import { useUserStorageStore } from "@/stores/userStorage";
 import { useLoginStore } from "@/stores/login";
@@ -28,6 +30,7 @@ export default {
     const password = ref("");
     const isSubmitButtonDisabled = ref(false);
     const loginUser = useLoginStore();
+    const router = useRouter();
     // const userStorage = useUserStorageStore();
 
     const login = () => {
@@ -51,11 +54,14 @@ export default {
           console.log("로그인 성공");
           router.push("/");
         })
-        .catch(() => {
+        .catch((e) => {
           console.log("로그인 실패");
+          console.log(e);
         })
         .finally(() => {
           console.log("Hello");
+          console.log(userId.value);
+          console.log(password.value)
           isSubmitButtonDisabled.value = false;
         });
     };
