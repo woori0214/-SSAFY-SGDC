@@ -9,9 +9,9 @@
                         <canvas ref="myChart" width="150" height="150"></canvas>
                     </div>
                     <div class="categories">
-                        <button class="category_btn" v-for="category in categories" :key="category.id"
-                            :class="{ 'active': category.isActive }" @click="navigateToPage(category)">
-                            {{ category.name }}
+                        <button class="category_btn" v-for="category in todayChallenges" :key="category.category_id"
+                            :class="{ 'completed': category.solo_result === 'COMPLETED' }">
+                            {{ category.category_name }}
                         </button>
                     </div>
                 </div>
@@ -28,7 +28,7 @@
                                     <img :src="item.sender_user_img" alt="sender image" class="player_img">
                                     <p>{{ item.sender_user_nickname }}</p>
                                     <button v-if="item.sender_isCurrentUser && !item.sender_authenticated"
-                                        @click="authenticate('sender', item)">인증하기</button>
+                                        @click="authenticate(item)">인증하기</button>
                                     <div v-else-if="item.sender_authenticated">인증 완료</div>
                                     <div v-else>진행중</div>
                                 </div>
@@ -41,7 +41,7 @@
                                     <img :src="item.receiver_user_img" alt="receiver image" class="player_img">
                                     <p>{{ item.receiver_user_nickname }}</p>
                                     <button v-if="item.receiver_isCurrentUser && !item.receiver_authenticated"
-                                        @click="authenticate('receiver', item)">인증하기</button>
+                                        @click="authenticate(item)">인증하기</button>
                                     <div v-else-if="item.receiver_authenticated">인증 완료</div>
                                     <div v-else>진행중</div>
                                 </div>
@@ -67,11 +67,15 @@
 import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useCompetionStore } from '@/stores/competition';
-import { useLoginStore } from '@/stores/login';
+import { useUserStorageStore } from '@/stores/userStorage';
+import { useSoloStore } from '@/stores/solo';
+const userStorage = useUserStorageStore();
 import proofCompet from '@/components/PopUp/PopUpProofPictureCompet.vue';
 import Chart from 'chart.js/auto';
-const loginStore = useLoginStore();
-const loggedInUserId = loginStore.userId; // 로그인한 사용자의 ID를 가져옴
+
+const soloStore = useSoloStore();
+const todayChallenges = ref([]);
+
 const competitionStore = useCompetionStore();
 const categories = ref([
     { id: 1, name: '기상', isActive: false },
@@ -107,7 +111,7 @@ const isCurrentUser = (userId) => {
 };
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
-const authenticate = (role, item) => {
+const authenticate = (item) => {
     showModal.value = true;
     selectedCompetItem.value = item;
 };
@@ -128,21 +132,16 @@ const fetchCompetitionData = async () => {
     }
 };
 
-const fetchData = async () => {
-    // Fetch your data here and update categories if needed
-    // 예를 들어:
-    // const response = await axios.get('/your-endpoint');
-    // categories.value = response.data;
-};
 
-const navigateToPage = (category) => {
-    if (category.isActive == false) {
-        // Navigate to the desired route
-        // 예를 들어:
-        // router.push({ name: 'CategoryPage', params: { id: category.id } });
-        router.push({ name: 'Competiton' })
-    }
-};
+
+// const navigateToPage = (category) => {
+//     if (category.isActive == false) {
+//         // Navigate to the desired route
+//         // 예를 들어:
+//         // router.push({ name: 'CategoryPage', params: { id: category.id } });
+//         router.push({ name: 'Competiton' })
+//     }
+// };
 
 const prev = () => {
     currentIndex.value = (currentIndex.value - 1 + items.value.length) % items.value.length;
@@ -173,33 +172,62 @@ const handleUpload = (imageSrc) => {
         console.error('이미지 업로드 실패:', error);
     });
 };
+
+function getCategoryNameById(id) {
+    const categoryMap = {
+        1: '기상',
+        2: '알고리즘',
+        3: '운동',
+        4: '식단',
+        5: '스터디',
+        6: '절제'
+
+    };
+    return categoryMap[id] || '알 수 없는 카테고리';
+}
 onMounted(() => {
     fetchCompetitionData();
-    fetchData();
-    if (chartRef.value) {
-        const ctx = chartRef.value.getContext('2d');
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Category 1'],
-                datasets: [
-                    {
-                        data: [60, 40],
-                        backgroundColor: ['lightblue', 'transparent'],
-                    },
-                ],
-            },
-            options: {
-                cutout: '60%',
-                responsive: true,
-                maintainAspectRatio: false,
-            },
-        });
+    const userInformation = userStorage.getUserInformation();
+    const userId = userInformation.user_Id;
+    if (userId) {
+        soloStore.soloToday(userId)
+            .then(response => {
+                todayChallenges.value = response.data['solo_id'].map(challenge => ({
+                    category_id: challenge.category_id,
+                    category_name: getCategoryNameById(challenge.category_id),
+                    solo_result: challenge.solo_result,
+                }));
+            })
+            .catch(error => {
+                console.error('Error fetching solo today data:', error);
+            });
+    } else {
+        console.error('User ID not found');
     }
 });
-
-
+if (chartRef.value) {
+    const ctx = chartRef.value.getContext('2d');
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Category 1'],
+            datasets: [
+                {
+                    data: [60, 40],
+                    backgroundColor: ['lightblue', 'transparent'],
+                },
+            ],
+        },
+        options: {
+            cutout: '60%',
+            responsive: true,
+            maintainAspectRatio: false,
+        },
+    });
+}
 </script>
+
+
   
 
   
@@ -302,6 +330,13 @@ onMounted(() => {
     /* 부모 컨테이너의 100% 너비를 가짐 */
 }
 
+.category_btn.completed {
+    background-color: #4CAF50;
+    /* 도전 완료된 카테고리의 배경색 */
+    color: white;
+    /* 텍스트 색상 */
+}
+
 @media (max-width: 768px) {
     .current_board {
         flex-direction: column;
@@ -330,4 +365,3 @@ onMounted(() => {
     }
 }
 </style>
-  

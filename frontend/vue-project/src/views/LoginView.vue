@@ -47,8 +47,9 @@ export default {
           console.log("로그인 성공");
           router.push("/");
         })
-        .catch(() => {
+        .catch((e) => {
           console.log("로그인 실패");
+          console.log(e);
         })
         .finally(() => {
           isSubmitButtonDisabled.value = false;
