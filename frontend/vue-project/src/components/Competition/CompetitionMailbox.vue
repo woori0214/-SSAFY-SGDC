@@ -22,7 +22,7 @@ import { useUserStorageStore } from '@/stores/userStorage';
 import CompetitionMailboxItem from './CompetitionMailboxItem.vue';
 
 const competitionStore = useCompetionStore();
-const login = useUserStorageStore();
+const userStorage = useUserStorageStore();
 const mailParameters = ref([
   {
     is_sender: 'John Doe',
