@@ -3,7 +3,7 @@
     <div>매칭 시작하기</div>
     <div class="categori_list">
       <button v-for="category in MyCategories" :key="category.id" :class="{ active: selectedCategory === category.id }"
-        @click="selectCategory(category.id)">
+        @click="selectCategory(category.id)" class="category-button">
         {{ category.name }}
       </button>
     </div>
@@ -15,8 +15,7 @@
     </div>
 
     <PopUpRequestMessage :showModal="isRandomMatchingModalVisible || isFriendMatchingModalVisible" :close="closeModal"
-      :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
-      :user_id="userId" />
+      :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null" :user_id="userId" />
   </div>
 </template>
 
@@ -123,12 +122,18 @@ const selectCategory = (categoryId) => {
   margin-bottom: 10px;
 }
 
-#categori_btn {
+.category-button {
   flex: 1;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 5px;
+  cursor: pointer;
+  /* active 상태일 때의 배경색을 설정합니다. */
+  background-color: #ffffff;
 }
 
-#categori_list button.active {
-  background-color: lightblue;
+.category-button.active {
+  background-color: #83b0e1;
 }
 
 #matching_btn_list {
@@ -141,6 +146,8 @@ const selectCategory = (categoryId) => {
   width: fit-content;
   height: 50px;
   flex: 13;
+  background-color: #71a5de;
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
 }
 
 .matching_btn_gap {

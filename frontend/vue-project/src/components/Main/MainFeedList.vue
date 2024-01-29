@@ -1,17 +1,16 @@
 <template>
   <div class="feed_board">
     <div class="more_feed">
-      <div class="more_feed_head">알려드립니다</div>
+      <h1>
+        <img src="@/assets/alarmmachine.png" alt="Alarm Machine Icon" class="alarm-icon" />
+        알려드립니다
+      </h1>
       <div>
         <button @click="more_feed">+더보기</button>
       </div>
     </div>
     <div class="feed_list">
-      <div
-        v-for="feed_item in feedlist"
-        :key="feed_item.feed_id"
-        class="feed_item"
-      >
+      <div v-for="feed_item in feedlist" :key="feed_item.feed_id" class="feed_item">
         <p class="feed_item_context">{{ feed_item.feed_content }}</p>
       </div>
       <div class="feed_item_foot">
@@ -20,11 +19,11 @@
   </div>
 </template>
   
-  <script setup>
+<script setup>
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useFeedStore } from "@/stores/feed";
-
+import alarmmachine from '@/assets/alarmmachine.png';
 const router = useRouter();
 const feedInfo = useFeedStore();
 const feedlist = ref([
@@ -140,6 +139,14 @@ const more_feed = () => {
   margin-top: -15px;
 }
 
-.feed_item_context {
+.feed_item_context {}
+
+.alarm-icon {
+  max-width: 45px;
+  /* Set your desired max-width */
+  max-height: 45px;
+  /* Set your desired max-height */
+  vertical-align: middle;
+  /* Align the image vertically */
 }
 </style>

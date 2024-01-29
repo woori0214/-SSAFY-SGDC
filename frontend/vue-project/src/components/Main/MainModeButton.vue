@@ -20,7 +20,6 @@ const compet = () => {
 </script>
 
 <style scoped>
-
 .mode-button_container {
     position: fixed;
     bottom: 0;
@@ -34,19 +33,38 @@ const compet = () => {
 }
 
 .mode_button {
-    flex-grow: 1;
+    /* flex-grow: 1;
 
     padding: 10px 0;
     height: 50px;
     color: #fff;
     border-radius: 5px;
-    cursor: pointer;
+    cursor: pointer; */
+    flex: 1 1 auto;
+    margin: 10px;
+    padding: 30px;
+    text-align: center;
+    text-transform: uppercase;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white;
+    /* text-shadow: 0px 0px 10px rgba(0,0,0,0.2);*/
+    box-shadow: 0 0 20px #eee;
+    border-radius: 10px;
+
 }
+
+.mode_button:hover {
+    background-position: right center;
+}
+
 .solomode_btn {
-    background-color: #3498db;
+    background-image: linear-gradient(to right, #25aae1, #4481eb, #04befe, #3f86ed);
+    box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
 }
 
 .competmode_btn {
-    background-color: #e74c3c;
+    background-image: linear-gradient(to right, #eb3941, #f15e64, #e14e53, #e2373f);
+    box-shadow: 0 5px 15px rgba(242, 97, 103, .4);
 }
 </style>
