@@ -3,6 +3,7 @@ package com.ssafy.sgdc.domain.entity;
 import com.ssafy.sgdc.domain.entity.enums.CompetKind;
 import com.ssafy.sgdc.domain.entity.enums.IsSender;
 import com.ssafy.sgdc.domain.entity.enums.MatchStatus;
+import com.ssafy.sgdc.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

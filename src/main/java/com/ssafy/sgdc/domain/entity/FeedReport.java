@@ -1,7 +1,6 @@
 package com.ssafy.sgdc.domain.entity;
 
-import com.ssafy.sgdc.domain.entity.Feed;
-import com.ssafy.sgdc.domain.entity.User;
+import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.domain.entity.enums.ComplainType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.domain.entity;
 
+import com.ssafy.sgdc.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

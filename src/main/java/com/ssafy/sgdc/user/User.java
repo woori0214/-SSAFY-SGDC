@@ -1,11 +1,7 @@
-package com.ssafy.sgdc.domain.entity;
+package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.domain.entity.enums.IsAlert;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -14,13 +10,15 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
+@ToString
 @Table(name = "user")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_id")
-    private long userId;
+    private int userId;
 
     @Column(name = "login_id", length = 20)
     private String loginId;
@@ -46,10 +44,6 @@ public class User {
     @Column(name = "user_img", length = 200)
     private String userImg;
 
-    @Column(name = "is_alert")
-    @Enumerated(EnumType.STRING)
-    private IsAlert isAlert;
-
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
@@ -59,9 +53,10 @@ public class User {
     @Column(name = "sign_out")
     private Boolean signOut;
 
-    @OneToOne
-    @JoinColumn(name = "badge_id")
-    private UserBadge badgeId;
+//    @OneToOne
+//    @JoinColumn(name = "badge_id")
+    @Column(name = "badge_id")
+    private long badgeId;
 
     @Column(name = "kakao_push")
     private Boolean kakaoPush;
@@ -71,4 +66,7 @@ public class User {
 
     @Column(name = "complain_cnt")
     private int complainCnt;
+
+    @Column(name = "token")
+    private String token;
 }
