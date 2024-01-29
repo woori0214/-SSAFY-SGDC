@@ -13,6 +13,8 @@
       <div v-for="feed_item in feedlist" :key="feed_item.feed_id" class="feed_item">
         <p class="feed_item_context">{{ feed_item.feed_content }}</p>
       </div>
+      <div class="feed_item_foot">
+      </div>
     </div>
   </div>
 </template>
@@ -33,18 +35,18 @@ const feedlist = ref([
     feed_id: 2,
     feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
   },
-  // {
-  //   feed_id: 3,
-  //   feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  // },
-  // {
-  //   feed_id: 4,
-  //   feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  // },
-  // {
-  //   feed_id: 5,
-  //   feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  // },
+  {
+    feed_id: 3,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 4,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 5,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
 ]);
 const feedlist_ = ref([]);
 
@@ -70,45 +72,71 @@ const more_feed = () => {
 <style>
 .feed_board {
   /* 임시 스타일 */
-  border: 2px solid #f8f9fb;
-  background-color: #aecbeb;
-  border-radius: 15px;
+  /* border: 2px solid #aecbeb; */
+  background-color: #e1ecf7;
+  border-radius: 25px;
   /* ---------- */
 }
 
 .more_feed {
   /* 임시 스타일 */
-  border: 1px solid whitesmoke;
+  border-bottom: 5px solid whitesmoke;
   /* background-color: rgb(255, 195, 195); */
   /* ---------- */
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-inline: 20px;
+  padding-inline: 20px;
+  padding-block: 10px;
+}
+
+.more_feed_head{
+  font-size: 44px;
+  font-weight: 700;
+  margin-left: 15px;
 }
 
 .feed_list {
   /* 임시 스타일 */
-  border: 2px solid rgb(255, 194, 125);
-  background-color: rgb(255, 194, 125);
-  border-radius: 15px;
+  /* border: 2px solid rgb(255, 194, 125);
+  background-color: rgb(255, 194, 125); */
+  border-radius: 25px;
   /* ---------- */
-  margin-inline: 20px;
-  margin-block: 10px;
+  /* margin-inline: 20px; */
+  margin-top: 20px;
+  margin-bottom: 5px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
   padding-block: 10px;
 }
 
 .feed_item {
   /* 임시 스타일 */
-  border: 2px solid yellow;
-  background-color: rgb(255, 255, 140);
-  border-radius: 15px;
+  border: 3px solid #aecbeb;
+  background-color: #f8f9fb;
+  border-top-right-radius: 20px;
+  border-top-left-radius: 20px;
   /* ---------- */
-  margin-inline: 10px;
-  padding-inline: 10px;
+  margin-inline: 15px;
+  padding-inline: 20px;
+  padding-bottom: 10px;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: -15px;
+}
+
+.feed_item_foot{
+  background-color: #83b0e1;
+  /* 볼더 스타일1 */
+  border-radius: 15px;
+  /*  */
+  /* 볼더 스타일2 */
+  /* border-bottom-right-radius: 15px;
+  border-bottom-left-radius: 15px; */
+  /*  */
+  height: 25px;
+  margin-inline: 15px;
+  margin-top: -15px;
 }
 
 .feed_item_context {}

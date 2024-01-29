@@ -3,7 +3,9 @@
     <div class="challenge_board_head">현황게시판</div>
     <div class="current_board">
       <div class="solo">
-        <h3>솔로 모드 현황</h3>
+        <div class="solo_head">
+          <div class="solo_head_item">솔로 모드 현황</div>
+        </div>
         <div class="solo_board">
           <!-- <div class="success_graph" ref="chartContainer">
                 <canvas ref="myChart" width="150" height="150"></canvas>
@@ -31,7 +33,9 @@
         </div>
       </div>
       <div class="compet">
-        <h2>경쟁 모드 현황</h2>
+        <div class="compet_head">
+          <div class="compet_head_item">경쟁 모드 현황</div>
+        </div>
         <div class="compet_board">
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
@@ -277,7 +281,7 @@ onMounted(() => {
   }
 
   const donut = document.querySelector(".donut");
-  let totalMinwon = 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
+  let totalMinwon = 80; //현재 진행도 값 << ref와 동기화 시켜줘야함
   if (donut) {
     let t4 = 0;
     const donutAnimation = setInterval(() => {
@@ -312,52 +316,74 @@ if (chartRef.value) {
 
 <style>
 .challenge_board {
-  border: 2px rgb(71, 48, 248) solid;
-  border-radius: 8px;
+  background-color: #e1ecf7;
+  border-radius: 25px;
+  padding-bottom: 20px;
 }
 
-.challenge_board_head{
-    background-color: #3f8bc9;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    padding: 8px;
+.challenge_board_head {
+  font-size: 44px;
+  font-weight: 700;
+  margin-left: 15px;
+  padding-inline: 20px;
+  padding-block: 10px;
 }
 
 .current_board {
   display: flex;
-  border: 1px green solid;
+  justify-content: center;
+  align-items: center;
+  margin-inline: 20px;
+  /* padding-inline: 10px; */
+  gap: 20px;
 }
 
 .solo {
-  border: 1px #aecbeb solid;
+  /* border: 1px #aecbeb solid; */
   width: 50%;
-  margin: 5px;
+  /* margin: 5px; */
   text-align: center;
 }
 
-.compet {
-  border: 1px rgb(50, 248, 255) solid;
-  width: 50%;
-  margin: 5px;
-  text-align: center;
+.solo_head {
+  display: flex;
+  justify-content: left;
+  margin-left: 18px;
+}
+
+.solo_head_item {
+  border-inline: #3f8bc9 solid 2px;
+  border-top: #3f8bc9 solid 2px;
+  background-color: #f8f9fb;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  padding-inline: 8px;
+  padding-top: 8px;
+  padding-bottom: 5px;
+
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .solo_board {
-  border: 1px rgb(224, 76, 100) solid;
-  padding: 5px;
+  background-color: #aecbeb;
+  border-radius: 20px;
+  padding: 15px;
   display: flex;
 }
 
 .success_graph {
-  flex: 1;
+  flex: 2;
   height: auto;
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .donut {
-  width: 100px;
-  height: 100px;
-  margin: 0 auto;
+  width: 90%;
+  height: 0;
+  padding-top: 90%;
   border-radius: 50%;
   position: relative;
   text-align: center;
@@ -392,13 +418,42 @@ if (chartRef.value) {
 }
 
 .category_btn {
-  width: 50px;
-  height: 50px;
   border-radius: 20px;
   margin: 3px;
-  padding: 5px;
+  padding: 10px;
   cursor: pointer;
-  flex-basis: calc(33.33% - 10px);
+  flex-basis: calc(50% - 10px);
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.compet {
+  border: 1px rgb(50, 248, 255) solid;
+  width: 50%;
+  /* margin: 5px; */
+  
+  text-align: center;
+}
+
+.compet_head {
+  display: flex;
+  justify-content: left;
+  margin-left: 18px;
+}
+
+.compet_head_item {
+  border-inline: #3f8bc9 solid 2px;
+  border-top: #3f8bc9 solid 2px;
+  background-color: #f8f9fb;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  padding-inline: 8px;
+  padding-top: 8px;
+  padding-bottom: 5px;
+
+  font-size: 22px;
+  font-weight: 600;
 }
 
 .active {
@@ -422,6 +477,10 @@ if (chartRef.value) {
   /* 기존 스타일 유지하고 overflow 추가 */
   overflow: hidden;
   /* carousel 이 해당 영역을 넘어가지 않도록 */
+
+  background-color: #aecbeb;
+  border-radius: 20px;
+  height: 80%;
 }
 
 .carousel_container {
