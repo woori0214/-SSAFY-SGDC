@@ -62,38 +62,56 @@ public class UserController {
 
     // 닉네임 중복체크
     @RequestMapping(value = "/signup/check-nick/{userNickname}", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> checkNickname(@PathVariable String userNickname){
+    public ResponseEntity<GeneralResponse> checkNickname(@PathVariable String userNickname){
         Map<String, String> response = new HashMap<>();
         System.out.println("닉네임 중복체크");
         boolean result = userService.checkNickname(userNickname);   // 중복시 true, 중복X false
         response.put("result", String.valueOf(!result)); // 닉네임 사용가능 result : true
         System.out.println("check-nickname "+String.valueOf(!result));
-        return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
+//        return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
 
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("닉네임 중복체크")
+                .data(response)
+                .build(), HttpStatus.OK);
     }
 
     // 싸피 학번중복체크
     @RequestMapping(value = "/signup/check-student-num/{userSsafyId}", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> checkSsafyId(@PathVariable String userSsafyId){
+    public ResponseEntity<GeneralResponse> checkSsafyId(@PathVariable String userSsafyId){
         Map<String, String> response = new HashMap<>();
         System.out.println("학번체크");
         boolean result = userService.checkSsafyId(Integer.parseInt(userSsafyId));   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(!result)); // 학번 사용가능 result : true
+        response.put("result", String.valueOf(!result));
         System.out.println("check-ssafyNumber "+String.valueOf(!result));
-        return ResponseEntity.ok(response);              // 학번 사용불가 result : false
+
+        // 학번 사용가능 result : true
+        // 학번 사용불가 result : false
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("학번 중복체크")
+                .data(response)
+                .build(), HttpStatus.OK);
     }
 
     // 싸피 핸드폰인증
     @RequestMapping(value = "/signup/check-phoneNum/{userPhone}", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> checkPhone(@PathVariable String userPhone){
+    public ResponseEntity<GeneralResponse> checkPhone(@PathVariable String userPhone){
         Map<String, String> response = new HashMap<>();
         System.out.println("폰 번호 체크");
         boolean result = userService.checkPhone(String.valueOf(userPhone));   // 중복시 true, 중복X false
 
-        response.put("result", String.valueOf(!result)); // 번호 사용가능 result : true
+        response.put("result", String.valueOf(!result));
         System.out.println("check-phone "+String.valueOf(!result));
-        return ResponseEntity.ok(response);              // 번호 사용불가 result : false
+        // 번호 사용가능 result : true
+        // 번호 사용불가 result : false
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("폰 번호 중복체크")
+                .data(response)
+                .build(), HttpStatus.OK);
     }
 
     // 로그인
@@ -125,7 +143,7 @@ public class UserController {
 
     // 마이페이지 사용자 정보 표시
     @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> userInfo(UserInfoDto userInfoDto){
+    public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto){
         Map<String, String > response = new HashMap<>();
 
         User user = userService.userInfo(userInfoDto);
@@ -137,6 +155,10 @@ public class UserController {
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
         response.put("complain_cnt", String.valueOf(user.getComplainCnt()));
 
-        return ResponseEntity.ok(response);
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("내 프로필 확인")
+                .data(response)
+                .build(), HttpStatus.OK);
     }
 }

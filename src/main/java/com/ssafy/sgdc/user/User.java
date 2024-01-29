@@ -18,7 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_id")
-    private int userId;
+    private long userId;
 
     @Column(name = "login_id", length = 20)
     private String loginId;
