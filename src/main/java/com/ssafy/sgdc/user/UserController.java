@@ -36,20 +36,27 @@ public class UserController {
 
         return new ResponseEntity<> (GeneralResponse.builder()
                 .status(200)
-                .message("회원가입 성공")
+                .message("회원가입")
                 .data(result)
                 .build(), HttpStatus.OK);
     }
 
     // 아이디 중복체크
     @RequestMapping(value = "/signup/check-id/{loginId}", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, String>> checkId(@PathVariable String loginId){
+    public ResponseEntity<GeneralResponse> checkId(@PathVariable String loginId){
         Map<String, String> response = new HashMap<>();
         System.out.println("아이디 중복체크");
-        boolean result = userService.checkId(loginId);   // 중복시 true, 중복X false
-        response.put("result", String.valueOf(!result)); // ID 사용가능 result : true
-        System.out.println("check-id "+String.valueOf(!result));
-        return ResponseEntity.ok(response);              // ID 사용불가 result : false
+        boolean result = userService.checkId(loginId);
+        // 중복시 true, 중복X false
+        // ID 사용가능 result : true
+        response.put("result", String.valueOf(!result));
+        // ID 사용불가 result : false
+
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("아이디 중복체크")
+                .data(response)
+                .build(), HttpStatus.OK);
 
     }
 
