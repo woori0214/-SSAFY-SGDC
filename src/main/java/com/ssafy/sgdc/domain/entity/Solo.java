@@ -2,7 +2,7 @@ package com.ssafy.sgdc.domain.entity;
 
 import com.ssafy.sgdc.domain.entity.enums.SoloResult;
 import com.ssafy.sgdc.domain.entity.enums.SoloStatus;
-import com.ssafy.sgdc.user.model.User;
+import com.ssafy.sgdc.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

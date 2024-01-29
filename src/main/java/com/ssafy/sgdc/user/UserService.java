@@ -1,10 +1,8 @@
-package com.ssafy.sgdc.user.service;
+package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.user.model.User;
-import com.ssafy.sgdc.user.model.dto.UserInfoDto;
-import com.ssafy.sgdc.user.model.dto.UserLoginDto;
-import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
-import com.ssafy.sgdc.user.model.UserRepo;
+import com.ssafy.sgdc.user.dto.UserInfoDto;
+import com.ssafy.sgdc.user.dto.UserLoginDto;
+import com.ssafy.sgdc.user.dto.UserSignUpDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

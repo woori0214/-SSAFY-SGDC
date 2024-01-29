@@ -1,6 +1,6 @@
-package com.ssafy.sgdc.user.model;
+package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.user.model.dto.UserInfoDto;
+import com.ssafy.sgdc.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRepo extends JpaRepository<User, Long> {

@@ -1,12 +1,11 @@
-package com.ssafy.sgdc.user.controller;
+package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.user.model.User;
-import com.ssafy.sgdc.user.model.dto.UserInfoDto;
-import com.ssafy.sgdc.user.model.dto.UserLoginDto;
-import com.ssafy.sgdc.user.service.UserService;
-import com.ssafy.sgdc.user.model.dto.UserSignUpDto;
-import jakarta.servlet.http.HttpSession;
+import com.ssafy.sgdc.user.dto.UserInfoDto;
+import com.ssafy.sgdc.user.dto.UserLoginDto;
+import com.ssafy.sgdc.user.dto.UserSignUpDto;
+import com.ssafy.sgdc.util.response.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,10 +27,18 @@ public class UserController {
     }
 
     @RequestMapping(value = "/signup/", method = RequestMethod.POST)
-    public String signUp(@RequestBody UserSignUpDto userSignUpDto){
+    public ResponseEntity<GeneralResponse> signUp(@RequestBody UserSignUpDto userSignUpDto){
         System.out.println("회원가입 경로.");
         userService.signUp(userSignUpDto);
-        return "회원가입완료";
+
+        Map<String, String> result = new HashMap<>();
+        result.put("result", "true");
+
+        return new ResponseEntity<> (GeneralResponse.builder()
+                .status(200)
+                .message("회원가입 성공")
+                .data(result)
+                .build(), HttpStatus.OK);
     }
 
     // 아이디 중복체크

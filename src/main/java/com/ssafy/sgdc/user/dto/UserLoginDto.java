@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.user.model.dto;
+package com.ssafy.sgdc.user.dto;
 
 import lombok.*;
 

@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.user.model;
+package com.ssafy.sgdc.user;
 
 import jakarta.persistence.*;
 import lombok.*;
