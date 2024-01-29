@@ -28,7 +28,7 @@ import { useLoginStore } from '@/stores/login';
 
 const userLoginStore = useLoginStore();
 const logout = function() {
-    useLoginStore.isLogout();
+    userLoginStore.isLogout();
 }
 </script>
 
