@@ -329,7 +329,7 @@ if (chartRef.value) {
 }
 
 .solo {
-  border: 1px rgb(255, 53, 188) solid;
+  border: 1px #aecbeb solid;
   width: 50%;
   margin: 5px;
   text-align: center;

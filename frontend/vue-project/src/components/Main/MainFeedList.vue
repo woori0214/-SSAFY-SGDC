@@ -71,8 +71,8 @@ const more_feed = () => {
 <style>
 .feed_board {
   /* 임시 스타일 */
-  border: 3px solid rgb(255, 195, 195);
-  background-color: rgb(255, 195, 195);
+  border: 2px solid #f8f9fb;
+  background-color: #aecbeb;
   border-radius: 15px;
   /* ---------- */
 }
