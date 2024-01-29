@@ -135,7 +135,7 @@ onMounted(() => {
   width: 100vw;
   height: 100vh;
 
-  background-color: rgb(243, 238, 230);
+  background-color: #e1ecf7;
   background-image: url("./assets/pixil_background_winter.png");
   background-size: 220px;
   background-repeat: repeat-x;
