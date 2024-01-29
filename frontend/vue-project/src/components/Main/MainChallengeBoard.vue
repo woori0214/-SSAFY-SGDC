@@ -18,10 +18,16 @@
             </div> -->
 
           <div class="success_graph">
-            <div class="donut" data-percent="85.4"></div>
+            <!-- <div class="donut" data-percent="85.4"> -->
+            <div class="donut">
+              <div class="donut_percent" ref="donut_percent_component">
+                <p class="donut_percent_text">{{ solo_percent }}%</p>
+              </div>
+            </div>
           </div>
           <div class="categories">
             <button
+              ref="categori_btn_component"
               class="category_btn"
               v-for="category in categories"
               :key="category.id"
@@ -259,6 +265,34 @@ function getCategoryNameById(id) {
   };
   return categoryMap[id] || "알 수 없는 카테고리";
 }
+
+const categori_btn_component = ref(null);
+const donut_percent_component = ref(null);
+
+function setFontSize() {
+  categori_btn_component.value.forEach((element) => {
+    const componentWidth = element.offsetWidth;
+    const fontSize = componentWidth / 5;
+    element.style.fontSize = fontSize + "px";
+  });
+
+  if (donut_percent_component.value) {
+    const donutComponentWidth = donut_percent_component.value.offsetWidth;
+    const donutFontSize = donutComponentWidth / 4; // 예시: 컴포넌트 너비의 10분의 1
+    donut_percent_component.value.style.fontSize = donutFontSize + "px";
+  }
+}
+
+// function adjustDonutFontSize() {
+//   const donut = document.querySelector('.donut');
+//   if (donut) {
+//     const size = donut.offsetWidth; // donut 요소의 너비
+//     const fontSize = size / 10; // 폰트 크기 계산
+//     donut.style.setProperty('--donut-font-size', `${fontSize}px`); // CSS 변수 설정
+//   }
+// }
+const solo_percent = ref(0);
+
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
@@ -281,36 +315,53 @@ onMounted(() => {
   }
 
   const donut = document.querySelector(".donut");
-  let totalMinwon = 80; //현재 진행도 값 << ref와 동기화 시켜줘야함
+  const totalMinwon = ref((4 / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
   if (donut) {
-    let t4 = 0;
+    solo_percent.value = 0;
     const donutAnimation = setInterval(() => {
-      donut.dataset.percent = t4;
-      donut.style.background = `conic-gradient(#4F98FF 0 ${t4}%, #DEDEDE ${t4}% 100% )`;
-      if (t4++ >= totalMinwon) clearInterval(donutAnimation);
+      donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
+      solo_percent.value++;
+      if (solo_percent.value >= totalMinwon.value)
+        clearInterval(donutAnimation);
     }, 30);
   }
+
+  setFontSize();
+  // adjustDonutFontSize();
+  window.addEventListener("resize", setFontSize);
+  // window.addEventListener('resize', adjustDonutFontSize);
+
+  const donut_parent = document.getElementsByClassName("donut_percent")[0];
+  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
+
+  function adjustChildMargin() {
+    const parentHeight = donut_parent.offsetHeight;
+    donut_child.style.marginTop = (parentHeight / 3) * -2 + "px"; // 예시: 부모 높이의 절반을 마진 탑으로 설정
+  }
+
+  adjustChildMargin(); // 초기 마진 설정
+  window.addEventListener("resize", adjustChildMargin); // 창 크기 조절 시 마진 재조정
 });
-if (chartRef.value) {
-  const ctx = chartRef.value.getContext("2d");
-  new Chart(ctx, {
-    type: "doughnut",
-    data: {
-      labels: ["Category 1"],
-      datasets: [
-        {
-          data: [60, 40],
-          backgroundColor: ["lightblue", "transparent"],
-        },
-      ],
-    },
-    options: {
-      cutout: "60%",
-      responsive: true,
-      maintainAspectRatio: false,
-    },
-  });
-}
+// if (chartRef.value) {
+//   const ctx = chartRef.value.getContext("2d");
+//   new Chart(ctx, {
+//     type: "doughnut",
+//     data: {
+//       labels: ["Category 1"],
+//       datasets: [
+//         {
+//           data: [60, 40],
+//           backgroundColor: ["lightblue", "transparent"],
+//         },
+//       ],
+//     },
+//     options: {
+//       cutout: "60%",
+//       responsive: true,
+//       maintainAspectRatio: false,
+//     },
+//   });
+// }
 </script>
 
 
@@ -388,26 +439,23 @@ if (chartRef.value) {
   position: relative;
   text-align: center;
   transition: background 0.3s ease-in-out;
-  background: conic-gradient(#3f8bc9 0% 30%, #f2f2f2 30% 100%);
+  /* background: conic-gradient(#3f8bc9 0% 30%, #f2f2f2 30% 100%); */
   border: 1px solid black;
+  /* --donut-font-size: 16px; */
 }
-
-.donut::before {
-  color: #fff;
+.donut_percent {
+  color: #2e2e2e;
   width: 70%;
-  padding: calc(35% - 0.64vw) 0;
-  background: #264057;
+  height: 0;
+  padding-top: 70%;
+  background: #e1ecf7;
   border-radius: 50%;
   position: absolute;
   left: 15%;
   top: 15%;
   display: block;
-  content: attr(data-percent) "%";
-  transform: skew(-0.03deg);
-  margin: auto;
-  font-size: 1.1vw;
-  font-size: 2vw;
-  padding: calc(35% - 1.3vw) 0;
+  /* font-size: var(--donut-font-size); */
+  font-weight: 600;
 }
 
 .categories {
@@ -415,15 +463,18 @@ if (chartRef.value) {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  gap: 10px;
 }
 
 .category_btn {
+  border: 0px;
+  background-color: #e1ecf7;
   border-radius: 20px;
-  margin: 3px;
-  padding: 10px;
   cursor: pointer;
   flex-basis: calc(50% - 10px);
   font-size: 22px;
+  /* font-size: 2.0vw;
+  font-size: 1.7vh; */
   font-weight: 600;
   text-align: center;
 }
@@ -432,7 +483,7 @@ if (chartRef.value) {
   border: 1px rgb(50, 248, 255) solid;
   width: 50%;
   /* margin: 5px; */
-  
+
   text-align: center;
 }
 

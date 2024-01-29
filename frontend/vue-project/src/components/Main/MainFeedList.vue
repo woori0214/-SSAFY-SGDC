@@ -112,7 +112,7 @@ const more_feed = () => {
 
 .feed_item {
   /* 임시 스타일 */
-  border: 3px solid #aecbeb;
+  border: 2px solid #aecbeb;
   background-color: #f8f9fb;
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;

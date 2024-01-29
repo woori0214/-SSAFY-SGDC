@@ -4,6 +4,7 @@
     <div class="rank-categori-btn-list">
       <button
         class="rank-categori-btn"
+        :class="{ active: selectedCategory === categori.id }"
         v-for="(categori, index) in categoris"
         :key="index"
         @click="selectCategory(categori.id)"
@@ -343,7 +344,7 @@ const selectCategory = (categoryId) => {
   background-color: #f8f9fb;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  margin-left: 20px;
+  margin-left: 15px;
   display: inline-flex;
   justify-content: left;
 }
@@ -352,11 +353,18 @@ const selectCategory = (categoryId) => {
   border: 0px;
   border-top-left-radius: 20px;
   border-top-right-radius: 20px;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 600;
+  color: black;
   padding-top: 12px;
   padding-inline: 12px;
   padding-bottom: 5px;
+}
+.rank-categori-btn.active {
+  background-color: #aecbeb;
+  color: #f8f9fb;
+  font-size: 20px;
+  margin-top: -5px;
 }
 .rank-board {
   border-radius: 15px;
@@ -369,15 +377,18 @@ const selectCategory = (categoryId) => {
 .rank-board-menu {
   border: 3px solid #aecbeb;
   background-color: #aecbeb;
-  border-radius: 10px;
+  /* border-radius: 10px; */
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
   display: flex;
   justify-content: space-between;
   padding: 8px;
 }
 .rank-board-menu-item {
   color: rgb(17, 17, 17);
-  font-size: 17px;
-  padding-inline: 10px;
+  font-size: 18px;
+  padding-inline: 5px;
   font-weight: 800;
 }
 .rank-board-list {
