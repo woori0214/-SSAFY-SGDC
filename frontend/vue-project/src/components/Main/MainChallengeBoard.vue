@@ -1,138 +1,205 @@
 <template>
-    <div class="challenge_board">
-        <h1>현황게시판</h1>
-        <div class="current_board">
-            <div class="solo">
-                <h2>솔로 모드 현황</h2>
-                <div class="solo_board">
-                    <div class="success_graph" ref="chartContainer">
-                        <canvas ref="myChart" width="150" height="150"></canvas>
-                    </div>
-                    <div class="categories">
-                        <button class="category_btn" v-for="category in todayChallenges" :key="category.category_id"
-                            :class="{ 'completed': category.solo_result === 'COMPLETED' }">
-                            {{ category.category_name }}
-                        </button>
-                    </div>
-                </div>
+  <div class="challenge_board">
+    <div class="challenge_board_head">현황게시판</div>
+    <div class="current_board">
+      <div class="solo">
+        <h3>솔로 모드 현황</h3>
+        <div class="solo_board">
+          <!-- <div class="success_graph" ref="chartContainer">
+                <canvas ref="myChart" width="150" height="150"></canvas>
             </div>
-            <div class="compet">
-                <h2>경쟁 모드 현황</h2>
-                <div class="compet_board">
-                    <div class="carousel_container">
-                        <div class="carousel_slide" :style="slideStyle">
-                            <!-- Carousel 아이템 -->
-                            <div class="carousel_item" v-for="(item, index) in competData" :key="index">
-                                <!--sender부분-->
-                                <div class="player1">
-                                    <img :src="item.sender_user_img" alt="sender image" class="player_img">
-                                    <p>{{ item.sender_user_nickname }}</p>
-                                    <button v-if="item.sender_isCurrentUser && !item.sender_authenticated"
-                                        @click="authenticate(item)">인증하기</button>
-                                    <div v-else-if="item.sender_authenticated">인증 완료</div>
-                                    <div v-else>진행중</div>
-                                </div>
-                                <div>
-                                    <h1>{{ item.category_id }}</h1>
-                                    <h1>vs</h1>
-                                </div>
-                                <!--receiver부분-->
-                                <div class="player2">
-                                    <img :src="item.receiver_user_img" alt="receiver image" class="player_img">
-                                    <p>{{ item.receiver_user_nickname }}</p>
-                                    <button v-if="item.receiver_isCurrentUser && !item.receiver_authenticated"
-                                        @click="authenticate(item)">인증하기</button>
-                                    <div v-else-if="item.receiver_authenticated">인증 완료</div>
-                                    <div v-else>진행중</div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Carousel 컨트롤 -->
-                        <button @click="prev">＜</button>
-                        <button @click="next">＞</button>
-                        <!-- 인디케이터 -->
-                        <div class="indicators">
-                            <span v-for="(item, index) in items" :key="index" :class="{ active: index === currentIndex }"
-                                @click="goTo(index)"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="categories">
+                <button class="category_btn" v-for="category in todayChallenges" :key="category.category_id"
+                    :class="{ 'completed': category.solo_result === 'COMPLETED' }">
+                    {{ category.category_name }}
+                </button>
+            </div> -->
+
+          <div class="success_graph">
+            <div class="donut" data-percent="85.4"></div>
+          </div>
+          <div class="categories">
+            <button
+              class="category_btn"
+              v-for="category in categories"
+              :key="category.id"
+              :class="{ completed: category.isActive === 'ture' }"
+            >
+              {{ category.name }}
+            </button>
+          </div>
         </div>
-        <Modal v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
+      </div>
+      <div class="compet">
+        <h2>경쟁 모드 현황</h2>
+        <div class="compet_board">
+          <div class="carousel_container">
+            <div class="carousel_slide" :style="slideStyle">
+              <!-- Carousel 아이템 -->
+              <div
+                class="carousel_item"
+                v-for="(item, index) in competData"
+                :key="index"
+              >
+                <!--sender부분-->
+                <div class="player1">
+                  <img
+                    :src="item.sender_user_img"
+                    alt="sender image"
+                    class="player_img"
+                  />
+                  <p>{{ item.sender_user_nickname }}</p>
+                  <button
+                    v-if="
+                      item.sender_isCurrentUser && !item.sender_authenticated
+                    "
+                    @click="authenticate(item)"
+                  >
+                    인증하기
+                  </button>
+                  <div v-else-if="item.sender_authenticated">인증 완료</div>
+                  <div v-else>진행중</div>
+                </div>
+                <div>
+                  <h1>{{ item.category_id }}</h1>
+                  <h1>vs</h1>
+                </div>
+                <!--receiver부분-->
+                <div class="player2">
+                  <img
+                    :src="item.receiver_user_img"
+                    alt="receiver image"
+                    class="player_img"
+                  />
+                  <p>{{ item.receiver_user_nickname }}</p>
+                  <button
+                    v-if="
+                      item.receiver_isCurrentUser &&
+                      !item.receiver_authenticated
+                    "
+                    @click="authenticate(item)"
+                  >
+                    인증하기
+                  </button>
+                  <div v-else-if="item.receiver_authenticated">인증 완료</div>
+                  <div v-else>진행중</div>
+                </div>
+              </div>
+            </div>
+            <!-- Carousel 컨트롤 -->
+            <button @click="prev">＜</button>
+            <button @click="next">＞</button>
+            <!-- 인디케이터 -->
+            <div class="indicators">
+              <span
+                v-for="(item, index) in items"
+                :key="index"
+                :class="{ active: index === currentIndex }"
+                @click="goTo(index)"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <Modal
+      v-if="showModal"
+      :show="showModal"
+      @uploadImage="handleUpload"
+      @update:show="showModal = $event"
+    />
+  </div>
 </template>
   
 <script setup>
-import { ref, onMounted, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { useCompetionStore } from '@/stores/competition';
-import { useUserStorageStore } from '@/stores/userStorage';
-import { useSoloStore } from '@/stores/solo';
+import { ref, onMounted, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useCompetionStore } from "@/stores/competition";
+import { useUserStorageStore } from "@/stores/userStorage";
+import { useSoloStore } from "@/stores/solo";
 const userStorage = useUserStorageStore();
-import proofCompet from '@/components/PopUp/PopUpProofPictureCompet.vue';
-import Chart from 'chart.js/auto';
+import proofCompet from "@/components/PopUp/PopUpProofPictureCompet.vue";
+import Chart from "chart.js/auto";
 
 const soloStore = useSoloStore();
 const todayChallenges = ref([]);
 
 const competitionStore = useCompetionStore();
 const categories = ref([
-    { id: 1, name: '기상', isActive: false },
-    { id: 2, name: '알고리즘', isActive: false },
-    { id: 3, name: '운동', isActive: false },
-    { id: 4, name: '식단', isActive: false },
-    { id: 5, name: '스터디', isActive: false },
-    { id: 6, name: '절제', isActive: false },
+  { id: 1, name: "기상", isActive: false },
+  { id: 2, name: "알고리즘", isActive: false },
+  { id: 3, name: "운동", isActive: false },
+  { id: 4, name: "식단", isActive: false },
+  { id: 5, name: "스터디", isActive: false },
+  { id: 6, name: "절제", isActive: false },
 ]);
 
 const items = ref([
-    {
-        index: 1, category: '기상', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
-        name2: '지은', imageUrl2: './src/assets/image2.png', challenge_status2: '인증 완료',
-    },
-    {
-        index: 2, category: '알고리즘', name1: '화석', imageUrl1: './src/assets/image1.png', challenge_status1: '진행중',
-        name2: '태범', imageUrl2: './src/assets/image2.png', challenge_status2: '진행중',
-    },
+  {
+    index: 1,
+    category: "기상",
+    name1: "화석",
+    imageUrl1: "./src/assets/image1.png",
+    challenge_status1: "진행중",
+    name2: "지은",
+    imageUrl2: "./src/assets/image2.png",
+    challenge_status2: "인증 완료",
+  },
+  {
+    index: 2,
+    category: "알고리즘",
+    name1: "화석",
+    imageUrl1: "./src/assets/image1.png",
+    challenge_status1: "진행중",
+    name2: "태범",
+    imageUrl2: "./src/assets/image2.png",
+    challenge_status2: "진행중",
+  },
 ]);
 const competData = ref([]);
 const currentIndex = ref(0);
 const router = useRouter();
 const chartRef = ref(null);
+
+const solo_progress = ref(35);
+
+// const donut = document.querySelector(".donut");
+// donut.data-percent = totalMinwon;
+// donut.style.background = `conic-gradient(#3F8BC9 0% ${totalMinwon}%, #F2F2F2 ${totalMinwon}% 100%)`;
+
 // 인증 상태를 확인하는 함수
 const isAuthenticated = (authImage) => {
-    return authImage !== null && authImage !== '';
+  return authImage !== null && authImage !== "";
 };
 
 // 사용자가 sender인지 receiver인지 확인하는 함수
 const isCurrentUser = (userId) => {
-    return loggedInUserId === userId;
+  return loggedInUserId === userId;
 };
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
 const authenticate = (item) => {
-    showModal.value = true;
-    selectedCompetItem.value = item;
+  showModal.value = true;
+  selectedCompetItem.value = item;
 };
 const fetchCompetitionData = async () => {
-    try {
-        const response = await competitionStore.competitionProgressDetail(loggedInUserId);
-        if (response.status === 200 && response.data.compet) {
-            competData.value = response.data.compet.map(compet => ({
-                ...compet,
-                sender_isCurrentUser: isCurrentUser(compet.sender_user_id),
-                receiver_isCurrentUser: isCurrentUser(compet.receiver_user_id),
-                sender_authenticated: isAuthenticated(compet.sender_auth_image),
-                receiver_authenticated: isAuthenticated(compet.receiver_auth_image),
-            }));
-        }
-    } catch (error) {
-        console.error('Error fetching competition data:', error);
+  try {
+    const response = await competitionStore.competitionProgressDetail(
+      loggedInUserId
+    );
+    if (response.status === 200 && response.data.compet) {
+      competData.value = response.data.compet.map((compet) => ({
+        ...compet,
+        sender_isCurrentUser: isCurrentUser(compet.sender_user_id),
+        receiver_isCurrentUser: isCurrentUser(compet.receiver_user_id),
+        sender_authenticated: isAuthenticated(compet.sender_auth_image),
+        receiver_authenticated: isAuthenticated(compet.receiver_auth_image),
+      }));
     }
+  } catch (error) {
+    console.error("Error fetching competition data:", error);
+  }
 };
-
-
 
 // const navigateToPage = (category) => {
 //     if (category.isActive == false) {
@@ -144,224 +211,274 @@ const fetchCompetitionData = async () => {
 // };
 
 const prev = () => {
-    currentIndex.value = (currentIndex.value - 1 + items.value.length) % items.value.length;
+  currentIndex.value =
+    (currentIndex.value - 1 + items.value.length) % items.value.length;
 };
 
 const next = () => {
-    currentIndex.value = (currentIndex.value + 1) % items.value.length;
+  currentIndex.value = (currentIndex.value + 1) % items.value.length;
 };
 
 const goTo = (index) => {
-    currentIndex.value = index;
+  currentIndex.value = index;
 };
 
 const slideStyle = computed(() => {
-    return {
-        transform: `translateX(-${currentIndex.value * 100}%)`
-    };
+  return {
+    transform: `translateX(-${currentIndex.value * 100}%)`,
+  };
 });
 const handleUpload = (imageSrc) => {
-    const data = {
-        user_id: selectedCompetItem.value.userId,
-        compet_id: selectedCompetItem.value.competId,
-        auth_img: imageSrc
-    };
-    competitionStore.competitionImage(data).then(response => {
-        console.log('이미지 업로드 성공:', response);
-    }).catch(error => {
-        console.error('이미지 업로드 실패:', error);
+  const data = {
+    user_id: selectedCompetItem.value.userId,
+    compet_id: selectedCompetItem.value.competId,
+    auth_img: imageSrc,
+  };
+  competitionStore
+    .competitionImage(data)
+    .then((response) => {
+      console.log("이미지 업로드 성공:", response);
+    })
+    .catch((error) => {
+      console.error("이미지 업로드 실패:", error);
     });
 };
 
 function getCategoryNameById(id) {
-    const categoryMap = {
-        1: '기상',
-        2: '알고리즘',
-        3: '운동',
-        4: '식단',
-        5: '스터디',
-        6: '절제'
-
-    };
-    return categoryMap[id] || '알 수 없는 카테고리';
+  const categoryMap = {
+    1: "기상",
+    2: "알고리즘",
+    3: "운동",
+    4: "식단",
+    5: "스터디",
+    6: "절제",
+  };
+  return categoryMap[id] || "알 수 없는 카테고리";
 }
 onMounted(() => {
-    fetchCompetitionData();
-    const userInformation = userStorage.getUserInformation();
-    const userId = userInformation.user_Id;
-    if (userId) {
-        soloStore.soloToday(userId)
-            .then(response => {
-                todayChallenges.value = response.data['solo_id'].map(challenge => ({
-                    category_id: challenge.category_id,
-                    category_name: getCategoryNameById(challenge.category_id),
-                    solo_result: challenge.solo_result,
-                }));
-            })
-            .catch(error => {
-                console.error('Error fetching solo today data:', error);
-            });
-    } else {
-        console.error('User ID not found');
-    }
+  fetchCompetitionData();
+  const userInformation = userStorage.getUserInformation();
+  const userId = userInformation.user_Id;
+  if (userId) {
+    soloStore
+      .soloToday(userId)
+      .then((response) => {
+        todayChallenges.value = response.data["solo_id"].map((challenge) => ({
+          category_id: challenge.category_id,
+          category_name: getCategoryNameById(challenge.category_id),
+          solo_result: challenge.solo_result,
+        }));
+      })
+      .catch((error) => {
+        console.error("Error fetching solo today data:", error);
+      });
+  } else {
+    console.error("User ID not found");
+  }
+
+  const donut = document.querySelector(".donut");
+  let totalMinwon = 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
+  if (donut) {
+    let t4 = 0;
+    const donutAnimation = setInterval(() => {
+      donut.dataset.percent = t4;
+      donut.style.background = `conic-gradient(#4F98FF 0 ${t4}%, #DEDEDE ${t4}% 100% )`;
+      if (t4++ >= totalMinwon) clearInterval(donutAnimation);
+    }, 30);
+  }
 });
 if (chartRef.value) {
-    const ctx = chartRef.value.getContext('2d');
-    new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Category 1'],
-            datasets: [
-                {
-                    data: [60, 40],
-                    backgroundColor: ['lightblue', 'transparent'],
-                },
-            ],
+  const ctx = chartRef.value.getContext("2d");
+  new Chart(ctx, {
+    type: "doughnut",
+    data: {
+      labels: ["Category 1"],
+      datasets: [
+        {
+          data: [60, 40],
+          backgroundColor: ["lightblue", "transparent"],
         },
-        options: {
-            cutout: '60%',
-            responsive: true,
-            maintainAspectRatio: false,
-        },
-    });
+      ],
+    },
+    options: {
+      cutout: "60%",
+      responsive: true,
+      maintainAspectRatio: false,
+    },
+  });
 }
 </script>
 
 
-  
-
-  
 <style>
 .challenge_board {
-    border: 2px rgb(71, 48, 248) solid;
+  border: 2px rgb(71, 48, 248) solid;
+  border-radius: 8px;
+}
+
+.challenge_board_head{
+    background-color: #3f8bc9;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    padding: 8px;
 }
 
 .current_board {
-    display: flex;
-    border: 1px green solid;
+  display: flex;
+  border: 1px green solid;
 }
 
 .solo {
-    border: 1px rgb(255, 53, 188) solid;
-    width: 50%;
-    margin: 5px;
-    text-align: center;
+  border: 1px rgb(255, 53, 188) solid;
+  width: 50%;
+  margin: 5px;
+  text-align: center;
 }
 
 .compet {
-    border: 1px rgb(50, 248, 255) solid;
-    width: 50%;
-    margin: 5px;
-    text-align: center;
+  border: 1px rgb(50, 248, 255) solid;
+  width: 50%;
+  margin: 5px;
+  text-align: center;
 }
 
 .solo_board {
-    border: 1px rgb(224, 76, 100) solid;
-    padding: 5px;
-    display: flex;
+  border: 1px rgb(224, 76, 100) solid;
+  padding: 5px;
+  display: flex;
 }
 
 .success_graph {
-    border: 1px black solid;
-    border-radius: 100%;
-    width: 150px;
-    height: auto;
-    text-align: center;
+  flex: 1;
+  height: auto;
+  text-align: center;
+}
+
+.donut {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  border-radius: 50%;
+  position: relative;
+  text-align: center;
+  transition: background 0.3s ease-in-out;
+  background: conic-gradient(#3f8bc9 0% 30%, #f2f2f2 30% 100%);
+  border: 1px solid black;
+}
+
+.donut::before {
+  color: #fff;
+  width: 70%;
+  padding: calc(35% - 0.64vw) 0;
+  background: #264057;
+  border-radius: 50%;
+  position: absolute;
+  left: 15%;
+  top: 15%;
+  display: block;
+  content: attr(data-percent) "%";
+  transform: skew(-0.03deg);
+  margin: auto;
+  font-size: 1.1vw;
+  font-size: 2vw;
+  padding: calc(35% - 1.3vw) 0;
 }
 
 .categories {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+  flex: 3;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .category_btn {
-    width: 100px;
-    height: 50px;
-    border-radius: 20px;
-    margin: 3px;
-    padding: 5px;
-    cursor: pointer;
-    flex-basis: calc(33.33% - 10px);
+  width: 50px;
+  height: 50px;
+  border-radius: 20px;
+  margin: 3px;
+  padding: 5px;
+  cursor: pointer;
+  flex-basis: calc(33.33% - 10px);
 }
 
 .active {
-    background-color: rgb(66, 66, 250);
-    color: #ababab;
+  background-color: rgb(66, 66, 250);
+  color: #ababab;
 }
 
 .player_img {
-    width: 100px;
-    height: 100px;
+  width: 100px;
+  height: 100px;
 }
 
 .carousel_item {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  text-align: center;
 }
 
 .compet_board {
-    /* 기존 스타일 유지하고 overflow 추가 */
-    overflow: hidden;
-    /* carousel 이 해당 영역을 넘어가지 않도록 */
+  /* 기존 스타일 유지하고 overflow 추가 */
+  overflow: hidden;
+  /* carousel 이 해당 영역을 넘어가지 않도록 */
 }
 
 .carousel_container {
-    position: relative;
-    overflow: hidden;
-    /* 필요에 따라 여기도 추가할 수 있습니다 */
-    width: 100%;
-    /* 혹은 필요한 너비로 조정하세요 */
-    margin: auto;
-    /* 가운데 정렬 */
+  position: relative;
+  overflow: hidden;
+  /* 필요에 따라 여기도 추가할 수 있습니다 */
+  width: 100%;
+  /* 혹은 필요한 너비로 조정하세요 */
+  margin: auto;
+  /* 가운데 정렬 */
 }
 
 .carousel_slide {
-    display: flex;
-    transition: transform 0.3s ease;
+  display: flex;
+  transition: transform 0.3s ease;
 }
 
 .carousel_item {
-    flex: 0 0 auto;
-    /* 각 아이템의 너비를 자동으로 설정 */
-    width: 100%;
-    /* 부모 컨테이너의 100% 너비를 가짐 */
+  flex: 0 0 auto;
+  /* 각 아이템의 너비를 자동으로 설정 */
+  width: 100%;
+  /* 부모 컨테이너의 100% 너비를 가짐 */
 }
 
 .category_btn.completed {
-    background-color: #4CAF50;
-    /* 도전 완료된 카테고리의 배경색 */
-    color: white;
-    /* 텍스트 색상 */
+  background-color: #4caf50;
+  /* 도전 완료된 카테고리의 배경색 */
+  color: white;
+  /* 텍스트 색상 */
 }
 
+/* @media (max-width: 768px) {  */
 @media (max-width: 768px) {
-    .current_board {
-        flex-direction: column;
-    }
+  .current_board {
+    flex-direction: column;
+  }
 
-    .solo,
-    .compet {
-        width: 100%;
-    }
+  .solo,
+  .compet {
+    width: 100%;
+  }
 
-    .carousel_item {
-        flex-direction: row;
-        align-items: center;
-        text-align: center;
-    }
+  .carousel_item {
+    flex-direction: row;
+    align-items: center;
+    text-align: center;
+  }
 
-    .player1,
-    .player2 {
-        margin-bottom: 10px;
-    }
+  .player1,
+  .player2 {
+    margin-bottom: 10px;
+  }
 
-    .player_img {
-        width: 70px;
-        /* 변경된 부분: 이미지 크기를 작게 조정 */
-        height: 70px;
-    }
+  .player_img {
+    width: 70px;
+    /* 변경된 부분: 이미지 크기를 작게 조정 */
+    height: 70px;
+  }
 }
 </style>
