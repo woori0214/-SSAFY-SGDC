@@ -19,6 +19,7 @@
           <div class="headbar">
             <h2>Router For Development</h2>
             <BackGroundMusic></BackGroundMusic>
+            <HeaderNav></HeaderNav>
           </div>
           <nav>
             <RouterLink to="/">Main</RouterLink>
@@ -43,6 +44,7 @@ import { RouterLink, RouterView } from "vue-router";
 import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
 import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
+import HeaderNav from "./components/Common/HeaderNav.vue";
 import { useLoginStore } from "./stores/login";
 
 //로그인된 유저 정보

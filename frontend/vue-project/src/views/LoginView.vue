@@ -44,7 +44,7 @@ export default {
       loginUser
         .isLogin(User.value)
         .then(() => {
-          console.log("로그인 성공");
+          console.log("로그인 성공,vue");
           router.push("/");
         })
         .catch((e) => {
@@ -53,6 +53,8 @@ export default {
         })
         .finally(() => {
           isSubmitButtonDisabled.value = false;
+          console.log(userId.value);
+          console.log(password.value);
         });
     };
 

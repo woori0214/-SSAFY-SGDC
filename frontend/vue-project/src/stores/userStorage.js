@@ -31,7 +31,8 @@ export const useUserStorageStore = defineStore('userStorage', () => {
     // console.log(data.user_id);
     localStorage.setItem("user_id", data.user_id);
     localStorage.setItem("user_name", data.user_name);
-    localStorage.setItem("token", data.token);
+    localStorage.setItem("user_nickname", data.user_nickname);
+    // localStorage.setItem("token", data.token);
   }
 
   // 유저 로그인 정보 가져오기
@@ -39,11 +40,13 @@ export const useUserStorageStore = defineStore('userStorage', () => {
   const getUserInformation = function () {
     const user_id = localStorage.getItem("user_id");
     const user_name = localStorage.getItem("user_name");
+    const user_nickname = localStorage.getItem("user_nickname");
     const token = localStorage.getItem("token");
 
     return {
       user_id: user_id || null,
       user_name: user_name || null,
+      user_nickname: user_nickname || null,
       token: token || null,
     }
   }
