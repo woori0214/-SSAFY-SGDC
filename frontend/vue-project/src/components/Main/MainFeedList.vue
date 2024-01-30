@@ -2,7 +2,11 @@
   <div class="feed_board">
     <div class="more_feed">
       <h1>
-        <img src="@/assets/alarmmachine.png" alt="Alarm Machine Icon" class="alarm-icon" />
+        <img
+          src="@/assets/alarmmachine.png"
+          alt="Alarm Machine Icon"
+          class="alarm-icon"
+        />
         알려드립니다
       </h1>
       <div>
@@ -10,11 +14,14 @@
       </div>
     </div>
     <div class="feed_list">
-      <div v-for="feed_item in feedlist" :key="feed_item.feed_id" class="feed_item">
+      <div
+        v-for="feed_item in feedlist"
+        :key="feed_item.feed_id"
+        class="feed_item"
+      >
         <p class="feed_item_context">{{ feed_item.feed_content }}</p>
       </div>
-      <div class="feed_item_foot">
-      </div>
+      <div class="feed_item_foot"></div>
     </div>
   </div>
 </template>
@@ -23,29 +30,49 @@
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useFeedStore } from "@/stores/feed";
-import alarmmachine from '@/assets/alarmmachine.png';
+import alarmmachine from "@/assets/alarmmachine.png";
 const router = useRouter();
 const feedInfo = useFeedStore();
 const feedlist = ref([
   {
+    feed_id: 0,
+    feed_content: "오화석0 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
     feed_id: 1,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+    feed_content: "오화석1 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 2,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+    feed_content: "오화석2 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 3,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+    feed_content: "오화석3 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 4,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+    feed_content: "오화석4 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 5,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+    feed_content: "오화석5 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 6,
+    feed_content: "오화석6 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 7,
+    feed_content: "오화석7 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 8,
+    feed_content: "오화석8 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 9,
+    feed_content: "오화석9 님이 기상챌린지를 성공하셨습니다.",
   },
 ]);
 const feedlist_ = ref([]);
@@ -90,7 +117,7 @@ const more_feed = () => {
   padding-block: 10px;
 }
 
-.more_feed_head{
+.more_feed_head {
   font-size: 44px;
   font-weight: 700;
   margin-left: 15px;
@@ -125,7 +152,7 @@ const more_feed = () => {
   margin-top: -15px;
 }
 
-.feed_item_foot{
+.feed_item_foot {
   background-color: #83b0e1;
   /* 볼더 스타일1 */
   border-radius: 15px;
@@ -139,7 +166,8 @@ const more_feed = () => {
   margin-top: -15px;
 }
 
-.feed_item_context {}
+.feed_item_context {
+}
 
 .alarm-icon {
   max-width: 45px;
