@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @ToString
-@Table(name = "user")
+@Table(name = "users")
 public class User {
 
     @Id
@@ -50,7 +50,7 @@ public class User {
     @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @Column(name = "sign_out")
+    @Column(name = "signout")
     private Boolean signOut;
 
 //    @OneToOne
