@@ -21,12 +21,16 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
+
 .select_body {
   border: 2px solid rgb(32, 29, 255);
 }
+
 .mail_box_body {
   border: 2px solid pink;
-  max-height: 520px;
+  height: 380px; /* Set your desired fixed height */
+  /* overflow-y: auto; */
 }
 </style>
