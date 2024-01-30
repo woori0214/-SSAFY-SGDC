@@ -41,7 +41,7 @@ import { useFollowStore } from '@/stores/follow';
 import { ref, onMounted } from 'vue';
 // 유저 이미지 가져오는 거 변경해야함
 import userimg from '@/assets/image1.png';
-import timerImage from '@/assets/timer.png';
+import timerImage from '@/assets/wake.png';
 import algoImage from '@/assets/algo.png';
 import dietImage from '@/assets/diet.png';
 import fightingImage from '@/assets/fighting.png';

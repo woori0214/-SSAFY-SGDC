@@ -12,11 +12,7 @@
                         </div>
                     </label>
 
-                    <input id="fileInput" type="file" @change="handleFileChange"
-                        style="display: none; border: 1px solid green;" />
-
-                    <!-- 업로드 버튼과 다른 내용들 -->
-                    <slot></slot>
+                    <input id="fileInput" type="file" @change="handleFileChange" style="display: none;"/>
 
                     <!-- 업로드 버튼과 닫기 버튼 컨테이너 -->
                     <div class="button-container">
@@ -28,15 +24,13 @@
         </div>
     </transition>
 </template>
-  
-  
 
 <script>
 import defaultImage from '@/assets/camera.png';
 
 export default {
-    props: ['show'],
-    emits: ['update:show'],
+    props: ['show', 'selectedCategory', 'isSoloMode',],
+    emits: ['update:show', 'uploadImage'],
     data() {
         return {
             currentImageSrc: defaultImage,
@@ -49,22 +43,32 @@ export default {
             this.$emit('update:show', false);
         },
         handleFileChange(event) {
+            console.log('파일이 선택되었습니다:', event.target.files[0]);
             const file = event.target.files[0];
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = (e) => this.currentImageSrc = e.target.result;
-                reader.readAsDataURL(file);
+            if (file) {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        console.log('FileReader가 로딩되었습니다:', e.target.result);
+                        this.currentImageSrc = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    console.log('유효하지 않은 파일 형식입니다. 이미지를 선택하세요.');
+                }
             }
         },
         uploadImage() {
+            console.log('이미지 업로드 로직을 실행합니다.');
+            // 여기에 이미지 업로드 로직을 추가하세요.
             this.$emit('uploadImage', this.currentImageSrc);
-            this.close();
+
         },
     },
 };
 </script>
 
-<style>
+<style scoped>
 /* 업데이트된 스타일링 */
 .modal_mask {
     position: fixed;
@@ -84,95 +88,65 @@ export default {
 }
 
 .modal_container {
-    background: white;
+    background: #e1ecf7;
+    border-radius: 30px;
+    border: #e1ecf7 1px solid;
     padding: 20px;
-    border-radius: 10px;
-    width: 800px;
-    /* 예시 폭 */
-    height: 500px;
-    /* 예시 높이 */
+    width: 80%; /* 변경된 너비 */
+    max-width: 600px; /* 최대 너비 */
+    height: auto; /* 자동 높이 조정 */
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* 수평 정렬 */
     justify-content: space-between;
-    /* 수직 정렬 변경 */
-    border: 1px solid black;
+    border: 1px solid #e1ecf7;
 }
 
 /* 파일 입력을 위한 스타일 */
 input[type="file"] {
-    margin-top: 10px;
-    /* 필요한 경우 여백 조정 */
+    margin-top: 10px; /* 간격 조정 */
 }
 
 /* 업로드 버튼과 닫기 버튼 컨테이너 스타일 */
 .button-container {
     display: flex;
     justify-content: center;
-    /* 수평 가운데 정렬 */
     width: 100%;
     margin-top: 10px;
-    /* 추가된 여백 */
 }
 
 /* 업로드 버튼 스타일 */
 .upload-button,
 .close-button {
     padding: 8px 16px;
-    background-color: #4caf50;
+    background-color: #71a5de;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
 }
-
 .upload-button {
-    margin-right: 10%;
+    margin-right: 10px; /* 간격 조정 */
 }
 
 /* 이미지 스타일 */
 .image-container {
     text-align: center;
-    width: 350px;
-    /* 이미지 컨테이너의 폭을 100%로 설정 */
-    height: 350px;
-    /* 이미지 컨테이너의 높이를 원하는 크기로 설정 */
+    width: 100%;
+    height: auto;
     overflow: hidden;
-    /* 크기를 넘어가는 이미지를 잘라내도록 설정 */
 }
 
 .modal-image {
     width: 100%;
-    /* 이미지를 100%로 설정하여 이미지 컨테이너에 꽉 차게 표시 */
     height: auto;
-    /* 가로 비율을 유지한 채로 높이를 자동 조절 */
 }
 
-.modal-enter-active,
-.modal-leave-active {
-    transition: opacity 0.5s;
-}
-
-.modal-enter,
-.modal-leave-to {
-    opacity: 0;
-}
-
+/* 모바일 화면용 스타일 */
 @media (max-width: 600px) {
     .modal_container {
         width: 90%;
-        height: 80%;
-    }
-
-    .image-container {
-        width: 100%;
-        height: 50%;
-    }
-
-    .modal-image {
-        max-width: 100%;
-        max-height: 100%;
     }
 }
 </style>
+
