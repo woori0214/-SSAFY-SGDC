@@ -29,10 +29,10 @@ public class ImageAuth {
 
     @ManyToOne
     @JoinColumn(name = "compet_id")
-    private Competition competId;
+    private Competition competition;
 
     @OneToOne
     @JoinColumn(name = "matcing_id")
-    private Matching matcingId;
+    private Matching matcing;
 
 }

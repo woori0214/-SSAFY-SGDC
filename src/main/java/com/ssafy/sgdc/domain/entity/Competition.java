@@ -23,7 +23,7 @@ public class Competition {
 
     @OneToOne
     @JoinColumn(name = "compet_detail_id")
-    private CompetDetail competDetailId;
+    private CompetDetail competDetail;
 
     private LocalDateTime createAt;
 
