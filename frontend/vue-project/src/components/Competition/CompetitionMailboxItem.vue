@@ -5,7 +5,7 @@
         {{ mail_sender }}가 {{ mail_category }}를 신청하였습니다.
       </div>
       <div class="mail_content_details">
-        <div class="mail_content_time">남은시간: {{ mail_remain_time }}      <button @click="acceptChallenge">수락</button></div>
+        <div class="mail_content_time">남은시간: {{ mail_remain_time }}      <button class="accept_btn" @click="acceptChallenge">수락</button></div>
       </div>
     </div>
   </div>
@@ -58,7 +58,7 @@ export default {
   font-size: 16px;
 }
 
-button {
+.accept_btn {
   background-color: #25aae1;
   color: #ffffff;
   border: none;
