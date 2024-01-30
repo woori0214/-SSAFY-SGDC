@@ -42,6 +42,7 @@
         <div class="compet_head">
           <div class="compet_head_item">경쟁 모드 현황</div>
         </div>
+        <!-- 경쟁모드 아이템 -->
         <div class="compet_board">
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
@@ -110,6 +111,7 @@
             </div>
           </div>
         </div>
+        <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
     <Modal
