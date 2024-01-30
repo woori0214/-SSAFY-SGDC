@@ -47,6 +47,18 @@ const feedlist = ref([
     feed_id: 5,
     feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
   },
+  {
+    feed_id: 5,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 5,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
+  {
+    feed_id: 5,
+    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
+  },
 ]);
 const feedlist_ = ref([]);
 

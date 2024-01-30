@@ -129,7 +129,7 @@ const selectCategory = (categoryId) => {
   border-radius: 5px;
   cursor: pointer;
   /* active 상태일 때의 배경색을 설정합니다. */
-  background-color: #ffffff;
+  background-color: #97c2f4;
 }
 
 .category-button.active {
