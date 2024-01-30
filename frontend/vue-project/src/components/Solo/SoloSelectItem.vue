@@ -1,13 +1,15 @@
 <template>
   <div>
-    <div class="category_grid">
+    <div class="category_container">
       <div v-for="category in categories" :key="category.id" class="category_item">
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
-        <button @click="openModal(category)" class="solo_btn" :class="{ 'active': isActive(category.id) }" :disabled="isActive(category.id)">
-          <img :src="category.img" alt="category">
+        <button @click="openModal(category)" class="solo_btn" :style="solobtncolor(category.id)">
+          <div class="img_container">
+            <img :src="category.img" alt="category" class="solo_bnt_img">
+          </div>
           <div class="category_text">
-            <div>{{ category.name }}</div>
-            <div class="extra_text">{{ category.contents }}</div>
+            <h2>{{ category.name }}</h2>
+            <p class="extra_text">{{ category.contents }}</p>
           </div>
         </button>
       </div>
@@ -16,7 +18,7 @@
     <!-- 확인 모달 창 -->
     <div v-if="isModalOpen" class="modal">
       <div class="modal-content">
-        <p>진짜로 도전하시겠습니까?</p>
+        <h2>진짜로 도전하시겠습니까?</h2>
         <button @click="confirmChallenge" class="check_btn">네</button>
         <button @click="closeModal" class="check_btn">아니오</button>
       </div>
@@ -34,12 +36,12 @@ import { ref, onMounted, computed } from 'vue';
 import { useSoloStore } from '@/stores/solo';
 import { useLoginStore } from '@/stores/login';
 
-import timerImage from '@/assets/timer.png';
+import timerImage from '@/assets/wake.png';
 import algoImage from '@/assets/algo.png';
+import healthImage from '@/assets/health.png';
+import studyImage from '@/assets/study.png';
 import dietImage from '@/assets/diet.png';
 import fightingImage from '@/assets/fighting.png';
-import studyImage from '@/assets/study.png';
-import healthImage from '@/assets/health.png';
 import PopUpProofPicture from '@/components/PopUp/PopUpProofPicture.vue';
 
 export default {
@@ -99,16 +101,16 @@ export default {
     ]);
 
     // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
-    // onMounted(() => {
-    //   solo.soloToday(user_id)
-    //     .then((res) => {
-    //       console.log(solo.soloTodayData)
-    //       soloTodayData.value = res.solo_id
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error fetching soloTodayData:', error);
-    //     });
-    // });
+    onMounted(() => {
+      solo.soloToday(user_id)
+        .then((res) => {
+          console.log(solo.soloTodayData)
+          soloTodayData.value = res.solo_id
+        })
+        .catch((error) => {
+          console.error('Error fetching soloTodayData:', error);
+        });
+    });
     
     // 확인 모달창
     const openModal = (category) => {
@@ -117,6 +119,7 @@ export default {
       console.log(selectedCategory)
       isModalOpen.value = true;
     };
+
     // 확인 모달창
     const closeModal = () => {
       isModalOpen.value = false;
@@ -130,6 +133,14 @@ export default {
       });
       return statusMap;
     });
+
+    // 버튼 활성화 상태 및 스타일 조정
+    const solobtncolor = (categoryId) => {
+      return {
+        backgroundColor: soloStatusMap.value[categoryId] === 1 ? '#71a5de' : '#aecbeb',
+        pointerEvents: soloStatusMap.value[categoryId] === 1 ? 'none' : 'auto',
+      };
+    };
 
     // 솔로모드 도전
     const confirmChallenge = () => {
@@ -165,76 +176,79 @@ export default {
       console.log(challengeData)
       closeTestModal();
     };
-
-    // 버튼 활성화
-    const isActive = (categoryId) => {
-      return soloStatusMap.value[categoryId] === 1;
-    };
     
     return {
       categories,
       openModal,
       closeModal,
       confirmChallenge,
+      solobtncolor,
       isModalOpen,
       isTestModalOpen,
       openTestModal,
       closeTestModal,
       handleImageUpload,
       selectedCategory,
-      isActive,
     };
   },
 };
 </script>
   
 <style scoped>
-.category_grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 60px;
+.category_container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between; /* 카테고리 아이템을 간격을 벌리며 레이아웃 */
+  background-color: #f8f9fb;
+  margin: 20px;
+  border-radius: 30px;
+  border: #aecbeb 2px solid;
+  padding: 20px;
 }
 
-.category_item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  width: 100%;
-  height: 100%;
-  margin-top: 0%;
 
+.category_item {
+  background-color: #aecbeb;
+  flex-basis: calc(50% - 30px); /* 한 줄에 두 개의 아이템이 나오도록 설정, 간격을 조절해야합니다. */
+  margin: 15px; /* 원하는 간격으로 설정 */
+  border-radius: 20px;
 }
 
 .solo_btn {
+  display: flex;
+  flex-direction: column; /* 이미지와 텍스트를 수직으로 배치 */
+  align-items: center; /* 가운데 정렬 */
   padding: 10px;
   font-size: 16px;
   width: 100%;
-  height: 0;
-  padding-top: 100%;
   position: relative;
   cursor: pointer;
+  border: none;
+  background: none;
+  border-radius: 20px;
 }
 
-button img {
-  position: absolute;
-  top: 35%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 50%;
-  max-height: 50%;
-  margin: 0%;
+.img_container {
+  width: 200px; /* 조정 가능한 크기 */
+  height: 200px; /* 조정 가능한 크기 */
+  border-radius: 50%; /* 동그라미 모양으로 만듭니다. */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* 이미지가 동그라미를 벗어나지 않도록 합니다. */
+  background-color: #f8f9fb; /* 이미지가 없을 때를 위한 배경 색상 */
+  margin-top: 10px;
+}
+
+.solo_bnt_img {
+  max-width: 90%;
+  max-height: 90%;
 }
 
 .category_text {
-  position: absolute;
-  bottom: 10px;
-  width: 100%;
   text-align: center;
-  color: black;
-  transform: translateX(-50%);
-  left: 50%;
+  color: white;
+  font-size: x-large;
 }
 
 .extra_text {
@@ -255,14 +269,23 @@ button img {
 }
 
 .modal-content {
-  background: white;
-  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  background-color: #e1ecf7;
+  border: #aecbeb 2px solid;
+  padding: 50px;
   border-radius: 8px;
   text-align: center;
 }
 
 .check_btn {
-  margin: 5px;
+  background: #71a5de;
+  border: #71a5de 1px solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 10px;
+  color: white;
+  font-size: medium;
 }
 </style>
   
