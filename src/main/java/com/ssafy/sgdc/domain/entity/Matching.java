@@ -22,20 +22,20 @@ public class Matching {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
-    @Column(name = "matcing_id")
-    private Long matcingId;
+    @Column(name = "matching_id")
+    private Long matchingId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private User userId;
+    private User user;
 
     @ManyToOne
     @JoinColumn(name = "compet_id")
-    private Competition competId;
+    private Competition competition;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    private Category categoryId;
+    private Category category;
 
     @Column(name = "compet_kind")
     @Enumerated(EnumType.STRING)
