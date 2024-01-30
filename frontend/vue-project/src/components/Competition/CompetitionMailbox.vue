@@ -100,15 +100,14 @@ const acceptChallenge = async (index) => {
 
 <style scoped>
 .main_box {
-  background-color: #f8f9fb;
-  border: 2px solid #aecbeb;
-  width: 95%;
-  margin: auto;
+  background-color: #e1ecf7;
+  border: 2px solid #83b0e1;
+  width: 93%;
   display: flex;
   flex-direction: column;
   height: 88%;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
@@ -128,9 +127,10 @@ const acceptChallenge = async (index) => {
   border: 2px solid #aecbeb;
   max-height: 100%;
   overflow: auto;
-  border-radius: 10px;
+  border-radius: 25px;
   padding: 10px;
   margin-top: 10px;
+  width: 100%; /* Set width to 100% */
 }
 .mail_box::-webkit-scrollbar {
   width: 10px;
@@ -139,11 +139,9 @@ const acceptChallenge = async (index) => {
   background-color: #71a5de;
   border-radius: 10px;
   background-clip: padding-box;
-  /* border: 2px solid transparent; */
 }
 .mail_box::-webkit-scrollbar-track {
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
-  /* box-shadow: inset 0px 0px 5px white; */
 }
 </style>

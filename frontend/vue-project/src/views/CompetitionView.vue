@@ -1,6 +1,6 @@
 <template>
   <div class="view_body">
-    <h1>경쟁모드</h1>
+    <h1 class="compet_title">경쟁모드</h1>
     <div class="select_body">
       <CompetitionSelect></CompetitionSelect>
     </div>
@@ -17,7 +17,6 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 
 <style scoped>
 .view_body {
-  /* border: 2px solid red; */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -25,12 +24,20 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .select_body {
-  /* border: 2px solid rgb(32, 29, 255); */
+  flex: 1; /* Fill the available space horizontally */
 }
 
 .mail_box_body {
-  /* border: 2px solid pink; */
   height: 380px; /* Set your desired fixed height */
-  /* overflow-y: auto; */
+  margin: 0;
+  width: 100%;
+}
+
+.compet_title {
+    background-color: #83b0e1;
+    border-radius: 25px;
+    width: 97%;
+    color: white;
+    padding: 10px;
 }
 </style>

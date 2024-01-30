@@ -43,7 +43,7 @@ export default {
   gap: 10px;
   padding: 15px;
   background-color: #ffffff;
-  border-radius: 10px;
+  border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
