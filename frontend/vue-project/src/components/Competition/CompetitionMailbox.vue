@@ -6,57 +6,61 @@
     </div>
     <div class="mail_box">
       <div v-for="(item, index) in mailParameters" :key="index">
-        <CompetitionMailboxItem :mail_sender="item.is_sender" :mail_category="mapCategoryIdToName(item.category_id)"
-          :mail_remain_time="item.compet_expiration_time" @acceptChallenge="() => acceptChallenge(index)" />
+        <CompetitionMailboxItem
+          :mail_sender="item.is_sender"
+          :mail_category="mapCategoryIdToName(item.category_id)"
+          :mail_remain_time="item.compet_expiration_time"
+          @acceptChallenge="() => acceptChallenge(index)"
+        />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useCompetionStore } from '@/stores/competition';
-import mailbox from '@/assets/mailbox.png';
-import { useUserStorageStore } from '@/stores/userStorage';
-import CompetitionMailboxItem from './CompetitionMailboxItem.vue';
+import { ref } from "vue";
+import { useCompetionStore } from "@/stores/competition";
+import mailbox from "@/assets/mailbox.png";
+import { useUserStorageStore } from "@/stores/userStorage";
+import CompetitionMailboxItem from "./CompetitionMailboxItem.vue";
 
 const competitionStore = useCompetionStore();
 const userStorage = useUserStorageStore();
 const mailParameters = ref([
   {
-    is_sender: 'John Doe',
+    is_sender: "John Doe",
     category_id: 1,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
   {
-    is_sender: 'Alice Smith',
+    is_sender: "Alice Smith",
     category_id: 2,
-    compet_expiration_time: '02:00',
+    compet_expiration_time: "02:00",
   },
 ]);
 const userInformation = userStorage.getUserInformation();
@@ -64,15 +68,15 @@ const userId = userInformation.user_Id;
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {
-    1: '기상',
-    2: '알고리즘',
-    3: '운동',
-    4: '스터디',
-    5: '식단',
-    6: '절제',
+    1: "기상",
+    2: "알고리즘",
+    3: "운동",
+    4: "스터디",
+    5: "식단",
+    6: "절제",
   };
 
-  return categoryNames[categoryId] || '알 수 없는 카테고리';
+  return categoryNames[categoryId] || "알 수 없는 카테고리";
 };
 
 const acceptChallenge = async (index) => {
@@ -80,16 +84,16 @@ const acceptChallenge = async (index) => {
   const acceptUser = {
     userId: userId,
     matchingId: item.matchingId,
-  }
+  };
   try {
-    if (item.competKind === '경쟁') {
+    if (item.competKind === "경쟁") {
       await competitionStore.randomAccept(acceptUser);
-    } else if (item.competKind === '친구') {
+    } else if (item.competKind === "친구") {
       await competitionStore.friendAccept(acceptUser);
     }
     console.log(`인덱스 ${index}의 도전을 수락했습니다.`);
   } catch (error) {
-    console.error('도전 수락 중 오류 발생:', error);
+    console.error("도전 수락 중 오류 발생:", error);
   }
 };
 </script>
@@ -127,5 +131,19 @@ const acceptChallenge = async (index) => {
   border-radius: 10px;
   padding: 10px;
   margin-top: 10px;
+}
+.mail_box::-webkit-scrollbar {
+  width: 10px;
+}
+.mail_box::-webkit-scrollbar-thumb {
+  background-color: #71a5de;
+  border-radius: 10px;
+  background-clip: padding-box;
+  /* border: 2px solid transparent; */
+}
+.mail_box::-webkit-scrollbar-track {
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  /* box-shadow: inset 0px 0px 5px white; */
 }
 </style>

@@ -17,7 +17,7 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 
 <style scoped>
 .view_body {
-  border: 2px solid red;
+  /* border: 2px solid red; */
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -25,11 +25,11 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .select_body {
-  border: 2px solid rgb(32, 29, 255);
+  /* border: 2px solid rgb(32, 29, 255); */
 }
 
 .mail_box_body {
-  border: 2px solid pink;
+  /* border: 2px solid pink; */
   height: 380px; /* Set your desired fixed height */
   /* overflow-y: auto; */
 }

@@ -107,7 +107,7 @@ const selectCategory = (categoryId) => {
 
 <style scoped>
 #main_box {
-  border: 2px solid greenyellow;
+  /* border: 2px solid greenyellow; */
   width: 95%;
   display: flex;
   flex-direction: column;
@@ -137,7 +137,7 @@ const selectCategory = (categoryId) => {
 }
 
 #matching_btn_list {
-  border: 2px solid orange;
+  /* border: 2px solid orange; */
   display: flex;
   justify-content: center;
 }
