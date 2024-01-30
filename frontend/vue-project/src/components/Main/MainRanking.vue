@@ -360,6 +360,10 @@ const selectCategory = (categoryId) => {
   padding-inline: 12px;
   padding-bottom: 5px;
 }
+.rank-categori-btn:hover{
+  color: #71a5de;
+  background-color: #e6e6e6;
+}
 .rank-categori-btn.active {
   background-color: #aecbeb;
   color: #f8f9fb;
@@ -373,6 +377,10 @@ const selectCategory = (categoryId) => {
 
   display: flex;
   flex-direction: column;
+}
+.rank-categori-btn:hover {
+  /* background-color: #dbdbdb; */
+  /* color: #aecbeb; */
 }
 .rank-board-menu {
   border: 3px solid #aecbeb;
