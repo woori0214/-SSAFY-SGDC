@@ -179,6 +179,7 @@ const more_feed = () => {
 }
 
 .feed_item_context {
+  border: 0px;
 }
 
 .alarm-icon {
