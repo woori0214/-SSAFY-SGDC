@@ -26,10 +26,10 @@ import MainChallengeBoard from '../Main/MainChallengeBoard.vue';
   .accordion-header {
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: #83b0e1;
     padding: 10px;
-    border: 1px solid #ccc;
     cursor: pointer;
+    border-radius: 15px;
   }
   
   .rotate-icon {
@@ -49,11 +49,11 @@ import MainChallengeBoard from '../Main/MainChallengeBoard.vue';
   /* 아코디언 내용 스타일링 */
   .accordion-content {
     padding: 10px;
-    border: 1px solid #ccc;
     border-top: none;
     overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
+    border-radius: 15px;
   }
   
   /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */

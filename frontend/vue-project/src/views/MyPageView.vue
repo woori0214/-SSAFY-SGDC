@@ -1,6 +1,5 @@
 <template>
     <div class="mypageview_body">
-        <h1>프로필페이지</h1>
         <div class="profile_body">
             <MyPageProfileBar :userData="userData" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData"
                 @ssallowing-request="handleSsallowingRequest" />
@@ -172,44 +171,43 @@ onMounted(() => {
 
 <style scoped>
 .mypageview_body {
-    border: 2px solid red;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 40px;
 }
 
 .profile_body {
-    border: 1px solid rgb(51, 0, 255);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .compet_body {
-    border: 1px solid rgb(255, 0, 132);
-    ;
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .solo_body {
-    border: 1px solid rgb(0, 238, 255);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .analysis_body {
-    border: 1px solid rgb(244, 156, 189);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .challenge_body {
-    border: 1px solid rgb(247, 0, 255);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .badge_body {
-    border: 1px solid rgb(210, 247, 0);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 
 .ssallow_body {
-    border: 1px solid rgb(0, 70, 22);
-
+    background: #e1ecf7;
+    border-radius: 30px;
 }
 </style>

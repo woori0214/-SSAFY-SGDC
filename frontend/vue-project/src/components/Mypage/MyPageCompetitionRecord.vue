@@ -211,15 +211,14 @@ export default {
 </script>
   
 <style scoped>
-/* 아코디언 헤더 스타일링 */
-.accordion-header {
+/* 아코디언 헤더 스타일링 */.accordion-header {
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: #83b0e1;
     padding: 10px;
-    border: 1px solid #ccc;
     cursor: pointer;
-}
+    border-radius: 15px;
+  }
 
 .rotate-icon {
     transition: transform 0.3s ease;
@@ -242,7 +241,6 @@ export default {
 .com_accordion-content {
     display: flex;
     padding: 10px;
-    border: 1px solid #ccc;
     border-top: none;
     overflow: auto;
     max-height: 0;
