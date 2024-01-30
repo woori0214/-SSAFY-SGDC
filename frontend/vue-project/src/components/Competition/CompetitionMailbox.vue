@@ -1,14 +1,13 @@
 <template>
   <div class="main_box">
-    <div>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</div>
+    <div class="mailbox_title">
+      <img src="@/assets/mailbox.png" alt="Mailbox Icon" class="mailbox_icon" />
+      <span>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</span>
+    </div>
     <div class="mail_box">
       <div v-for="(item, index) in mailParameters" :key="index">
-        <CompetitionMailboxItem
-          :mail_sender="item.is_sender"
-          :mail_category="mapCategoryIdToName(item.category_id)"
-          :mail_remain_time="item.compet_expiration_time"
-          @acceptChallenge="() => acceptChallenge(index)"
-        />
+        <CompetitionMailboxItem :mail_sender="item.is_sender" :mail_category="mapCategoryIdToName(item.category_id)"
+          :mail_remain_time="item.compet_expiration_time" @acceptChallenge="() => acceptChallenge(index)" />
       </div>
     </div>
   </div>
@@ -17,7 +16,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useCompetionStore } from '@/stores/competition';
-
+import mailbox from '@/assets/mailbox.png';
 import { useUserStorageStore } from '@/stores/userStorage';
 import CompetitionMailboxItem from './CompetitionMailboxItem.vue';
 
@@ -34,10 +33,34 @@ const mailParameters = ref([
     category_id: 2,
     compet_expiration_time: '02:00',
   },
+  {
+    is_sender: 'Alice Smith',
+    category_id: 2,
+    compet_expiration_time: '02:00',
+  },
+  {
+    is_sender: 'Alice Smith',
+    category_id: 2,
+    compet_expiration_time: '02:00',
+  },
+  {
+    is_sender: 'Alice Smith',
+    category_id: 2,
+    compet_expiration_time: '02:00',
+  },
+  {
+    is_sender: 'Alice Smith',
+    category_id: 2,
+    compet_expiration_time: '02:00',
+  },
+  {
+    is_sender: 'Alice Smith',
+    category_id: 2,
+    compet_expiration_time: '02:00',
+  },
 ]);
 const userInformation = userStorage.getUserInformation();
 const userId = userInformation.user_Id;
-
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {
@@ -73,17 +96,36 @@ const acceptChallenge = async (index) => {
 
 <style scoped>
 .main_box {
-  border: 2px solid blue;
+  background-color: #f8f9fb;
+  border: 2px solid #aecbeb;
   width: 95%;
   margin: auto;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 88%;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
+}
+
+.mailbox_title {
+  display: flex;
+  align-items: center;
+}
+
+.mailbox_icon {
+  width: 30px;
+  height: 30px;
+  margin-right: 10px;
 }
 
 .mail_box {
-  border: 2px solid skyblue;
-  max-height: 400px;
+  background-color: #e1ecf7;
+  border: 2px solid #aecbeb;
+  max-height: 100%;
   overflow: auto;
+  border-radius: 10px;
+  padding: 10px;
+  margin-top: 10px;
 }
 </style>
