@@ -36,6 +36,11 @@
       <br />
       <RouterView />
     </div>
+    <div class="ServiceInformation">
+      <div>싸강두천 - 천재들의 싸움은 외나무다리에서 피어난다</div>
+      <div>Frontend : 오화석 김태범 홍지은</div>
+      <div>Backend : 유수안 박현춘 전우리</div>
+    </div>
   </div>
 </template>
 
@@ -159,5 +164,14 @@ nav {
   display: flex;
   flex-flow: wrap;
   gap: 20px;
+}
+
+.ServiceInformation{
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  text-align: right;
+  color: rgb(216, 164, 115);
+  z-index: -1;
 }
 </style>
