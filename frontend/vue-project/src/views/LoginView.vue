@@ -1,16 +1,39 @@
 <template>
-  <div>
-    <h1>로그인</h1>
-    <form @submit.prevent="login">
-      <div>
-        <label for="userId">아이디</label>
-        <input type="text" v-model="userId" id="userId" />
+  <div class="login-body">
+    <head>
+      <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+        />
+      </head>
+    <div class="login-title">로그인</div>
+    <form @submit.prevent="login" class="login-form">
+      <div class="login-form-item">
+        <label for="userId" class="login-form-item-label">아이디</label>
+        <input
+          type="text"
+          class="login-form-item-input"
+          v-model="userId"
+          id="userId"
+        />
       </div>
-      <div>
-        <label for="password">비밀번호</label>
-        <input type="password" v-model="password" id="password" />
+      <div class="login-form-item">
+        <label for="password" class="login-form-item-label">비밀번호</label>
+        <input
+          type="password"
+          class="login-form-item-input"
+          v-model="password"
+          id="password"
+        />
       </div>
-      <button type="submit" :disabled="isSubmitButtonDisabled">로그인</button>
+      <button
+        type="submit"
+        class="login-form-btn"
+        :disabled="isSubmitButtonDisabled"
+      >
+        <span class="material-symbols-outlined"> login </span>
+        로그인
+      </button>
     </form>
   </div>
 </template>
@@ -19,7 +42,6 @@
 import { ref, computed } from "vue";
 import router from "@/router";
 import { useLoginStore } from "@/stores/login";
-
 
 export default {
   setup() {
@@ -70,12 +92,62 @@ export default {
 </script>
   
 <style scoped>
-form {
-  max-width: 300px;
-  margin: auto;
+.login-body {
+  /* border: 2px solid red; */
+  width: 80%;
+  height: 85%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-label {
-  display: block;
-  margin-bottom: 8px;
+.login-title {
+  /* border: 2px solid orange; */
+
+  font-size: 45px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #2196f3;
+}
+.login-form {
+  /* border: 2px solid orange; */
+  background-color: #e1ecf7;
+  border-radius: 25px;
+  padding: 15%;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+.login-form-item {
+  /* border: 2px solid yellow; */
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.login-form-item-label {
+  /* border: 2px solid green; */
+
+  font-size: 30px;
+  font-weight: 600;
+}
+.login-form-item-input {
+  border: 2px solid #e1ecf7;
+  border-radius: 8px;
+
+  height: 40px;
+  font-size: 24px;
+  padding-inline: 10px;
+}
+.login-form-btn {
+  border: 2px solid #aecbeb;
+  border-radius: 8px;
+  background-color: #aecbeb;
+  margin: 0 auto;
+  width: 40%;
+  min-width: 130px;
+  height: 50px;
+  font-size: 25px;
+  font-weight: 600;
 }
 </style>
