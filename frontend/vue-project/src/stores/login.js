@@ -12,8 +12,8 @@ export const useLoginStore = defineStore('login', () => {
 
     const userStorage = useUserStorageStore();
     const userInfo = userStorage.getUserInformation();
-    const loginUser = ref(userInfo.user_id);
-    const userNickname = ref(userInfo.user_nickname);
+    const loginUser = ref(null);
+    const userNickname = ref(null);
 
 
     // 로그인 함수
@@ -36,6 +36,8 @@ export const useLoginStore = defineStore('login', () => {
                         user_nickname: response.data.data.user_nickname,
                         // token: response.data.token,
                     });
+                    loginUser.value = userInfo.user_id;
+                    userNickname.value = userInfo.user_nickname;
 
                     
                     resolve(response);
@@ -59,6 +61,8 @@ export const useLoginStore = defineStore('login', () => {
     const isLogout = function () {
         console.log('isLogout 되고있나');
         userStorage.deleteAllStorage();
+        loginUser.value = null; 
+        userNickname.value = null;
         // router.push({ name: "Main" });
 
         // return new Promise((resolve, reject) => {

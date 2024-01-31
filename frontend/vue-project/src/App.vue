@@ -17,20 +17,22 @@
       <header>
         <div class="wrapper">
           <div class="headbar">
-            <h2>Router For Development</h2>
+            
             <BackGroundMusic></BackGroundMusic>
             <HeaderNav></HeaderNav>
           </div>
-          <nav>
-            <RouterLink to="/">Main</RouterLink>
-            <RouterLink to="/competition">Competiton</RouterLink>
-            <RouterLink to="/solo">Solo</RouterLink>
-            <RouterLink to="/feed">Feed</RouterLink>
-            <RouterLink to="/feeddetail">FeedDetail</RouterLink>
-            <RouterLink :to="{ name: 'MyPage', params: { userId: user_id } }">MyPage</RouterLink>
-            <RouterLink to="/login">Login</RouterLink>
-            <RouterLink to="/signup">SignUp</RouterLink>
-          </nav>
+          <div class="nav-wrapper">
+            <nav>
+              <RouterLink to="/">Main</RouterLink>
+              <RouterLink to="/competition">Competition</RouterLink>
+              <RouterLink to="/solo">Solo</RouterLink>
+              <RouterLink to="/feed">Feed</RouterLink>
+              <RouterLink to="/feeddetail">FeedDetail</RouterLink>
+              <RouterLink :to="{ name: 'MyPage', params: { userId: user_id } }">MyPage</RouterLink>
+              <RouterLink to="/login">Login</RouterLink>
+              <RouterLink to="/signup">SignUp</RouterLink>
+            </nav>
+          </div>
         </div>
       </header>
       <br />
@@ -70,40 +72,45 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.coster{
+.coster {
   position: fixed;
   width: 400px;
   bottom: 132px;
   left: 0px;
   z-index: -2;
 }
-.ferris_wheel{
+
+.ferris_wheel {
   position: fixed;
   width: 400px;
   bottom: 132px;
   right: 0px;
   z-index: -2;
 }
-.cloud_left{
+
+.cloud_left {
   position: fixed;
   width: 350px;
   top: 0px;
   left: -20px;
   z-index: -3;
 }
-.cloud_right{
+
+.cloud_right {
   position: fixed;
   width: 350px;
   top: 0px;
   right: 0px;
   z-index: -3;
 }
-.pinokio{
+
+.pinokio {
   position: fixed;
   width: 350px;
   bottom: 100px;
   right: -30px;
 }
+
 .bear {
   position: fixed;
   width: 200px;
@@ -111,9 +118,9 @@ onMounted(() => {
   left: 0px;
   transform: scaleX(-1);
 }
+
 #main-body {
-  /* border: 2px solid gainsboro; */
-  /* background-color: rgba(255, 255, 255, 1.0); */
+
   z-index: 1;
 
   max-width: 1000px;
@@ -125,16 +132,20 @@ onMounted(() => {
 
   overflow: auto;
 }
+
 #main-body::-webkit-scrollbar {
   display: none;
 }
-.back-main-item{
+
+.back-main-item {
   position: fixed;
   width: 100vw;
-  height: calc(100vh - 139px);;
+  height: calc(100vh - 139px);
+  ;
 
   z-index: -6;
 }
+
 .back-ground-body {
   position: fixed;
   width: 100vw;
@@ -150,20 +161,39 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
 }
-a {
-  border: 1px solid green;
-  margin: 5px;
-  padding-inline: 10px;
+
+.nav-wrapper {
+  background-color: #fff; 
+  border-radius: 15px;
+  overflow: hidden; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
+
 nav {
   display: flex;
-  margin-top: 10px;
-  flex-wrap: wrap;
+  justify-content: space-between; 
+  align-items: center;
+  margin: 20px 0;
 }
+
+nav a {
+  text-decoration: none;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  margin: 5px;
+
+  &:hover {
+    background-color: #83b0e1;
+  }
+}
+
 .headbar {
   display: flex;
   flex-flow: wrap;
   gap: 20px;
+  align-items: center;
 }
 
 .ServiceInformation{

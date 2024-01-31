@@ -327,8 +327,13 @@ const plusFeedItem = () => {
   flex-direction: column;
   gap: 50px;
   margin: 20px;
-
+  background-color: #e1ecf7;
+  border-radius: 15px;
   height: calc(100vh - 439px);
   overflow: auto;
 }
+.feed_frame.feed{
+  margin-bottom: 80px;
+}
+
 </style>
