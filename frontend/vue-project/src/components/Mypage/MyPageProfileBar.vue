@@ -13,15 +13,17 @@
                     <img :src="user.user_img" alt="use_img" class="user_img">
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
-                <div v-if="user.user_id != loginUser" class="myprofile_btns">
-                    <button class="myprofile_btn">도전장 보내기</button>
-                    <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우
-                        신청</button>
-                </div>
+                <!-- <div v-if="user.user_id != loginUser" class="myprofile_btns"> -->
+                    <div class="myprofile_btns">
+                        <button class="myprofile_btn" @click="send">도전장 보내기</button>
+                        <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
+                        <button @click="toggleFollow(loginUser)" class="ssallow_btn">{{
+                            getButtonText(ssallowing.isFollowing) }}</button>
+                    </div>
+                <!-- </div> -->
                 <div v-if="user.user_id === loginUser" class="myprofile_btns">
-                    <button class="myprofile_btn">도전장함</button>
-                    <button class="myprofile_btn" @click="sendSsallowingRequest">마이페이지
-                        수정</button>
+                    <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
+                    <button class="myprofile_btn" @click="">마이페이지 수정</button>
                 </div>
             </div>
             <div class="follow_cnt">
@@ -34,7 +36,12 @@
                     <h3>쌀로잉 수</h3>
                 </div>
             </div>
-
+            <div v-if="isMailboxOpen" class="popup_mailbox">
+                <div class="mailbox_content">
+                    <CompetitionMailbox />
+                    <button @click="isMailboxOpen=false" class="mailbox_close_btn">close</button>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -42,37 +49,81 @@
 <script>
 import { ref, computed } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
+import CompetitionMailbox from '@/components/Competition/CompetitionMailbox.vue';
 
 const user = ref([])
 
 export default {
     props: ['userData', 'ssallowingData', 'ssallowerData', 'loginUser'],
-
+    
     setup(props, { emit }) {
         const badgeStore = useBadgeStore();
+        const user = ref(props.userData);
+        const loginUser = ref(props.loginUser);
+        const ssallowing = ref(props.ssallowingData);
+        const ssallower = ref(props.ssallowerData);
+        const isMailboxOpen = ref(false);
 
-        const user = ref(props.userData)
-        const loginUser = ref(props.loginUser)
-        const ssallowing = ref(props.ssallowingData)
-        const ssallower = ref(props.ssallowerData)
         // console.log(user.value)
-
-
         const sendSsallowingRequest = () => {
-            const ssallowing = { user_id: user.value.user_id, following_id: user.value.user_id }
+            const ssallowing = { user_id: user.value.user_id, following_id: user.value.user_id };
             // 클릭 이벤트 발생 시 plusSsallowing 함수 호출
             emit('ssallowing-request', ssallowing);
         };
-
         // 사용자의 뱃지 이미지 찾기
         const userBadgeImage = computed(() => {
             const badge = badgeStore.badgeList.find(badge => badge.badge_id === user.value.badge_id);
             return badge ? badge.badge_img : ''; // 일치하는 뱃지가 있으면 이미지 반환, 없으면 빈 문자열 반환
         });
 
+        // 도전장함
+        const openCompetMailbox = function() {
+            isMailboxOpen.value = true;
+        }
 
-        return { user, ssallowing, ssallower, userBadgeImage, sendSsallowingRequest }
-    }
+        const goUnssallow = function (followingId) {
+            const unssallow_info = { user_id: userId.value, following_id: followingId };
+            follow.deleteSsallowing(unssallow_info)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        };
+
+        // // 쌀로우 버튼 클릭 시 상태 변경 및 처리
+        const goSsallowing = function (followId) {
+            const ssallowing_info = { user_id: userId.value, following_id: followId }
+            follow.plusSsallowing(ssallowing_info)
+                .then((res) => {
+                    console.log(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        }
+
+        // 버튼 토글
+        const toggleFollow = (ssallow) => {
+            ssallow.isFollowing = !ssallow.isFollowing;
+            if (ssallow.isFollowing) {
+                goSsallowing(ssallow.user_id);
+            } else {
+                goUnssallow(ssallow.user_id);
+            }
+        };
+
+        // 버튼 텍스트
+        const getButtonText = (isFollowing) => {
+            return isFollowing ? '언쌀로우' : '쌀로우';
+        };
+        return { user, ssallowing, ssallower, userBadgeImage,isMailboxOpen, 
+            sendSsallowingRequest, openCompetMailbox, goUnssallow, goSsallowing,
+            toggleFollow, getButtonText,
+         };
+    },
+    components: { CompetitionMailbox }
 }
 </script>
 
@@ -132,13 +183,13 @@ export default {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-left: 50px;
+    margin-left: 30px;
 }
 
 .myprofile_btns {
     display: flex;
     flex-direction: column;
-    margin: 50px;
+    margin: 30px;
 }
 
 .myprofile_btn {
@@ -164,6 +215,44 @@ export default {
 
 .follow_div {
     margin: 0 50px;
+}
+
+.popup_mailbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.mailbox_content {
+    display: flex;
+    flex-direction: column;
+    background-color: #e1ecf7;
+    border: #aecbeb 5px solid;
+    border-radius: 50px;
+    width: 50%;
+    height: 80%;
+    max-width: 80%;
+    max-height: 80%;
+    overflow: auto;
+    text-align: center;
+    justify-content: center;
+}
+
+.mailbox_close_btn {
+    width: 30%;
+    height: auto;
+    margin: 0 auto;
+    background-color: #71a5de;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
 }
 
 @media (max-width: 768px) {
@@ -212,6 +301,13 @@ export default {
         width: 40vw; /* 너비를 화면 너비의 40%로 조정 */
         height: 8vh; /* 높이를 화면 높이의 8%로 조정 */
         font-size: 3.5vw; 
+    }
+
+    .mailbox_content {
+        width: 90%;
+        height: 90%;
+        max-width: none;
+        max-height: none;
     }
 }
 </style>

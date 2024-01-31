@@ -5,7 +5,7 @@
             <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
         </div>
         <div class="accordion-content-ssallow" :class="{ 'open': isOpen }">
-            <div>
+            <div class="sallowing_body"> 
                 <h2>쌀로잉</h2>
                 <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
                     <div class="ssallow_info">
@@ -22,7 +22,7 @@
                     </div>
                 </div>
             </div>
-            <div>
+            <div class="ssallower_body">
                 <h2>쌀로워</h2>
                 <div v-for="ssallower in ssallowers" :key="ssallower.user_id" class="ssallow">
                     <div class="ssallow_info">
@@ -74,9 +74,9 @@ export default {
             isFollowing: false, 
         })));
         // 사용자 프로필 페이지로 이동
-        const gotoProfile = function (userId) {
+        const gotoProfile = function (user_id) {
             console.log(userId)
-            router.push({ name: 'MyPage', params: { userId: userId } });
+            router.push({ name: 'MyPage', params: { userId: user_id } });
         }
 
         // // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
@@ -145,6 +145,15 @@ export default {
 </script>
     
 <style scoped>
+
+.sallowing_body,
+.ssallower_body {
+    background: #f8f9fb;
+    margin-top: 10px;
+    border-radius: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
 .ssallow {
     display: flex;
     align-items: center;
@@ -157,7 +166,17 @@ export default {
 }
 
 .ssallow_btn {
-    margin: 15px;
+    margin: 10px;
+    background: #71a5de;
+    border: #71a5de;
+    border-radius: 30px;
+    color: white;
+    width: auto;
+    height: 40px;
+    /* 버튼 크기를 뷰포트 단위로 설정 */
+    width: 15vw; 
+    height: 5vh; 
+    font-size: 1.5vw; 
 }
 
 .ssallow_img {
@@ -165,18 +184,19 @@ export default {
     height: 50px;
     border-radius: 100px;
     margin: 20px;
-    border: 1px black solid;
+    border: 3px #83b0e1 solid;
 }
 
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
-    display: flex;
+    display: flex; 
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: #83b0e1;
     padding: 10px;
-    border: 1px solid #ccc;
     cursor: pointer;
+    border-radius: 15px;
 }
+
 
 .rotate-icon {
     transition: transform 0.3s ease;
@@ -200,7 +220,6 @@ export default {
     display: flex;
     flex-direction: column;
     padding: 10px;
-    border: 1px solid #ccc;
     border-top: none;
     overflow: hidden;
     max-height: 0;

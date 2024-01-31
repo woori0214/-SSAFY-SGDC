@@ -106,7 +106,7 @@ export default {
 <style scoped>
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
-    display: flex;
+    display: flex; 
     align-items: center;
     background-color: #83b0e1;
     padding: 10px;
