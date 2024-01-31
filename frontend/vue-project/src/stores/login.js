@@ -5,9 +5,11 @@ import { useRouter } from 'vue-router';
 import { useUserStorageStore } from "@/stores/userStorage";
 // import { useLoginStore } from "@/stores/login";
 import axios from 'axios';
+import { serverURL } from '@/main.js';
 
 export const useLoginStore = defineStore('login', () => {
-    const URL = 'http://localhost:8080/user';
+    const URL = serverURL + 'user';
+
     const userStorage = useUserStorageStore();
     const userInfo = userStorage.getUserInformation();
     const loginUser = ref(userInfo.user_id);

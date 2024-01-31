@@ -3,13 +3,13 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-
+import { serverURL } from '@/main.js';
 
 
 export const useSignupStore = defineStore('signup', () => {
 
     const ssafyurl = 'https://project.ssafy.com/ssafy/api/auth/signin';
-    const URL = 'http://localhost:8080/user/signup';
+    const URL = serverURL + 'user/signup';
     // 사용자 프로젝트 싸피 인증
 
     const isssafy = function (ssafy) {

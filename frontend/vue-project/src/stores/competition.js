@@ -2,11 +2,14 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { serverURL } from '@/main.js';
 
 
 export const useCompetionStore = defineStore('competition', () => {
-    const URL = 'http://localhost:8080/compet';
-    const URL2 = 'http://localhost:8080';
+    const URL = serverURL + 'compet';
+    const URL2 = serverURL;
+
+    
     //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {

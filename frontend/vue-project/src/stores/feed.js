@@ -2,10 +2,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { serverURL } from '@/main.js';
+
 
 export const useFeedStore = defineStore('feed', () => {
-
-    const URI = 'http://localhost8080/feed';
+    const URL = serverURL + 'feed';
 
     //게시물 한 개
     const getFeed = function(feedId){

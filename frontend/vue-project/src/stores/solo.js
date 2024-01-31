@@ -3,10 +3,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { serverURL } from '@/main.js';
 
 
 export const useSoloStore = defineStore('solo', () => {
-    const URL = 'http://localhost:8080/solo';
+    const URL = serverURL + 'solo';
     // 솔로 모드 내역(오늘) 데이터 저장
     // api 연결되면 지우자.
     const soloTodayData = ref([

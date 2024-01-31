@@ -3,11 +3,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-
+import { serverURL } from '@/main.js';
 
 
 export const useUserStore = defineStore('user', () => {
-    const URL = 'http://localhost:8080/user';
+    const URL = serverURL + 'user';
     
     // 마이페이지 사용자 정보
     const userData = function (userId) {

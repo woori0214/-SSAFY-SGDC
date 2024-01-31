@@ -565,7 +565,7 @@ export default {
         .isid(id.value)
         .then((response) => {
           console.log(response);
-          if (!(response.data.result == "true")) {
+          if (!(response.data.data.result == "true")) {
             idExists.value = true;
             idAvailable.value = false;
           } else {
@@ -583,7 +583,7 @@ export default {
       signUp
         .isnickname(nickname.value)
         .then((response) => {
-          if (!(response.data.result == "true")) {
+          if (!(response.data.data.result == "true")) {
             nicknameExists.value = true;
             nicknameAvailable.value = false;
           } else {
@@ -601,7 +601,7 @@ export default {
       signUp
         .isstudentnum(ssafyid.value)
         .then((response) => {
-          if (!(response.data.result == "true")) {
+          if (!(response.data.data.result == "true")) {
             ssafyidExists.value = true;
             ssafyidAvailable.value = false;
           } else {
@@ -620,7 +620,7 @@ export default {
       signUp
         .authphone(phonenumber.value)
         .then((response) => {
-          if (!(response.data.result == "true")) {
+          if (!(response.data.data.result == "true")) {
             phonenumberExists.value = true;
             phonenumberAvailable.value = false;
           } else {

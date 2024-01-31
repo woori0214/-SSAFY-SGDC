@@ -2,10 +2,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { serverURL } from '@/main.js';
+
 
 export const useBadgeStore = defineStore('badge', () => {
-
-    const URI = 'http://localhost8080/badge';
+    const URL = serverURL + 'badge';
 
     const badgeList = ref([
         {
@@ -44,7 +45,7 @@ export const useBadgeStore = defineStore('badge', () => {
     const getBadgeList = function() {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/list`)
+                .get(`${URL}/list`)
                 .then((res) => {
                     badgeList.value = res.badge_List
                     resolve(res);
@@ -60,7 +61,7 @@ export const useBadgeStore = defineStore('badge', () => {
     const getUserBadgeList = function(userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/list/${userId}`)
+                .get(`${URL}/list/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
