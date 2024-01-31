@@ -22,16 +22,18 @@ export const useLoginStore = defineStore('login', () => {
 
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/login`, loginData)
+                .post(`${URL}/login/`, loginData)
                 .then((response) => {
                     // 스토리지 로그인 정보 등록
                     //        로그인 정보를 등록하기 전에 전에 남아있는 정보가 있나 확인 해야되나..?
                     // console.log('isLogin response :');
-
+                    console.log('Login test');
+                    console.log(response);
+                    console.log('Login response');
                     userStorage.setUserInformation({
-                        user_id: response.data.user_id,
-                        user_name: response.data.user_name,
-                        user_nickname: response.data.user_nickname,
+                        user_id: response.data.data.user_id,
+                        user_name: response.data.data.user_name,
+                        user_nickname: response.data.data.user_nickname,
                         // token: response.data.token,
                     });
 

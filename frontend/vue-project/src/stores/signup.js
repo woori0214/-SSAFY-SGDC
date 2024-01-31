@@ -120,7 +120,7 @@ export const useSignupStore = defineStore('signup', () => {
 
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/check-phone/${userPhone}`)
+                .get(`${URL}/check-phoneNum/${userPhone}`)
                 .then(response => {
                     console.log(response);
                     resolve(response);
