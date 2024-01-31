@@ -7,7 +7,7 @@
     <div class="accordion-content" :class="{ 'open': isOpen }">
       <div v-for="badge in badge_list" :key="badge.badge_name" class="badge">
         <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
-        <h3>{{ badge.badge_name }}</h3>
+        <h3 class="badge_info">{{ badge.badge_name }}</h3>
         <p>{{ badge.badge_detail }}</p>
       </div>
     </div>
@@ -17,9 +17,14 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
-import badgeimg from '@/assets/badge.png';
 import nobadgeimg from '@/assets/no_badge.png';
 
+import wakebadge from '@/assets/badges/wake1.png';
+import algobadge from '@/assets/badges/algo1.png';
+import healthbadge from '@/assets/badges/health1.png';
+import studybadge from '@/assets/badges/study1.png';
+import dietbadge from '@/assets/badges/diet1.png';
+import fightingbadge from '@/assets/badges/wake1.png';
 
 export default {
   props: ['userId',],
@@ -32,22 +37,22 @@ export default {
       {
         badge_name: "기린이",
         badge_detail: "기상 챌린지",
-        badge_img: badgeimg
+        badge_img: wakebadge
       },
       {
         badge_name: "코끼리",
         badge_detail: "식단 챌린지",
-        badge_img: badgeimg
+        badge_img: dietbadge
       },
       {
         badge_name: "짐종국",
         badge_detail: "운동 챌린지",
-        badge_img: badgeimg
+        badge_img: healthbadge
       },
       {
-        badge_name: "참자",
+        badge_name: "절제왕",
         badge_detail: "절제 챌린지",
-        badge_img: badgeimg
+        badge_img: fightingbadge
       },
     ]);
 
@@ -97,21 +102,34 @@ export default {
   
 <style scoped>
 .badge {
+  /* flex-basis: calc(100% / 6); /* 뱃지 너비를 전체 너비의 1/6로 설정 */
+  /* max-width: calc(100% / 6); 최대 너비도 전체 너비의 1/6로 설정 */ 
   text-align: center;
+  box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
+  padding: 5px; /* 뱃지 간격을 위한 패딩 추가 */
 }
+
 .badge_img {
   width: 100px;
-  margin: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0;
 }
+
+.badge_info {
+  margin-top: 0;
+}
+
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
   display: flex;
   align-items: center;
-  background-color: #f1f1f1;
+  background-color: #83b0e1;
   padding: 10px;
-  border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 15px;
 }
+
 
 .rotate-icon {
   transition: transform 0.3s ease;
@@ -133,12 +151,14 @@ export default {
 /* 아코디언 내용 스타일링 */
 .accordion-content {
   display: flex;
+  justify-content: left;
+  flex-wrap: wrap;
   padding: 10px;
-  border: 1px solid #ccc;
   border-top: none;
-  overflow: hidden;
+  overflow: auto;
   max-height: 0;
   transition: max-height 0.3s ease;
+  margin-top: 3px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */

@@ -2,6 +2,7 @@
     <div class="mypageview_body">
         <div class="profile_body">
             <MyPageProfileBar :userData="userData" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData"
+                :loginUser="loginUser"
                 @ssallowing-request="handleSsallowingRequest" />
         </div>
         <div class="compet_body">
@@ -16,6 +17,12 @@
         <div class="badge_body">
             <MyPageBadgeList :userId="userId" />
         </div>
+        <!-- <div v-if="isCurrentUser" class="challenge_body">
+            <MyPageChallengeBoard />
+        </div>
+        <div v-if="isCurrentUser" class="ssallow_body">
+            <MyPageSsallow :userId="userId" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData" />
+        </div> -->
         <div class="challenge_body">
             <MyPageChallengeBoard />
         </div>
@@ -37,7 +44,9 @@ import MyPageSsallow from '@/components/Mypage/MyPageSsallow.vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useFollowStore } from '@/stores/follow';
-import { ref, onMounted } from 'vue';
+import { useLoginStore } from '@/stores/login';
+import { ref, onMounted, computed } from 'vue';
+
 // 유저 이미지 가져오는 거 변경해야함
 import userimg from '@/assets/image1.png';
 import timerImage from '@/assets/wake.png';
@@ -47,14 +56,17 @@ import fightingImage from '@/assets/fighting.png';
 import studyImage from '@/assets/study.png';
 import healthImage from '@/assets/health.png';
 
-const user = useUserStore()
-const follow = useFollowStore()
-const route = useRoute()
+const user = useUserStore();
+const follow = useFollowStore();
+const login = useLoginStore();
+const route = useRoute();
 
 const userId = ref(1);  // userId를 저장할 ref 추가
-// const userData = ref({})
-// const ssallowingData = ref([])
-// const ssallowerData = ref([])
+// const userData = ref({});
+// const ssallowingData = ref([]);
+// const ssallowerData = ref([]);
+// const loginUser = ref(login.loginUser);
+const loginUser = ref(1);
 
 const categories = ref([
     { id: 1, name: "기상", img: timerImage },
@@ -77,9 +89,8 @@ const userData = {
     created_at: "2024-01-12",
     updated_at: "2024-01-24",
     signout: "Y",
-    badge_id: 13,
+    badge_id: 1,
     user_phone: "010-5555-5555",
-    kakao_push: "Y",
     challenge_cnt: 15,
     complain_cnt: 2
 }
@@ -116,6 +127,8 @@ const ssallowerData = ref([
     },
 ])
 
+// 로그인 유저와 마이페이지 유저가 같은지
+const isCurrentUser = computed(() => loginUser.value === userId.value);
 
 const handleSsallowingRequest = (ssallowing) => {
     // MyPageProfileBar 컴포넌트에서 넘겨받은 데이터를 이용해 plusSsallowing 함수 호출

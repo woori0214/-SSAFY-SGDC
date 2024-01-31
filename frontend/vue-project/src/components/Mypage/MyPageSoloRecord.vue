@@ -106,12 +106,12 @@ export default {
 <style scoped>
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
-  display: flex;
-  align-items: center;
-  background-color: #f1f1f1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    background-color: #83b0e1;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 15px;
 }
 
 .rotate-icon {
@@ -134,7 +134,6 @@ export default {
 /* 아코디언 내용 스타일링 */
 .accordion-content {
   padding: 10px;
-  border: 1px solid #ccc;
   border-top: none;
   overflow: auto;
   max-height: 0;
@@ -155,7 +154,9 @@ export default {
   margin: 10px;
 }
 .soloimg {
-  width: 90px;
+  background: #f8f9fb;
+  border-radius: 100%;
+  width: 110px;
   margin: 5px;
 
 }</style>

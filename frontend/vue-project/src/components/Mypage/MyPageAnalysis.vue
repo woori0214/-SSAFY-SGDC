@@ -5,20 +5,29 @@
       <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
     </div>
     <div class="accordion-content" :class="{ 'open': isOpen }">
-      <div class="compet_analysis">
-        <h2>경쟁모드</h2>
-        <h1>{{ total_analysis }}%</h1>
-        <h3>{{ all_wincount }}승 {{ all_failcount }}패 {{ all_count }}전</h3>
-      </div>
-      <div class="solo_analysis">
-        <h2>솔로모드</h2>
-        <div class="solo_analysis2">
-          <div>
-            <h1>{{ success_solo }} 회</h1>
-            <h3>성공한 솔로 도전 횟수</h3>
+      <div class="analysis">
+        <div class="solo_analysis">
+          <div class="analysis_head">
+            <div class="analysis_head_item">솔로모드</div>
           </div>
-          <div>
-            <img :src="many_solo_challenge_image" alt="Category Image"  class="many_solo_img"/>
+          <div class="solo_analysis_contents">
+            <div class="solo_analysis_cnt">
+              <h1>{{ success_solo }} 회</h1>
+              <h3>성공한 솔로 도전 횟수</h3>
+            </div>
+            <div class="solo_analysis_category">
+              <img :src="many_solo_challenge_image" alt="Category Image" class="many_solo_img" />
+              <h3>많이 도전한 카테고리</h3>
+            </div>
+          </div>
+        </div>
+        <div class="compet_analysis">
+          <div class="compet_analysis_head">
+            <div class="compet_analysis_head_item">경쟁모드</div>
+          </div>
+          <div class="compet_analysis_contents">
+            <h1>{{ total_analysis }}%</h1>
+            <h3>{{ all_wincount }}승 {{ all_failcount }}패 {{ all_count }}전</h3>
           </div>
         </div>
       </div>
@@ -42,7 +51,7 @@ export default {
 
     let maxCount = 0;
     let mostFrequentId = null;
-  
+
     const compet_analysis = ref([
       {
         userCategoryId: 1,
@@ -136,7 +145,7 @@ export default {
         category_id: 2,
       },
     ]);
-    
+
     // 승리 횟수 계산
     const all_wincount = computed(() => {
       return compet_analysis.value.reduce((total, item) => total + item.categoryWinCount, 0);
@@ -164,7 +173,7 @@ export default {
         acc[cur.category_id] = (acc[cur.category_id] || 0) + 1;
         return acc;
       }, {});
-      
+
 
       for (const id in countMap) {
         if (countMap[id] > maxCount) {
@@ -247,10 +256,10 @@ export default {
 .accordion-header {
   display: flex;
   align-items: center;
-  background-color: #f1f1f1;
+  background-color: #83b0e1;
   padding: 10px;
-  border: 1px solid #ccc;
   cursor: pointer;
+  border-radius: 15px;
 }
 
 .rotate-icon {
@@ -274,7 +283,6 @@ export default {
 .accordion-content {
   display: flex;
   padding: 10px;
-  border: 1px solid #ccc;
   border-top: none;
   overflow: hidden;
   max-height: 0;
@@ -288,26 +296,99 @@ export default {
   transition: max-height 0.3s ease;
 }
 
-.compet_analysis {
-  text-align: center;
-  margin: 10px;
+.analysis {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-inline: 20px;
+  /* padding-inline: 10px; */
+  gap: 20px;
 }
 
 .solo_analysis {
+  width: 50%;
   text-align: center;
-  margin: 10px;
-  justify-content: center;
 }
 
-.solo_analysis2 {
+.analysis_head {
   display: flex;
+  justify-content: left;
+  margin-left: 18px;
+}
+
+.analysis_head_item {
+  border-inline: #3f8bc9 solid 2px;
+  border-top: #3f8bc9 solid 2px;
+  background-color: #f8f9fb;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  padding-inline: 8px;
+  padding-top: 8px;
+  padding-bottom: 5px;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.solo_analysis_contents {
+  background-color: #aecbeb;
+  border-radius: 20px;
+  padding: 15px;
+  display: flex;
+}
+
+.solo_analysis_cnt {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 10px;
+}
+
+.solo_analysis_category {
+  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin: 10px;
 }
 
 .many_solo_img {
   width: 70px;
   margin: 10px;
+}
+
+.compet_analysis {
+  width: 50%;
+  text-align: center;
+}
+
+.compet_analysis_head {
+  display: flex;
+  justify-content: left;
+  margin-left: 18px;
+}
+
+.compet_analysis_head_item {
+  border-inline: #3f8bc9 solid 2px;
+  border-top: #3f8bc9 solid 2px;
+  background-color: #f8f9fb;
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+  padding-inline: 8px;
+  padding-top: 8px;
+  padding-bottom: 5px;
+
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.compet_analysis_contents {
+  background-color: #aecbeb;
+  border-radius: 20px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
 }
 </style>
   
