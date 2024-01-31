@@ -2,6 +2,7 @@ package com.ssafy.sgdc.follow;
 
 import com.ssafy.sgdc.follow.dto.FollowerListResponseDto;
 import com.ssafy.sgdc.follow.dto.FollowingListResponseDto;
+import com.ssafy.sgdc.user.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,9 @@ public interface FollowService {
     List<FollowingListResponseDto> followingList(Long fromUserId);
 
     // 팔로워 리스트
-    @Transactional
     List<FollowerListResponseDto> followerList(Long toUserId);
+
+    // 팔로잉,팔로워 수 조회
+    Long followingCount(User userId); // 팔로잉 수
+    Long followerCount(User userId); // 팔로워 수
 }

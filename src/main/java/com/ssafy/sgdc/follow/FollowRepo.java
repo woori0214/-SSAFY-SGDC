@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.follow;
 
+import com.ssafy.sgdc.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -27,8 +28,10 @@ public interface FollowRepo extends JpaRepository<Follow, Long> {
     List<Follow> getListByFromUserId(Long userId);
 
     // 팔로잉 조회
-    @Query(value = "SELECT * from follow f  where f.user_id = :followingId", nativeQuery = true)
-    List<Follow> getListByToUserId(Long followingId);
+    @Query(value = "SELECT * from follow f  where f.user_id = :userId", nativeQuery = true)
+    List<Follow> getListByToUserId(Long userId);
 
-
+    // 팔로잉 팔로워 수 조회
+    Long countByUserId(User userId); // 팔로잉 수
+    Long countByFollowingId(User followingId); // 팔로워 수
 }
