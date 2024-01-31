@@ -1,94 +1,302 @@
 
 
 <template>
-  <div>
-    <h1>회원가입</h1>
-    <div>
-      <label for="userImg">프로필 사진</label>
-      <input type="file" accept="image/*" @change="handleFileUpload" id="userImg" ref="fileInputRef" />
-      <p v-if="fileUploadError" class="input_error">{{ fileUploadError }}</p>
+  <div class="signup-main-body">
+    <div class="signup-title">Welcome to 싸강두천</div>
+    <div class="signup-question-box">
+      <button class="signup-question-before-btn" @click="signupSlideprev">
+        ◀
+      </button>
+      <div class="signup-question-slide" :style="signupSlideStyle">
+        <!-- 프로필 사진 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <!-- <label for="userImg">프로필 사진</label>
+            <img
+              v-if="userImg"
+              :src="userImg"
+              alt="프로필 사진"
+              class="thumbnail"
+            />
+            <input
+              type="file"
+              accept="image/*"
+              @change="handleFileUpload"
+              id="userImg"
+              ref="fileInputRef"
+              class="userImgButton"
+            />
+            <p v-if="fileUploadError" class="input_error">
+              {{ fileUploadError }}
+            </p> -->
 
-      <img v-if="userImg" :src="userImg" alt="프로필 사진" class="thumbnail" />
-    </div>
+            <div class="signup-userImg">
+              <!-- <button class="signup-userImg-upload" :style="userImg ? 'background-image: userImg' : ''"></button> -->
+              <label
+                for="customFileInput"
+                class="signup-userImg-upload"
+                :style="userImg ? `background-image: url(${userImg})` : ``"
+              ></label>
 
-    <div>
-      <label for="id">아이디</label>
-      <input type="text" v-model="id" @input="idCheck" placeholder="아이디를 입력하세요" />
-      <p v-if="idError" class="input_error">
-        아이디는 4자 이상 20자 이하의 대소문자로 시작하는 조합으로 입력해야
-        합니다.
-      </p>
-      <button @click="checkIdAvailability">중복확인</button>
-      <p v-show="idExists && !idAvailable" class="input_error">
-        중복된 아이디가 있습니다.
-      </p>
-      <p v-show="!idExists && idAvailable" class="success_message">
-        사용 가능한 아이디입니다.
-      </p>
-    </div>
-    <div>
-      <label for="email">이메일</label>
-      <input type="email" v-model="email" placeholder="싸피프로젝트 사이트 이메일을 입력하세요." />
-    </div>
-    <div>
-      <label for="password">비밀번호</label>
-      <input type="password" v-model="password" placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요." />
-    </div>
-    <div>
-      <label for="ssafyid">ssafy학번</label>
-      <input type="text" v-model="ssafyid" placeholder="ssafy학번을 입력하세요" />
-      <button @click="checkStudentnumAvailability">중복확인</button>
-      <p v-show="ssafyidExists" class="input_error">중복된 학번입니다.</p>
-      <p v-show="ssafyidAvailable" class="success_message">
-        학번이 인증되었습니다.
-      </p>
-    </div>
-    <button @click="submitForm">본인확인</button>
-    <div v-if="submitted" class="confirmation_message">
-      <p v-if="isVerificationSuccess" class="success_message">
-        본인확인이 완료되었습니다.
-      </p>
-      <p v-else class="input_error">본인확인에 실패했습니다.</p>
-    </div>
+              <!-- 실제 파일 입력 -->
+              <input
+                type="file"
+                accept="image/*"
+                id="customFileInput"
+                ref="fileInputRef"
+                @change="handleFileUpload"
+              />
 
-    <div>
-      <label for="name">이름</label>
-      <input type="text" v-model="name" @input="nameCheck" placeholder="이름을 입력하세요" />
-      <p v-if="nameError" class="input_error">
-        이름은 2자 이상, 10자 이하의 한글이어야 합니다.
-      </p>
-    </div>
+              <div class="signup-userImg-context">
+                프로필을<br />업로드 하세요.
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div>
-      <label for="nickname">닉네임</label>
-      <input type="text" v-model="nickname" @input="nicknameCheck" placeholder="닉네임을 입력하세요" />
-      <p v-if="nicknameError" class="input_error">
-        닉네임은 2자 이상, 10자 이하의 한글이어야 합니다.
-      </p>
-      <button @click="checkNickAvailability">중복확인</button>
-      <p v-show="nicknameExists" class="input_error">
-        중복된 닉네임이 있습니다.
-      </p>
-      <p v-show="nicknameAvailable" class="success_message">
-        사용 가능한 닉네임입니다.
-      </p>
-    </div>
+        <!-- 아이디 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="id" class="signup-question-context-what"
+                >아이디</label
+              >
+            </div>
 
-    <div>
-      <label for="phonenumber">전화번호</label>
-      <input type="text" v-model="phonenumber" @input="phonenumberCheck" placeholder="-를 제외하고 입력해주세요." />
-      <p v-if="phonenumberError" class="input_error">
-        유효한 전화번호를 입력하세요.
-      </p>
-      <button @click="checkPhoneNumAvailability">중복확인</button>
-      <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
-        중복된 전화번호가 있습니다.
-      </p>
-      <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
-        사용 가능한 번호입니다.
-      </p>
-    </div>
-    <!-- <div>
+            <div class="signup-question-context-box">
+              <input
+                type="text"
+                v-model="id"
+                @input="idCheck"
+                placeholder="아이디를 입력하세요"
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <button
+                @click="checkIdAvailability"
+                class="signup-question-context-check"
+              >
+                중복확인
+              </button>
+            </div>
+
+            <div class="error-box">
+              <p v-if="idError" class="input_error">
+                아이디는 4자 이상 20자 이하의 대소문자로 시작하는 조합으로
+                입력해야 합니다.
+              </p>
+              <p v-show="idExists && !idAvailable" class="input_error">
+                중복된 아이디가 있습니다.
+              </p>
+              <p v-show="!idExists && idAvailable" class="success_message">
+                사용 가능한 아이디입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 싸피 프로젝트 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="email" class="signup-question-context-what"
+                >이메일</label
+              >
+
+              <input
+                type="email"
+                v-model="email"
+                placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <label for="password" class="signup-question-context-what"
+                >비밀번호</label
+              >
+              <input
+                type="password"
+                v-model="password"
+                placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요."
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <button @click="submitForm" class="signup-question-context-check">
+                본인확인
+              </button>
+            </div>
+
+            <div class="error-box">
+              <div v-if="submitted" class="confirmation_message">
+                <p v-if="isVerificationSuccess" class="success_message">
+                  본인확인이 완료되었습니다.
+                </p>
+                <p v-else class="input_error">본인확인에 실패했습니다.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 학번 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="ssafyid" class="signup-question-context-what"
+                >ssafy학번</label
+              >
+            </div>
+
+            <div class="signup-question-context-box">
+              <input
+                type="text"
+                v-model="ssafyid"
+                placeholder="ssafy학번을 입력하세요"
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <button
+                @click="checkStudentnumAvailability"
+                class="signup-question-context-check"
+              >
+                중복확인
+              </button>
+            </div>
+
+            <div class="error-box">
+              <p v-show="ssafyidExists" class="input_error">
+                중복된 학번입니다.
+              </p>
+              <p v-show="ssafyidAvailable" class="success_message">
+                학번이 인증되었습니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 사용자 이름 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="name" class="signup-question-context-what"
+                >이름</label
+              >
+            </div>
+
+            <div class="signup-question-context-box">
+              <input
+                type="text"
+                v-model="name"
+                @input="nameCheck"
+                placeholder="이름을 입력하세요"
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="error-box">
+              <p v-if="nameError" class="input_error">
+                이름은 2자 이상, 10자 이하의 한글이어야 합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 닉네임 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="nickname" class="signup-question-context-what"
+                >닉네임</label
+              >
+            </div>
+
+            <div class="signup-question-context-box">
+              <input
+                type="text"
+                v-model="nickname"
+                @input="nicknameCheck"
+                placeholder="닉네임을 입력하세요"
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <button
+                @click="checkNickAvailability"
+                class="signup-question-context-check"
+              >
+                중복확인
+              </button>
+            </div>
+
+            <div class="error-box">
+              <p v-if="nicknameError" class="input_error">
+                닉네임은 2자 이상, 10자 이하의 한글이어야 합니다.
+              </p>
+              <p v-show="nicknameExists" class="input_error">
+                중복된 닉네임이 있습니다.
+              </p>
+              <p v-show="nicknameAvailable" class="success_message">
+                사용 가능한 닉네임입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 전화번호 -->
+        <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-question-context-box">
+              <label for="phonenumber" class="signup-question-context-what"
+                >전화번호</label
+              >
+            </div>
+
+            <div class="signup-question-context-box">
+              <input
+                type="text"
+                v-model="phonenumber"
+                @input="phonenumberCheck"
+                placeholder="-를 제외하고 입력해주세요."
+                class="signup-question-context-input"
+              />
+            </div>
+
+            <div class="signup-question-context-box">
+              <button
+                @click="checkPhoneNumAvailability"
+                class="signup-question-context-check"
+              >
+                중복확인
+              </button>
+            </div>
+
+            <div class="error-box">
+              <p v-if="phonenumberError" class="input_error">
+                유효한 전화번호를 입력하세요.
+              </p>
+              <p
+                v-show="phonenumberExists && !phonenumberAvailable"
+                class="input_error"
+              >
+                중복된 전화번호가 있습니다.
+              </p>
+              <p
+                v-show="!phonenumberExists && phonenumberAvailable"
+                class="success_message"
+              >
+                사용 가능한 번호입니다.
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- <div>
       <label for="alert">랜덤 도전장 수신 여부</label>
       <div class="toggle_switch">
         <input
@@ -100,13 +308,132 @@
         <label for="alert_toggle"></label>
       </div>
     </div> -->
-    <button @click="submitForm2" :disabled="hasAnyError.value">회원가입</button>
+      </div>
+      <button class="signup-question-next-btn" @click="signupSlidenext">
+        ▶
+      </button>
+    </div>
+    <!-- 회원가입 제출 -->
+    <button class="submitButton" @click="submitForm2" :disabled="!hasAnyError">
+      회원가입
+    </button>
+
+    <div class="signup-history-body">
+      <div class="signup-question-history">
+        <div
+          class="history-item"
+          :style="
+              !fileUploadError && userImg ? '' : 'background-color: #f8f9fb'
+            "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !fileUploadError && userImg ? 'background-color: #2196f3' : ''
+            "
+          ></div>
+          프로필 사진
+        </div>
+        <div
+          class="history-item"
+          :style="
+              !idError && !idExists && idAvailable
+                ? ''
+                : 'background-color: #f8f9fb'
+            "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !idError && !idExists && idAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
+          아이디 설정
+        </div>
+        <div
+          class="history-item"
+          :style="isVerificationSuccess ? '' : 'background-color: #f8f9fb'"
+        >
+          <div
+            class="history-item-isclear"
+            :style="isVerificationSuccess ? 'background-color: #2196f3' : ''"
+          ></div>
+          싸피 프로젝트 본인 인증
+        </div>
+        <div
+          class="history-item"
+          :style="
+              !ssafyidExists && ssafyidAvailable
+                ? ''
+                : 'background-color: #f8f9fb'
+            "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !ssafyidExists && ssafyidAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
+          싸피 학번 입력
+        </div>
+        <div
+          class="history-item"
+          :style="!nameError && name != '' ? '' : 'background-color: #f8f9fb'"
+        >
+          <div
+            class="history-item-isclear"
+            :style="!nameError && name != '' ? 'background-color: #2196f3' : ''"
+          ></div>
+          이름 입력
+        </div>
+        <div
+          class="history-item"
+          :style="
+              !nicknameError && !nicknameExists && nicknameAvailable
+                ? ''
+                : 'background-color: #f8f9fb'
+            "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !nicknameError && !nicknameExists && nicknameAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
+          닉네임 설정
+        </div>
+        <div
+          class="history-item"
+          :style="
+              !phonenumberError && !phonenumberExists && phonenumberAvailable
+                ? ''
+                : 'background-color: #f8f9fb'
+            "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !phonenumberError && !phonenumberExists && phonenumberAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
+          전화번호 입력
+        </div>
+      </div>
+    </div>
   </div>
 </template>
   
 <script>
 import { ref, computed } from "vue";
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 import { useSignupStore } from "@/stores/signup";
 import { useLoginStore } from "@/stores/login";
@@ -114,7 +441,6 @@ import { useLoginStore } from "@/stores/login";
 export default {
   setup() {
     const router = useRouter();
-
 
     const id = ref("");
     const userImg = ref("");
@@ -154,38 +480,63 @@ export default {
     const idError = ref(false);
     const phonenumberError = ref(false);
 
+    const userImageDefault = ref("@/assets/camera2.png");
     // 모든 정보가 입력되었는지 검사하는 함수
     const hasAnyError = computed(() => {
-      // console.log('idError:' + !idError.value);
-      // console.log('nameError:' +!nameError.value);
-      // console.log('nicknameError' + !nicknameError.value);
-      // console.log(!phonenumberError.value);
-      // console.log(!idExists.value);
-      // console.log(!nicknameExists.value);
-      // console.log(idAvailable.value);
-      // console.log(nicknameAvailable.value);
-      // console.log(!ssafyidExists.value);
-      // console.log(ssafyidAvailable.value);
-      // console.log(!phonenumberExists.value);
-      // console.log(phonenumberAvailable.value);
-      // console.log(submitted.value);
+      // console.log('idError: ' + !idError.value);
+      // console.log('nameError: ' +!nameError.value);
+      // console.log('nicknameError: ' + !nicknameError.value);
+      // console.log('phonenumberError: ' + !phonenumberError.value);
+      // console.log('idExists: ' + !idExists.value);
+      // console.log('nicknameExists: ' + !nicknameExists.value);
+      // console.log('idAvailable: ' + idAvailable.value);
+      // console.log('nicknameAvailable: ' + nicknameAvailable.value);
+      // console.log('ssafyidExists: ' + !ssafyidExists.value);
+      // console.log('ssafyidAvailable: ' + ssafyidAvailable.value);
+      // console.log('phonenumberExists: ' + !phonenumberExists.value);
+      // console.log('phonenumberAvailable: ' + phonenumberAvailable.value);
+      // console.log('submitted: ' + submitted.value);
       // console.log('End');
 
       return (
-        !idError.value ||
-        !nameError.value ||
-        !nicknameError.value ||
-        !phonenumberError.value ||
-        !idExists.value ||
-        !nicknameExists.value ||
-        idAvailable.value ||
-        nicknameAvailable.value ||
-        !ssafyidExists.value ||
-        ssafyidAvailable.value ||
-        !phonenumberExists.value ||
-        phonenumberAvailable.value ||
+        !idError.value &&
+        !nameError.value &&
+        !nicknameError.value &&
+        !phonenumberError.value &&
+        !idExists.value &&
+        !nicknameExists.value &&
+        idAvailable.value &&
+        nicknameAvailable.value &&
+        !ssafyidExists.value &&
+        ssafyidAvailable.value &&
+        !phonenumberExists.value &&
+        phonenumberAvailable.value &&
         submitted.value
       );
+    });
+
+    const currentIndex = ref(0);
+    const totalQuestionLength = ref(7);
+
+    const signupSlideprev = () => {
+      currentIndex.value =
+        (currentIndex.value - 1 + totalQuestionLength.value) %
+        totalQuestionLength.value;
+    };
+
+    const signupSlidenext = () => {
+      currentIndex.value = (currentIndex.value + 1) % totalQuestionLength.value;
+    };
+
+    const signupSlidegoTo = (index) => {
+      currentIndex.value = index;
+    };
+
+    const signupSlideStyle = computed(() => {
+      return {
+        transform: `translateX(-${currentIndex.value * 100}%)`,
+      };
+      // transform: `translateX(-${currentIndex.value * 100}%)`,
     });
 
     // 프로젝트 싸피 회원 인증하는 함수
@@ -339,7 +690,7 @@ export default {
           try {
             router.push({ name: "Main" });
           } catch (error) {
-            alert('라우팅 에러발생함' + error);
+            alert("라우팅 에러발생함" + error);
           }
         })
         .catch(() => {
@@ -382,9 +733,9 @@ export default {
 
           //autoLoginForSignup(newUser);
           try {
-            router.push({ name: 'Main' });
+            router.push({ name: "Main" });
           } catch (error) {
-            alert('라우팅 에러발생함' + error);
+            alert("라우팅 에러발생함" + error);
           }
         })
         .catch(() => {
@@ -402,12 +753,12 @@ export default {
           // `event.target.result`에는 base64로 인코딩된 이미지가 포함됩니다.
           userImg.value = event.target.result;
           fileUploadError.value = null;
+          // console.log(userImg.value);
         };
         // 파일을 데이터 URL로 읽어옵니다 (base64로 인코딩)
         reader.readAsDataURL(file);
       }
     };
-
 
     return {
       id,
@@ -453,12 +804,267 @@ export default {
       phonenumberExists,
       phonenumberAvailable,
       checkPhoneNumAvailability,
+      signupSlideStyle,
+      signupSlideprev,
+      signupSlidenext,
+      signupSlidegoTo,
+      userImageDefault,
     };
   },
 };
 </script>
   
 <style scoped>
+.signup-main-body {
+  /* border: 2px solid red; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 85%;
+  justify-content: space-between;
+}
+.signup-title {
+  /* border: 2px solid orange; */
+
+  color: #2196f3;
+  width: 70%;
+  font-size: 45px;
+  font-weight: 700;
+}
+.signup-question-box {
+  /* border: 2px solid orange; */
+
+  width: 100%;
+  height: 70%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.signup-question-before-btn {
+  border: 2px solid #71a5de;
+  border-radius: 5px;
+  background-color: #71a5de;
+  color: #f8f9fb;
+
+  z-index: 2;
+  height: 40%;
+  width: 20px;
+  font-size: 10px;
+  text-align: center;
+}
+.signup-question-next-btn {
+  border: 2px solid #71a5de;
+  border-radius: 5px;
+  background-color: #71a5de;
+  color: #f8f9fb;
+
+  z-index: 2;
+  height: 40%;
+  width: 20px;
+  font-size: 10px;
+  text-align: center;
+}
+.signup-question-slide {
+  /* border: 2px solid yellow; */
+
+  width: 90%;
+  height: 85%;
+  display: flex;
+  transition: transform 0.3s ease;
+}
+.signup-question-item {
+  /* border: 2px solid green; */
+
+  flex: 0 0 auto;
+  width: 100%;
+  display: flex;
+  align-content: center;
+}
+
+.signup-question-context {
+  /* border: 2px solid green; */
+  background-color: #e1ecf7;
+  border-radius: 25px;
+
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.signup-question-context-what {
+  /* border: 2px solid purple; */
+
+  width: 40%;
+  margin-left: 0;
+  margin-right: auto;
+  font-size: 30px;
+  font-weight: 700;
+  color: #71a5de;
+}
+.signup-question-context-input {
+  border: 2px solid #f8f9fb;
+  border-radius: 5px;
+
+  width: calc(100% - 20px);
+  height: 40px;
+  margin: 0 auto;
+  font-size: 22px;
+  padding-inline: 10px;
+  padding-block: 5px;
+}
+.signup-question-context-check {
+  border: 2px solid #aecbeb;
+  border-radius: 5px;
+  background-color: #aecbeb;
+  color: black;
+
+  font-size: 18px;
+  font-weight: 600;
+  padding-inline: 5px;
+  margin-left: auto;
+  margin-right: 0;
+}
+.signup-question-context-item {
+  border: 2px solid purple;
+
+  width: 100%;
+  margin: 0 auto;
+}
+.signup-question-context-box {
+  /* border: 2px solid blue; */
+
+  width: 80%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+/* Signup Question Styles */
+#customFileInput {
+  display: none;
+}
+.signup-userImg {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+}
+.signup-userImg-upload {
+  border: 3px solid #71a5de;
+  background-color: #fff;
+  border-radius: 100%;
+  background-image: url("@/assets/camera2.png");
+  background-size: contain; /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
+  background-position: center; /* 이미지 중앙 정렬 */
+  background-repeat: no-repeat;
+
+  width: 30%;
+  height: 0;
+  padding-bottom: 30%;
+}
+.signup-userImg-context {
+  /* border: 1px solid red; */
+
+  font-size: 35px;
+  font-weight: 700;
+}
+
+/* Signup Question Styles End */
+
+.signup-history-body {
+  width: 80%;
+  position: relative;
+}
+.signup-question-history {
+  /* border: 2px solid orange; */
+
+  display: flex;
+  justify-content: left;
+  overflow: auto;
+  gap: 15px;
+  padding-inline: 30px;
+}
+.signup-history-body::before,
+.signup-history-body::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 6%; /* 흐릿한 효과의 너비 */
+  z-index: 2;
+  pointer-events: none; /* 마우스 이벤트 방지 */
+}
+.signup-history-body::before {
+  left: 0;
+  background: linear-gradient(to right, #f8f9fb, rgba(255, 255, 255, 0));
+}
+
+.signup-history-body::after {
+  right: 0;
+  background: linear-gradient(to left, #f8f9fb, rgba(255, 255, 255, 0));
+}
+.signup-question-history::-webkit-scrollbar {
+  height: 5px;
+  border: 1px solid black;
+}
+.signup-question-history::-webkit-scrollbar-thumb {
+  background-color: #71a5de;
+  background-clip: padding-box;
+  /* border: 2px solid transparent; */
+}
+.signup-question-history::-webkit-scrollbar-track {
+  background-color: rgb(255, 255, 255);
+  /* box-shadow: inset 0px 0px 5px white; */
+}
+.history-item {
+  border: 2px solid #aecbeb;
+  border-radius: 20px;
+  background-color: #aecbeb;
+  font-size: 20px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding-inline: 5px;
+}
+
+.history-item-isclear {
+  border: 3px solid #2196f3;
+  border-radius: 100%;
+  /* 임시 크기 */
+  width: 10px;
+  height: 10px;
+  /* 임시 크기 */
+}
+
+.submitButton {
+  font-size: 22px;
+  font-weight: 600;
+  border: 3px solid #2196f3;
+  border-radius: 8px;
+  padding-inline: 10px;
+  background-color: #f8f9fb;
+}
+
+.error-box {
+  /* border: 2px solid red; */
+  position: absolute;
+  width: 80%;
+  bottom: 0px;
+  text-align: center;
+}
+.error-item {
+}
+
+/* 수신 여부 토글 CSS --------------------------------------- */
 .toggle_switch {
   position: relative;
   display: inline-block;
@@ -495,18 +1101,18 @@ export default {
   transition: 0.3s;
 }
 
-.toggle_switch input:checked+label {
+.toggle_switch input:checked + label {
   background-color: #2196f3;
 }
 
-.toggle_switch input:checked+label:after {
+.toggle_switch input:checked + label:after {
   transform: translateX(15px);
 }
 
 .thumbnail {
-  max-width: 50px;
+  max-width: 200px;
   /* 원하는 크기로 조절하세요 */
-  max-height: 50px;
+  max-height: 200px;
   margin-top: 5px;
   /* 이미지와 다른 입력란 간격 조절 */
 }
