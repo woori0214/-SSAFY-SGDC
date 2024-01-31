@@ -92,6 +92,16 @@ public class FollowServiceImpl implements FollowService {
         return followDtoList;
     }
 
+    @Override
+    public Long followingCount(User userId) {
+        return followRepository.countByUserId(userId);
+    }
+
+    @Override
+    public Long followerCount(User userId) {
+        return followRepository.countByFollowingId(userId);
+    }
+
 }
 
 
