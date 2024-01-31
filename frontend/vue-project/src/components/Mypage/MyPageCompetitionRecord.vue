@@ -17,28 +17,30 @@
             <div v-if="showPopup" class="popup">
                 <div class="popup-content">
                     <!-- Time -->
-                    <div class="time">{{ formatTime(selectedMatchingData[0].compet_expiration_time) }}</div>
+                    <div class="time">
+                        <h1>{{ formatTime(selectedMatchingData[0].compet_expiration_time) }}</h1>
+                    </div>
 
                     <!-- Sender and Receiver with Images -->
                     <div class="match-details">
                         <div class="sender">
                             <img :src="getAuthImage(popupdata.sender_id)" alt="Sender Image">
-                            <span>{{ popupdata.sender_nickname }}</span>
+                            <h3>{{ popupdata.sender_nickname }}</h3>
                         </div>
-                        <div class="category">
-                            <span>{{ getCategoryName(popupdata.category_id) }}</span>
+                        <div class="result_category">
+                            <span>{{ getCategoryName(selectedMatchingData[0].category_id) }}</span>
+                            <h2>vs</h2>
                         </div>
                         <div class="receiver">
                             <img :src="getAuthImage(popupdata.receiver_id)" alt="Receiver Image">
-                            <span>{{ popupdata.receiver_nickname }}</span>
+                            <h3>{{ popupdata.receiver_nickname }}</h3>
                         </div>
                     </div>
 
                     <!-- Result -->
-                    <div class="result">{{ popupdata.compet_result === 1 ? '승리' : '패배' }}</div>
-
+                    <div class="result">{{ popupdata.compet_result === 1 ? 'Win' : 'Lose' }}</div>
                     <!-- Close Button -->
-                    <button @click="showPopup = false">닫기</button>
+                    <button @click="showPopup = false" class="popup_close_btn">닫기</button>
                 </div>
             </div>
 
@@ -124,6 +126,10 @@ export default {
                 compet_id: 6, compet_result_id: 6, compet_result: 1, matching_id: 6,
                 sender_id: 1, sender_nickname: '우리다', receiver_id: 7, receiver_nickname: '우리', tooltip_info: '경기6'
             },
+            {
+                compet_id: 7, compet_result_id: 7, compet_result: 1, matching_id: 7,
+                sender_id: 1, sender_nickname: '우리다', receiver_id: 2, receiver_nickname: '화석', tooltip_info: '경기7'
+            },
 
         ])
 
@@ -166,7 +172,7 @@ export default {
         // 카테고리 이름 가져오기
         const getCategoryName = (categoryId) => {
             const category = categories.value.find(cat => cat.id === categoryId);
-            return category ? categories.name : '';
+            return category ? category.name : '';
         };
 
         // 페이지 열었을 때 정보 가져오기
@@ -210,15 +216,15 @@ export default {
 }
 </script>
   
-<style scoped>
+<style scoped> 
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
     display: flex;
     align-items: center;
-    background-color: #f1f1f1;
+    background-color: #83b0e1;
     padding: 10px;
-    border: 1px solid #ccc;
     cursor: pointer;
+    border-radius: 15px;
 }
 
 .rotate-icon {
@@ -242,7 +248,6 @@ export default {
 .com_accordion-content {
     display: flex;
     padding: 10px;
-    border: 1px solid #ccc;
     border-top: none;
     overflow: auto;
     max-height: 0;
@@ -259,6 +264,7 @@ export default {
 .result_div {
     display: flex;
     flex-direction: row;
+    padding: 10px;
 }
 
 .result_img_div {
@@ -292,16 +298,18 @@ export default {
 }
 
 .popup-content {
-    background-color: aliceblue;
-    width: 80%;
-    /* 변경 */
+    display: flex;
+    flex-direction: column;
+    background-color: #e1ecf7;
+    border: #aecbeb 5px solid;
+    border-radius: 50px;
+    width: 50%;
+    height: 80%;
     max-width: 80%;
-    /* 추가 */
     max-height: 80%;
-    /* 추가 */
     overflow: auto;
-    /* 추가 */
     text-align: center;
+    justify-content: center;
 }
 
 .time,
@@ -323,15 +331,84 @@ export default {
 }
 
 .match-details img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    border-radius: 30px;
+    object-fit: cover;
+}
+
+.result_category {
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.result {
+    font-size: 2.0em;
+    font-weight: bolder;
+    color: rgb(255, 0, 0);
+}
+
+.popup_close_btn {
+    width: 30%;
+    height: 40px;
+    margin: 0 auto;
+    background-color: #71a5de;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+@media screen and (max-width: 320px), (max-height: 616px) {
+    .popup-content {
+        width: 90%;
+        height: 90%;
+        max-width: none;
+        max-height: none;
+    }
+}
+
+.time,
+.match-details,
+.result {
+    margin-bottom: 20px;
+}
+
+.match-details {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.sender,
+.receiver {
+    display: flex;
+    flex-direction: column;
+}
+
+.match-details img {
+    width: 150px;
+    height: 150px;
+    border-radius: 30px;
     object-fit: cover;
 }
 
 .result {
-    font-size: 1.5em;
+    font-size: 2.0em;
+    font-weight: bolder;
     color: rgb(255, 0, 0);
-    /* Or red based on result */
-}</style>
+}
+
+.popup_close_btn {
+    width: 30%;
+    height: 40px;
+    margin: 0 auto;
+    background-color: #71a5de;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+}
+</style>
   
