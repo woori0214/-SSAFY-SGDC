@@ -3,11 +3,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL } from '@/main.js';
+import { serverURL, v1_URL } from '@/main.js';
 
 
 export const useFollowStore = defineStore('follow', () => {
-    const URL = serverURL + 'follow';
+    const URL = serverURL + v1_URL + 'follow';
     
     // 쌀로잉 조회
     const ssallowing = function (userId) {

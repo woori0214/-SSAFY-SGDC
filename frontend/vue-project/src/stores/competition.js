@@ -2,12 +2,12 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL } from '@/main.js';
+import { serverURL, v1_URL } from '@/main.js';
 
 
 export const useCompetionStore = defineStore('competition', () => {
-    const URL = serverURL + 'compet';
-    const URL2 = serverURL;
+    const URL = serverURL + v1_URL + 'compet';
+    const URL2 = serverURL  + v1_URL;
 
     
     //랜덤도전장보내기

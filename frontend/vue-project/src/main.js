@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 
 export const serverURL = 'http://i10a108.p.ssafy.io:8080/';
+export const v1_URL = 'api/v1/';
 
 const app = createApp(App)
 

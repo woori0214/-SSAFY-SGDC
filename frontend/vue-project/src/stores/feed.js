@@ -2,11 +2,11 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL } from '@/main.js';
+import { serverURL, v1_URL } from '@/main.js';
 
 
 export const useFeedStore = defineStore('feed', () => {
-    const URL = serverURL + 'feed';
+    const URL = serverURL + v1_URL + 'feed';
 
     //게시물 한 개
     const getFeed = function(feedId){
