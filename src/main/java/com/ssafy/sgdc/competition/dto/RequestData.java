@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public class RequestData {
 
-    private Long userId;
-    private Long categoryId;
+    private int userId;
+    private int categoryId;
 
 }
