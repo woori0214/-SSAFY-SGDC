@@ -18,7 +18,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_id")
-    private long userId;
+    private int userId;
 
     @Column(name = "login_id", length = 20)
     private String loginId;
@@ -26,7 +26,7 @@ public class User {
     @Column(name = "user_ssafy_id")
     private int userSsafyId;
 
-    @Column(name = "user_email", length = 20)
+    @Column(name = "user_email", length = 250)
     private String userEmail;
 
     @Column(name = "user_nickname", length = 20)
@@ -56,7 +56,7 @@ public class User {
 //    @OneToOne
 //    @JoinColumn(name = "badge_id")
     @Column(name = "badge_id")
-    private long badgeId;
+    private int badgeId;
 
     @Column(name = "kakao_push")
     private Boolean kakaoPush;
