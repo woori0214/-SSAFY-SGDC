@@ -3,8 +3,13 @@
     <div class="select_category">
       <p>STEP1. 카테고리를 선택해주세요</p>
       <div class="category_list_box">
-        <button v-for="category in MyCategories" :key="category.id" :class="{ active: selectedCategory === category.id }"
-          @click="selectCategory(category.id)" class="category-button">
+        <button
+          v-for="category in MyCategories"
+          :key="category.id"
+          :class="{ active: selectedCategory === category.id }"
+          @click="selectCategory(category.id)"
+          class="category-button"
+        >
           {{ category.name }}
         </button>
       </div>
@@ -13,56 +18,65 @@
     <div id="matching_btn_list">
       <p class="matching_title">STEP2. 매칭모드를 선택해주세요</p>
       <div class="buttons_container">
-        <button id="matching_btn" @click="openRandomMatchingModal">랜덤 매치</button>
+        <button id="matching_btn" @click="openRandomMatchingModal">
+          랜덤 매치
+        </button>
         <div class="matching_btn_gap"></div>
-        <button id="matching_btn" @click="openFriendMatchingModal">친구와 매치</button>
+        <button id="matching_btn" @click="openFriendMatchingModal">
+          친구와 매치
+        </button>
       </div>
     </div>
 
-    <PopUpRequestMessage :showModal="isRandomMatchingModalVisible || isFriendMatchingModalVisible" :close="closeModal"
-      :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null" :user_id="userId" />
+    <PopUpRequestMessage
+      :showModal="isRandomMatchingModalVisible || isFriendMatchingModalVisible"
+      :close="closeModal"
+      :modalType="modalType"
+      :category_id="selectedCategory !== null ? selectedCategory : null"
+      :user_id="userId"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
-import PopUpRequestMessage from '@/components/PopUp/PopUpRequestMessage.vue';
-import { useCompetionStore } from '@/stores/competition';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import PopUpRequestMessage from "@/components/PopUp/PopUpRequestMessage.vue";
+import { useCompetionStore } from "@/stores/competition";
 
-import { useUserStorageStore } from '@/stores/userStorage';
+import { useUserStorageStore } from "@/stores/userStorage";
 
 const MyCategories = ref([
   {
     id: 1,
-    name: '기상',
+    name: "기상",
   },
   {
     id: 2,
-    name: '알고리즘',
+    name: "알고리즘",
   },
   {
     id: 3,
-    name: '운동',
+    name: "운동",
   },
   {
     id: 4,
-    name: '스터디',
+    name: "스터디",
   },
   {
     id: 5,
-    name: '식단',
+    name: "식단",
   },
   {
     id: 6,
-    name: '절제',
+    name: "절제",
   },
 ]);
 
 const router = useRouter();
 const isRandomMatchingModalVisible = ref(false);
 const isFriendMatchingModalVisible = ref(false);
-const modalType = ref('');
+const modalType = ref("");
 const selectedCategory = ref(null);
 
 const competSelect = useCompetionStore();
@@ -76,37 +90,38 @@ const openRandomMatchingModal = () => {
       category_id: selectedCategory.value,
       user_id: userId,
     };
-    console.log('도전장', randomSendData);
+    console.log("도전장", randomSendData);
     // Add logic to handle the random matching modal
     competSelect
       .randomSend(randomSendData)
       .then((response) => {
-        console.log('Random matching request sent successfully:', response);
+        console.log("Random matching request sent successfully:", response);
       })
       .catch((error) => {
-        console.error('Error sending random matching request:', error);
+        console.error("Error sending random matching request:", error);
       });
   }
 
   isRandomMatchingModalVisible.value = true;
-  modalType.value = 'randomMatching';
+  modalType.value = "randomMatching";
 };
 
 const openFriendMatchingModal = () => {
   if (selectedCategory !== null) {
     isFriendMatchingModalVisible.value = true;
-    modalType.value = 'friendMatching';
+    modalType.value = "friendMatching";
   }
 };
 
 const closeModal = () => {
   isRandomMatchingModalVisible.value = false;
   isFriendMatchingModalVisible.value = false;
-  modalType.value = '';
+  modalType.value = "";
 };
 
 const selectCategory = (categoryId) => {
-  selectedCategory.value = selectedCategory.value === categoryId ? null : categoryId;
+  selectedCategory.value =
+    selectedCategory.value === categoryId ? null : categoryId;
 };
 </script>
 
@@ -115,12 +130,12 @@ const selectCategory = (categoryId) => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  
+
   /* margin: auto; */
 }
 
 .select_category {
-  background-color:#e1ecf7;
+  background-color: #e1ecf7;
   border: 2px solid #e1ecf7;
   width: 93%;
   /* margin: auto; */
@@ -129,7 +144,6 @@ const selectCategory = (categoryId) => {
   padding: 30px;
   border-radius: 25px;
   margin-bottom: 5%;
-
 }
 
 .category_list_box {
@@ -182,7 +196,6 @@ const selectCategory = (categoryId) => {
   border-radius: 25px;
   flex: 13;
   background-color: #83b0e1;
- 
 }
 
 .matching_btn_gap {

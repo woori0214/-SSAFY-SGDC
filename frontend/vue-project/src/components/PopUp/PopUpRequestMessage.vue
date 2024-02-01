@@ -115,7 +115,7 @@ const closeResponseModal = () => {
 };
 </script>
   
-<style scoped>
+<style>
 .modal {
     display: flex;
     justify-content: center;
