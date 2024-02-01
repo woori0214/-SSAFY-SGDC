@@ -1,7 +1,6 @@
 package com.ssafy.sgdc.competition;
 
 import com.ssafy.sgdc.competition.dto.RequestData;
-import com.ssafy.sgdc.domain.entity.Matching;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
