@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.domain.entity;
 
+import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.enums.SoloResult;
 import com.ssafy.sgdc.enums.SoloStatus;
 import com.ssafy.sgdc.user.User;

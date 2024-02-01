@@ -1,7 +1,7 @@
 package com.ssafy.sgdc.competition.dto.request;
 
+import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.competition.domain.Matching;
-import com.ssafy.sgdc.domain.entity.Category;
 import com.ssafy.sgdc.enums.CompetKind;
 import com.ssafy.sgdc.enums.IsSender;
 import com.ssafy.sgdc.enums.MatchStatus;

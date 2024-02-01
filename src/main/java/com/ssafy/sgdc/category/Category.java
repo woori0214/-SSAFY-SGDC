@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.domain.entity;
+package com.ssafy.sgdc.category;
 
 import com.ssafy.sgdc.enums.CategoryName;
 import jakarta.persistence.*;
