@@ -1,11 +1,11 @@
 package com.ssafy.sgdc.follow;
 
-import com.ssafy.sgdc.follow.dto.CMRespDto;
+import com.ssafy.sgdc.base.dto.DataResponseDto;
+import com.ssafy.sgdc.base.dto.ResponseDto;
 import com.ssafy.sgdc.follow.dto.FollowCountDto;
 import com.ssafy.sgdc.follow.dto.FollowerListResponseDto;
 import com.ssafy.sgdc.follow.dto.FollowingListResponseDto;
 import com.ssafy.sgdc.user.User;
-import com.ssafy.sgdc.util.response.GeneralResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -15,10 +15,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Objects;
 
 
 @ApiResponses({
@@ -41,16 +40,13 @@ class FollowController {
      */
     @Operation(summary = "팔로우 성공", description="다른 유저에게 팔로우를 합니다.")
     @Parameters({
-            @Parameter(name = "toUserId", schema=@Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
-            @Parameter(name = "fromUserId",  schema=@Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+            @Parameter(name = "toUserId", schema=@Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
+            @Parameter(name = "fromUserId",  schema=@Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     })
     @PostMapping("/{toUserId}/{fromUserId}")
-    public ResponseEntity<?> follow(@PathVariable Long toUserId, @PathVariable Long fromUserId) {
-        followService.follow(toUserId, fromUserId);
-        return new ResponseEntity<>(GeneralResponse.builder()
-                .status(200)
-                .message("팔로우 성공")
-                .build(), HttpStatus.OK);
+    public DataResponseDto<Objects> follow(@PathVariable int toUserId, @PathVariable int fromUserId) {
+            followService.follow(toUserId, fromUserId);
+            return DataResponseDto.of(null, "팔로우 성공");
     }
 
     /**
@@ -58,16 +54,13 @@ class FollowController {
      */
     @Operation(summary= "팔로우 취소", description="다른 유저에게 건 팔로우를 취소합니다.")
     @Parameters({
-            @Parameter(name = "toUserId", schema = @Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
-            @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+            @Parameter(name = "toUserId", schema = @Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
+            @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     })
     @DeleteMapping("/{toUserId}/{fromUserId}")
-    public ResponseEntity<?> unfollow(@PathVariable Long toUserId, @PathVariable Long fromUserId){
+    public DataResponseDto<Objects> unfollow(@PathVariable int toUserId, @PathVariable int fromUserId){
         followService.unFollow(toUserId, fromUserId);
-        return new ResponseEntity<>(GeneralResponse.builder()
-                .status(200)
-                .message("언팔로우 성공")
-                .build(), HttpStatus.OK);
+        return DataResponseDto.of(null, "팔로우 취소");
     }
 
 
@@ -75,22 +68,22 @@ class FollowController {
      * 팔로워 리스트
      */
     @Operation(summary = "팔로워 리스트", description="팔로워 리스트를 확인합니다.")
-    @Parameter(name = "toUserId", schema = @Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH)
-    @GetMapping("/followerList/{toUserId}")
-    public ResponseEntity<?> followerList(@PathVariable Long toUserId){
+    @Parameter(name = "toUserId", schema = @Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH)
+    @GetMapping("/follower-list/{toUserId}")
+    public DataResponseDto<?> followerList(@PathVariable int toUserId) {
         List<FollowerListResponseDto> followerListResponseDtoList = followService.followerList(toUserId);
-        return new ResponseEntity<>(new CMRespDto<>(200, "팔로워리스트 조회", followerListResponseDtoList), HttpStatus.OK);
+        return DataResponseDto.of(followerListResponseDtoList, "팔로워리스트 조회");
     }
 
     /**
      * 팔로잉 리스트
      */
     @Operation(summary = "팔로잉 리스트", description="팔로잉 리스트를 확인합니다.")
-    @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
-    @GetMapping("/followingList/{fromUserId}")
-    public ResponseEntity<?>followingList(@PathVariable Long fromUserId){
+    @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+    @GetMapping("/following-list/{fromUserId}")
+    public DataResponseDto<?> followingList(@PathVariable int fromUserId){
         List<FollowingListResponseDto> followingListResponseDtoList = followService.followingList(fromUserId);
-        return new ResponseEntity<>(new CMRespDto<>(200, "팔로잉리스트 조회", followingListResponseDtoList), HttpStatus.OK);
+        return DataResponseDto.of(followingListResponseDtoList, "팔로잉리스트 조회");
     }
 
 
@@ -98,12 +91,25 @@ class FollowController {
      * 팔로잉 팔로워 수 조회
      */
     @Operation(summary = "팔로잉 팔로워 수", description="팔로잉 팔로워 수를 확입합니다.")
-    @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
-    @GetMapping("/followCount/{userId}")
-    public ResponseEntity<?> followCount(@PathVariable User userId){
-        Long following = followService.followingCount(userId);
-        Long follower = followService.followerCount(userId);
-        return new ResponseEntity<>(new CMRespDto<>(200, "팔로잉리스트 조회", new FollowCountDto(follower,following)), HttpStatus.OK);
+    @Parameter(name = "userId", schema = @Schema(implementation = int.class), description = "유저 본인의 PK", in = ParameterIn.PATH)
+    @GetMapping("/follow-count/{userId}")
+    public DataResponseDto<?> followCount(@PathVariable User userId){
+        int following = followService.followingCount(userId);
+        int follower = followService.followerCount(userId);
+        return DataResponseDto.of(new FollowCountDto(follower,following), "팔로잉 팔로워 수 조회");
     }
 
+    /**
+     * 사용자가 팔로잉 했는지 조회
+     */
+    @Operation(summary = "사용자가 팔로잉 했는지 조회", description="사용자가 팔로잉한 사용자인지 확인합니다.")
+    @Parameters({
+            @Parameter(name = "toUserId", schema = @Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
+            @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+    })
+    @GetMapping("/follow-check/{userId}/{followingId}")
+    public ResponseDto isFollow(@PathVariable User userId, @PathVariable User followingId){
+        boolean follow = followService.isFollow(followingId,userId);
+        return new ResponseDto(follow,0,"팔로잉 체크");
+    }
 }
