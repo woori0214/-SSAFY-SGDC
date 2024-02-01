@@ -268,6 +268,8 @@ function getCategoryNameById(id) {
   return categoryMap[id] || "알 수 없는 카테고리";
 }
 
+
+
 const categori_btn_component = ref(null);
 const donut_percent_component = ref(null);
 
