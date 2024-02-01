@@ -9,6 +9,21 @@ import { serverURL, v1_URL } from '@/main.js';
 export const useFollowStore = defineStore('follow', () => {
     const URL = serverURL + v1_URL + 'follow';
     
+    // 쌀로우 수 조회
+    const getSsallowCount = function (userId) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/follow-count/${userId.value}`)
+                .then((res) => {
+                    console.log(res);
+                    resolve(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                })
+        })
+    }
     // 쌀로잉 조회
     const ssallowing = function (userId) {
         return new Promise((resolve, reject) => {
@@ -45,7 +60,7 @@ export const useFollowStore = defineStore('follow', () => {
     const plusSsallowing = function (ssallowingData) {
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/following/${ssallowingData.user_id}`, ssallowingData)
+                .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -57,12 +72,11 @@ export const useFollowStore = defineStore('follow', () => {
         });
     }
     // 쌀로잉 삭제
-    const deleteSsallowing = function (ssallowing) {
+    const deleteSsallowing = function (unSsallowingData) {
         return new Promise((resolve, reject) => {
             axios
-                .delete(`${URL}/${ssallowing.user_id}/${ssallowing.following_id}`)
+                .delete(`${URL}/${unSsallowingData.user_id}/${unSsallowingData.following_id}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -71,7 +85,29 @@ export const useFollowStore = defineStore('follow', () => {
                 });
         });
     }
-    return {ssallowing, ssallower, plusSsallowing, deleteSsallowing}
+
+    // 사용자가 팔로잉했는지
+    const checkSsallowing = function(checkusers) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/follow-check/${checkusers.user_id}/${checkusers.following_id}`)
+                .then((res) => {
+                    resolve(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                })
+        })
+    }
+    return {
+        getSsallowCount,
+        ssallowing, 
+        ssallower, 
+        plusSsallowing, 
+        deleteSsallowing,
+        checkSsallowing
+    }
 })
 
 

@@ -71,19 +71,21 @@ export default {
 
 .modal_mask {
     position: fixed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 9998;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .modal_wrapper {
+    display: flex;
     padding: 20px;
+    justify-content: center;
 }
 
 .modal_container {
@@ -99,7 +101,6 @@ export default {
     align-items: center;
     justify-content: space-between;
     border: 1px solid #e1ecf7;
-    color: center;
 }
 
 /* 파일 입력을 위한 스타일 */
@@ -138,7 +139,7 @@ input[type="file"] {
     text-align: center;
     width: 100%;
     height: auto;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .modal-image {
@@ -149,7 +150,7 @@ input[type="file"] {
 /* 모바일 화면용 스타일 */
 @media (max-width: 600px) {
     .modal_container {
-        width: 90%;
+        width: 80%;
     }
 }
 </style>

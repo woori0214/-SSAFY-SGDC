@@ -1,81 +1,116 @@
 <template>
-    <header>
-        <div class="header-wrapper">
-            <div class="header-links">
-                <div v-if="!userLoginStore.loginUser" class="login-signup-links">
-                    <RouterLink to="/login" class="nav-link">로그인</RouterLink>
-                    <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
-                </div>
-                <div v-else class="user-nav">
-                    <span>{{ userLoginStore.userNickname }}님, 안녕하세요!</span>
-                    <a @click="logout" class="nav-link logout">로그아웃</a>
-                </div>
-            </div>
-        </div>
-        <div class="mainimage">
-            <img src="@/assets/mainimage.gif" class="header-image">
-
-        </div>
-    </header>
+  <header class="header-wrapper">
+    <div class="header-music-box">
+      <BackGroundMusic class="header-music"></BackGroundMusic>
+    </div>
+    <div class="mainimage-box">
+      <img src="@/assets/mainimage.gif" class="header-image" />
+    </div>
+    <div class="header-links">
+      <!-- 로그인 상태 -->
+      <div v-if="!userLoginStore.loginUser" class="login-signup-links">
+        <RouterLink to="/login" class="nav-link">로그인</RouterLink>
+        <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
+      </div>
+      <!-- 로그아웃 상태 -->
+      <div v-else class="user-nav">
+        <span>{{ userLoginStore.userNickname }}님, 안녕하세요!</span>
+        <a @click="logout" class="nav-link logout">로그아웃</a>
+      </div>
+    </div>
+  </header>
 </template>
   
 <style scoped>
 .header-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
+  /* border: 2px solid red; */
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  width: 100%;
 }
 
 .header-links {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-
-    flex-grow: 1;
-
+  /* border: 2px solid orange; */
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  /* flex-grow: 1; */
+  flex: 2;
+  margin-bottom: 5px;
 }
 
 .login-signup-links {
-    margin-right: 10px;
+  display: flex;
+  gap: 15px;
 }
 
 .nav-link {
-    text-decoration: none;
-    color: #333;
-    margin-right: 10px;
+  border: 0px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: #131313;
+  font-size: 16px;
+  font-weight: 600;
+  background-color: #aecbeb;
+  padding-block: 5px;
+  padding-inline: 8px;
+}
+.nav-link:hover{
+    color:#ffffff
 }
 
 .user-nav {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .logout {
-    cursor: pointer;
-    margin-left: 10px;
-    color: #333;
+  cursor: pointer;
+  margin-left: 10px;
+  color: #333;
 }
 
-.header-image {
-    width: 30%;
-    /* 이미지의 너비를 부모 요소 너비의 50%로 설정 */
-    height: auto;
-    /* 높이를 자동으로 조절하여 비율 유지 */
-    justify-content: center;
+.mainimage-box {
+  /* border: 2px solid blue; */
+  display: flex;
+  justify-content: center;
+  /* max-height: 90px; */
+  min-height: 50px;
+  flex: 5;
 }
-.mainimage{
-    display: flex;
-    justify-content: center;
+.header-image {
+  /* border: 2px solid orange; */
+  /* 높이를 자동으로 조절하여 비율 유지 */
+  justify-content: center;
+  height: 10vh;
+  max-height: 90px;
+  min-height: 50px;
+  transition: all 0.5s ease;
+}
+.header-image:hover {
+  height: 25vh;
+  max-height: 25vh;
+  /* transform: scale(1.2); */
+}
+.header-music-box {
+  /* border: 2px solid orange; */
+  flex: 2;
+  display: flex;
+  justify-content: left;
+}
+.header-music {
+  /* border: 2px solid green; */
 }
 </style>
   
 <script setup>
-import { useLoginStore } from '@/stores/login';
+import { useLoginStore } from "@/stores/login";
+import BackGroundMusic from "./BackGroundMusic.vue";
 
 const userLoginStore = useLoginStore();
 const logout = function () {
-    userLoginStore.isLogout();
+  userLoginStore.isLogout();
 };
 </script>
   

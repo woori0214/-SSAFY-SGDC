@@ -1,9 +1,7 @@
 <template>
     <div class="mypageview_body">
         <div class="profile_body">
-            <MyPageProfileBar :userData="userData" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData"
-                :loginUser="loginUser"
-                @ssallowing-request="handleSsallowingRequest" />
+            <MyPageProfileBar :userData="userData" :loginUser="loginUser"/>
         </div>
         <div class="compet_body">
             <MyPageCompetitionRecord :userId="userId" :categories="categories" />
@@ -129,21 +127,6 @@ const ssallowerData = ref([
 
 // 로그인 유저와 마이페이지 유저가 같은지
 const isCurrentUser = computed(() => loginUser.value === userId.value);
-
-const handleSsallowingRequest = (ssallowing) => {
-    // MyPageProfileBar 컴포넌트에서 넘겨받은 데이터를 이용해 plusSsallowing 함수 호출
-    console.log('팔로우 할게요')
-    follow.plusSsallowing(ssallowing)
-        .then((res) => {
-            // 성공 시 처리
-            console.log(res);
-            console.log('추가되었습니다.')
-        })
-        .catch((err) => {
-            // 실패 시 처리
-            console.error(err);
-        });
-};
 
 // 페이지 열었을 때, 사용자 정보 모드 받아와야함
 // user 정보, 팔로우 정보는 props
