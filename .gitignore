@@ -40,6 +40,7 @@ target
 secrets.yml
 .gradletasknamecache
 .sts4-cache
+.sql
 
 mvnw
 mvnw.cmd

@@ -18,7 +18,7 @@ public class FeedLike {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_like_id")
-    private long feedLikeId;
+    private int feedLikeId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -1,9 +1,9 @@
 package com.ssafy.sgdc.competition.dto;
 
-import com.ssafy.sgdc.competition.Matching;
-import entity.enums.CompetKind;
-import entity.enums.IsSender;
-import entity.enums.MatchStatus;
+import com.ssafy.sgdc.competition.domain.Matching;
+import com.ssafy.sgdc.enums.CompetKind;
+import com.ssafy.sgdc.enums.IsSender;
+import com.ssafy.sgdc.enums.MatchStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,20 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MatchingDto {
 
-    private int matchingId;
-    private int userId;
-    private int competitionId;
-    private int categoryId;
-    private CompetKind competKind;
-    private IsSender isSender;
-    private LocalDateTime competExpirationTime;
-    private MatchStatus matchStatus;
+    private int matching_id;
+    private int user_id;
+    private int category_id;
+    private CompetKind compet_kind;
+    private IsSender is_sender;
+    private LocalDateTime compet_expiration_time;
+    private MatchStatus match_status;
+
 
     public static MatchingDto of(Matching matching) {
         return new MatchingDto(
                 matching.getMatchingId(),
                 matching.getUser().getUserId(),
-                matching.getCompetition().getCompetId(),
                 matching.getCategory().getCategoryId(),
                 matching.getCompetKind(),
                 matching.getIsSender(),

@@ -17,7 +17,7 @@ public class Badge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "badge_id")
-    private long badgeId;
+    private int badgeId;
 
     @Column(name = "badge_name", length = 20)
     private String badgeName;

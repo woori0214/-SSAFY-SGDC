@@ -1,16 +1,14 @@
-package com.ssafy.sgdc.domain.entity;
+package com.ssafy.sgdc.competition.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "image_auth")
@@ -19,7 +17,7 @@ public class ImageAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "auth_id")
-    private Long authId;
+    private int authId;
 
     @Column(name = "auth_img")
     private String authImg;
@@ -35,4 +33,10 @@ public class ImageAuth {
     @JoinColumn(name = "matcing_id")
     private Matching matcing;
 
+    public ImageAuth(String authImg, LocalDateTime createAt, Competition competition, Matching matching) {
+        this.authImg = authImg;
+        this.createAt = createAt;
+        this.competition = competition;
+        this.matcing = matching;
+    }
 }

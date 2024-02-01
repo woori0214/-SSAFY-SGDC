@@ -1,9 +1,9 @@
-package com.ssafy.sgdc.competition.dto;
+package com.ssafy.sgdc.competition.dto.request;
 
 import lombok.Getter;
 
 @Getter
-public class RequestData {
+public class RandomSendRequest {
 
     private int userId;
     private int categoryId;

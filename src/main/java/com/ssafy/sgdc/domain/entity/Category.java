@@ -1,6 +1,6 @@
 package com.ssafy.sgdc.domain.entity;
 
-import com.ssafy.sgdc.domain.entity.enums.CategoryName;
+import com.ssafy.sgdc.enums.CategoryName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "category_id")
-    private long categoryId;
+    private int categoryId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category_name")
