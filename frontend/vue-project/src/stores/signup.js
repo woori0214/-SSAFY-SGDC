@@ -9,7 +9,7 @@ import { serverURL, v1_URL } from '@/main.js';
 export const useSignupStore = defineStore('signup', () => {
 
     const ssafyurl = 'https://project.ssafy.com/ssafy/api/auth/signin';
-    const URL = serverURL + v1_URL + 'user/signup';
+    const URL = serverURL + 'user/signup';
     // 사용자 프로젝트 싸피 인증
 
     const isssafy = function (ssafy) {
