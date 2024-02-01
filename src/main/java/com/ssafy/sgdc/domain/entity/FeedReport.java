@@ -1,7 +1,7 @@
 package com.ssafy.sgdc.domain.entity;
 
 import com.ssafy.sgdc.user.User;
-import com.ssafy.sgdc.domain.entity.enums.ComplainType;
+import com.ssafy.sgdc.enums.ComplainType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,7 +19,7 @@ public class FeedReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_report_id")
-    private long feedReportId;
+    private int feedReportId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

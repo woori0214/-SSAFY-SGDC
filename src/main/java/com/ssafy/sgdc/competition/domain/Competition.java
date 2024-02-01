@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.domain.entity;
+package com.ssafy.sgdc.competition.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "competition")
@@ -19,8 +18,9 @@ public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "compet_id")
-    private Long competId;
+    private int competId;
 
+    @Setter
     @OneToOne
     @JoinColumn(name = "compet_detail_id")
     private CompetDetail competDetail;
@@ -29,4 +29,13 @@ public class Competition {
 
     private LocalDateTime doneAt;
 
+    public static Competition of(LocalDateTime now, LocalDateTime doneAt) {
+        return new Competition(now, doneAt, null);
+    }
+
+    private Competition(LocalDateTime createAt, LocalDateTime doneAt, CompetDetail competDetail) {
+        this.competDetail = competDetail;
+        this.createAt = createAt;
+        this.doneAt = doneAt;
+    }
 }

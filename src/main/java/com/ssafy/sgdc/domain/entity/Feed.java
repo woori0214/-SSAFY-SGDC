@@ -1,12 +1,12 @@
 package com.ssafy.sgdc.domain.entity;
 
+import com.ssafy.sgdc.competition.domain.Competition;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Entity
 @Getter
@@ -19,7 +19,7 @@ public class Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_id")
-    private long feedId;
+    private int feedId;
 
     @Column(name = "feed_title", length = 20)
     private String feedTitle;

@@ -1,6 +1,6 @@
 package com.ssafy.sgdc.domain.entity;
 
-import com.ssafy.sgdc.domain.entity.enums.CategoryStatus;
+import com.ssafy.sgdc.enums.CategoryStatus;
 import com.ssafy.sgdc.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,7 +19,7 @@ public class UserCategory {
 
     @Id
     @Column(name = "user_category_id")
-    private long userCategoryId;
+    private int userCategoryId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

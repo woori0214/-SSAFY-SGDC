@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.domain.entity.enums;
+package com.ssafy.sgdc.enums;
 
 public enum ComplainType {
     FAKE_AUTH, // 거짓 인증
