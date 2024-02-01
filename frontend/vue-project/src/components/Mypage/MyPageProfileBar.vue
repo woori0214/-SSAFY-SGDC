@@ -1,27 +1,28 @@
 <template>
     <div>
         <div class="top">
-            <h2> {{ user.user_nickname }} 님 프로필</h2>
+            <h2> {{ mypageUser.user_nickname }} 님 프로필</h2>
             <div>
-                <img v-for="complain in user.complain_cnt" :key="complain" src="@/assets/pinno.png" alt="pinno"
+                <img v-for="complain in mypageUser.complain_cnt" :key="complain" src="@/assets/pinno.png" alt="pinno"
                     class="complain_img">
             </div>
         </div>
         <div class="middle">
             <div class="middle1">
                 <div class="user_img_badge">
-                    <img :src="user.user_img" alt="use_img" class="user_img">
+                    <img :src="mypageUser.user_img" alt="use_img" class="user_img">
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
-                <!-- <div v-if="user.user_id != loginUser" class="myprofile_btns"> -->
-                    <div class="myprofile_btns">
-                        <button class="myprofile_btn" @click="send">도전장 보내기</button>
-                        <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
-                        <button @click="toggleFollow(loginUser)" class="ssallow_btn">{{
-                            getButtonText(ssallowing.isFollowing) }}</button>
-                    </div>
+                <!-- <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns"> -->
+                <div class="myprofile_btns">
+                    <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
+                    <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
+                    <button @click="toggleFollow(loginUser)" class="ssallow_btn">
+                        {{ getButtonText(ssallowing.isFollowing) }}
+                    </button>
+                </div>
                 <!-- </div> -->
-                <div v-if="user.user_id === loginUser" class="myprofile_btns">
+                <div v-if="mypageUser.user_id === loginUser" class="myprofile_btns">
                     <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
                     <button class="myprofile_btn" @click="">마이페이지 수정</button>
                 </div>
@@ -39,7 +40,23 @@
             <div v-if="isMailboxOpen" class="popup_mailbox">
                 <div class="mailbox_content">
                     <CompetitionMailbox />
-                    <button @click="isMailboxOpen=false" class="mailbox_close_btn">close</button>
+                    <button @click="isMailboxOpen = false" class="mailbox_close_btn">close</button>
+                </div>
+            </div>
+            <div v-if="isopenSendMsg" class="popup_sendmsg">
+                <div class="sendmsg_content">
+                    <h3>카테고리를 선택해주세요</h3>
+                    <div class="sendmsg_category">
+                        <button v-for="category in categories" :key="category.id" @click="selectCategory(category.id)"
+                            class="sendmsg_category_btn">
+                            <h3>{{ category.name }}</h3>
+                        </button>
+                    </div>
+                    <div class="sendmsg_btns">
+                        <button @click="sendmsg()" class="sendmsg_btn">도전장 보내기</button>
+                        <button @click="isopenSendMsg = false" class="sendmsg_btn">닫기</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -49,40 +66,121 @@
 <script>
 import { ref, computed } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
+import { useCompetionStore } from '@/stores/competition';
 import CompetitionMailbox from '@/components/Competition/CompetitionMailbox.vue';
 
-const user = ref([])
+// 카테고리 이미지
+import timerImage from '@/assets/wake.png';
+import algoImage from '@/assets/algo.png';
+import healthImage from '@/assets/health.png';
+import studyImage from '@/assets/study.png';
+import dietImage from '@/assets/diet.png';
+import fightingImage from '@/assets/fighting.png';
+
+const mypageUser = ref([])
 
 export default {
     props: ['userData', 'ssallowingData', 'ssallowerData', 'loginUser'],
-    
+
     setup(props, { emit }) {
+        const categories = ref([
+            {
+                id: 1,
+                name: '기상',
+                contents: 'SSAFY 입실체크 빨리하기',
+                img: timerImage
+            },
+            {
+                id: 2,
+                name: '알고리즘',
+                contents: '알고리즘 1일 1문제 풀기',
+                img: algoImage
+            },
+            {
+                id: 3,
+                name: '운동',
+                contents: '운동 인증샷 찍기(헬스장, 공원 등)',
+                img: healthImage
+            },
+            {
+                id: 4,
+                name: '스터디',
+                contents: '하루 몇시간 공부했는지 인증하기',
+                img: studyImage
+            },
+            {
+                id: 5,
+                name: '식단',
+                contents: '10층 샐러드 빈그릇 인증샷 찍기',
+                img: dietImage
+            },
+            {
+                id: 6,
+                name: '절제',
+                contents: '오늘 나는 ㅇㅇㅇ을 참았다.',
+                img: fightingImage
+            },
+        ]);
+
         const badgeStore = useBadgeStore();
-        const user = ref(props.userData);
+        const competStore = useCompetionStore();
+        const mypageUser = ref(props.userData);
         const loginUser = ref(props.loginUser);
         const ssallowing = ref(props.ssallowingData);
         const ssallower = ref(props.ssallowerData);
         const isMailboxOpen = ref(false);
+        const isopenSendMsg = ref(false);
+        const selectedCategory = ref(null);
 
         // console.log(user.value)
         const sendSsallowingRequest = () => {
-            const ssallowing = { user_id: user.value.user_id, following_id: user.value.user_id };
+            const ssallowing = { user_id: mypageUser.value.user_id, following_id: mypageUser.value.user_id };
             // 클릭 이벤트 발생 시 plusSsallowing 함수 호출
             emit('ssallowing-request', ssallowing);
         };
         // 사용자의 뱃지 이미지 찾기
         const userBadgeImage = computed(() => {
-            const badge = badgeStore.badgeList.find(badge => badge.badge_id === user.value.badge_id);
+            const badge = badgeStore.badgeList.find(badge => badge.badge_id === mypageUser.value.badge_id);
             return badge ? badge.badge_img : ''; // 일치하는 뱃지가 있으면 이미지 반환, 없으면 빈 문자열 반환
         });
 
         // 도전장함
-        const openCompetMailbox = function() {
+        const openCompetMailbox = function () {
             isMailboxOpen.value = true;
         }
 
+        // 도전장보내기
+        const openSendMsg = function () {
+            isopenSendMsg.value = true;
+        };
+        const selectCategory = (categoryId) => {
+            selectedCategory.value = categoryId;
+            console.log(selectedCategory.value)
+        };
+        const sendmsg = function () {
+            // selectedCategory의 현재 값으로 작업을 수행
+            if (selectedCategory.value !== null) {
+                const friendSendmsg = {
+                    user_id: loginUser.value,
+                    friend_id: mypageUser.value.user_id,
+                    category_id: selectedCategory.value,
+                }
+                competStore.friendSend(friendSendmsg)
+                    .then((res) => {
+                        console.log('도전장 보내기 성공')
+                    })
+                    .catch((err) => {
+                        console.log(err)
+                    })
+            } else {
+                alert('"카테고리가 선택되지 않았습니다."')
+            }
+
+        };
+
+
         const goUnssallow = function (followingId) {
-            const unssallow_info = { user_id: userId.value, following_id: followingId };
+            const unssallow_info = { user_id: mypageUser.value, following_id: followingId };
             follow.deleteSsallowing(unssallow_info)
                 .then((res) => {
                     console.log(res);
@@ -118,10 +216,17 @@ export default {
         const getButtonText = (isFollowing) => {
             return isFollowing ? '언쌀로우' : '쌀로우';
         };
-        return { user, ssallowing, ssallower, userBadgeImage,isMailboxOpen, 
-            sendSsallowingRequest, openCompetMailbox, goUnssallow, goSsallowing,
+        return {
+            categories,
+            mypageUser, loginUser,
+            userBadgeImage,
+            isopenSendMsg,
+            ssallowing, ssallower, isMailboxOpen,
             toggleFollow, getButtonText,
-         };
+            openSendMsg, selectCategory, sendmsg,
+            openCompetMailbox,
+            sendSsallowingRequest, goUnssallow, goSsallowing,
+        };
     },
     components: { CompetitionMailbox }
 }
@@ -200,11 +305,6 @@ export default {
     color: white;
     width: auto;
     height: 40px;
-    
-    /* 버튼 크기를 뷰포트 단위로 설정 */
-    width: 15vw; 
-    height: 8vh; 
-    font-size: 1.5vw; 
 }
 
 .follow_cnt {
@@ -217,42 +317,88 @@ export default {
     margin: 0 50px;
 }
 
-.popup_mailbox {
+
+
+/* 도전장함, 도전장 보내기 */
+.popup_mailbox,
+.popup_sendmsg {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
 }
 
-.mailbox_content {
+.mailbox_content,
+.sendmsg_content {
     display: flex;
     flex-direction: column;
     background-color: #e1ecf7;
-    border: #aecbeb 5px solid;
-    border-radius: 50px;
-    width: 50%;
-    height: 80%;
-    max-width: 80%;
-    max-height: 80%;
-    overflow: auto;
+    border: #aecbeb 2px solid;
+    padding: 50px;
+    border-radius: 8px;
     text-align: center;
+    width: 80vw;
+}
+
+.sendmsg_category {
+    display: flex;
     justify-content: center;
+}
+
+.sendmsg_category_btn {
+    cursor: pointer;
+    width: 150px;
+    padding: 10px;
+    margin: 10px;
+
+    border: 2px solid #83b0e1;
+    border-radius: 25px;
+    background-color: #83b0e1;
+
+    color: white;
+    font-size: larger;
+    font-weight: bolder;
+}
+
+.sendmsg_category_btn.active {
+    background-color: #83b0e1;
 }
 
 .mailbox_close_btn {
     width: 30%;
-    height: auto;
-    margin: 0 auto;
+    height: 50px;
+    margin: 10px auto;
     background-color: #71a5de;
     border: none;
     border-radius: 20px;
     cursor: pointer;
     color: white;
+    font-size: larger;
+}
+
+.sendmsg_btns {
+    margin-top: 20px;
+}
+
+.sendmsg_btn {
+    text-align: center;
+
+    margin: 20px;
+    width: 200px;
+    height: 50px;
+
+    background-color: #83b0e1;
+    border: #83b0e1;
+    border-radius: 25px;
+    color: white;
+    font-size: larger;
+    font-weight: bolder;
+
 }
 
 @media (max-width: 768px) {
@@ -298,9 +444,11 @@ export default {
     }
 
     .myprofile_btn {
-        width: 40vw; /* 너비를 화면 너비의 40%로 조정 */
-        height: 8vh; /* 높이를 화면 높이의 8%로 조정 */
-        font-size: 3.5vw; 
+        width: 40vw;
+        /* 너비를 화면 너비의 40%로 조정 */
+        height: 8vh;
+        /* 높이를 화면 높이의 8%로 조정 */
+        font-size: 3.5vw;
     }
 
     .mailbox_content {
@@ -308,6 +456,19 @@ export default {
         height: 90%;
         max-width: none;
         max-height: none;
+    }
+}
+
+@media (max-width: 320px) {
+
+    .popup_mailbox,
+    .popup_sendmsg {
+
+    }
+
+    .mailbox_content,
+    .sendmsg_content {
+        /* 팝업 내용 스타일 추가 조정, 필요에 따라 */
     }
 }
 </style>

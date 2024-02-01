@@ -7,15 +7,6 @@
           <div class="solo_head_item">솔로 모드 현황</div>
         </div>
         <div class="solo_board">
-          <!-- <div class="success_graph" ref="chartContainer">
-                <canvas ref="myChart" width="150" height="150"></canvas>
-            </div>
-            <div class="categories">
-                <button class="category_btn" v-for="category in todayChallenges" :key="category.category_id"
-                    :class="{ 'completed': category.solo_result === 'COMPLETED' }">
-                    {{ category.category_name }}
-                </button>
-            </div> -->
 
           <div class="success_graph">
             <!-- <div class="donut" data-percent="85.4"> -->
@@ -26,13 +17,8 @@
             </div>
           </div>
           <div class="categories">
-            <button
-              ref="categori_btn_component"
-              class="category_btn"
-              v-for="category in categories"
-              :key="category.id"
-              :class="{ completed: category.isActive === 'ture' }"
-            >
+            <button ref="categori_btn_component" class="category_btn" v-for="category in categories" :key="category.id"
+              :class="{ completed: category.isActive === 'ture' }" @click="proofSolo(category.id)">
               {{ category.name }}
             </button>
           </div>
@@ -47,25 +33,13 @@
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템 -->
-              <div
-                class="carousel_item"
-                v-for="(item, index) in competData"
-                :key="index"
-              >
+              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
                 <!--sender부분-->
                 <div class="player1">
-                  <img
-                    :src="item.sender_user_img"
-                    alt="sender image"
-                    class="player_img"
-                  />
+                  <img :src="item.sender_user_img" alt="sender image" class="player_img" />
                   <p>{{ item.sender_user_nickname }}</p>
-                  <button
-                    v-if="
-                      item.sender_isCurrentUser && !item.sender_authenticated
-                    "
-                    @click="authenticate(item)"
-                  >
+                  <button v-if="item.sender_isCurrentUser && !item.sender_authenticated
+                    " @click="authenticate(item)">
                     인증하기
                   </button>
                   <div v-else-if="item.sender_authenticated">인증 완료</div>
@@ -77,19 +51,11 @@
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img
-                    :src="item.receiver_user_img"
-                    alt="receiver image"
-                    class="player_img"
-                  />
+                  <img :src="item.receiver_user_img" alt="receiver image" class="player_img" />
                   <p>{{ item.receiver_user_nickname }}</p>
-                  <button
-                    v-if="
-                      item.receiver_isCurrentUser &&
-                      !item.receiver_authenticated
-                    "
-                    @click="authenticate(item)"
-                  >
+                  <button v-if="item.receiver_isCurrentUser &&
+                    !item.receiver_authenticated
+                    " @click="authenticate(item)">
                     인증하기
                   </button>
                   <div v-else-if="item.receiver_authenticated">인증 완료</div>
@@ -102,24 +68,17 @@
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span
-                v-for="(item, index) in items"
-                :key="index"
-                :class="{ active: index === currentIndex }"
-                @click="goTo(index)"
-              ></span>
+              <span v-for="(item, index) in items" :key="index" :class="{ active: index === currentIndex }"
+                @click="goTo(index)"></span>
             </div>
           </div>
         </div>
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <Modal
-      v-if="showModal"
-      :show="showModal"
-      @uploadImage="handleUpload"
-      @update:show="showModal = $event"
-    />
+    <Modal v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
+    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleImageUpload"
+      :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
   
@@ -129,14 +88,28 @@ import { useRouter } from "vue-router";
 import { useCompetionStore } from "@/stores/competition";
 import { useUserStorageStore } from "@/stores/userStorage";
 import { useSoloStore } from "@/stores/solo";
+import { useLoginStore } from "@/stores/login";
+import PopUpProofPicture from "../PopUp/PopUpProofPicture.vue";
+
 const userStorage = useUserStorageStore();
-import proofCompet from "@/components/PopUp/PopUpProofPictureCompet.vue";
-import Chart from "chart.js/auto";
-
-const soloStore = useSoloStore();
-const todayChallenges = ref([]);
-
 const competitionStore = useCompetionStore();
+const soloStore = useSoloStore();
+const loginStore = useLoginStore();
+
+const todayChallenges = ref([]);
+const userId = ref(null);
+
+const competData = ref([]);
+const currentIndex = ref(0);
+const router = useRouter();
+const chartRef = ref(null);
+const isTestModalOpen = ref(false);
+
+const solo_progress = ref(35);
+
+// const donut = document.querySelector(".donut");
+// donut.data-percent = totalMinwon;
+// donut.style.background = `conic-gradient(#3F8BC9 0% ${totalMinwon}%, #F2F2F2 ${totalMinwon}% 100%)`;
 const categories = ref([
   { id: 1, name: "기상", isActive: false },
   { id: 2, name: "알고리즘", isActive: false },
@@ -168,16 +141,22 @@ const items = ref([
     challenge_status2: "진행중",
   },
 ]);
-const competData = ref([]);
-const currentIndex = ref(0);
-const router = useRouter();
-const chartRef = ref(null);
 
-const solo_progress = ref(35);
+// 솔로모드 인증 바로가기
+const proofSolo = function (categoryId) {
+  userId.value = loginStore.loginUser
+  const challenge = { user_id: userId, category_id: categoryId };
+  soloStore.soloChallenge(challenge);
+  openTestModal()
+};
+// 인증 모달창
+const openTestModal = () => {
+  isTestModalOpen.value = true;
+};
+const closeTestModal = () => {
+  isTestModalOpen.value = false;
+};
 
-// const donut = document.querySelector(".donut");
-// donut.data-percent = totalMinwon;
-// donut.style.background = `conic-gradient(#3F8BC9 0% ${totalMinwon}%, #F2F2F2 ${totalMinwon}% 100%)`;
 
 // 인증 상태를 확인하는 함수
 const isAuthenticated = (authImage) => {
@@ -298,7 +277,7 @@ const solo_percent = ref(0);
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
-  const userId = userInformation.user_Id;
+  const userId = ref(userInformation.user_id);
   if (userId) {
     soloStore
       .soloToday(userId)
@@ -445,6 +424,7 @@ onMounted(() => {
   border: 1px solid black;
   /* --donut-font-size: 16px; */
 }
+
 .donut_percent {
   color: #2e2e2e;
   width: 70%;
