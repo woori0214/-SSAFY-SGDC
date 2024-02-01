@@ -3,34 +3,40 @@
     <div class="back-ground-body">
       <!-- <img src="./assets/backimg1.png" class="back-main-item"> -->
       <div class="back-side-item" v-if="web_width > 1070">
-        <img src="./assets/jitensya_kuma.png" alt="" class="bear" v-if="web_width > 1470">
-        <img src="./assets/cloud_side_left.png" alt="" class="cloud_left">
-        <img src="./assets/coster.png" alt="" class="coster">
+        <img
+          src="./assets/jitensya_kuma.png"
+          alt=""
+          class="bear"
+          v-if="web_width > 1470"
+        />
+        <img src="./assets/cloud_side_left.png" alt="" class="cloud_left" />
+        <img src="./assets/coster.png" alt="" class="coster" />
       </div>
       <div class="back-side-item" v-if="web_width > 1070">
-        <img src="./assets/pinokio.png" alt="" class="pinokio" v-if="web_width > 1470">
-        <img src="./assets/cloud_side_right.png" alt="" class="cloud_right">
-        <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel">
+        <img
+          src="./assets/pinokio.png"
+          alt=""
+          class="pinokio"
+          v-if="web_width > 1470"
+        />
+        <img src="./assets/cloud_side_right.png" alt="" class="cloud_right" />
+        <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel" />
       </div>
     </div>
     <div id="main-body">
       <header>
         <div class="wrapper">
           <div class="headbar">
-            
-            <BackGroundMusic></BackGroundMusic>
             <HeaderNav></HeaderNav>
           </div>
           <div class="nav-wrapper">
             <nav>
               <RouterLink to="/">Main</RouterLink>
-              <RouterLink to="/competition">Competition</RouterLink>
-              <RouterLink to="/solo">Solo</RouterLink>
-              <RouterLink to="/feed">Feed</RouterLink>
-              <RouterLink to="/feeddetail">FeedDetail</RouterLink>
-              <RouterLink :to="{ name: 'MyPage', params: { userId: user_id } }">MyPage</RouterLink>
-              <RouterLink to="/login">Login</RouterLink>
-              <RouterLink to="/signup">SignUp</RouterLink>
+              <a href="#" @click="handleNavigation('/competition')"
+                >Competition</a
+              >
+              <a href="#" @click="handleNavigation('/solo')">Solo</a>
+              <a href="#" @click="handleNavigation('/feed')">Feed</a>
             </nav>
           </div>
         </div>
@@ -38,6 +44,21 @@
       <br />
       <RouterView />
     </div>
+    <!-- 개발용 라우터 바 -->
+    <div class="developBar">
+      <RouterLink to="/">Main</RouterLink>
+      <RouterLink to="/competition">Competition</RouterLink>
+      <RouterLink to="/solo">Solo</RouterLink>
+      <RouterLink to="/feed">Feed</RouterLink>
+      <RouterLink to="/feeddetail">FeedDetail</RouterLink>
+      <RouterLink :to="{ name: 'MyPage', params: { userId: user_id } }"
+        >MyPage</RouterLink
+      >
+      <RouterLink to="/login">Login</RouterLink>
+      <RouterLink to="/signup">SignUp</RouterLink>
+    </div>
+    <!-- 개발용 라우터 바 End-->
+
     <div class="ServiceInformation">
       <div>싸강두천 - 천재들의 싸움은 외나무다리에서 피어난다</div>
       <div>Frontend : 오화석 김태범 홍지은</div>
@@ -48,17 +69,18 @@
 
 <script setup>
 import { RouterLink, RouterView } from "vue-router";
-import BackGroundMusic from "./components/Common/BackGroundMusic.vue";
+import router from "@/router";
 import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
 import HeaderNav from "./components/Common/HeaderNav.vue";
 import { useLoginStore } from "./stores/login";
+import { useUserStorageStore } from "./stores/userStorage";
 
 //로그인된 유저 정보
-const login = useLoginStore()
+const login = useLoginStore();
 
 // const user_id = login.loginUser
-const user_id = 1
+const user_id = 1;
 
 const web_width = ref(window.innerWidth);
 
@@ -66,9 +88,20 @@ const handleWidth = () => {
   web_width.value = window.innerWidth;
 };
 
+const tmp_flag = ref(false);
+
+const handleNavigation = (to) => {
+  const userStorage = useUserStorageStore();
+  if (userStorage.getUserInformation().user_id.value != null) {
+    router.push(to);
+  } else {
+    alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
+  }
+};
+
 onMounted(() => {
-  window.addEventListener('resize', handleWidth);
-})
+  window.addEventListener("resize", handleWidth);
+});
 </script>
 
 <style scoped>
@@ -120,7 +153,6 @@ onMounted(() => {
 }
 
 #main-body {
-
   z-index: 1;
 
   max-width: 1000px;
@@ -141,8 +173,6 @@ onMounted(() => {
   position: fixed;
   width: 100vw;
   height: calc(100vh - 139px);
-  ;
-
   z-index: -6;
 }
 
@@ -161,31 +191,34 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
 }
-
+.wrapper {
+  margin-inline: 8px;
+}
 .nav-wrapper {
-  background-color: #fff; 
+  background-color: #fff;
   border-radius: 15px;
-  overflow: hidden; 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 nav {
+  /* border: 2px solid red; */
   display: flex;
-  justify-content: space-between; 
+  justify-content: flex-start;
   align-items: center;
-  margin: 20px 0;
 }
 
 nav a {
+  /* border: 2px solid green; */
   text-decoration: none;
   color: black;
   padding: 10px 15px;
   border-radius: 5px;
   transition: background-color 0.3s ease;
-  margin: 5px;
-
+  margin-inline: 10px;
   &:hover {
     background-color: #83b0e1;
+    color: #fff;
   }
 }
 
@@ -196,7 +229,30 @@ nav a {
   align-items: center;
 }
 
-.ServiceInformation{
+.developBar {
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #c1d8f0;
+}
+.developBar a {
+  border-radius: 5px;
+  background-color: #e1ecf7;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  padding-block: 3px;
+}
+.developBar a:hover {
+  background-color: #83b0e1;
+  color: #f8f9fb;
+}
+.ServiceInformation {
   position: absolute;
   bottom: 0px;
   right: 0px;
