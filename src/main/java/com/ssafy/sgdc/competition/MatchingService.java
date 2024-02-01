@@ -1,12 +1,12 @@
 package com.ssafy.sgdc.competition;
 
 import com.ssafy.sgdc.category.CategoryRepo;
-import com.ssafy.sgdc.domain.entity.Matching;
-import com.ssafy.sgdc.domain.entity.enums.CompetKind;
-import com.ssafy.sgdc.domain.entity.enums.IsSender;
-import com.ssafy.sgdc.domain.entity.enums.MatchStatus;
+
 import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
+import entity.enums.CompetKind;
+import entity.enums.IsSender;
+import entity.enums.MatchStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,7 @@ public class MatchingService {
     @Autowired
     private CategoryRepo categoryRepo;
 
-    public Matching sendRandomMatching(Long userId, Long categoryId) {
+    public Matching sendRandomMatching(int userId, int categoryId) {
         User user = userRepo.findByUserId(userId);
 
         if (user.getChallengeCnt() > 0) {
@@ -59,15 +59,15 @@ public class MatchingService {
 
     }
 
-    private User getRandomUser(Long userId) {
+    private User getRandomUser(int userId) {
 
-        Long minId = userRepo.findMinUserId();
-        Long maxId = userRepo.findMaxUserId();
+        int minId = userRepo.findMinUserId();
+        int maxId = userRepo.findMaxUserId();
         Random random = new Random();
 
         User randomUser;
         do {
-            long randomId = minId + (long) (random.nextDouble() * (maxId - minId));
+            int randomId = minId + (int) (random.nextDouble() * (maxId - minId));
             randomUser = userRepo.findByUserId(randomId);
         } while (randomUser == null || randomUser.getUserId() == userId);
 
