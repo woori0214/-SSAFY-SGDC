@@ -14,13 +14,6 @@
                     <img :src="mypageUser.user_img" alt="use_img" class="user_img">
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
-                <!-- <div v-if="user.user_id != loginUser" class="myprofile_btns"> -->
-                <div class="myprofile_btns">
-                    <button class="myprofile_btn" @click="send">도전장 보내기</button>
-                    <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
-                    <button @click="toggleFollow(loginUser)" class="ssallow_btn">{{
-                        getButtonText(ssallowing.isFollowing) }}</button>
-                </div>
                 <!-- <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns"> -->
                 <div class="myprofile_btns">
                     <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
