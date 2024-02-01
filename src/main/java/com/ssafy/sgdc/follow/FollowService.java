@@ -13,18 +13,21 @@ import java.util.List;
 public interface FollowService {
 
     // 팔로잉
-    void follow(Long toUserId, Long fromUserId);
+    void follow(int toUserId, int fromUserId);
 
     // 팔로워
-    void unFollow(Long toUserId, Long fromUserId);
+    void unFollow(int toUserId, int fromUserId);
 
     // 팔로잉 조회
-    List<FollowingListResponseDto> followingList(Long fromUserId);
+    List<FollowingListResponseDto> followingList(int fromUserId);
 
     // 팔로워 리스트
-    List<FollowerListResponseDto> followerList(Long toUserId);
+    List<FollowerListResponseDto> followerList(int toUserId);
 
     // 팔로잉,팔로워 수 조회
-    Long followingCount(User userId); // 팔로잉 수
-    Long followerCount(User userId); // 팔로워 수
+    int followingCount(User userId); // 팔로잉 수
+    int followerCount(User userId); // 팔로워 수
+
+    // 팔로우했는지 확인
+    boolean isFollow(User userId, User followingId);
 }

@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class FollowCountDto {
 
-    private Long followerCount;
-    private Long followingCount;
+    private int followerCount;
+    private int followingCount;
 
-    public FollowCountDto(Long followerCount, Long followingCount) {
+    public FollowCountDto(int followerCount, int followingCount) {
         this.followerCount=followerCount;
         this.followingCount=followingCount;
     }

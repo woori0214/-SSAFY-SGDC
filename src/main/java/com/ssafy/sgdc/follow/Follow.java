@@ -23,7 +23,7 @@ public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "friend_id")
-    private long friendId;
+    private int friendId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
