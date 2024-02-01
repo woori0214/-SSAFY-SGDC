@@ -12,7 +12,7 @@ public class UserInfoDto {
     private int userSsafyId;
     private String userNickname;
     private String userImg;
-    private long badgeId;
+    private int badgeId;
     private int challengeCnt;
     private int complainCnt;
 }
