@@ -14,16 +14,23 @@
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
                 <!-- <div v-if="user.user_id != loginUser" class="myprofile_btns"> -->
-                    <div class="myprofile_btns">
-                        <button class="myprofile_btn" @click="send">도전장 보내기</button>
-                        <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
-                        <button @click="toggleFollow(loginUser)" class="ssallow_btn">{{
-                            getButtonText(ssallowing.isFollowing) }}</button>
-                    </div>
+                <div class="myprofile_btns">
+                    <button class="myprofile_btn" @click="send">도전장 보내기</button>
+                    <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
+                    <button @click="toggleFollow(loginUser)" class="ssallow_btn">{{
+                        getButtonText(ssallowing.isFollowing) }}</button>
+                </div>
                 <!-- </div> -->
                 <div v-if="user.user_id === loginUser" class="myprofile_btns">
                     <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
-                    <button class="myprofile_btn" @click="">마이페이지 수정</button>
+
+                    <RouterLink to="/mypageupdate" tag="button" class="myprofile_btn"
+                        style="text-decoration: none; text-align: center; display: flex; flex-direction: column; align-items: center;">
+
+                        <span style="margin-top: auto; margin-bottom: auto;">마이페이지 수정</span>
+
+                    </RouterLink>
+
                 </div>
             </div>
             <div class="follow_cnt">
@@ -39,7 +46,7 @@
             <div v-if="isMailboxOpen" class="popup_mailbox">
                 <div class="mailbox_content">
                     <CompetitionMailbox />
-                    <button @click="isMailboxOpen=false" class="mailbox_close_btn">close</button>
+                    <button @click="isMailboxOpen = false" class="mailbox_close_btn">close</button>
                 </div>
             </div>
         </div>
@@ -50,12 +57,13 @@
 import { ref, computed } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
 import CompetitionMailbox from '@/components/Competition/CompetitionMailbox.vue';
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const user = ref([])
 
 export default {
     props: ['userData', 'ssallowingData', 'ssallowerData', 'loginUser'],
-    
+
     setup(props, { emit }) {
         const badgeStore = useBadgeStore();
         const user = ref(props.userData);
@@ -63,7 +71,9 @@ export default {
         const ssallowing = ref(props.ssallowingData);
         const ssallower = ref(props.ssallowerData);
         const isMailboxOpen = ref(false);
-
+        const openMypageUpdate = () => {
+            router
+        }
         // console.log(user.value)
         const sendSsallowingRequest = () => {
             const ssallowing = { user_id: user.value.user_id, following_id: user.value.user_id };
@@ -77,7 +87,7 @@ export default {
         });
 
         // 도전장함
-        const openCompetMailbox = function() {
+        const openCompetMailbox = function () {
             isMailboxOpen.value = true;
         }
 
@@ -118,10 +128,11 @@ export default {
         const getButtonText = (isFollowing) => {
             return isFollowing ? '언쌀로우' : '쌀로우';
         };
-        return { user, ssallowing, ssallower, userBadgeImage,isMailboxOpen, 
+        return {
+            user, ssallowing, ssallower, userBadgeImage, isMailboxOpen,
             sendSsallowingRequest, openCompetMailbox, goUnssallow, goSsallowing,
             toggleFollow, getButtonText,
-         };
+        };
     },
     components: { CompetitionMailbox }
 }
@@ -200,11 +211,11 @@ export default {
     color: white;
     width: auto;
     height: 40px;
-    
+
     /* 버튼 크기를 뷰포트 단위로 설정 */
-    width: 15vw; 
-    height: 8vh; 
-    font-size: 1.5vw; 
+    width: 15vw;
+    height: 8vh;
+    font-size: 1.5vw;
 }
 
 .follow_cnt {
@@ -298,9 +309,11 @@ export default {
     }
 
     .myprofile_btn {
-        width: 40vw; /* 너비를 화면 너비의 40%로 조정 */
-        height: 8vh; /* 높이를 화면 높이의 8%로 조정 */
-        font-size: 3.5vw; 
+        width: 40vw;
+        /* 너비를 화면 너비의 40%로 조정 */
+        height: 8vh;
+        /* 높이를 화면 높이의 8%로 조정 */
+        font-size: 3.5vw;
     }
 
     .mailbox_content {

@@ -71,32 +71,41 @@ const userInformation = userStorage.getUserInformation();
 const userId = userInformation.user_Id;
 
 const openRandomMatchingModal = () => {
-  if (selectedCategory !== null) {
-    const randomSendData = {
-      category_id: selectedCategory.value,
-      user_id: userId,
-    };
-    console.log('도전장', randomSendData);
-    // Add logic to handle the random matching modal
-    competSelect
-      .randomSend(randomSendData)
-      .then((response) => {
-        console.log('Random matching request sent successfully:', response);
-      })
-      .catch((error) => {
-        console.error('Error sending random matching request:', error);
-      });
+  if (selectedCategory.value === null) {
+    alert("카테고리를 선택해주세요.");
+    return;
   }
+
+  const randomSendData = {
+    category_id: selectedCategory.value,
+    user_id: userId,
+  };
+
+  competSelect
+    .randomSend(randomSendData)
+    .then((response) => {
+      console.log('Random matching request sent successfully:', response);
+      // 여기에 매칭 성공 시 수행할 로직을 추가할 수 있습니다.
+    })
+    .catch((error) => {
+      console.error('Error sending random matching request:', error);
+      // 오류 처리 로직을 추가할 수 있습니다.
+    });
 
   isRandomMatchingModalVisible.value = true;
   modalType.value = 'randomMatching';
 };
 
 const openFriendMatchingModal = () => {
-  if (selectedCategory !== null) {
-    isFriendMatchingModalVisible.value = true;
-    modalType.value = 'friendMatching';
+  if (selectedCategory.value === null) {
+    // 카테고리가 선택되지 않았을 경우 경고 메시지 표시
+    alert("카테고리를 선택해주세요.");
+    return; // 함수 실행 중지
   }
+
+  // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
+  isFriendMatchingModalVisible.value = true;
+  modalType.value = 'friendMatching';
 };
 
 const closeModal = () => {
@@ -115,12 +124,12 @@ const selectCategory = (categoryId) => {
   width: 100%;
   display: flex;
   flex-direction: column;
-  
+
   /* margin: auto; */
 }
 
 .select_category {
-  background-color:#e1ecf7;
+  background-color: #e1ecf7;
   border: 2px solid #e1ecf7;
   width: 93%;
   /* margin: auto; */
@@ -154,8 +163,10 @@ const selectCategory = (categoryId) => {
 
 #matching_btn_list {
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  align-items: center; /* 가운데 정렬 */
+  flex-direction: column;
+  /* 세로 방향으로 정렬 */
+  align-items: center;
+  /* 가운데 정렬 */
   background-color: #e1ecf7;
   border: 2px solid #e1ecf7;
   border-radius: 25px;
@@ -166,14 +177,18 @@ const selectCategory = (categoryId) => {
 }
 
 .matching_title {
-  margin-bottom: 15px; /* 제목과 버튼 사이 간격 조정 */
-  font-size: 1em; /* 글꼴 크기 조정 */
+  margin-bottom: 15px;
+  /* 제목과 버튼 사이 간격 조정 */
+  font-size: 1em;
+  /* 글꼴 크기 조정 */
 }
 
 .buttons_container {
   display: flex;
-  justify-content: space-around; /* 버튼들을 균등하게 분배 */
-  width: 100%; /* 컨테이너 너비를 전체로 설정 */
+  justify-content: space-around;
+  /* 버튼들을 균등하게 분배 */
+  width: 100%;
+  /* 컨테이너 너비를 전체로 설정 */
 }
 
 #matching_btn {
@@ -182,10 +197,11 @@ const selectCategory = (categoryId) => {
   border-radius: 25px;
   flex: 13;
   background-color: #83b0e1;
- 
+
 }
 
 .matching_btn_gap {
-  display: none; /* 별도 간격 요소 제거 */
+  display: none;
+  /* 별도 간격 요소 제거 */
 }
 </style>
