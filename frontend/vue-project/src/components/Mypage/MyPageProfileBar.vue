@@ -8,6 +8,7 @@
             </div>
         </div>
         <div class="middle">
+            <!--사용자 이미지, 버튼-->
             <div class="middle1">
                 <div class="user_img_badge">
                     <img :src="mypageUser.user_img" alt="use_img" class="user_img">
@@ -16,10 +17,7 @@
                 <!-- <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns"> -->
                 <div class="myprofile_btns">
                     <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
-                    <button class="myprofile_btn" @click="sendSsallowingRequest">쌀로우 신청</button>
-                    <button @click="toggleFollow(loginUser)" class="ssallow_btn">
-                        {{ getButtonText(ssallowing.isFollowing) }}
-                    </button>
+                    <button @click="toggleFollow()" class="myprofile_btn">{{ getButtonText(isFollowing) }} </button>
                 </div>
                 <!-- </div> -->
                 <div v-if="mypageUser.user_id === loginUser" class="myprofile_btns">
@@ -27,22 +25,27 @@
                     <button class="myprofile_btn" @click="">마이페이지 수정</button>
                 </div>
             </div>
+            <!--팔로우 수-->
             <div class="follow_cnt">
                 <div class="follow_div">
-                    <h1>{{ ssallower.length }}</h1>
+                    <h1>{{ ssallower_cnt }}</h1>
                     <h3>쌀로워 수</h3>
                 </div>
                 <div class="follow_div">
-                    <h1>{{ ssallowing.length }}</h1>
+                    <h1>{{ ssallowing_cnt }}</h1>
                     <h3>쌀로잉 수</h3>
                 </div>
             </div>
+
+            <!--도전장함-->
             <div v-if="isMailboxOpen" class="popup_mailbox">
                 <div class="mailbox_content">
                     <CompetitionMailbox />
                     <button @click="isMailboxOpen = false" class="mailbox_close_btn">close</button>
                 </div>
             </div>
+
+            <!--도전장 보내기-->
             <div v-if="isopenSendMsg" class="popup_sendmsg">
                 <div class="sendmsg_content">
                     <h3>카테고리를 선택해주세요</h3>
@@ -64,9 +67,10 @@
 </template>
 
 <script>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
 import { useCompetionStore } from '@/stores/competition';
+import { useFollowStore } from '@/stores/follow';
 import CompetitionMailbox from '@/components/Competition/CompetitionMailbox.vue';
 
 // 카테고리 이미지
@@ -80,9 +84,9 @@ import fightingImage from '@/assets/fighting.png';
 const mypageUser = ref([])
 
 export default {
-    props: ['userData', 'ssallowingData', 'ssallowerData', 'loginUser'],
+    props: ['userData', 'loginUser'],
 
-    setup(props, { emit }) {
+    setup(props) {
         const categories = ref([
             {
                 id: 1,
@@ -124,20 +128,22 @@ export default {
 
         const badgeStore = useBadgeStore();
         const competStore = useCompetionStore();
+        const followStore = useFollowStore();
+
         const mypageUser = ref(props.userData);
         const loginUser = ref(props.loginUser);
-        const ssallowing = ref(props.ssallowingData);
-        const ssallower = ref(props.ssallowerData);
-        const isMailboxOpen = ref(false);
-        const isopenSendMsg = ref(false);
+        
+        // 나중에 주석 풀기
+        // const ssallowing_cnt = ref(null);
+        // const ssallower_cnt = ref(null);
+        const ssallowing_cnt = ref(3);
+        const ssallower_cnt = ref(2);
         const selectedCategory = ref(null);
 
-        // console.log(user.value)
-        const sendSsallowingRequest = () => {
-            const ssallowing = { user_id: mypageUser.value.user_id, following_id: mypageUser.value.user_id };
-            // 클릭 이벤트 발생 시 plusSsallowing 함수 호출
-            emit('ssallowing-request', ssallowing);
-        };
+        const isMailboxOpen = ref(false);
+        const isopenSendMsg = ref(false);
+        const isFollowing = ref(false);
+
         // 사용자의 뱃지 이미지 찾기
         const userBadgeImage = computed(() => {
             const badge = badgeStore.badgeList.find(badge => badge.badge_id === mypageUser.value.badge_id);
@@ -178,54 +184,78 @@ export default {
 
         };
 
-
-        const goUnssallow = function (followingId) {
-            const unssallow_info = { user_id: mypageUser.value, following_id: followingId };
-            follow.deleteSsallowing(unssallow_info)
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        };
-
-        // // 쌀로우 버튼 클릭 시 상태 변경 및 처리
-        const goSsallowing = function (followId) {
-            const ssallowing_info = { user_id: userId.value, following_id: followId }
-            follow.plusSsallowing(ssallowing_info)
-                .then((res) => {
-                    console.log(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                })
-        }
-
         // 버튼 토글
-        const toggleFollow = (ssallow) => {
-            ssallow.isFollowing = !ssallow.isFollowing;
-            if (ssallow.isFollowing) {
-                goSsallowing(ssallow.user_id);
+        const toggleFollow = () => {
+            isFollowing.value = !isFollowing.value;
+            if (isFollowing.value) {
+                goSsallowing();
             } else {
-                goUnssallow(ssallow.user_id);
+                goUnssallow();
             }
         };
 
+        const goSsallowing = function () {
+            const ssallowingData = { user_id: mypageUser.value.user_id, following_id: loginUser.value };
+            followStore.plusSsallowing(ssallowingData)
+                .then((res) => {
+                    console.log(res);
+                    console.log('팔로우됨');
+                })
+                .catch((err) => {
+                    console.log(err);
+                })
+        };
+
+        const goUnssallow = function () {
+            const UnssallowingData = { user_id: mypageUser.value.user_id, following_id: loginUser.value };
+            followStore.deleteSsallowing(UnssallowingData)
+                .then((res) => {
+                    console.log(res);
+                    console.log('언팔함')
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+        }
         // 버튼 텍스트
         const getButtonText = (isFollowing) => {
             return isFollowing ? '언쌀로우' : '쌀로우';
         };
+
+        onMounted(() => {
+            // 페이지 열었을 때 쌀로우 수
+            followStore.getSsallowCount(mypageUser)
+                .then((res) => {
+                    ssallowing_cnt.value = res.data.followingCount
+                    ssallower_cnt.value = res.data.followerCount
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+            
+            // 팔로우 했는지 안했는지 확인
+            const checkusers = {user_id: mypageUser.value, following_id: loginUser.value}
+            followStore.checkSsallowing(checkusers)
+                .then((res) => {
+                    isFollowing.value = res.success
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+        });
+
         return {
             categories,
             mypageUser, loginUser,
             userBadgeImage,
             isopenSendMsg,
-            ssallowing, ssallower, isMailboxOpen,
+            ssallowing_cnt, ssallower_cnt,
+            isMailboxOpen,
+            isFollowing,
             toggleFollow, getButtonText,
             openSendMsg, selectCategory, sendmsg,
             openCompetMailbox,
-            sendSsallowingRequest, goUnssallow, goSsallowing,
         };
     },
     components: { CompetitionMailbox }
@@ -305,6 +335,8 @@ export default {
     color: white;
     width: auto;
     height: 40px;
+    font-size: medium;
+    font-weight: bolder;
 }
 
 .follow_cnt {
@@ -462,9 +494,7 @@ export default {
 @media (max-width: 320px) {
 
     .popup_mailbox,
-    .popup_sendmsg {
-
-    }
+    .popup_sendmsg {}
 
     .mailbox_content,
     .sendmsg_content {

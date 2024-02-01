@@ -7,7 +7,6 @@
           <div class="solo_head_item">솔로 모드 현황</div>
         </div>
         <div class="solo_board">
-
           <div class="success_graph">
             <!-- <div class="donut" data-percent="85.4"> -->
             <div class="donut">
@@ -76,8 +75,8 @@
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <Modal v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
-    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleImageUpload"
+    <PopUpProofPictureCompet v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
+    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleUpload"
       :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
@@ -90,6 +89,7 @@ import { useUserStorageStore } from "@/stores/userStorage";
 import { useSoloStore } from "@/stores/solo";
 import { useLoginStore } from "@/stores/login";
 import PopUpProofPicture from "../PopUp/PopUpProofPicture.vue";
+import PopUpProofPictureCompet from "../PopUp/PopUpProofPictureCompet.vue";
 
 const userStorage = useUserStorageStore();
 const competitionStore = useCompetionStore();
@@ -104,6 +104,8 @@ const currentIndex = ref(0);
 const router = useRouter();
 const chartRef = ref(null);
 const isTestModalOpen = ref(false);
+const showModal = ref(false);
+const selectedCategory = ref(null);
 
 const solo_progress = ref(35);
 
@@ -145,6 +147,7 @@ const items = ref([
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId) {
   userId.value = loginStore.loginUser
+  selectedCategory.value = categoryId
   const challenge = { user_id: userId, category_id: categoryId };
   soloStore.soloChallenge(challenge);
   openTestModal()
@@ -219,6 +222,7 @@ const slideStyle = computed(() => {
     transform: `translateX(-${currentIndex.value * 100}%)`,
   };
 });
+
 const handleUpload = (imageSrc) => {
   const data = {
     user_id: selectedCompetItem.value.userId,
