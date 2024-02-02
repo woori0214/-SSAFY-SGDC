@@ -17,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-
 @Slf4j
 @EnableWebSecurity
 @Configuration
@@ -37,18 +36,23 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http
-                .httpBasic((basic) -> basic.authenticationEntryPoint(entryPoint))
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
 
                         (authorize) -> authorize
-                                .requestMatchers("/api/v1/user/signup/").permitAll()
-                                .requestMatchers("/api/v1/user/login/").permitAll()
-                                .anyRequest().authenticated()
-
+//                                .requestMatchers("/api/v1/user/signup/").permitAll()
+//                                .requestMatchers("/api/v1/user/login/").permitAll()
+//                                .requestMatchers("/api/v1/user/re-auth/").permitAll()
+//                                .anyRequest().authenticated()
+                                .anyRequest().permitAll()
                 )
-                .exceptionHandling(Customizer.withDefaults())
+                .exceptionHandling((exceptionHandling) ->
+                        exceptionHandling.authenticationEntryPoint(entryPoint) //customEntryPoint
+//                                .accessDeniedHandler(jwtAccessDeniedHandler) // cutomAccessDeniedHandler
+                )
+//                .exceptionHandling(Customizer.withDefaults())
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true))
