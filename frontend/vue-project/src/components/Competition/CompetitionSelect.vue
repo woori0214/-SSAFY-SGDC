@@ -3,7 +3,7 @@
     <div class="select_category">
       <p>STEP1. 카테고리를 선택해주세요</p>
       <div class="category_list_box">
-        <button v-for="category in MyCategories" :key="category.id" :class="{ active: selectedCategory === category.id }"
+        <button v-for="category in Categories" :key="category.id" :class="{ active: selectedCategory === category.id }"
           @click="selectCategory(category.id)" class="category-button">
           {{ category.name }}
         </button>
@@ -19,20 +19,28 @@
       </div>
     </div>
 
-    <PopUpRequestMessage :showModal="isRandomMatchingModalVisible || isFriendMatchingModalVisible" :close="closeModal"
-      :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null" :user_id="userId" />
+    <PopUpRequestMessage :showModal="isRandomMatchingMessageVisible || isFriendMatchingMessageVisible"
+      :close="closeMessage" :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
+      :user_id="userId" :friendId="selectedFriendId" />
+
+    <PopUpFriendsList :userId="userId" 
+    :showModal="isFriendMatchingListVisible" 
+    :Listclose="closeFriendsList"
+      :selectedCategory="selectedCategory !== null ? selectedCategory : null" 
+      @friend-selected="handleFriendSelect" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import PopUpRequestMessage from '@/components/PopUp/PopUpRequestMessage.vue';
 import { useCompetionStore } from '@/stores/competition';
-
 import { useUserStorageStore } from '@/stores/userStorage';
 
-const MyCategories = ref([
+import PopUpRequestMessage from '@/components/PopUp/PopUpRequestMessage.vue';
+import PopUpFriendsList from '@/components/PopUp/PopUpFriendsList.vue';
+
+const Categories = ref([
   {
     id: 1,
     name: '기상',
@@ -60,16 +68,21 @@ const MyCategories = ref([
 ]);
 
 const router = useRouter();
-const isRandomMatchingModalVisible = ref(false);
-const isFriendMatchingModalVisible = ref(false);
-const modalType = ref('');
-const selectedCategory = ref(null);
-
 const competSelect = useCompetionStore();
 const userStorage = useUserStorageStore();
 const userInformation = userStorage.getUserInformation();
-const userId = userInformation.user_Id;
 
+const isRandomMatchingMessageVisible = ref(false);
+const isFriendMatchingMessageVisible = ref(false);
+const isFriendMatchingListVisible = ref(false);
+
+const modalType = ref('');
+const selectedCategory = ref(null);
+const selectedFriendId = ref(null);
+
+const userId = userInformation.user_id;
+
+// 랜덤 매칭
 const openRandomMatchingModal = () => {
   if (selectedCategory.value === null) {
     alert("카테고리를 선택해주세요.");
@@ -92,27 +105,41 @@ const openRandomMatchingModal = () => {
       // 오류 처리 로직을 추가할 수 있습니다.
     });
 
-  isRandomMatchingModalVisible.value = true;
+  isRandomMatchingMessageVisible.value = true;
   modalType.value = 'randomMatching';
 };
 
+const closeMessage = () => {
+  isRandomMatchingMessageVisible.value = false;
+  isFriendMatchingMessageVisible.value = false;
+  modalType.value = '';
+};
+
+// 친구 매칭
 const openFriendMatchingModal = () => {
   if (selectedCategory.value === null) {
     // 카테고리가 선택되지 않았을 경우 경고 메시지 표시
     alert("카테고리를 선택해주세요.");
     return; // 함수 실행 중지
   }
-
   // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
-  isFriendMatchingModalVisible.value = true;
+  isFriendMatchingListVisible.value = true;
+  console.log(isFriendMatchingListVisible.value)
   modalType.value = 'friendMatching';
+  console.log(modalType.value)
 };
 
-const closeModal = () => {
-  isRandomMatchingModalVisible.value = false;
-  isFriendMatchingModalVisible.value = false;
-  modalType.value = '';
+// 친구 선택
+const handleFriendSelect = (friendId) => {
+  selectedFriendId.value = friendId;
+  isFriendMatchingMessageVisible.value = true;
+  isFriendMatchingListVisible.value = false;
+  closeFriendsList()
 };
+
+const closeFriendsList = () => {
+  isFriendMatchingListVisible.value = false;
+}
 
 const selectCategory = (categoryId) => {
   selectedCategory.value = selectedCategory.value === categoryId ? null : categoryId;
