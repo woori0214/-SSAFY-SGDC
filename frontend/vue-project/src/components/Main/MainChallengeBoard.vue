@@ -563,7 +563,7 @@ onMounted(() => {
 .category_btn.completed {
   background-color: #4caf50;
   /* 도전 완료된 카테고리의 배경색 */
-  color: white;
+  /* color: white; */
   /* 텍스트 색상 */
 }
 

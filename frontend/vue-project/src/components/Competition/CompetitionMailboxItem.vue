@@ -54,11 +54,11 @@ export default {
   components: {
     PopUpReciverCompetAcceptModal,
   },
-  setup({emit}) {
+  setup() {
     const isAcceptChallenge = ref(false);
 
     const acceptChallenge = () => {
-      $emit("acceptChallenge");
+      // emit("acceptChallenge");
       isAcceptChallenge.value = true;
       console.log(isAcceptChallenge.value);
     };

@@ -24,7 +24,4 @@ onMounted(() => {
 </script>
 
 <style>
-.modal {
-  z-index: 10;
-}
 </style>

@@ -8,25 +8,12 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
-    <!-- <div class="BGM-body">
-      <button @click="SuffleBGM">음악 셔플</button>
-      <button @click="PlayBGM">음악 재생</button>
-      <button @click="PauseBGM">음악 정지</button>
-      <div class="music_title">{{ musicTitle }}</div>
-    </div> -->
-    <!-- <audio
-      src="src/components/Common/bgm/2RainyWeather.mp3"
-      autoplay
-      loop
-      id="myAudio"
-    ></audio> -->
     <button class="audio-btn" @click="OnOffAudio">
       <span v-if="audioStatus" class="material-symbols-outlined audio-btn-icon">
         play_arrow
       </span>
       <span v-if="!audioStatus" class="material-symbols-outlined"> pause </span>
     </button>
-    <!-- <button @click="SuffleMyAudio">음악 바꾸기</button> -->
   </div>
 </template>
 
@@ -90,6 +77,8 @@ const OnOffAudio = () => {
   height: 40px;
   width: 40px;
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 .audio-btn:hover{
   background-color: #aecbeb;
