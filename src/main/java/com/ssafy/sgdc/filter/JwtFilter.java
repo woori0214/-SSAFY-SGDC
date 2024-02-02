@@ -2,15 +2,10 @@ package com.ssafy.sgdc.filter;
 
 import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
-import com.ssafy.sgdc.user.UserService;
 import com.ssafy.sgdc.util.JwtUtil;
-import com.ssafy.sgdc.util.response.Code;
-import com.ssafy.sgdc.util.response.CustomException;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
