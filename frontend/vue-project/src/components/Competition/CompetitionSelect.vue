@@ -4,7 +4,7 @@
       <p>STEP1. 카테고리를 선택해주세요</p>
       <div class="category_list_box">
         <button v-for="category in Categories" :key="category.id" :class="{ active: selectedCategory === category.id }"
-          @click="selectCategory(category.id)" class="category-button">
+          @click="selectCategory(category)" class="category-button">
           {{ category.name }}
         </button>
       </div>
@@ -21,6 +21,7 @@
 
     <PopUpRequestMessage :showModal="isRandomMatchingMessageVisible || isFriendMatchingMessageVisible"
       :close="closeMessage" :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
+      :category_name="selectedCategoryName !== null ? selectedCategoryName : null"
       :user_id="userId" :friendId="selectedFriendId" />
 
     <PopUpFriendsList :userId="userId" 
@@ -78,6 +79,7 @@ const isFriendMatchingListVisible = ref(false);
 
 const modalType = ref('');
 const selectedCategory = ref(null);
+const selectedCategoryName = ref(null);
 const selectedFriendId = ref(null);
 
 const userId = userInformation.user_id;
@@ -141,8 +143,9 @@ const closeFriendsList = () => {
   isFriendMatchingListVisible.value = false;
 }
 
-const selectCategory = (categoryId) => {
-  selectedCategory.value = selectedCategory.value === categoryId ? null : categoryId;
+const selectCategory = (category) => {
+  selectedCategory.value = selectedCategory.value === category.id ? null : category.id;
+  selectedCategoryName.value = selectedCategoryName.value === category.name ? null : category.name;
 };
 </script>
 
