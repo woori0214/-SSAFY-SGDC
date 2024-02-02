@@ -5,11 +5,9 @@ import com.ssafy.sgdc.competition.dto.CompetitionDto;
 import com.ssafy.sgdc.competition.dto.MatchingDto;
 import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
 import com.ssafy.sgdc.competition.dto.request.FriendSendRequest;
-import com.ssafy.sgdc.competition.dto.request.ImageAuthRequest;
 import com.ssafy.sgdc.competition.dto.request.RandomSendRequest;
 import com.ssafy.sgdc.competition.dto.response.*;
 import com.ssafy.sgdc.competition.service.CompetitionService;
-import com.ssafy.sgdc.util.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,15 +77,6 @@ public class CompetitionController {
         );
     }
 
-    @PostMapping("/image-auth")
-    public ResponseEntity<?> imageAuth(@RequestBody ImageAuthRequest imageAuthRequest) {
-        competitionService.saveImageAuth(imageAuthRequest.getUser_id(),
-                imageAuthRequest.getCompet_id(), imageAuthRequest.getAuth_img());
-        return new ResponseEntity<>(Message.builder().status(200)
-                .message("사진 인증 성공").build(),
-                HttpStatus.OK
-        );
-    }
 
     @GetMapping("/finish-compet-list/{userId}")
     public ResponseEntity<?> getFinishCompetList(@PathVariable int userId) {
