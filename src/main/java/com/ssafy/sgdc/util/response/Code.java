@@ -10,7 +10,8 @@ import java.util.Map;
 @AllArgsConstructor
 public enum Code {
     INVALID(HttpStatus.BAD_REQUEST, "잘못 된 값이 입력되었습니다.", null),
-    INVALID_ID_PW(HttpStatus.BAD_REQUEST, "ID와 PW가 맞지 않습니다.", null);
+    INVALID_ID_PW(HttpStatus.BAD_REQUEST, "ID와 PW가 맞지 않습니다.", null),
+    INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "token이 잘못되었거나 만료되었습니다.", null);
     private HttpStatus status;
     private String message;
     private Map<String, String> body;
