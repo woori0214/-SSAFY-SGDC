@@ -1,6 +1,6 @@
 <template>
     <div>
-        <h1>피드 게시판</h1>
+        <!-- <h1>피드 게시판</h1> -->
         <FeedList></FeedList>
     </div>
 </template>

@@ -79,59 +79,9 @@ const OnOffAudio = () => {
     audio.pause();
   }
 };
-
-// const audio = new Audio(sunny1);
-// audio.loop = true;
-
-// const SuffleBGM = () => {
-//   nowMusicNum.value = Math.floor(Math.random() * bgm_lsit.value.length);
-//   audio.src = bgm_lsit.value[nowMusicNum.value].source;
-
-//   musicTitle.value = bgm_lsit.value[nowMusicNum.value].title;
-//   audio.play();
-// };
-
-// const PlayBGM = () => {
-//   musicTitle.value = bgm_lsit.value[nowMusicNum.value].title;
-//   audio.play();
-// };
-
-// const PauseBGM = () => {
-//   audio.pause();
-//   musicTitle.value = "일시 정지 중";
-// };
 </script>
 
 <style>
-/* .BGM-body {
-  display: flex;
-  gap: 10px;
-}
-.audio-body {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-#myAudio {
-  height: 30px;
-  width: 85px;
-}
-#myAudio::-webkit-media-controls-timeline {
-  display: none !important;
-}
-#myAudio::-webkit-media-controls-mute-button {
-  display: none;
-}
-#myAudio::-webkit-media-controls-current-time-display {
-  display: none;
-}
-#myAudio::-webkit-media-controls-time-remaining-display {
-  display: none;
-}
-#myAudio::-webkit-media-controls-panel {
-  -webkit-justify-content: center;
-} */
-
 .audio-btn {
   background-color: #e1ecf7;
   margin-bottom: 5px;

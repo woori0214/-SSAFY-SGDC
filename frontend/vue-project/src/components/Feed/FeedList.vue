@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>피드 리스트</div>
+    <!-- <div>피드 리스트</div> -->
     <div class="feed_container" ref="feedContainer">
       <Feed
         class="feed"
@@ -326,10 +326,10 @@ const plusFeedItem = () => {
   display: flex;
   flex-direction: column;
   gap: 50px;
-  margin: 20px;
+  margin-inline: 20px;
   background-color: #e1ecf7;
   border-radius: 15px;
-  height: calc(100vh - 439px);
+  height: calc(87vh - 180px);
   overflow: auto;
 }
 .feed_frame.feed{
