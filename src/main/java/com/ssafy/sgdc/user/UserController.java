@@ -186,6 +186,7 @@ public class UserController {
         response.put("user_img", user.getUserImg());
         response.put("badge_id", String.valueOf(user.getBadgeId()));
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
+        response.put("user_phone", String.valueOf(user.getUserPhone()));
         response.put("complain_cnt", String.valueOf(user.getComplainCnt()));
 
         return new ResponseEntity<>(GeneralResponse.builder()

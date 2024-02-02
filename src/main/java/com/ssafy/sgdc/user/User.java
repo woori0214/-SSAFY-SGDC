@@ -63,9 +63,6 @@ public class User {
     @Column(name = "badge_id")
     private int badgeId;
 
-    @Column(name = "kakao_push")
-    private Boolean kakaoPush;
-
     @Column(name = "challenge_cnt")
     private int challengeCnt;
 

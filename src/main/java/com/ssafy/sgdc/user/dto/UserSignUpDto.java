@@ -18,5 +18,4 @@ public class UserSignUpDto {
     private String userPassword;
     private String userImg;
     private String userPhone;
-    private Boolean kakaoPush;
 }
