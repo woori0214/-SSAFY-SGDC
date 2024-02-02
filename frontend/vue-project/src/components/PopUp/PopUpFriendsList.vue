@@ -15,9 +15,6 @@
                             <img :src="ssallowing.userImg" alt="" class="popup_ssallowing_img">
                             <h3>{{ ssallowing.userNickname }}</h3>
                         </div>
-                        <div>
-                            <h3>전적</h3>
-                        </div>
                     </div>
                     <button class="popup_ssallowing_btn" @click="sendRequest(ssallowing.userId)">신청</button>
                 </div>
@@ -29,9 +26,6 @@
                             <div class="popup_ssallowing_name">
                                 <img :src="friend.userImg" alt="" class="popup_ssallowing_img">
                                 <h3>{{ friend.userNickname }}</h3>
-                            </div>
-                            <div>
-                                <h3>전적</h3>
                             </div>
                         </div>
                         <button class="popup_ssallowing_btn" @click="sendRequest(friend.userId)">신청</button>
@@ -161,8 +155,14 @@ export default {
 
 .friendList_content {
     background-color: white;
+    max-width: 80%;
+    /* 최대 너비 설정 */
+    max-height: 80%;
+    /* 최대 높이 설정 */
     width: 50%;
-    height: 70%;
+    /* 너비 자동 조절 */
+    height: auto;
+    /* 높이 자동 조절 */
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -173,37 +173,71 @@ export default {
 .find_friends {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    padding: 5px;
 }
 
 .find_friends_input {
     border: #71a5de 2px solid;
-    border-radius: 20px;
-    width: 90%;
+    border-radius: 10px;
+    width: 80%;
     height: 40px;
+    margin: 10px;
     font-size: large;
 }
 
 .find_friends_btn {
-    background: #71a5de;
-    border: #71a5de;
-    color: white;
+    background: #aecbeb;
+    border: #aecbeb;
+    color: black;
     border-radius: 10px;
 
-    width: 5%;
+    width: 100px;
     height: 40px;
+
+    min-width: 50px;
     margin: 10px;
     font-size: large;
     font-weight: bold;
 }
 
+.find_friends_btn:hover {
+    background: #71a5de;
+    border: #71a5de;
+    color: white;
+}
+
 .list_friends {
     height: 60%;
     overflow: auto;
+    margin: 10px;
+    padding: 5px;
+
+    border: #71a5de 2px solid;
+    border-radius: 20px;
+}
+
+.list_friends::-webkit-scrollbar {
+    width: 10px;
+}
+
+.list_friends::-webkit-scrollbar-thumb {
+    background-color: #71a5de;
+    border-radius: 10px;
+    /* background-clip: padding-box; */
 }
 
 .popup_ssallowing {
     display: flex;
+    justify-content: space-between;
     align-items: center;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.popup_ssallowing:last-child {
+    border-bottom: none;
+    /* 마지막 항목의 선 제거 */
 }
 
 .popup_ssallowing_info {
@@ -212,7 +246,7 @@ export default {
     align-items: center;
     text-align: center;
 
-    width: 90%;
+    width: 85%;
 }
 
 .popup_ssallowing_name {
@@ -229,28 +263,61 @@ export default {
 }
 
 .popup_ssallowing_btn {
-    background: #71a5de;
-    border: #71a5de;
-    color: white;
+    background: #aecbeb;
+    border: #aecbeb;
+    color: black;
     border-radius: 10px;
 
-    width: 5%;
-    height: 30px;
+    width: 100px;
+    min-width: 50px;
+    height: 40px;
     margin: 10px;
     font-size: medium;
     font-weight: bold;
 }
 
+.popup_ssallowing_btn:hover {
+    background: #71a5de;
+    border: #71a5de;
+    color: white;
+}
+
 .close_friendList {
-    width: 200px;
+    min-width: 50%;
     height: 50px;
     padding: 8px 16px;
-    background-color: #71a5de;
-    color: white;
+
+    background: #aecbeb;
+    border: #aecbeb;
+    color: black;
+
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-size: larger;
     font-weight: bolder;
 }
-</style>
+
+.close_friendList:hover {
+    background-color: #71a5de;
+    color: white;
+}
+
+@media screen and (max-width: 450px) {
+    .popup_ssallowing {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .popup_ssallowing_name {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+}</style>

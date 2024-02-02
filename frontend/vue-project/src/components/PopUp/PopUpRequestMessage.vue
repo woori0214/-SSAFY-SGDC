@@ -3,17 +3,17 @@
     <div v-if="showModal" class="modal">
         <div class="modal-content">
             <!-- 모달 내용 --> 
-            <template v-if="modalType === 'randomMatching'">
-                <h2>{{ category_id }}</h2>
+            <div v-if="modalType === 'randomMatching'">
+                <h2>카테고리 : {{ category_name }}</h2>
                 <h1>랜덤의 상대에게 도전장을 보냈습니다</h1>
                 <!-- Display additional random matching modal content -->
-            </template>
-            <template v-else-if="modalType === 'friendMatching'">
-                <h2>{{ category_id }}</h2>
+            </div>
+            <div v-else-if="modalType === 'friendMatching'">
+                <h2>카테고리 : {{ category_name }}</h2>
                 <h1>{{ friendId }} 님에게 도전장을 보냈습니다.</h1>
-            </template>
+            </div>
 
-            <button @click="closeModal">닫기</button>
+            <button @click="closeModal" class="closeMsg">닫기</button>
         </div>
     </div>
     <div v-if="showResponseModal" class="modal">
@@ -34,6 +34,7 @@ const props = defineProps({
     close: Function,
     modalType: String,
     category_id: Number,
+    category_name: String,
     user_id: String,
     friendId: String
 });
@@ -117,7 +118,7 @@ const closeResponseModal = () => {
 }
 
 .modal-content {
-    background-color: white;
+    background-color: #e1ecf7;
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -137,19 +138,26 @@ const closeResponseModal = () => {
     margin-bottom: 8px;
 }
 
-button {
-    background-color: #3498db;
+.closeMsg{
+    background: #aecbeb;
+    border: #aecbeb;
+    color: black;
+    border-radius: 10px;
+
+    width: 100px;
+    min-width: 50px;
+    height: 40px;
+    margin: 10px;
+    font-size: medium;
+    font-weight: bold;
+}
+.closeMsg:hover{
+    background: #71a5de;
+    border: #71a5de;
     color: white;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
 }
 
-button:hover {
-    background-color: #2980b9;
-}
+
 </style>
   
   
