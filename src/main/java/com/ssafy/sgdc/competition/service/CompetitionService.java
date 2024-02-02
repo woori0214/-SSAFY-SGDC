@@ -321,7 +321,6 @@ public class CompetitionService {
                 } else {
                     competDetail.setCompetResult(CompetResult.RECEIVE_WIN);
                 }
-
             } else { // 둘 다 인증 한 경우 (이건 사진 인증에서 확인하므로 아마 여기까진 안올것)
                 competDetail.setCompetResult(CompetResult.BOTH_WIN);
             }
