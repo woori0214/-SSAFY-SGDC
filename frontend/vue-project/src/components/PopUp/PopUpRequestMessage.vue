@@ -2,28 +2,15 @@
 <template>
     <div v-if="showModal" class="modal">
         <div class="modal-content">
-            <!-- 모달 내용 -->
+            <!-- 모달 내용 --> 
             <template v-if="modalType === 'randomMatching'">
+                <h2>{{ category_id }}</h2>
                 <h1>랜덤의 상대에게 도전장을 보냈습니다</h1>
                 <!-- Display additional random matching modal content -->
             </template>
             <template v-else-if="modalType === 'friendMatching'">
-                <h1>친구리스트</h1>
-                <h3>선택한 카테고리: {{ category_id }}</h3>
-                <h3>현재 사용자 ID: {{ user_id }}</h3>
-                
-                <ul>
-                    <li v-for="friend in friendList" :key="friend.followingId">
-                        {{ friend.followingId.userNickname }}
-                    </li>
-                    <span v-for="record in friendRecord" :key="record.userCategoryId">
-                        <span v-if="record.userId === friend.followingId">
-                            전적: {{ record.categoryWinCount / (record.categoryWinCount + record.categoryFailCount) }}
-                        </span>
-                    </span>
-                    <button @click="submitSendToFriend(friend.followingId, category_id)">신청</button>
-                </ul>
-
+                <h2>{{ category_id }}</h2>
+                <h1>{{ friendId }} 님에게 도전장을 보냈습니다.</h1>
             </template>
 
             <button @click="closeModal">닫기</button>
@@ -47,7 +34,8 @@ const props = defineProps({
     close: Function,
     modalType: String,
     category_id: Number,
-    user_id: String
+    user_id: String,
+    friendId: String
 });
 const closeModal = () => {
     props.close();
