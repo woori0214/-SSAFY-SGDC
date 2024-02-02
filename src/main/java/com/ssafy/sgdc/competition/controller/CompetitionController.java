@@ -3,6 +3,7 @@ package com.ssafy.sgdc.competition.controller;
 import com.ssafy.sgdc.competition.domain.Matching;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
 import com.ssafy.sgdc.competition.dto.MatchingDto;
+import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
 import com.ssafy.sgdc.competition.dto.request.FriendSendRequest;
 import com.ssafy.sgdc.competition.dto.request.ImageAuthRequest;
 import com.ssafy.sgdc.competition.dto.request.RandomSendRequest;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/compet")
+@RequestMapping("api/v1/compet")
 @RequiredArgsConstructor
 public class CompetitionController {
 
@@ -95,6 +96,23 @@ public class CompetitionController {
                 .status(200).message("종료된 경쟁 리스트 조회 완료").competitions(result)
                 .build(), HttpStatus.OK
         );
+    }
+
+    @GetMapping("/finish-compet-detail/{userId}/{competId}")
+    public ResponseEntity<?> getFinishCompetition(@PathVariable int userId, @PathVariable int competId) {
+        CompetitionDto result = competitionService.getCompleteCompetition(userId, competId);
+        return new ResponseEntity<>(CompetitionResponse.builder()
+                .status(200).message("종료된 경쟁 조회 완료").competition(result).build(),
+                HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/progress-compet-detail/{userId}")
+    public ResponseEntity<?> getProgressCompetition(@PathVariable int userId) {
+        List<CompetitionProgressDetailDto> result = competitionService.getProgressCompetitionDetail(userId);
+        return new ResponseEntity<>(ProgressCompetitionDetailResponse.builder()
+                .status(200).message("경쟁 모드 인증 현황 조회 완료").competitions(result)
+                .build(), HttpStatus.OK);
     }
 
 }

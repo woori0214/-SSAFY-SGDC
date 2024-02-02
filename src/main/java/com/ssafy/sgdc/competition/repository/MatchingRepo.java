@@ -21,6 +21,9 @@ public interface MatchingRepo extends JpaRepository<Matching, Integer> {
     @Query("SELECT m FROM Matching m WHERE m.user.userId = :userId AND m.competition IS NOT NULL")
     List<Matching> findAcceptMatchingListByUserId(int userId);
 
+    @Query("SELECT m FROM Matching m WHERE m.user.userId = :userId AND m.competition.competId = :competId")
+    Optional<Matching> findAcceptMatchingByUserIdAndCompetId(int userId, int competId);
+
     @Query("SELECT m FROM Matching m WHERE m.competition.competId = :competId AND m.matchingId != :matchingId")
     Optional<Matching> findOtherMatching(int competId, int matchingId);
 
