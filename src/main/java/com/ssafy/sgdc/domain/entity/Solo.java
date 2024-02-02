@@ -22,7 +22,7 @@ public class Solo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "solo_id")
-    private long soloId;
+    private int soloId;
 
     @Column(name = "create_at")
     private LocalDateTime createAt;

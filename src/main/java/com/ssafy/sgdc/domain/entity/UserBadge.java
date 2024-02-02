@@ -18,7 +18,7 @@ public class UserBadge {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_badge_id")
-    private long userBadgeId;
+    private int userBadgeId;
 
     @ManyToOne
     @JoinColumn(name = "badge_id")

@@ -19,7 +19,7 @@ public class FeedReport {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_report_id")
-    private long feedReportId;
+    private int feedReportId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -19,7 +19,7 @@ public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "compet_id")
-    private Long competId;
+    private int competId;
 
     @OneToOne
     @JoinColumn(name = "compet_detail_id")

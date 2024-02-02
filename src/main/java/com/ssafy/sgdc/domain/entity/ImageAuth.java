@@ -19,7 +19,7 @@ public class ImageAuth {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "auth_id")
-    private Long authId;
+    private int authId;
 
     @Column(name = "auth_img")
     private String authImg;

@@ -41,11 +41,11 @@ class FollowController {
      */
     @Operation(summary = "팔로우 성공", description="다른 유저에게 팔로우를 합니다.")
     @Parameters({
-            @Parameter(name = "toUserId", schema=@Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
-            @Parameter(name = "fromUserId",  schema=@Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+            @Parameter(name = "toUserId", schema=@Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
+            @Parameter(name = "fromUserId",  schema=@Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     })
     @PostMapping("/{toUserId}/{fromUserId}")
-    public ResponseEntity<?> follow(@PathVariable Long toUserId, @PathVariable Long fromUserId) {
+    public ResponseEntity<?> follow(@PathVariable int toUserId, @PathVariable int fromUserId) {
         followService.follow(toUserId, fromUserId);
         return new ResponseEntity<>(GeneralResponse.builder()
                 .status(200)
@@ -58,11 +58,11 @@ class FollowController {
      */
     @Operation(summary= "팔로우 취소", description="다른 유저에게 건 팔로우를 취소합니다.")
     @Parameters({
-            @Parameter(name = "toUserId", schema = @Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
-            @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+            @Parameter(name = "toUserId", schema = @Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH),
+            @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     })
     @DeleteMapping("/{toUserId}/{fromUserId}")
-    public ResponseEntity<?> unfollow(@PathVariable Long toUserId, @PathVariable Long fromUserId){
+    public ResponseEntity<?> unfollow(@PathVariable int toUserId, @PathVariable int fromUserId){
         followService.unFollow(toUserId, fromUserId);
         return new ResponseEntity<>(GeneralResponse.builder()
                 .status(200)
@@ -75,9 +75,9 @@ class FollowController {
      * 팔로워 리스트
      */
     @Operation(summary = "팔로워 리스트", description="팔로워 리스트를 확인합니다.")
-    @Parameter(name = "toUserId", schema = @Schema(implementation = Long.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH)
+    @Parameter(name = "toUserId", schema = @Schema(implementation = int.class), description = "팔로우 받는 유저 PK", in = ParameterIn.PATH)
     @GetMapping("/followerList/{toUserId}")
-    public ResponseEntity<?> followerList(@PathVariable Long toUserId){
+    public ResponseEntity<?> followerList(@PathVariable int toUserId){
         List<FollowerListResponseDto> followerListResponseDtoList = followService.followerList(toUserId);
         return new ResponseEntity<>(new CMRespDto<>(200, "팔로워리스트 조회", followerListResponseDtoList), HttpStatus.OK);
     }
@@ -86,9 +86,9 @@ class FollowController {
      * 팔로잉 리스트
      */
     @Operation(summary = "팔로잉 리스트", description="팔로잉 리스트를 확인합니다.")
-    @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+    @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     @GetMapping("/followingList/{fromUserId}")
-    public ResponseEntity<?>followingList(@PathVariable Long fromUserId){
+    public ResponseEntity<?>followingList(@PathVariable int fromUserId){
         List<FollowingListResponseDto> followingListResponseDtoList = followService.followingList(fromUserId);
         return new ResponseEntity<>(new CMRespDto<>(200, "팔로잉리스트 조회", followingListResponseDtoList), HttpStatus.OK);
     }
@@ -98,11 +98,11 @@ class FollowController {
      * 팔로잉 팔로워 수 조회
      */
     @Operation(summary = "팔로잉 팔로워 수", description="팔로잉 팔로워 수를 확입합니다.")
-    @Parameter(name = "fromUserId", schema = @Schema(implementation = Long.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+    @Parameter(name = "fromUserId", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
     @GetMapping("/followCount/{userId}")
     public ResponseEntity<?> followCount(@PathVariable User userId){
-        Long following = followService.followingCount(userId);
-        Long follower = followService.followerCount(userId);
+        int following = followService.followingCount(userId);
+        int follower = followService.followerCount(userId);
         return new ResponseEntity<>(new CMRespDto<>(200, "팔로잉리스트 조회", new FollowCountDto(follower,following)), HttpStatus.OK);
     }
 

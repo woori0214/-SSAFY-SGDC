@@ -28,7 +28,7 @@ public class FollowServiceImpl implements FollowService {
      */
     @Override
     @Transactional
-    public void follow(Long toUserId, Long fromUserId) throws CustomApiException {
+    public void follow(int toUserId, int fromUserId) throws CustomApiException {
         try {
             followRepository.mFollow(fromUserId, toUserId);
         } catch (Exception e) {
@@ -41,7 +41,7 @@ public class FollowServiceImpl implements FollowService {
      */
     @Override
     @Transactional
-    public void unFollow(Long toUserId, Long fromUserId) {
+    public void unFollow(int toUserId, int fromUserId) {
         try {
             followRepository.mUnFollow(fromUserId, toUserId);
         } catch (Exception ignored) {
@@ -54,7 +54,7 @@ public class FollowServiceImpl implements FollowService {
      */
     @Override
     @Transactional
-    public List<FollowerListResponseDto> followerList(Long fromUserId) {
+    public List<FollowerListResponseDto> followerList(int fromUserId) {
 
         List<Follow> followList = followRepository.getListByFromUserId(fromUserId);
         List<FollowerListResponseDto> followDtoList = new ArrayList<>();
@@ -77,7 +77,7 @@ public class FollowServiceImpl implements FollowService {
      */
     @Override
     @Transactional
-    public List<FollowingListResponseDto> followingList(Long toUserId) {
+    public List<FollowingListResponseDto> followingList(int toUserId) {
         List<Follow> followList = followRepository.getListByToUserId(toUserId);
         List<FollowingListResponseDto> followDtoList = new ArrayList<>();
         for (Follow follow : followList) {
@@ -93,12 +93,12 @@ public class FollowServiceImpl implements FollowService {
     }
 
     @Override
-    public Long followingCount(User userId) {
+    public int followingCount(User userId) {
         return followRepository.countByUserId(userId);
     }
 
     @Override
-    public Long followerCount(User userId) {
+    public int followerCount(User userId) {
         return followRepository.countByFollowingId(userId);
     }
 

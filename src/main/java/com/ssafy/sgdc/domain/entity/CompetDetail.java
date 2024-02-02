@@ -18,7 +18,7 @@ public class CompetDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "compet_result_id")
-    private Long competResultId;
+    private int competResultId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "compet_result")

@@ -2,8 +2,13 @@ package com.ssafy.sgdc.user;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,9 +23,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_id")
-    private long userId;
+    private int userId;
 
-    @Column(name = "login_id", length = 20)
+    @Column(name = "login_id", unique = true, length = 20)
     private String loginId;
 
     @Column(name = "user_ssafy_id")
@@ -56,7 +61,7 @@ public class User {
 //    @OneToOne
 //    @JoinColumn(name = "badge_id")
     @Column(name = "badge_id")
-    private long badgeId;
+    private int badgeId;
 
     @Column(name = "kakao_push")
     private Boolean kakaoPush;
@@ -69,4 +74,16 @@ public class User {
 
     @Column(name = "token")
     private String token;
+
+    @Column(name = "auth")
+    private String auth;
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+
+        for (String role : auth.split(",")) {
+            roles.add(new SimpleGrantedAuthority(role));
+        }
+
+        return roles;
+    }
 }

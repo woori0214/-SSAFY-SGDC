@@ -23,7 +23,7 @@ public class Matching {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "matching_id")
-    private Long matchingId;
+    private int matchingId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

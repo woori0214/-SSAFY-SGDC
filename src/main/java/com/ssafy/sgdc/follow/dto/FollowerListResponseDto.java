@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 public class FollowerListResponseDto {
 
     private String userNickname;
-    private Long userId;
+    private int userId;
     private String userImg;
 
 
-    public FollowerListResponseDto(Long userId, String userNickname, String userImg) {
+    public FollowerListResponseDto(int userId, String userNickname, String userImg) {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userImg = userImg;

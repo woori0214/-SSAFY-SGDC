@@ -19,7 +19,7 @@ public class UserCategory {
 
     @Id
     @Column(name = "user_category_id")
-    private long userCategoryId;
+    private int userCategoryId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

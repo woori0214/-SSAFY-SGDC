@@ -19,7 +19,7 @@ public class Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_id")
-    private long feedId;
+    private int feedId;
 
     @Column(name = "feed_title", length = 20)
     private String feedTitle;

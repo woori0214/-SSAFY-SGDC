@@ -15,10 +15,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class MatchingDto {
 
-    private Long matchingId;
-    private Long userId;
-    private Long competitionId;
-    private Long categoryId;
+    private int matchingId;
+    private int userId;
+    private int competitionId;
+    private int categoryId;
     private CompetKind competKind;
     private IsSender isSender;
     private LocalDateTime competExpirationTime;
