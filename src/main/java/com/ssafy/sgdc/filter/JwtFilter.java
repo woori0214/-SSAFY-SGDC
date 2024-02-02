@@ -4,6 +4,9 @@ import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import com.ssafy.sgdc.user.UserService;
 import com.ssafy.sgdc.util.JwtUtil;
+import com.ssafy.sgdc.util.response.Code;
+import com.ssafy.sgdc.util.response.CustomException;
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -44,22 +47,28 @@ public class JwtFilter extends OncePerRequestFilter {
         if(jwt == null){
             logger.debug("토큰이 없습니다.");
         }
-        else {
-            String loginId = jwtUtil.getUsernameFromToken(jwt);
-            User user = userRepo.findByLoginId(loginId);
-            System.out.println(user.toString());
-            if (jwtUtil.validateToken(jwt, user)) {
-                System.out.println(user.getAuthorities());
-                // authentication하기
+        else { //토큰 유효
 
-                UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                securityToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(securityToken);
-                logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다. uri:{}}", requestURI);
+            try {
+                String loginId = jwtUtil.getUsernameFromToken(jwt);
+                User user = userRepo.findByLoginId(loginId);
+
+                System.out.println(user.toString());
+                if (user != null && jwtUtil.validateToken(jwt, user)) {
+                    System.out.println(user.getAuthorities());
+                    // authentication하기
+
+                    UsernamePasswordAuthenticationToken securityToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+                    securityToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(securityToken);
+                    logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다. uri:{}}", requestURI);
+                }
+                //토큰 X
+                else {
+                    logger.debug("유효한 JWT토큰이 없습니다. uri: {}", requestURI);
+                }
             }
-            //토큰 X
-            else {
-                logger.debug("유효한 JWT토큰이 없습니다. uri: {}", requestURI);
+            catch (ExpiredJwtException e){
             }
         }
 
