@@ -176,40 +176,7 @@ public class CompetitionService {
         return matchingRepo.findMatchingListByUserId(userId).stream().map(MatchingDto::of).toList();
     }
 
-    // 이미지 저장
-    public void saveImageAuth(int userId, int competId, String authImg) {
 
-        // 이미지 경로 없을 때 처리
-        if (authImg.isEmpty()) {
-            throw new RuntimeException("이미지 경로 없음");
-        }
-
-        Competition competition = competitionRepo.findByCompetId(competId)
-                .orElseThrow(() -> new RuntimeException("경쟁을 찾을 수 없습니다."));
-
-        if (competition.getDoneAt().isBefore(LocalDateTime.now())) {
-            throw new RuntimeException("이미 종료된 경쟁입니다.");
-        }
-
-        Matching matching = matchingRepo.findByCompetitionCompetIdAndUserUserId(competId, userId)
-                .orElseThrow(() -> new RuntimeException("해당 도전장을 찾을 수 없습니다."));
-
-        CreateImageAuthDto imageAuthDto = new CreateImageAuthDto(authImg, LocalDateTime.now(), competition, matching);
-
-        imageAuthRepo.save(CreateImageAuthDto.from(imageAuthDto));
-
-        // 두 사용자 모두 인증했으면 경쟁 상태 업데이트
-        if (imageAuthRepo.countByCompetitionCompetId(competId) == 2) {
-            CreateCompetDetailDto competDetailDto = new CreateCompetDetailDto(CompetResult.BOTH_WIN);
-
-            CompetDetail competDetail = CreateCompetDetailDto.from(competDetailDto);
-            competDetailRepo.save(competDetail);
-
-            competition.setCompetDetail(competDetail);
-            competitionRepo.save(competition);
-        }
-
-    }
 
     //종료된 경쟁 목록 조회
     public List<CompetitionDto> getCompleteCompetitionList(int userId) {
