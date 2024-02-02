@@ -1,8 +1,14 @@
 package com.ssafy.sgdc.user;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.sgdc.user.dto.TokenDto;
 import com.ssafy.sgdc.user.dto.UserInfoDto;
 import com.ssafy.sgdc.user.dto.UserLoginDto;
 import com.ssafy.sgdc.user.dto.UserSignUpDto;
+import com.ssafy.sgdc.util.JwtUtil;
+import com.ssafy.sgdc.util.response.Code;
+import com.ssafy.sgdc.util.response.CustomException;
 import com.ssafy.sgdc.util.response.GeneralResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +25,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private JwtUtil jwt;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getRoot(){
@@ -116,31 +124,56 @@ public class UserController {
 
     // 로그인
     @RequestMapping(value = "/login/" ,method = RequestMethod.POST)
-    public String login(@RequestBody UserLoginDto userLoginDto){
-        return "login경로";
-//        Map<String, String> response = new HashMap<>();
-//
-//        User user = userService.login(userLoginDto);
-//
-//        if(user==null){
-//            if(ResponseEntity.badRequest().equals("500")){
-//                return null;
-//            }
-//            return null;
-////            return (ResponseEntity<Map<String, String>>) ResponseEntity.badRequest();
-//        }
-//        else{
-//            response.put("user_id", String.valueOf(user.getUserId()));
-//            response.put("login_id", user.getLoginId());
-//            response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
-//            response.put("user_email", user.getUserEmail());
-//            response.put("user_nickname", user.getUserNickname());
-//            response.put("user_name", user.getUserName());
-//
-//            return ResponseEntity.ok(response);
-//        }
+    public ResponseEntity<GeneralResponse> login(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
+        Map<String, String> response = new HashMap<>();
+
+        User user = userService.login(userLoginDto);
+
+        if(user==null){
+            throw new CustomException(Code.INVALID_ID_PW);
+        }
+        else{
+            String accessToken = jwt.generateAccessToken(user);
+            String refreshToken = jwt.generateRefreshToken(user);
+
+            response.put("accessToken", accessToken);
+            response.put("refreshToken", refreshToken);
+            response.put("user_id", String.valueOf(user.getUserId()));
+            response.put("login_id", user.getLoginId());
+            response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
+            response.put("user_email", user.getUserEmail());
+            response.put("user_nickname", user.getUserNickname());
+            response.put("user_name", user.getUserName());
+
+            return new ResponseEntity<>(GeneralResponse.builder()
+                    .status(200)
+                    .message("로그인")
+                    .data(response)
+                    .build(), HttpStatus.OK);
+        }
     }
 
+    @RequestMapping(value = "/re-auth/", method = RequestMethod.POST)
+    public ResponseEntity<GeneralResponse> reAuth(@RequestBody TokenDto tokenDto){
+        User user = userService.getUserById(tokenDto.getUserId());
+        if(user!=null && jwt.validateToken(tokenDto.getRefreshToken(), user)){ //refreshToken 검증 완료
+            String accessToken = jwt.generateAccessToken(user);
+            String refreshToken = jwt.generateRefreshToken(user);
+
+            Map<String, String > response = new HashMap<>();
+            response.put("accessToken", accessToken);
+            response.put("refreshToken", refreshToken);
+
+            return new ResponseEntity<>(GeneralResponse.builder()
+                    .status(200)
+                    .message("토큰 재발급 완료")
+                    .data(response)
+                    .build(), HttpStatus.OK);
+        }
+        else{
+            throw new CustomException(Code.INVALID_TOKEN);
+        }
+    }
     // 마이페이지 사용자 정보 표시
     @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto){
@@ -153,6 +186,7 @@ public class UserController {
         response.put("user_img", user.getUserImg());
         response.put("badge_id", String.valueOf(user.getBadgeId()));
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
+        response.put("user_phone", String.valueOf(user.getUserPhone()));
         response.put("complain_cnt", String.valueOf(user.getComplainCnt()));
 
         return new ResponseEntity<>(GeneralResponse.builder()

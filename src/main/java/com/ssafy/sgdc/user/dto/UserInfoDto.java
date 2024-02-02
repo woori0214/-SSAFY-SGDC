@@ -15,4 +15,5 @@ public class UserInfoDto {
     private int badgeId;
     private int challengeCnt;
     private int complainCnt;
+    private String userPhone;
 }
