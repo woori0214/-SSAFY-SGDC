@@ -2,6 +2,7 @@ package com.ssafy.sgdc.competition.service;
 
 import com.ssafy.sgdc.category.CategoryRepo;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
+import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
 import com.ssafy.sgdc.competition.dto.request.CreateCompetDetailDto;
 import com.ssafy.sgdc.competition.dto.request.CreateImageAuthDto;
 import com.ssafy.sgdc.competition.repository.CompetDetailRepo;
@@ -83,6 +84,7 @@ public class CompetitionService {
 
     // 랜덤 상대를 뽑는 함수
     // 중간에 아이디가 빈 값을 고려하여 최소값 최대값의 범위로 하나 뽑음
+    // TODO: 친구인 상대 제외하기
     private User getRandomUser(int userId) {
 
         int minId = userRepo.findMinUserId();
@@ -101,7 +103,13 @@ public class CompetitionService {
 
     @Transactional
     // 친구에게 도전장 보내기
+    // TODO: 같은 카테고리로 보내지 못하게 하기
     public Matching sendFriendMatching(int userId, int friendId, int categoryId) {
+
+        if (userId == friendId) {
+            throw new RuntimeException("자신에게 도전장을 보낼 수 없습니다.");
+        }
+
         User user = userRepo.findByUserId(userId);
 
         //도전장 개수 빼기
@@ -130,6 +138,7 @@ public class CompetitionService {
     }
 
     // 도전장 수락
+    // TODO: 수락은 한번만 누를 수 있게
     public Matching acceptMatching(int matchingId) {
 
         Matching recieveMatching = matchingRepo.findByMatchingId(matchingId)
@@ -210,21 +219,99 @@ public class CompetitionService {
         List<Matching> matchings = matchingRepo.findAcceptMatchingListByUserId(userId);
 
         for (Matching matching : matchings) {
-            Matching oherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
-                    matching.getMatchingId())
-                    .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
-            CompetitionDto competitionDto = CompetitionDto.of(
-                    matching.getCompetition(),
-                    matching.getMatchingId(),
-                    matching.getIsSender(),
-                    oherMatching.getUser().getUserId(),
-                    oherMatching.getUser().getUserNickname()
-            );
 
-            competitionDtoList.add(competitionDto);
+            // 경쟁 결과가 나온 경쟁인지 확인
+            if (matching.getCompetition().getCompetDetail() != null) {
+
+                Matching otherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
+                                matching.getMatchingId())
+                        .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+                CompetitionDto competitionDto = CompetitionDto.of(
+                        matching.getCompetition(),
+                        matching.getMatchingId(),
+                        matching.getIsSender(),
+                        otherMatching.getUser().getUserId(),
+                        otherMatching.getUser().getUserNickname()
+                );
+
+                competitionDtoList.add(competitionDto);
+            }
         }
 
         return competitionDtoList;
+    }
+
+    // 종료된 경쟁 조회
+    public CompetitionDto getCompleteCompetition(int userId, int competId) {
+        Matching matching = matchingRepo.findAcceptMatchingByUserIdAndCompetId(userId, competId)
+                .orElseThrow(() -> new RuntimeException("해당 경쟁을 찾을 수 없습니다."));
+
+        // 종료되지 않은 경쟁
+        if (matching.getCompetition().getCompetDetail() == null) {
+            throw new RuntimeException("아직 종료되지 않은 경쟁입니다.");
+        }
+
+        Matching oherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
+                        matching.getMatchingId())
+                .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+
+        return CompetitionDto.of(
+                matching.getCompetition(),
+                matching.getMatchingId(),
+                matching.getIsSender(),
+                oherMatching.getUser().getUserId(),
+                oherMatching.getUser().getUserNickname()
+        );
+    }
+
+    /*
+    API로 처리하면 프론트에서 일정 시간마다 불러와야 됨
+     */
+    // 경쟁 모드 인증 현황
+    public List<CompetitionProgressDetailDto> getProgressCompetitionDetail(int userId) {
+
+        List<CompetitionProgressDetailDto> details = new ArrayList<>();
+
+        List<Matching> matchings = matchingRepo.findAcceptMatchingListByUserId(userId);
+
+        for (Matching matching : matchings) {
+
+            // 경쟁 결과가 아직 나오지 않은 경쟁만
+            if (matching.getCompetition().getCompetDetail() == null) {
+                Matching otherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
+                                matching.getMatchingId())
+                        .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+
+                ImageAuth userImageAuth = imageAuthRepo.findByMatcingMatchingId(matching.getMatchingId())
+                        .orElse(null);
+
+                ImageAuth otherImageAuth = imageAuthRepo.findByMatcingMatchingId(otherMatching.getMatchingId())
+                        .orElse(null);
+
+                CompetitionProgressDetailDto competitionProgressDetailDto
+                        = CompetitionProgressDetailDto.of(
+                                matching.getCompetition().getCompetId(),
+                        matching.getCategory().getCategoryId(),
+                        userImageAuth != null ? userImageAuth.getAuthId() : 0, // null이면 0으로 처리함
+                        userImageAuth != null ? userImageAuth.getAuthImg() : null,
+                        matching.getUser().getUserId(),
+                        matching.getUser().getUserImg(),
+                        matching.getUser().getUserNickname(),
+                        otherImageAuth != null ? otherImageAuth.getAuthId() : 0, // null이면 0으로 처리함
+                        otherImageAuth != null ? otherImageAuth.getAuthImg() : null,
+                        otherMatching.getUser().getUserId(),
+                        otherMatching.getUser().getUserImg(),
+                        otherMatching.getUser().getUserNickname()
+                );
+
+                details.add(competitionProgressDetailDto);
+
+            }
+
+        }
+
+        return details;
+
     }
 
     // 일정 시간마다 경쟁결과 확인
