@@ -125,44 +125,41 @@ const logout = function () {
 }
 
 @keyframes fadeOutUp {
-  0%,
-  100% {
+  0%{
     top: 30px;
-    opacity: 0; /* 시작과 끝에서 투명도를 0으로 유지 */
-  }
-  25% {
-    opacity: 1; /* 애니메이션 시작 후 조금 지나면서 불투명하게 만듦 */
+    opacity: 1; /* 시작과 끝에서 투명도를 0으로 유지 */
   }
   50% {
     top: -10px;
     opacity: 0; /* 최고점에서 다시 투명해짐 */
   }
-  75% {
-    opacity: 0; /* 원래 위치로 돌아오기 시작할 때 다시 불투명해짐 */
+  100%{
+    top: 30px;
+    opacity: 0;
   }
 }
 .dialogue1 {
   position: absolute;
   /* left: 0%; */
-  animation: fadeOutUp 4.5s ease-in-out infinite;
+  animation: fadeOutUp 4.5s linear infinite;
 }
 
 .dialogue2 {
   position: absolute;
   /* left: 50%; */
-  animation: fadeOutUp 3s ease-in-out infinite;
+  animation: fadeOutUp 3s linear infinite;
 }
 
 .dialogue3 {
   position: absolute;
   /* left: 75%; */
-  animation: fadeOutUp 4s ease-in-out infinite;
+  animation: fadeOutUp 4s linear infinite;
 }
 
 .dialogue4 {
   position: absolute;
   /* left: 100%; */
-  animation: fadeOutUp 3.5s ease-in-out infinite;
+  animation: fadeOutUp 3.5s linear infinite;
 }
 
 .header-wrapper {

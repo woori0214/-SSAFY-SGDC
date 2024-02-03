@@ -2,10 +2,10 @@
   <div class="login-body">
     <head>
       <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
-        />
-      </head>
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+      />
+    </head>
     <div class="login-title">로그인</div>
     <form @submit.prevent="login" class="login-form">
       <div class="login-form-item">
@@ -95,27 +95,32 @@ export default {
 .login-body {
   /* border: 2px solid red; */
   width: 80%;
-  height: 85%;
+  height: 70%;
   margin: 0 auto;
   display: flex;
+  flex-grow: 1;
+  padding-bottom: 50px;
   flex-direction: column;
-  justify-content: center;
+  /* justify-content: center; << 얘가 높이를 좁게하면 타이틀을 네비하고 겹치게하는 주범이였음 */
+  gap: 20px;
 }
 .login-title {
   /* border: 2px solid orange; */
 
   font-size: 45px;
   font-weight: 700;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   color: #2196f3;
 }
 .login-form {
   /* border: 2px solid orange; */
   background-color: #e1ecf7;
   border-radius: 25px;
-  padding: 15%;
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
   gap: 30px;
 }
 .login-form-item {
