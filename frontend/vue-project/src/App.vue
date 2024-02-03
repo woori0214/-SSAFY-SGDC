@@ -29,16 +29,6 @@
           <div class="headbar">
             <HeaderNav></HeaderNav>
           </div>
-          <div class="nav-wrapper">
-            <nav>
-              <RouterLink to="/">Main</RouterLink>
-              <a href="#" @click="handleNavigation('/competition')"
-                >Competition</a
-              >
-              <a href="#" @click="handleNavigation('/solo')">Solo</a>
-              <a href="#" @click="handleNavigation('/feed')">Feed</a>
-            </nav>
-          </div>
         </div>
       </header>
       <br />
@@ -193,33 +183,6 @@ onMounted(() => {
 }
 .wrapper {
   margin-inline: 8px;
-}
-.nav-wrapper {
-  background-color: #fff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-nav {
-  /* border: 2px solid red; */
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-nav a {
-  /* border: 2px solid green; */
-  text-decoration: none;
-  color: black;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-  margin-inline: 10px;
-  &:hover {
-    background-color: #83b0e1;
-    color: #fff;
-  }
 }
 
 .headbar {

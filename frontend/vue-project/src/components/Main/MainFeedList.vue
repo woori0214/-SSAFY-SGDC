@@ -10,7 +10,7 @@
         알려드립니다
       </h1>
       <div>
-        <button @click="more_feed">+더보기</button>
+        <button v-if="userStored_id != null" @click="more_feed">+더보기</button>
       </div>
     </div>
     <div class="feed_list">
@@ -31,6 +31,10 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useFeedStore } from "@/stores/feed";
 import alarmmachine from "@/assets/alarmmachine.png";
+import { useUserStorageStore } from "@/stores/userStorage";
+
+const useUserStorage = useUserStorageStore();
+const userStored_id = ref(null);
 const router = useRouter();
 const feedInfo = useFeedStore();
 const feedlist = ref([
@@ -100,6 +104,12 @@ onMounted(async () => {
     }
   } catch (error) {
     console.error("피드 목록을 가져오는 중 오류가 발생했습니다:", error);
+  }
+
+  try {
+    userStored_id.value = useUserStorage.getUserInformation().user_id;
+  } catch (error) {
+    console.error("유저 정보를 가져오는 중 오류가 발생했습니다:", error);
   }
 });
 
