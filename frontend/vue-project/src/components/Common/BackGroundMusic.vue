@@ -8,25 +8,12 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
-    <!-- <div class="BGM-body">
-      <button @click="SuffleBGM">음악 셔플</button>
-      <button @click="PlayBGM">음악 재생</button>
-      <button @click="PauseBGM">음악 정지</button>
-      <div class="music_title">{{ musicTitle }}</div>
-    </div> -->
-    <!-- <audio
-      src="src/components/Common/bgm/2RainyWeather.mp3"
-      autoplay
-      loop
-      id="myAudio"
-    ></audio> -->
     <button class="audio-btn" @click="OnOffAudio">
       <span v-if="audioStatus" class="material-symbols-outlined audio-btn-icon">
         play_arrow
       </span>
       <span v-if="!audioStatus" class="material-symbols-outlined"> pause </span>
     </button>
-    <!-- <button @click="SuffleMyAudio">음악 바꾸기</button> -->
   </div>
 </template>
 
@@ -46,15 +33,6 @@ const bgm_lsit = ref([
   { source: rainy2, title: "Rainy Weather 2:00 a.m." },
 ]);
 
-//const musicTitle = ref("___");
-const nowMusicNum = ref(0);
-
-// const SuffleMyAudio = () => {
-//   const myAudio = document.getElementById("myAudio");
-//   nowMusicNum.value = Math.floor(Math.random() * bgm_lsit.value.length);
-
-//   myAudio.src = bgm_lsit.value[nowMusicNum.value].source;
-// };
 
 const audio = new Audio(sunny1);
 audio.loop = true;
