@@ -1,5 +1,6 @@
 <template>
   <header class="header-wrapper">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <div class="header-music-box">
       <BackGroundMusic class="header-music"></BackGroundMusic>
     </div>
@@ -7,6 +8,9 @@
       <img src="@/assets/mainimage.gif" class="header-image" />
     </div>
     <div class="header-links">
+      <button @click="popUpMailBox"><span class="material-symbols-outlined">
+notifications
+</span></button>
       <!-- 로그인 상태 -->
       <div v-if="!userLoginStore.loginUser" class="login-signup-links">
         <RouterLink to="/login" class="nav-link">로그인</RouterLink>
@@ -18,8 +22,34 @@
         <a @click="logout" class="nav-link logout">로그아웃</a>
       </div>
     </div>
+    <PopUpMainMailbox :showModal="showMailBox" :close="closeMailBox"/>
   </header>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { useLoginStore } from "@/stores/login";
+import BackGroundMusic from "./BackGroundMusic.vue";
+
+
+
+import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";
+
+const showMailBox = ref(false);
+
+const popUpMailBox = () => {
+  showMailBox.value = true;
+}
+
+const closeMailBox = () => {
+  showMailBox.value = false;
+}
+
+const userLoginStore = useLoginStore();
+const logout = function () {
+  userLoginStore.isLogout();
+};
+</script>
   
 <style scoped>
 .header-wrapper {
@@ -102,15 +132,4 @@
 .header-music {
   /* border: 2px solid green; */
 }
-</style>
-  
-<script setup>
-import { useLoginStore } from "@/stores/login";
-import BackGroundMusic from "./BackGroundMusic.vue";
-
-const userLoginStore = useLoginStore();
-const logout = function () {
-  userLoginStore.isLogout();
-};
-</script>
-  
+</style>  
