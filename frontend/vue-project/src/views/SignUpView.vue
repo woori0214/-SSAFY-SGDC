@@ -2,7 +2,7 @@
 
 <template>
   <div class="signup-main-body">
-    <div class="signup-title">Welcome to 싸강두천</div>
+    <div class="signup-title slideDown">Welcome to 싸강두천</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
         ◀
@@ -11,27 +11,7 @@
         <!-- 프로필 사진 -->
         <div class="signup-question-item">
           <div class="signup-question-context">
-            <!-- <label for="userImg">프로필 사진</label>
-            <img
-              v-if="userImg"
-              :src="userImg"
-              alt="프로필 사진"
-              class="thumbnail"
-            />
-            <input
-              type="file"
-              accept="image/*"
-              @change="handleFileUpload"
-              id="userImg"
-              ref="fileInputRef"
-              class="userImgButton"
-            />
-            <p v-if="fileUploadError" class="input_error">
-              {{ fileUploadError }}
-            </p> -->
-
             <div class="signup-userImg">
-              <!-- <button class="signup-userImg-upload" :style="userImg ? 'background-image: userImg' : ''"></button> -->
               <label
                 for="customFileInput"
                 class="signup-userImg-upload"
@@ -51,6 +31,15 @@
                 프로필을<br />업로드 하세요.
               </div>
             </div>
+
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!fileUploadError && userImg"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -94,6 +83,14 @@
                 사용 가능한 아이디입니다.
               </p>
             </div>
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!idError && !idExists && idAvailable"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -139,6 +136,15 @@
                 <p v-else class="input_error">본인확인에 실패했습니다.</p>
               </div>
             </div>
+
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="isVerificationSuccess"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -177,6 +183,15 @@
                 학번이 인증되었습니다.
               </p>
             </div>
+
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!ssafyidExists && ssafyidAvailable"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -204,6 +219,15 @@
                 이름은 2자 이상, 10자 이하의 한글이어야 합니다.
               </p>
             </div>
+
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!nameError && name != ''"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -246,6 +270,15 @@
                 사용 가능한 닉네임입니다.
               </p>
             </div>
+
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!nicknameError && !nicknameExists && nicknameAvailable"
+            >
+              다음!
+            </button>
           </div>
         </div>
 
@@ -323,8 +356,8 @@
         <div
           class="history-item"
           :style="
-              !fileUploadError && userImg ? '' : 'background-color: #f8f9fb'
-            "
+            !fileUploadError && userImg ? '' : 'background-color: #f8f9fb'
+          "
         >
           <div
             class="history-item-isclear"
@@ -337,10 +370,10 @@
         <div
           class="history-item"
           :style="
-              !idError && !idExists && idAvailable
-                ? ''
-                : 'background-color: #f8f9fb'
-            "
+            !idError && !idExists && idAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
         >
           <div
             class="history-item-isclear"
@@ -365,10 +398,10 @@
         <div
           class="history-item"
           :style="
-              !ssafyidExists && ssafyidAvailable
-                ? ''
-                : 'background-color: #f8f9fb'
-            "
+            !ssafyidExists && ssafyidAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
         >
           <div
             class="history-item-isclear"
@@ -393,10 +426,10 @@
         <div
           class="history-item"
           :style="
-              !nicknameError && !nicknameExists && nicknameAvailable
-                ? ''
-                : 'background-color: #f8f9fb'
-            "
+            !nicknameError && !nicknameExists && nicknameAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
         >
           <div
             class="history-item-isclear"
@@ -411,10 +444,10 @@
         <div
           class="history-item"
           :style="
-              !phonenumberError && !phonenumberExists && phonenumberAvailable
-                ? ''
-                : 'background-color: #f8f9fb'
-            "
+            !phonenumberError && !phonenumberExists && phonenumberAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
         >
           <div
             class="history-item-isclear"
@@ -815,6 +848,17 @@ export default {
 </script>
   
 <style scoped>
+#signup-clear-btn {
+  position: absolute;
+  bottom: -50px;
+  width: 150px;
+  font-size: 25px;
+  font-weight: 600;
+  border: 3px solid #2196f3;
+  border-radius: 10px;
+  background-color: #f8f9fb;
+  color: #202020;
+}
 .signup-main-body {
   /* border: 2px solid red; */
   display: flex;
@@ -936,7 +980,6 @@ export default {
 }
 .signup-question-context-box {
   /* border: 2px solid blue; */
-
   width: 80%;
   margin: 0 auto;
   display: flex;
@@ -1052,6 +1095,8 @@ export default {
   border-radius: 8px;
   padding-inline: 10px;
   background-color: #f8f9fb;
+  margin-right: 15%;
+  margin-left: auto;
 }
 
 .error-box {
@@ -1164,4 +1209,102 @@ export default {
 }
 
 /* You can add more media queries for different breakpoints */
+
+.slideDown {
+  animation-name: slideDown;
+  -webkit-animation-name: slideDown;
+
+  animation-duration: 1s;
+  -webkit-animation-duration: 1s;
+
+  animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+
+  visibility: visible !important;
+}
+
+@keyframes slideDown {
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(8%);
+  }
+  65% {
+    transform: translateY(-4%);
+  }
+  80% {
+    transform: translateY(4%);
+  }
+  95% {
+    transform: translateY(-2%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
+}
+
+@-webkit-keyframes slideDown {
+  0% {
+    -webkit-transform: translateY(-100%);
+  }
+  50% {
+    -webkit-transform: translateY(8%);
+  }
+  65% {
+    -webkit-transform: translateY(-4%);
+  }
+  80% {
+    -webkit-transform: translateY(4%);
+  }
+  95% {
+    -webkit-transform: translateY(-2%);
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+  }
+}
+
+.expandUp {
+  animation-name: expandUp;
+  -webkit-animation-name: expandUp;
+
+  animation-duration: 0.7s;
+  -webkit-animation-duration: 0.7s;
+
+  animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
+
+  visibility: visible !important;
+}
+
+@keyframes expandUp {
+  0% {
+    transform: translateY(100%) scale(0.6) scaleY(0.5);
+  }
+  60% {
+    transform: translateY(-7%) scaleY(1.12);
+  }
+  75% {
+    transform: translateY(3%);
+  }
+  100% {
+    transform: translateY(0%) scale(1) scaleY(1);
+  }
+}
+
+@-webkit-keyframes expandUp {
+  0% {
+    -webkit-transform: translateY(100%) scale(0.6) scaleY(0.5);
+  }
+  60% {
+    -webkit-transform: translateY(-7%) scaleY(1.12);
+  }
+  75% {
+    -webkit-transform: translateY(3%);
+  }
+  100% {
+    -webkit-transform: translateY(0%) scale(1) scaleY(1);
+  }
+}
 </style>
