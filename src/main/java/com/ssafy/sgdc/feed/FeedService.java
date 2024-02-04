@@ -128,11 +128,6 @@ public class FeedService {
                 .orElseThrow(() -> new RuntimeException("해당 경쟁을 찾을 수 없습니다."));
     }
 
-    private CompetDetail findCompetDetailByResultId(int resultId) {
-        return competDetailRepo.findByCompetResultId(resultId)
-                .orElseThrow(() -> new RuntimeException("해당 경쟁 결과를 찾을 수 없습니다."));
-    }
-
     private List<Matching> findMatchesByCompetitionId(int competId) {
         List<Matching> matches = matchingRepo.findByCompetitionCompetId(competId);
         if (matches.isEmpty()) {

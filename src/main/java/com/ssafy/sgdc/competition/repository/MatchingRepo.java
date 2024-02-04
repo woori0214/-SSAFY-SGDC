@@ -1,6 +1,7 @@
 package com.ssafy.sgdc.competition.repository;
 
 import com.ssafy.sgdc.competition.domain.Matching;
+import com.ssafy.sgdc.enums.IsSender;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -17,6 +18,9 @@ public interface MatchingRepo extends JpaRepository<Matching, Integer> {
     List<Matching> findMatchingListByUserId(int userId);
 
     Optional<Matching> findByCompetitionCompetIdAndUserUserId(int competId, int userId);
+
+    // Feed Service에서 도전장 조회
+    List<Matching> findByCompetitionCompetId(int competId);
 
     @Query("SELECT m FROM Matching m WHERE m.user.userId = :userId AND m.competition IS NOT NULL")
     List<Matching> findAcceptMatchingListByUserId(int userId);
