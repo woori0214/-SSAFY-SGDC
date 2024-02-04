@@ -32,25 +32,29 @@
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템 -->
-              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
+              <div class="carousel_item" v-for="(item, index) in items" :key="index">
                 <!--sender부분-->
                 <div class="player1">
-                  <img :src="item.sender_user_img" alt="sender image" class="player_img" />
+                  <img :src="item.imageUrl1" alt="..." class="player_img">
+                  <p>{{ item.name1 }}</p>
+                  <button>{{ item.challenge_status1 }}</button>
+                  <!-- <img :src="item.sender_user_img" alt="sender image" class="player_img" />
                   <p>{{ item.sender_user_nickname }}</p>
                   <button v-if="item.sender_isCurrentUser && !item.sender_authenticated
                     " @click="authenticate(item)">
                     인증하기
                   </button>
                   <div v-else-if="item.sender_authenticated">인증 완료</div>
-                  <div v-else>진행중</div>
+                  <div v-else>진행중</div> -->
                 </div>
                 <div>
-                  <h1>{{ item.category_id }}</h1>
+                  <h1>{{ item.category }}</h1>
+                  <!-- <h1>{{ item.category_id }}</h1> -->
                   <h1>vs</h1>
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img :src="item.receiver_user_img" alt="receiver image" class="player_img" />
+                  <!-- <img :src="item.receiver_user_img" alt="receiver image" class="player_img" />
                   <p>{{ item.receiver_user_nickname }}</p>
                   <button v-if="item.receiver_isCurrentUser &&
                     !item.receiver_authenticated
@@ -58,7 +62,10 @@
                     인증하기
                   </button>
                   <div v-else-if="item.receiver_authenticated">인증 완료</div>
-                  <div v-else>진행중</div>
+                  <div v-else>진행중</div> -->
+                  <img :src="item.imageUrl2" alt="..." class="player_img">
+                  <p>{{ item.name2 }}</p>
+                  <button>{{ item.challenge_status2 }}</button>
                 </div>
               </div>
             </div>
@@ -75,7 +82,8 @@
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <PopUpProofPictureCompet v-if="showModal" :show="showModal" @uploadImage="handleUpload" @update:show="showModal = $event" />
+    <PopUpProofPictureCompet v-if="showModal" :show="showModal" @uploadImage="handleUpload"
+      @update:show="showModal = $event" />
     <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleUpload"
       :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
