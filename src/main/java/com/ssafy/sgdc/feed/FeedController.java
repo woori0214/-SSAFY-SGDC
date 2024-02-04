@@ -50,10 +50,10 @@ public class FeedController {
             @Parameter(name = "size", schema = @Schema(implementation = int.class), description = "가져올 페이지 수")
     })
     @GetMapping("/feed-list/pages")
-    public Page<FeedOneDto> getFeeds(
+    public DataResponseDto<Page<FeedOneDto>> getFeeds(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return feedService.getFeeds(page, size);
+        return DataResponseDto.of(feedService.getFeeds(page, size),"피드 10개씩 조회");
     }
 
 
