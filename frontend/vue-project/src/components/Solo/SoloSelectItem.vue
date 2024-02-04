@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="solomode_container">
     <div class="category_container">
       <div v-for="category in categories" :key="category.id" class="category_item">
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
@@ -195,7 +195,13 @@ export default {
 </script>
   
 <style scoped>
+
+.solomode_container{
+  max-height: 400px;
+}
 .category_container {
+  height: 80%;
+  overflow: auto;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between; /* 카테고리 아이템을 간격을 벌리며 레이아웃 */
