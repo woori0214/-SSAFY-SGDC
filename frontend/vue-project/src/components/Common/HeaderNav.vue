@@ -91,6 +91,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
+import router from "@/router";
 import { useLoginStore } from "@/stores/login";
 import BackGroundMusic from "./BackGroundMusic.vue";
 import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";

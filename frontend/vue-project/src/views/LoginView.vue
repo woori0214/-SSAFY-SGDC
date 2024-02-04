@@ -5,6 +5,10 @@
         rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
       />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+      />
     </head>
     <div class="login-title slideDown">로그인</div>
     <form @submit.prevent="login" class="login-form">
@@ -34,6 +38,15 @@
         <span class="material-symbols-outlined"> login </span>
         로그인
       </button>
+
+      <!-- <button class="go-signup-btn" @click="">
+        <span class="material-symbols-outlined"> person_add </span>
+        회원가입
+      </button> -->
+      <RouterLink to="/signup" class="go-signup-btn"
+        ><span class="material-symbols-outlined"> person_add </span
+        >회원가입</RouterLink
+      >
     </form>
   </div>
 </template>
@@ -155,59 +168,77 @@ export default {
   font-size: 25px;
   font-weight: 600;
 }
+.go-signup-btn {
+  border: 2px solid #aecbeb;
+  border-radius: 8px;
+  background-color: #f8f9fb;
+  color: black;
+  margin: 0 auto;
+  width: 40%;
+  min-width: 130px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: 600;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: -15px;
+  text-decoration: none;
+}
 
-.slideDown{
-	animation-name: slideDown;
-	-webkit-animation-name: slideDown;	
+.slideDown {
+  animation-name: slideDown;
+  -webkit-animation-name: slideDown;
 
-	animation-duration: 1s;	
-	-webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-duration: 1s;
 
-	animation-timing-function: ease;	
-	-webkit-animation-timing-function: ease;	
+  animation-timing-function: ease;
+  -webkit-animation-timing-function: ease;
 
-	visibility: visible !important;						
+  visibility: visible !important;
 }
 
 @keyframes slideDown {
-	0% {
-		transform: translateY(-100%);
-	}
-	50%{
-		transform: translateY(8%);
-	}
-	65%{
-		transform: translateY(-4%);
-	}
-	80%{
-		transform: translateY(4%);
-	}
-	95%{
-		transform: translateY(-2%);
-	}			
-	100% {
-		transform: translateY(0%);
-	}		
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(8%);
+  }
+  65% {
+    transform: translateY(-4%);
+  }
+  80% {
+    transform: translateY(4%);
+  }
+  95% {
+    transform: translateY(-2%);
+  }
+  100% {
+    transform: translateY(0%);
+  }
 }
 
 @-webkit-keyframes slideDown {
-	0% {
-		-webkit-transform: translateY(-100%);
-	}
-	50%{
-		-webkit-transform: translateY(8%);
-	}
-	65%{
-		-webkit-transform: translateY(-4%);
-	}
-	80%{
-		-webkit-transform: translateY(4%);
-	}
-	95%{
-		-webkit-transform: translateY(-2%);
-	}			
-	100% {
-		-webkit-transform: translateY(0%);
-	}	
+  0% {
+    -webkit-transform: translateY(-100%);
+  }
+  50% {
+    -webkit-transform: translateY(8%);
+  }
+  65% {
+    -webkit-transform: translateY(-4%);
+  }
+  80% {
+    -webkit-transform: translateY(4%);
+  }
+  95% {
+    -webkit-transform: translateY(-2%);
+  }
+  100% {
+    -webkit-transform: translateY(0%);
+  }
 }
 </style>
