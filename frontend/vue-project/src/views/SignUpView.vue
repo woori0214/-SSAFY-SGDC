@@ -1077,6 +1077,7 @@ export default {
   align-items: center;
   gap: 5px;
   padding-inline: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .history-item-isclear {
