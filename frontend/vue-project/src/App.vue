@@ -140,7 +140,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #main-body::-webkit-scrollbar {
