@@ -144,7 +144,16 @@ onMounted(() => {
 }
 
 #main-body::-webkit-scrollbar {
-  display: none;
+  width: 10px;
+}
+#main-body::-webkit-scrollbar-thumb {
+  background-color: #71a5de;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+#main-body::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 10px;
 }
 
 .back-main-item {

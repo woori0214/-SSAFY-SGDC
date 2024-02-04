@@ -23,28 +23,28 @@
             v-if="closeLogo"
             :style="closeLogo ? 'left: 32%' : ''"
           >
-            안녕하세요!
+            싸피에서!
           </div>
           <div
             class="fade-out-up dialogue2"
             v-if="closeLogo"
-            :style="closeLogo ? 'left: 42%' : ''"
+            :style="closeLogo ? 'left: 39%' : ''"
           >
-            반가워요!
+            강하다고 생각하는!
           </div>
           <div
             class="fade-out-up dialogue3"
             v-if="closeLogo"
             :style="closeLogo ? 'left: 52%' : ''"
           >
-            싸피생 화이팅!
+            두 천재들의!
           </div>
           <div
             class="fade-out-up dialogue4"
             v-if="closeLogo"
             :style="closeLogo ? 'left: 62%' : ''"
           >
-            싸강두천!
+            싸움!
           </div>
         </div>
       </div>
@@ -130,7 +130,7 @@ const handleNavigation = (to) => {
   text-align: center;
   border-radius: 5px;
   position: absolute;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 600;
 }
 

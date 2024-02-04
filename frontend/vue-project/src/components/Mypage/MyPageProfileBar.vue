@@ -361,6 +361,7 @@ export default {
 /* 도전장함, 도전장 보내기 */
 .popup_mailbox,
 .popup_sendmsg {
+    border: 2px solid red;
     position: fixed;
     top: 0;
     left: 0;
@@ -378,10 +379,12 @@ export default {
     flex-direction: column;
     background-color: #e1ecf7;
     border: #aecbeb 2px solid;
-    padding: 50px;
+    /* padding: 50px; */
     border-radius: 8px;
-    text-align: center;
-    width: 80vw;
+    /* text-align: center; */
+    /* width: 80vw; */
+    width: 50%;
+    /* height: 50%; */
 }
 
 .sendmsg_category {

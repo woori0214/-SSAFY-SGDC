@@ -2,7 +2,7 @@
 
 <template>
   <div class="signup-main-body">
-    <div class="signup-title slideDown">Welcome to 싸강두천</div>
+    <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
         ◀

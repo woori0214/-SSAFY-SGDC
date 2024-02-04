@@ -105,7 +105,8 @@ const acceptChallenge = async (index) => {
   width: 93%;
   display: flex;
   flex-direction: column;
-  height: 88%;
+  max-height: 400px;
+  flex-grow: 1;
   padding: 20px;
   border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);

@@ -58,38 +58,6 @@ const feedlist = ref([
     feed_id: 4,
     feed_content: "오화석4 님이 기상챌린지를 성공하셨습니다.",
   },
-  {
-    feed_id: 5,
-    feed_content: "오화석5 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 6,
-    feed_content: "오화석6 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 7,
-    feed_content: "오화석7 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 8,
-    feed_content: "오화석8 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 9,
-    feed_content: "오화석9 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 5,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 5,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 5,
-    feed_content: "오화석 님이 기상챌린지를 성공하셨습니다.",
-  },
 ]);
 const feedlist_ = ref([]);
 
