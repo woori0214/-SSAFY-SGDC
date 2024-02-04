@@ -24,19 +24,17 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .select_body {
-  flex: 1; /* Fill the available space horizontally */
 }
 
 .mail_box_body {
   height: 380px; /* Set your desired fixed height */
   margin: 0;
-  width: 100%;
 }
 
 .compet_title {
     background-color: #83b0e1;
     border-radius: 25px;
-    width: 97%;
+    width: calc(100% - 20px);
     color: white;
     padding: 10px;
 }

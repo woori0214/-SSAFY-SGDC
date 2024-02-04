@@ -332,6 +332,19 @@ const plusFeedItem = () => {
   height: calc(87vh - 180px);
   overflow: auto;
 }
+.feed_container::-webkit-scrollbar {
+  width: 10px;
+}
+.feed_container::-webkit-scrollbar-thumb {
+  background-color: #71a5de;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+.feed_container::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 10px;
+}
+
 .feed_frame.feed{
   margin-bottom: 80px;
 }

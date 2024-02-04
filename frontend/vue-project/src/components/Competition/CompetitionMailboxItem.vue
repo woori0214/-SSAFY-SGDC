@@ -5,13 +5,20 @@
         {{ mail_sender }}가 {{ mail_category }}를 신청하였습니다.
       </div>
       <div class="mail_content_details">
-        <div class="mail_content_time">남은시간: {{ mail_remain_time }}      <button class="accept_btn" @click="acceptChallenge">수락</button></div>
+        <div class="mail_content_time">
+          남은시간: {{ mail_remain_time }}
+          <button class="accept_btn" @click="acceptChallenge">수락</button>
+        </div>
       </div>
     </div>
+    <PopUpReceiverCompetitionApprove :showModal="showChallengeAcceptBox" :close="closeChallengeAcceptBox"/>
   </div>
 </template>
 
 <script>
+import { ref } from "vue";
+import PopUpReceiverCompetitionApprove from "../PopUp/PopUpReceiverCompetitionApprove.vue";
+
 export default {
   name: "mail-item",
   props: {
@@ -31,7 +38,28 @@ export default {
   methods: {
     acceptChallenge() {
       this.$emit("acceptChallenge");
+      this.popUpChallengeAcceptBox();
     },
+  },
+  components: {
+    PopUpReceiverCompetitionApprove,
+  },
+  setup() {
+    const showChallengeAcceptBox = ref(false);
+
+    const popUpChallengeAcceptBox = () => {
+      showChallengeAcceptBox.value = true;
+    };
+
+    const closeChallengeAcceptBox = () => {
+      showChallengeAcceptBox.value = false;
+    };
+
+    return {
+      showChallengeAcceptBox,
+      popUpChallengeAcceptBox,
+      closeChallengeAcceptBox,
+    }
   },
 };
 </script>

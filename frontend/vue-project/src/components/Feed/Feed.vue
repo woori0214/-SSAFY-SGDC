@@ -25,6 +25,7 @@
       </div>
       <div class="feed_view_cnt">조회수 {{ viewCnt }}</div>
     </div>
+    <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox"/>
   </div>
 </template>
 
@@ -34,6 +35,7 @@ import { useUserStorageStore } from "@/stores/userStorage";
 import { ref } from 'vue';
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
+import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
 
 export default {
   name: "feed_item",
@@ -73,11 +75,14 @@ export default {
       });
     },
   },
+  components:{
+    PopUpComplaint,
+  },
   setup(props) {
     const feedjs = useFeedStore();
     const userStorage = useUserStorageStore();
     const heartIcon = ref(emptyHeart);
-
+    const showComplaintBox = ref(false);
 
     // 피드 좋아요 누르기 함수
     const pushFeedLike = () => {
@@ -109,9 +114,20 @@ export default {
         });
     };
 
+    const handleDeclareClick = () => {
+      showComplaintBox.value = true;
+    };
+
+    const closeComplaintBox = () => {
+      showComplaintBox.value = false;
+    };
+
     return {
       pushFeedLike,
       heartIcon,
+      handleDeclareClick,
+      showComplaintBox,
+      closeComplaintBox,
     };
   },
 };

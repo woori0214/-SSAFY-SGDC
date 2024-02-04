@@ -1,6 +1,11 @@
 <template>
   <div class="ranking-body">
     <div class="ranking-head">Ranking</div>
+
+    <div class="betweenBlock">
+      <div class="betweenBlock-item"></div>
+    </div>
+
     <div class="rank-categori-btn-list">
       <button
         class="rank-categori-btn"
@@ -338,7 +343,7 @@ const selectCategory = (categoryId) => {
   font-weight: 700;
   margin-left: 15px;
   padding-inline: 20px;
-  padding-block: 10px;
+  padding-top: 10px;
 }
 .rank-categori-btn-list {
   background-color: #f8f9fb;
@@ -359,8 +364,9 @@ const selectCategory = (categoryId) => {
   padding-top: 12px;
   padding-inline: 12px;
   padding-bottom: 5px;
+  transition: background-color 0.3s ease;
 }
-.rank-categori-btn:hover{
+.rank-categori-btn:hover {
   color: #71a5de;
   background-color: #e6e6e6;
 }
@@ -433,5 +439,19 @@ const selectCategory = (categoryId) => {
   width: 50px;
 
   text-align: center;
+}
+
+.betweenBlock {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-block: 15px;
+}
+.betweenBlock-item {
+  background-color: #f8f9fb;
+  border-radius: 5px;
+  width: 98%;
+  height: 4px;
 }
 </style>

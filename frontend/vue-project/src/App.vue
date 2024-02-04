@@ -29,16 +29,6 @@
           <div class="headbar">
             <HeaderNav></HeaderNav>
           </div>
-          <div class="nav-wrapper">
-            <nav>
-              <RouterLink to="/">Main</RouterLink>
-              <a href="#" @click="handleNavigation('/competition')"
-                >Competition</a
-              >
-              <a href="#" @click="handleNavigation('/solo')">Solo</a>
-              <a href="#" @click="handleNavigation('/feed')">Feed</a>
-            </nav>
-          </div>
         </div>
       </header>
       <br />
@@ -74,7 +64,6 @@ import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
 import HeaderNav from "./components/Common/HeaderNav.vue";
 import { useLoginStore } from "./stores/login";
-import { useUserStorageStore } from "./stores/userStorage";
 
 //로그인된 유저 정보
 const login = useLoginStore();
@@ -86,17 +75,6 @@ const web_width = ref(window.innerWidth);
 
 const handleWidth = () => {
   web_width.value = window.innerWidth;
-};
-
-const tmp_flag = ref(false);
-
-const handleNavigation = (to) => {
-  const userStorage = useUserStorageStore();
-  if (userStorage.getUserInformation().user_id.value != null) {
-    router.push(to);
-  } else {
-    alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
-  }
 };
 
 onMounted(() => {
@@ -162,11 +140,21 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
 
-  overflow: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 #main-body::-webkit-scrollbar {
-  display: none;
+  width: 10px;
+}
+#main-body::-webkit-scrollbar-thumb {
+  background-color: #71a5de;
+  border-radius: 10px;
+  background-clip: padding-box;
+}
+#main-body::-webkit-scrollbar-track {
+  background-color: rgba(255, 255, 255, 0);
+  border-radius: 10px;
 }
 
 .back-main-item {
@@ -193,33 +181,6 @@ onMounted(() => {
 }
 .wrapper {
   margin-inline: 8px;
-}
-.nav-wrapper {
-  background-color: #fff;
-  border-radius: 15px;
-  overflow: hidden;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-nav {
-  /* border: 2px solid red; */
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-
-nav a {
-  /* border: 2px solid green; */
-  text-decoration: none;
-  color: black;
-  padding: 10px 15px;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-  margin-inline: 10px;
-  &:hover {
-    background-color: #83b0e1;
-    color: #fff;
-  }
 }
 
 .headbar {
