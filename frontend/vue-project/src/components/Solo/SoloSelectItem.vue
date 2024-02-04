@@ -4,13 +4,11 @@
       <div v-for="category in categories" :key="category.id" class="category_item">
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
         <button @click="openModal(category)" class="solo_btn" :style="solobtncolor(category.id)">
-          <div class="img_container">
+          <div class="solo_btn_content">
             <img :src="category.img" alt="category" class="solo_bnt_img">
+            <div class="category_text">{{ category.name }}</div>
           </div>
-          <div class="category_text">
-            <h2>{{ category.name }}</h2>
-            <p class="extra_text">{{ category.contents }}</p>
-          </div>
+          <div class="extra_text">{{ category.contents }}</div>
         </button>
       </div>
     </div>
@@ -65,37 +63,37 @@ export default {
       {
         id: 1,
         name: '기상',
-        contents: 'SSAFY 입실체크 빨리하기',
+        contents: 'SSAFY 입실체크 인증',
         img: timerImage
       },
       {
         id: 2,
         name: '알고리즘',
-        contents: '알고리즘 1일 1문제 풀기',
+        contents: '1일 1알고리즘',
         img: algoImage
       },
       {
         id: 3,
         name: '운동',
-        contents: '운동 인증샷 찍기(헬스장, 공원 등)',
+        contents: '운동 인증샷',
         img: healthImage
       },
       {
         id: 4,
         name: '스터디',
-        contents: '하루 몇시간 공부했는지 인증하기',
+        contents: '공부시간 인증샷',
         img: studyImage
       },
       {
         id: 5,
         name: '식단',
-        contents: '10층 샐러드 빈그릇 인증샷 찍기',
+        contents: '샐러드 빈그릇 인증샷',
         img: dietImage
       },
       {
         id: 6,
         name: '절제',
-        contents: '오늘 나는 ㅇㅇㅇ을 참았다.',
+        contents: '오늘 나는 ___ 을 참았다.',
         img: fightingImage
       },
     ]);
@@ -111,7 +109,7 @@ export default {
           console.error('Error fetching soloTodayData:', error);
         });
     });
-    
+
     // 확인 모달창
     const openModal = (category) => {
       // console.log(category)
@@ -176,7 +174,7 @@ export default {
       console.log(challengeData)
       closeTestModal();
     };
-    
+
     return {
       categories,
       openModal,
@@ -195,16 +193,17 @@ export default {
 </script>
   
 <style scoped>
-
-.solomode_container{
-  max-height: 400px;
+.solomode_container {
+  max-height: 500px;
 }
+
 .category_container {
   height: 80%;
   overflow: auto;
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between; /* 카테고리 아이템을 간격을 벌리며 레이아웃 */
+  justify-content: space-between;
+  /* 카테고리 아이템을 간격을 벌리며 레이아웃 */
   background-color: #f8f9fb;
   margin: 20px;
   border-radius: 30px;
@@ -215,49 +214,48 @@ export default {
 
 .category_item {
   background-color: #aecbeb;
-  flex-basis: calc(50% - 30px); /* 한 줄에 두 개의 아이템이 나오도록 설정, 간격을 조절해야합니다. */
-  margin: 15px; /* 원하는 간격으로 설정 */
+  margin: 15px;
+  /* 원하는 간격으로 설정 */
   border-radius: 20px;
 }
 
 .solo_btn {
   display: flex;
-  flex-direction: column; /* 이미지와 텍스트를 수직으로 배치 */
-  align-items: center; /* 가운데 정렬 */
-  padding: 10px;
-  font-size: 16px;
-  width: 100%;
-  position: relative;
-  cursor: pointer;
-  border: none;
-  background: none;
-  border-radius: 20px;
-}
-
-.img_container {
-  width: 200px; /* 조정 가능한 크기 */
-  height: 200px; /* 조정 가능한 크기 */
-  border-radius: 50%; /* 동그라미 모양으로 만듭니다. */
-  display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  overflow: hidden; /* 이미지가 동그라미를 벗어나지 않도록 합니다. */
-  background-color: #f8f9fb; /* 이미지가 없을 때를 위한 배경 색상 */
-  margin-top: 10px;
+  text-align: center;
+  cursor: pointer;
+
+  border: none;
+  border-radius: 20px;
+
+  width: 250px;
+  height: 150px;
+}
+
+.solo_btn_content {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  height: 80%;
+
+  font-size: 25px;
+  font-weight: bold;
+  color: black;
 }
 
 .solo_bnt_img {
-  max-width: 90%;
-  max-height: 90%;
-}
-
-.category_text {
-  text-align: center;
-  color: white;
-  font-size: x-large;
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 100%;
+  background-color: #f8f9fb;
 }
 
 .extra_text {
+  font-size: 15px;
   margin-top: 5px;
   color: black;
 }
@@ -293,5 +291,47 @@ export default {
   color: white;
   font-size: medium;
 }
+
+@media screen and (max-width: 820px) {
+  .solo_btn {
+    padding: 5px;
+    width: 200px;
+    height: 150px;
+  }
+
+  .solo_btn_content {
+    font-size: 18px;
+  }
+
+}
+
+@media screen and (max-width: 768px) {
+  .solo_btn {
+    width: 189px;
+    height: 150px;
+  }
+}
+
+@media screen and (max-width: 540px) {
+  .category_container {
+    justify-content: center;
+  }
+
+  .solo_btn {
+    width: 300px;
+    height: 150px;
+  }
+
+  .solo_btn_content {
+    font-size: 25px;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .solo_btn {
+    width: 250px;
+    height: 150px;
+  }
+
+}
 </style>
-  
