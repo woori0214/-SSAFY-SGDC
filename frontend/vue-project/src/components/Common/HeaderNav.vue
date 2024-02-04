@@ -214,6 +214,7 @@ const handleNavigation = (to) => {
   background-color: #aecbeb;
   padding-block: 5px;
   padding-inline: 8px;
+  transition: color 0.3s ease;
 }
 .nav-link:hover {
   color: #ffffff;

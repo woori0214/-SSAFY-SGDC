@@ -68,6 +68,7 @@ const OnOffAudio = () => {
   height: 40px;
   width: 40px;
   text-align: center;
+  transition: background-color 0.3s ease;
 }
 .audio-btn:hover{
   background-color: #aecbeb;
