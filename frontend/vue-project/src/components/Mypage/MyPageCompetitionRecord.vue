@@ -249,16 +249,25 @@ export default {
     display: flex;
     padding: 10px;
     border-top: none;
-    overflow: auto;
+    overflow: hidden;
     max-height: 0;
     transition: max-height 0.3s ease;
+}
+
+.com_accordion-content::-webkit-scrollbar {
+    height: 5px;
+}
+
+.com_accordion-content::-webkit-scrollbar-thumb {
+    background-color: #71a5de;
+    border-radius: 10px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
 .com_accordion-content.open {
     max-height: 1000px;
-    /* 충분한 크기로 조절하거나, 실제 내용의 높이에 따라 조절해주세요. */
     transition: max-height 0.3s ease;
+    overflow: scroll;
 }
 
 .result_div {

@@ -17,7 +17,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
-import nobadgeimg from '@/assets/no_badge.png';
+import nobadgeimg from '@/assets/badges/badge_lock.png';
 
 import wakebadge from '@/assets/badges/wake1.png';
 import algobadge from '@/assets/badges/algo1.png';
@@ -102,8 +102,6 @@ export default {
   
 <style scoped>
 .badge {
-  /* flex-basis: calc(100% / 6); /* 뱃지 너비를 전체 너비의 1/6로 설정 */
-  /* max-width: calc(100% / 6); 최대 너비도 전체 너비의 1/6로 설정 */ 
   text-align: center;
   box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
   padding: 5px; /* 뱃지 간격을 위한 패딩 추가 */
@@ -150,15 +148,23 @@ export default {
 
 /* 아코디언 내용 스타일링 */
 .accordion-content {
-  display: flex;
-  justify-content: left;
-  flex-wrap: wrap;
   padding: 10px;
   border-top: none;
-  overflow: auto;
+  overflow: hidden;
   max-height: 0;
   transition: max-height 0.3s ease;
-  margin-top: 3px;
+  display: flex;
+  flex-direction: row;
+
+}
+
+.accordion-content::-webkit-scrollbar {
+    height: 5px;
+}
+
+.accordion-content::-webkit-scrollbar-thumb {
+    background-color: #71a5de;
+    border-radius: 10px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
@@ -166,6 +172,7 @@ export default {
   max-height: 1000px;
   /* 충분한 크기로 조절하거나, 실제 내용의 높이에 따라 조절해주세요. */
   transition: max-height 0.3s ease;
+  overflow: scroll;
 }
 </style>
   

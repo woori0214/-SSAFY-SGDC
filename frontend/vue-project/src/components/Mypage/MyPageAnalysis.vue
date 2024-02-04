@@ -316,6 +316,7 @@ export default {
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.3s ease;
+  overflow: hidden;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */

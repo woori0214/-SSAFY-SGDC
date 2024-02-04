@@ -1,4 +1,4 @@
-<template>
+<template> 
     <div>
         <div class="accordion-header" @click="toggleAccordion">
             <h2>쌀로우</h2>
@@ -10,9 +10,9 @@
                 <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
                     <div class="ssallow_info">
                         <img :src="ssallowing.user_img" alt="" class="ssallow_img">
-                        <h2>{{ ssallowing.user_nickname }}</h2>
+                        {{ ssallowing.user_nickname }}
                     </div>
-                    <div>
+                    <div class="ssallow_btns">
                         <button @click="gotoProfile(ssallowing.user_id)" class="ssallow_btn">프로필 페이지</button>
                         <button @click="toggleFollow(ssallowing)" class="ssallow_btn">{{getButtonText(ssallowing.isFollowing) }}</button>
                     </div>
@@ -23,9 +23,9 @@
                 <div v-for="ssallower in ssallowers" :key="ssallower.user_id" class="ssallow">
                     <div class="ssallow_info">
                         <img :src="ssallower.user_img" alt="" class="ssallow_img">
-                        <h2>{{ ssallower.user_nickname }}</h2>
+                        {{ ssallower.user_nickname }}
                     </div>
-                    <div>
+                    <div class="ssallow_btns">
                         <button @click="gotoProfile(ssallower.user_id)" class="ssallow_btn">프로필 페이지</button>
                         <button @click="toggleFollow(ssallower)" class="ssallow_btn">{{ getButtonText(ssallower.isFollowing)}}</button>
 
@@ -162,35 +162,57 @@ export default {
 .sallowing_body,
 .ssallower_body {
     background: #f8f9fb;
-    margin-top: 10px;
+    margin: 10px;
     border-radius: 30px;
     padding-left: 20px;
     padding-right: 20px;
+    height: 300px;
+    overflow: scroll;
+}
+.sallowing_body::-webkit-scrollbar,
+.ssallower_body::-webkit-scrollbar {
+    width: 5px;
 }
 
+.sallowing_body::-webkit-scrollbar-thumb,
+.ssallower_body::-webkit-scrollbar-thumb {
+    background-color: #71a5de;
+    border-radius: 10px;
+}
 .ssallow {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .ssallow_info {
     display: flex;
     align-items: center;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.ssallow_btns {
+    display: flex;
 }
 
 .ssallow_btn {
     margin: 10px;
-    background: #71a5de;
-    border: #71a5de;
+    background: #e1ecf7;
+    border: none;
     border-radius: 30px;
+    color: black;
+
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
+.ssallow_btn:hover {
+    background: #83b0e1;
     color: white;
-    width: auto;
-    height: 40px;
-    /* 버튼 크기를 뷰포트 단위로 설정 */
-    width: 15vw;
-    height: 5vh;
-    font-size: 1.5vw;
 }
 
 .ssallow_img {
@@ -245,5 +267,50 @@ export default {
     max-height: 1000px;
     transition: max-height 0.3s ease;
 }
+
+@media screen and (max-width: 768px) {
+    .ssallow_info {
+        font-size: 20px;
+    }
+
+    .ssallow_btn {
+        width: 150px;
+        height: 50px;
+        font-size: 17px;
+    }
+}
+@media screen and (max-width: 450px) {
+    .ssallow_info {
+        font-size: 15px;
+    }
+    .ssallow_img {
+        margin: 15px 5px;
+    }
+    .ssallow_btns {
+        flex-direction: column;
+    }
+    .ssallow_btn {
+    width: 130px;
+    height: 30px;
+    font-size: 15px;
+    margin: 3px 10px;
+}
+@media screen and (max-width: 350px) {
+    .ssallow {
+        flex-direction: column;
+    }
+    .ssallow_btns {
+        flex-direction: row;
+    }
+    .ssallow_btn {
+    width: 110px;
+    height: 30px;
+    font-size: 15px;
+    margin: 2px;
+}
+}
+}
+
+
 </style>
     
