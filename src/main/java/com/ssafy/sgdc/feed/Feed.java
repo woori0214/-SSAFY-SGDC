@@ -17,9 +17,9 @@ public class Feed {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "feed_id")
-    private long feedId;
+    private int feedId;
 
-    @Column(name = "feed_title", length = 20)
+    @Column(name = "feed_title", length = 200)
     private String feedTitle;
 
     @Column(name = "feed_content", length = 200)
@@ -43,8 +43,32 @@ public class Feed {
     @Column(name = "feed_img", length = 200)
     private String feedImg;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compet_id")
     private Competition competId;
+
+    private Feed(String feedTitle, String feedContent, int feedLikeNum, int views, boolean privacy, LocalDateTime createAt, LocalDateTime updateAt, String feedImg, Competition competId) {
+        this.feedTitle = feedTitle;
+        this.feedContent = feedContent;
+        this.feedLikeNum = feedLikeNum;
+        this.views = views;
+        this.privacy = privacy;
+        this.createAt = createAt;
+        this.updateAt = updateAt;
+        this.feedImg = feedImg;
+        this.competId = competId;
+    }
+
+    public static Feed of(String feedTitle,
+                          String feedContent,
+                          int feedLikeNum,
+                          int views,
+                          boolean privacy,
+                          LocalDateTime createAt,
+                          LocalDateTime updateAt,
+                          String feedImg,
+                          Competition competId
+                          )
+    { return new Feed(feedTitle, feedContent, feedLikeNum, views, privacy, createAt, updateAt, feedImg, competId); }
 
 }

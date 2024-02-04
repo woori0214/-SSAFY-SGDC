@@ -19,6 +19,7 @@ import com.ssafy.sgdc.enums.CompetKind;
 import com.ssafy.sgdc.enums.CompetResult;
 import com.ssafy.sgdc.enums.IsSender;
 import com.ssafy.sgdc.enums.MatchStatus;
+import com.ssafy.sgdc.feed.FeedService;
 import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +47,8 @@ public class CompetitionService {
     private final ImageAuthRepo imageAuthRepo;
 
     private final CompetDetailRepo competDetailRepo;
+
+    private final FeedService feedService;
 
     /* !!도전장 보내기 관련
         프론트에서 사용자가 진행 중인 경쟁목록을 가져와서 애초에 진행 중인 카테고리로는 보낼 수 없게 막아야함
@@ -328,6 +331,7 @@ public class CompetitionService {
             competition.setCompetDetail(competDetailRepo.save(competDetail));
 
             competitionRepo.save(competition);
+            feedService.createFeed(competition);
 
         }
 
