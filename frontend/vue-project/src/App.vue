@@ -64,7 +64,6 @@ import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
 import HeaderNav from "./components/Common/HeaderNav.vue";
 import { useLoginStore } from "./stores/login";
-import { useUserStorageStore } from "./stores/userStorage";
 
 //로그인된 유저 정보
 const login = useLoginStore();
@@ -76,17 +75,6 @@ const web_width = ref(window.innerWidth);
 
 const handleWidth = () => {
   web_width.value = window.innerWidth;
-};
-
-const tmp_flag = ref(false);
-
-const handleNavigation = (to) => {
-  const userStorage = useUserStorageStore();
-  if (userStorage.getUserInformation().user_id.value != null) {
-    router.push(to);
-  } else {
-    alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
-  }
 };
 
 onMounted(() => {
