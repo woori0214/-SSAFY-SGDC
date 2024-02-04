@@ -14,12 +14,12 @@
                     <img :src="mypageUser.user_img" alt="use_img" class="user_img">
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
-                <!-- <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns"> -->
+                <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns">
                 <div class="myprofile_btns">
                     <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
                     <button @click="toggleFollow()" class="myprofile_btn">{{ getButtonText(isFollowing) }} </button>
                 </div>
-                <!-- </div> -->
+                </div>
                 <div v-if="mypageUser.user_id === loginUser" class="myprofile_btns">
                     <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
 
@@ -35,12 +35,12 @@
             <!--팔로우 수-->
             <div class="follow_cnt">
                 <div class="follow_div">
-                    <h1>{{ ssallower_cnt }}</h1>
-                    <h3>쌀로워 수</h3>
+                    <div class="follow_cnt_num">{{ ssallower_cnt }}</div>
+                    <div>쌀로워</div>
                 </div>
                 <div class="follow_div">
-                    <h1>{{ ssallowing_cnt }}</h1>
-                    <h3>쌀로잉 수</h3>
+                    <div class="follow_cnt_num">{{ ssallowing_cnt }}</div>
+                    <div>쌀로잉</div>
                 </div>
             </div>
 
@@ -48,25 +48,37 @@
             <div v-if="isMailboxOpen" class="popup_mailbox">
                 <div class="mailbox_content">
                     <CompetitionMailbox />
-                    <button @click="isMailboxOpen = false" class="mailbox_close_btn">close</button>
+                    <button @click="isMailboxOpen = false" class="mailbox_close_btn">닫기</button>
                 </div>
             </div>
 
             <!--도전장 보내기-->
             <div v-if="isopenSendMsg" class="popup_sendmsg">
-                <div class="sendmsg_content">
-                    <h3>카테고리를 선택해주세요</h3>
-                    <div class="sendmsg_category">
-                        <button v-for="category in categories" :key="category.id" @click="selectCategory(category.id)"
-                            class="sendmsg_category_btn">
-                            <h3>{{ category.name }}</h3>
-                        </button>
-                    </div>
-                    <div class="sendmsg_btns">
-                        <button @click="sendmsg()" class="sendmsg_btn">도전장 보내기</button>
-                        <button @click="isopenSendMsg = false" class="sendmsg_btn">닫기</button>
+                <div class="sendmsg_contents">
+                    <div class="sendmsg_info">카테고리를 선택해주세요</div>
+                    <div class="sendmsg_content">
+                        <div class="sendmsg_selectcategory">선택한 카테고리 : {{ selectedCategoryNickname }}</div>
+                        <div class="sendmsg_category">
+                            <button v-for="category in categories" :key="category.id" @click="selectCategory(category)"
+                                class="sendmsg_category_btn">
+                                {{ category.name }}
+                            </button>
+                        </div>
+                        <div class="sendmsg_btns">
+                            <button @click="sendmsg()" class="sendmsg_btn">도전장 보내기</button>
+                            <button @click="isopenSendMsg = false" class="sendmsg_btn">닫기</button>
+                        </div>
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <!--도전장 보냄 확인-->
+        <div v-if="showResponseModal" class="send_msg_request">
+            <div class="send_msg_request_contents">
+                <div class="send_msg_request_content">
+                    <h3>도전장 전송 완료</h3>
+                    <button @click="closeResponseModal" class="mailbox_close_btn">닫기</button>
                 </div>
             </div>
         </div>
@@ -139,17 +151,19 @@ export default {
 
         const mypageUser = ref(props.userData);
         const loginUser = ref(props.loginUser);
-        
+
         // 나중에 주석 풀기
         // const ssallowing_cnt = ref(null);
         // const ssallower_cnt = ref(null);
         const ssallowing_cnt = ref(3);
         const ssallower_cnt = ref(2);
         const selectedCategory = ref(null);
+        const selectedCategoryNickname = ref(null);
 
         const isMailboxOpen = ref(false);
         const isopenSendMsg = ref(false);
         const isFollowing = ref(false);
+        const showResponseModal = ref(false);
 
         // 사용자의 뱃지 이미지 찾기
         const userBadgeImage = computed(() => {
@@ -166,13 +180,16 @@ export default {
         const openSendMsg = function () {
             isopenSendMsg.value = true;
         };
-        const selectCategory = (categoryId) => {
-            selectedCategory.value = categoryId;
+        const selectCategory = (category) => {
+            selectedCategory.value = category.id;
+            selectedCategoryNickname.value = category.name;
             console.log(selectedCategory.value)
+            console.log(selectedCategoryNickname.value)
         };
         const sendmsg = function () {
             // selectedCategory의 현재 값으로 작업을 수행
             if (selectedCategory.value !== null) {
+                showResponseModal.value = true;
                 const friendSendmsg = {
                     user_id: loginUser.value,
                     friend_id: mypageUser.value.user_id,
@@ -181,6 +198,8 @@ export default {
                 competStore.friendSend(friendSendmsg)
                     .then((res) => {
                         console.log('도전장 보내기 성공')
+                        isopenSendMsg.value = false;
+                        showResponseModal.value = true;
                     })
                     .catch((err) => {
                         console.log(err)
@@ -190,6 +209,10 @@ export default {
             }
 
         };
+
+        const closeResponseModal = () => {
+            showResponseModal.value = false;
+        }
 
         // 버튼 토글
         const toggleFollow = () => {
@@ -239,9 +262,9 @@ export default {
                 .catch((err) => {
                     console.log(err)
                 })
-            
+
             // 팔로우 했는지 안했는지 확인
-            const checkusers = {user_id: mypageUser.value, following_id: loginUser.value}
+            const checkusers = { user_id: mypageUser.value, following_id: loginUser.value }
             followStore.checkSsallowing(checkusers)
                 .then((res) => {
                     isFollowing.value = res.success
@@ -254,12 +277,15 @@ export default {
 
         return {
             categories,
+            selectedCategoryNickname,
             mypageUser, loginUser,
             userBadgeImage,
             isopenSendMsg,
             ssallowing_cnt, ssallower_cnt,
             isMailboxOpen,
             isFollowing,
+            showResponseModal,
+            closeResponseModal,
             toggleFollow, getButtonText,
             openSendMsg, selectCategory, sendmsg,
             openCompetMailbox,
@@ -298,6 +324,7 @@ export default {
 
 .user_img {
     background: #f8f9fb;
+    border: #aecbeb 2px solid;
     border-radius: 500px;
     width: 130px;
     height: 130px;
@@ -317,15 +344,18 @@ export default {
 
 .middle {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
+
+    margin: 20px;
+    border-radius: 20px;
+    background-color: #f8f9fb;
 }
 
 .middle1 {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    margin-left: 30px;
+    width: 50%;
 }
 
 .myprofile_btns {
@@ -335,25 +365,46 @@ export default {
 }
 
 .myprofile_btn {
-    margin: 10px;
-    background: #71a5de;
-    border: #71a5de;
+    margin: 10px 20px;
+    background: #e1ecf7;
+    border: none;
     border-radius: 30px;
-    color: white;
-    width: auto;
+    color: black;
+    width: 170px;
     height: 40px;
     font-size: medium;
     font-weight: bolder;
 }
 
+.myprofile_btn:hover {
+    margin: 10px 20px;
+    background: #83b0e1;
+    color: white;
+}
+
 .follow_cnt {
     display: flex;
-    margin-right: 30px;
     text-align: center;
+    font-size: 18px;
+    font-weight: bolder;
 }
 
 .follow_div {
-    margin: 0 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    text-align: center;
+    margin: 10px 30px;
+    padding-bottom: 5px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #e1ecf7;
+}
+
+.follow_cnt_num {
+    font-size: 30px;
 }
 
 
@@ -371,59 +422,116 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100000;
 }
 
-.mailbox_content,
+.mailbox_content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    text-align: center;
+    background-color: #f8f9fb;
+    border: #aecbeb 2px solid;
+    border-radius: 20px;
+    width: 50%;
+    height: 60%;
+    padding: 30px;
+}
+
+.sendmsg_contents {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e1ecf7;
+    border-radius: 20px;
+    width: 60%;
+    height: 50%;
+    text-align: center;
+}
+
+.sendmsg_info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 30px;
+    background-color: #83b0e1;
+    color: white;
+    font-size: 25px;
+    width: 400px;
+    height: 50px;
+
+}
+
 .sendmsg_content {
     display: flex;
     flex-direction: column;
-    background-color: #e1ecf7;
-    border: #aecbeb 2px solid;
-    /* padding: 50px; */
-    border-radius: 8px;
-    /* text-align: center; */
-    /* width: 80vw; */
-    width: 50%;
-    /* height: 50%; */
+    background-color: #f8f9fb;
+    border-radius: 20px;
+    margin: 10px;
+    padding: 30px;
+    padding-top: 10px;
+    width: 80%;
+    height: 60%;
+    text-align: center;
+}
+
+.sendmsg_selectcategory {
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .sendmsg_category {
-    display: flex;
-    justify-content: center;
+    background-color: #e1ecf7;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 15px;
 }
 
 .sendmsg_category_btn {
     cursor: pointer;
-    width: 150px;
     padding: 10px;
     margin: 10px;
 
-    border: 2px solid #83b0e1;
-    border-radius: 25px;
-    background-color: #83b0e1;
+    background-color: #aecbeb;
+    border-radius: 20px;
+    border: none;
 
-    color: white;
+    width: 150px;
+    color: black;
     font-size: larger;
     font-weight: bolder;
 }
 
 .sendmsg_category_btn.active {
     background-color: #83b0e1;
+    color: white;
 }
 
 .mailbox_close_btn {
-    width: 30%;
+    width: 150px;
     height: 50px;
     margin: 10px auto;
-    background-color: #71a5de;
+    margin-bottom: 0;
+
+    background-color: #e1ecf7;
     border: none;
     border-radius: 20px;
     cursor: pointer;
-    color: white;
-    font-size: larger;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
 }
 
+.mailbox_close_btn:hover {
+    background-color: #83b0e1;
+    color: white;
+}
+
+
 .sendmsg_btns {
+    display: flex;
+    justify-content: center;
     margin-top: 20px;
 }
 
@@ -434,81 +542,136 @@ export default {
     width: 200px;
     height: 50px;
 
-    background-color: #83b0e1;
-    border: #83b0e1;
+    background-color: #e1ecf7;
+    border: none;
     border-radius: 25px;
-    color: white;
+    color: black;
     font-size: larger;
     font-weight: bolder;
 
 }
 
-@media (max-width: 768px) {
-    .top {
-        flex-direction: column;
-        align-items: center;
-    }
+.sendmsg_btn:hover {
+    background-color: #83b0e1;
+    color: white;
+}
 
+.send_msg_request {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+}
+
+.send_msg_request_contents {
+    background-color: #e1ecf7;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+.send_msg_request_content {
+    background-color: #f8f9fb;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+@media screen and (max-width: 768px) {
     .complain_img {
         width: 20px;
         height: 20px;
         margin: 2px;
     }
 
-    .middle {
-        flex-direction: column;
-        align-items: center;
-    }
-
     .user_img {
         width: 100px;
         height: 100px;
         margin: 10px;
-    }
-
-    .follow_cnt {
-        margin: 10px;
-    }
-
-    .user_img {
-        width: 100px;
-        /* 화면 크기가 작아졌을 때의 크기 */
-        height: 100px;
     }
 
     .badge_img {
         bottom: 10px;
-        /* 화면 크기가 작아졌을 때 뱃지 위치 조정 */
         right: 0px;
         width: 40px;
-        /* 화면 크기가 작아졌을 때 뱃지 크기 조정 */
         height: 40px;
     }
 
     .myprofile_btn {
-        width: 40vw;
-        /* 너비를 화면 너비의 40%로 조정 */
-        height: 8vh;
-        /* 높이를 화면 높이의 8%로 조정 */
-        font-size: 3.5vw;
+        width: 150px;
+        font-size: 15px;
+    }
+
+    .follow_cnt {
+        display: flex;
+        text-align: center;
+        font-size: 17px;
+        font-weight: bolder;
+    }
+
+    .follow_div {
+        width: 80px;
+        height: 80px;
+        margin: 10px 20px;
+    }
+
+    .follow_cnt_num {
+        font-size: 25px;
     }
 
     .mailbox_content {
-        width: 90%;
-        height: 90%;
-        max-width: none;
-        max-height: none;
+        width: 60%;
+        height: 60%;
     }
 }
 
-@media (max-width: 320px) {
-
-    .popup_mailbox,
-    .popup_sendmsg {}
-
-    .mailbox_content,
-    .sendmsg_content {
-        /* 팝업 내용 스타일 추가 조정, 필요에 따라 */
+@media screen and (max-width: 650px) {
+    .top {
+        margin: 10px 10px;
     }
+
+    .middle {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .middle1 {
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .myprofile_btns {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .myprofile_btn {
+        width: 180px;
+        font-size: 12px;
+        margin: 10px;
+    }
+
+    .follow_cnt {
+        font-size: 16px;
+    }
+
+    .follow_div {
+        width: 80px;
+        height: 80px;
+        padding-bottom: 5px;
+    }
+
 }
 </style>
