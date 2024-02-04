@@ -1,27 +1,49 @@
 <template>
   <div class="feed_board">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <div class="more_feed">
-      <h1>
-        <img
+      <div class="more_feed_head">
+        <!-- <img
           src="@/assets/alarmmachine.png"
           alt="Alarm Machine Icon"
           class="alarm-icon"
-        />
+        /> -->
+        <div class="material-symbols-outlined" style="font-size: 44px">
+          lightbulb
+        </div>
         알려드립니다
-      </h1>
+      </div>
       <div>
-        <button v-if="userStored_id != null" @click="more_feed">+더보기</button>
+        <button
+          v-if="userStored_id != null"
+          @click="more_feed"
+          class="more_feed_btn"
+        >
+          더보기<span class="material-symbols-outlined"> exit_to_app </span>
+        </button>
       </div>
     </div>
+
+    <div class="betweenBlock">
+      <div class="betweenBlock-item"></div>
+    </div>
+
     <div class="feed_list">
       <div
         v-for="feed_item in feedlist"
         :key="feed_item.feed_id"
         class="feed_item"
       >
-        <p class="feed_item_context">{{ feed_item.feed_content }}</p>
+        <div class="feed_item_context">{{ feed_item.feed_content }}</div>
       </div>
-      <div class="feed_item_foot"></div>
+      <!-- <div class="feed_item_foot"></div> -->
     </div>
   </div>
 </template>
@@ -95,11 +117,20 @@ const more_feed = () => {
   /* ---------- */
 }
 
+.betweenBlock {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.betweenBlock-item {
+  background-color: #f8f9fb;
+  border-radius: 5px;
+  width: 98%;
+  height: 4px;
+}
+
 .more_feed {
-  /* 임시 스타일 */
-  border-bottom: 5px solid whitesmoke;
-  /* background-color: rgb(255, 195, 195); */
-  /* ---------- */
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -111,6 +142,10 @@ const more_feed = () => {
   font-size: 44px;
   font-weight: 700;
   margin-left: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .feed_list {
@@ -120,44 +155,40 @@ const more_feed = () => {
   border-radius: 25px;
   /* ---------- */
   /* margin-inline: 20px; */
-  margin-top: 20px;
-  margin-bottom: 5px;
+  margin-block: 20px;
   display: flex;
   flex-direction: column;
-  padding-block: 10px;
+  /* padding-block: 10px; */
+  gap: 15px;
 }
 
 .feed_item {
   /* 임시 스타일 */
-  border: 2px solid #aecbeb;
+  /* border: 2px solid #aecbeb; */
   background-color: #f8f9fb;
-  border-top-right-radius: 20px;
-  border-top-left-radius: 20px;
+  border-radius: 10px;
+  /* border-top-right-radius: 20px;
+  border-top-left-radius: 20px; */
   /* ---------- */
   margin-inline: 15px;
   padding-inline: 20px;
-  padding-bottom: 10px;
+  padding-block: 5px;
   font-size: 20px;
   font-weight: 600;
-  margin-top: -15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.feed_item_foot {
+/* .feed_item_foot {
   background-color: #83b0e1;
-  /* 볼더 스타일1 */
   border-radius: 15px;
-  /*  */
-  /* 볼더 스타일2 */
-  /* border-bottom-right-radius: 15px;
-  border-bottom-left-radius: 15px; */
-  /*  */
   height: 25px;
   margin-inline: 15px;
   margin-top: -15px;
-}
+} */
 
 .feed_item_context {
   border: 0px;
+  margin-block: 5px;
 }
 
 .alarm-icon {
@@ -167,5 +198,22 @@ const more_feed = () => {
   /* Set your desired max-height */
   vertical-align: middle;
   /* Align the image vertically */
+}
+.more_feed_btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 600;
+  border-radius: 5px;
+  background-color: #f8f9fb;
+  border: 2px solid gray;
+  padding-block: 5px;
+  transition: background-color 0.3s ease;
+}
+.more_feed_btn:hover {
+  background-color: #83b0e1;
+  color: white;
+  border: #f8f9fb;
 }
 </style>
