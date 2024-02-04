@@ -24,7 +24,6 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .select_body {
-  flex: 1; /* Fill the available space horizontally */
 }
 
 .mail_box_body {

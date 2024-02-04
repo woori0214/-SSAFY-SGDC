@@ -194,12 +194,12 @@ export default {
   
 <style scoped>
 .solomode_container {
-  max-height: 500px;
+  /* max-height: 500px; */
 }
 
 .category_container {
-  height: 80%;
-  overflow: auto;
+  /* height: 80%; */
+  /* overflow: auto; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
