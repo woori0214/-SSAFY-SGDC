@@ -26,20 +26,20 @@ export const useCompetionStore = defineStore('competition', () => {
     };
 
 
-    //랜덤도전장수락하기
-    const randomAccept = function (randomAccept) {
-        return new Promise((resolve, reject) => {
-            axios
-                .post(`${URL}/random-accept`, randomAccept)
-                .then((response) => {
-                    resolve(response);
-                })
-                .catch((e) => {
-                    console.log(e)
-                    reject(e);
-                });
-        })
-    };
+    // //랜덤도전장수락하기
+    // const randomAccept = function (randomAccept) {
+    //     return new Promise((resolve, reject) => {
+    //         axios
+    //             .post(`${URL}/random-accept`, randomAccept)
+    //             .then((response) => {
+    //                 resolve(response);
+    //             })
+    //             .catch((e) => {
+    //                 console.log(e)
+    //                 reject(e);
+    //             });
+    //     })
+    // };
     //친구에게 도전장 보내기
     const friendSend = function (friendSend) {
         return new Promise((resolve, reject) => {
@@ -55,10 +55,24 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
     //친구도전장 수락하기
-    const friendAccept = function (friendAccept) {
+    // const friendAccept = function (friendAccept) {
+    //     return new Promise((resolve, reject) => {
+    //         axios
+    //             .post(`${URL}/friend-send`, friendAccept)
+    //             .then((response) => {
+    //                 resolve(response);
+    //             })
+    //             .catch((e) => {
+    //                 console.log(e)
+    //                 reject(e);
+    //             });
+    //     })
+    // };
+        //친구,랜덤도전장 수락하기
+    const bothAccept = function (matchingId) {
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/friend-send`, friendAccept)
+                .post(`${URL}/accept/${matchingId}`, {})
                 .then((response) => {
                     resolve(response);
                 })
@@ -113,7 +127,7 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
 
-    //종료 경쟁 정보 상세 조회
+    //종료 경쟁 정보 상세 조회(개별)
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
             axios
@@ -129,10 +143,10 @@ export const useCompetionStore = defineStore('competition', () => {
     };
 
     //경쟁모드인증현황
-    const competitionProgressDetail = function (userId, cometId) {
+    const competitionProgressDetail = function (userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/progress-compet-detail/${userId}/${cometId}`)
+                .get(`${URL}/progress-compet-detail/${userId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -148,7 +162,7 @@ export const useCompetionStore = defineStore('competition', () => {
     const competitionFriendList = function (userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL2}/friend/list/${userId}`)
+                .get(`${URL2}/friends/list/${userId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -175,9 +189,10 @@ export const useCompetionStore = defineStore('competition', () => {
     };
     return {
         randomSend,
-        randomAccept,
+        // randomAccept,
         friendSend,
-        friendAccept,
+        // friendAccept,
+        bothAccept,
         competitionMailbox,
         competitionImage,
         competitionFinish,
