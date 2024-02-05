@@ -3,6 +3,7 @@ package com.ssafy.sgdc.feed;
 
 import com.ssafy.sgdc.base.dto.DataResponseDto;
 import com.ssafy.sgdc.feed.dto.FeedOneDto;
+import com.ssafy.sgdc.feed.dto.UpdateViewDto;
 import com.ssafy.sgdc.follow.dto.FollowerListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -57,6 +58,15 @@ public class FeedController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "createAt");
         return DataResponseDto.of(feedService.findItemsAfter(feedId, pageable),"피드 10개씩 조회");
+    }
+
+
+    @Operation(summary = "피드 조회수 업데이트", description="피드의 조회수를 업데이트합니다.")
+    @Parameter(name = "feedId", schema = @Schema(implementation = int.class), description = "특정 피드의 PK", in = ParameterIn.PATH)
+    @PatchMapping("/feed-views/{feedId}")
+    public DataResponseDto<?> follow(@PathVariable int feedId) {
+        UpdateViewDto updateViewsData = new UpdateViewDto(feedService.updateView(feedId));
+        return DataResponseDto.of(updateViewsData, "조회수 증가");
     }
 
 

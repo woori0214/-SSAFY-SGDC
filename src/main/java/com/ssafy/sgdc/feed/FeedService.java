@@ -85,14 +85,6 @@ public class FeedService {
      *  피드 게시물 10개씩 불러오기
      */
 
-    public Page<FeedOneDto> getFeeds(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-
-        Page<Feed> feedPage = feedRepo.findAll(pageable);
-
-        return feedPage.map(this::convertToDto);
-    }
-
     public Page<FeedOneDto> findItemsAfter(int feedId, Pageable pageable) {
         if (feedId==0) {
             // 처음 페이지를 로드할 때
@@ -104,6 +96,24 @@ public class FeedService {
             return feedPage.map(this::convertToDto);
         }
     }
+
+
+    /**
+     * 피드 조회수 업데이트
+     */
+    @Transactional
+    public int updateView(int feedId) {
+        feedRepo.updateView(feedId);
+        return getFeedViews(feedId);
+    }
+
+    private int getFeedViews(int feedId) {
+        return feedRepo.findByFeedId(feedId)
+                .map(Feed::getViews)
+                .orElse(0);
+    }
+
+
     private FeedOneDto convertToDto(Feed feed) {
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
