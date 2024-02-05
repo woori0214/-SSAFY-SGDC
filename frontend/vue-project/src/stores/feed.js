@@ -12,7 +12,7 @@ export const useFeedStore = defineStore('feed', () => {
     const getFeed = function(feedId){
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/feed-info/${feedId}`)
+                .get(`${URL}/feed-info/${feedId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -28,7 +28,7 @@ export const useFeedStore = defineStore('feed', () => {
     const updateFeedView = function (feedId) {
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URI}/feed-views/${feedId}`,{})
+                .patch(`${URL}/feed-views/${feedId}`,{})
                 .then((res) => {
                     resolve(res)
                     console.log('조회수 +1')
@@ -43,7 +43,7 @@ export const useFeedStore = defineStore('feed', () => {
     const getFeedList = function(){
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/feed-list`)
+                .get(`${URL}/feed-list`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -58,7 +58,7 @@ export const useFeedStore = defineStore('feed', () => {
     const getFeedListPage = function(page){
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URI}/feed-list/pages`, page)
+                .get(`${URL}/feed-list/pages`, page)
                 .then((response) => {
                     resolve(response);
                 })
@@ -75,7 +75,7 @@ export const useFeedStore = defineStore('feed', () => {
 
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URI}/feed-like/${feedId}`, {})
+                .patch(`${URL}/feed-like/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
                     console.log('좋아요 +1')

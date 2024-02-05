@@ -28,6 +28,7 @@
         <div class="wrapper">
           <div class="headbar">
             <HeaderNav></HeaderNav>
+            <SearchNickname></SearchNickname>
           </div>
         </div>
       </header>
@@ -64,6 +65,7 @@ import BackGroundImg from "./assets/pixil_background_winter.png";
 import { ref, onMounted } from "vue";
 import HeaderNav from "./components/Common/HeaderNav.vue";
 import { useLoginStore } from "./stores/login";
+import SearchNickname from "./components/Common/SearchNickname.vue";
 
 //로그인된 유저 정보
 const login = useLoginStore();

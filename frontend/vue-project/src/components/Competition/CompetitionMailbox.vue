@@ -1,17 +1,15 @@
 <template>
-  <div class="main_box">
-    <div class="mailbox_title">
-      <img src="@/assets/mailbox.png" alt="Mailbox Icon" class="mailbox_icon" />
-      <span>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</span>
-    </div>
-    <div class="mail_box">
-      <div v-for="(item, index) in mailParameters" :key="index">
-        <CompetitionMailboxItem
-          :mail_sender="item.is_sender"
-          :mail_category="mapCategoryIdToName(item.category_id)"
-          :mail_remain_time="item.compet_expiration_time"
-          @acceptChallenge="() => acceptChallenge(index)"
-        />
+  <div class="mail_box_body">
+    <div class="main_box">
+      <div class="mailbox_title">
+        <img src="@/assets/mailbox.png" alt="Mailbox Icon" class="mailbox_icon" />
+        <span>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</span>
+      </div>
+      <div class="mail_box">
+        <div v-for="(item, index) in mailParameters" :key="index">
+          <CompetitionMailboxItem :mail_sender="item.is_sender" :mail_category="mapCategoryIdToName(item.category_id)"
+            :mail_remain_time="item.compet_expiration_time" @acceptChallenge="() => acceptChallenge(index)" />
+        </div>
       </div>
     </div>
   </div>
@@ -86,12 +84,20 @@ const acceptChallenge = async (index) => {
     matchingId: item.matchingId,
   };
   try {
-    if (item.competKind === "경쟁") {
+    let isAccepted = false; // 수락 성공 여부를 추적하기 위한 변수
+    if (item.competKind === "random") {
       await competitionStore.randomAccept(acceptUser);
-    } else if (item.competKind === "친구") {
+      isAccepted = true;
+    } else if (item.competKind === "friend") {
       await competitionStore.friendAccept(acceptUser);
+      isAccepted = true;
     }
-    console.log(`인덱스 ${index}의 도전을 수락했습니다.`);
+
+    if (isAccepted) {
+      console.log(`인덱스 ${index}의 도전을 수락했습니다.`);
+      // 해당 아이템을 배열에서 제거
+      mailParameters.value.splice(index, 1);
+    }
   } catch (error) {
     console.error("도전 수락 중 오류 발생:", error);
   }
@@ -110,6 +116,7 @@ const acceptChallenge = async (index) => {
   padding: 20px;
   border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
+  margin: 0 10px;
 }
 
 .mailbox_title {
@@ -136,18 +143,31 @@ const acceptChallenge = async (index) => {
 
   padding: 10px;
   margin-top: 10px;
-  width: calc(100% - 24px); /* Set width to 100% */
+  margin-left: 10px;
+  margin-right: 10px;
+  width: calc(100% - 24px);
+  /*Set width to 100% */
+
 }
+
 .mail_box::-webkit-scrollbar {
   width: 10px;
 }
+
 .mail_box::-webkit-scrollbar-thumb {
   background-color: #71a5de;
   border-radius: 10px;
   background-clip: padding-box;
 }
+
 .mail_box::-webkit-scrollbar-track {
   background-color: rgb(255, 255, 255);
   border-radius: 10px;
+}
+
+.mail_box_body {
+  height: 380px;
+  margin: 0;
+  display: flex;
 }
 </style>

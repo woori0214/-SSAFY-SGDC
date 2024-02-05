@@ -11,7 +11,7 @@
         </div>
       </div>
     </div>
-    <PopUpReceiverCompetitionApprove :showModal="showChallengeAcceptBox" :close="closeChallengeAcceptBox"/>
+    <PopUpReceiverCompetitionApprove :showModal="showChallengeAcceptBox" :close="closeChallengeAcceptBox" />
   </div>
 </template>
 
@@ -87,12 +87,22 @@ export default {
 }
 
 .accept_btn {
-  background-color: #25aae1;
-  color: #ffffff;
+  background-color: #e1ecf7;
+  /* 기본 배경색 변경 */
+  color: #000000;
+  /* 기본 텍스트 색 변경 */
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
+  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
+  /* 부드러운 색상 전환 추가 */
 }
-</style>
+
+.accept_btn:hover {
+  background-color: #83b0e1;
+  /* 호버 시 배경색 변경 */
+  color: #ffffff;
+  /* 호버 시 텍스트 색 변경 */
+}</style>

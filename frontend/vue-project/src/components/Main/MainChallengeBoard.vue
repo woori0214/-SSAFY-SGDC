@@ -62,10 +62,10 @@
                   <div v-else-if="item.sender_authenticated">인증 완료</div>
                   <div v-else>진행중</div> -->
                 </div>
-                <div>
-                  <h1>{{ item.category }}</h1>
+                <div class =item_category_vs>
+                  <h1 class="item_category">{{ item.category }}</h1>
                   <!-- <h1>{{ item.category_id }}</h1> -->
-                  <h1>vs</h1>
+                  <h1 class="item_vs">vs</h1>
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
@@ -513,7 +513,7 @@ onMounted(() => {
 }
 
 .compet {
-  border: 1px rgb(50, 248, 255) solid;
+  /* border: 1px rgb(50, 248, 255) solid; */
   width: 50%;
   /* margin: 5px; */
 
@@ -594,6 +594,48 @@ onMounted(() => {
   /* 도전 완료된 카테고리의 배경색 */
   color: white;
   /* 텍스트 색상 */
+}
+
+.player1, .player2 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px; /* 요소들 사이의 간격을 조정합니다. */
+}
+
+.player_img {
+  margin-top: 13px;
+  width: 100px; /* 이미지의 너비 */
+  height: 100px; /* 이미지의 높이, 너비와 동일하게 설정하여 정사각형 형태로 만듦 */
+  border-radius: 50%; /* 모서리를 완전히 둥글게 만들어 원형 형태로 표시 */
+  object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 하면서 비율을 유지 */
+  background-color: white;
+  border: #2e2e2e;
+}
+
+
+.player1 p, .player2 p {
+  margin: 0; /* 이름과 버튼 사이의 기본 마진을 제거 또는 조정 */
+  font-size: 1rem; /* 필요에 따라 폰트 사이즈 조정 */
+}
+
+.player1 button, .player2 button {
+  margin-top: 0px; /* 버튼 위의 간격을 조정 */
+  padding: 4px 8px; /* 버튼 내부 패딩 조정 */
+  font-size: 0.875rem; /* 버튼 폰트 사이즈 조정 */
+}
+.item_category{
+  margin-bottom: 1px;
+}
+.item_vs{
+  margin-top: 1px;
+}
+.item_category_vs {
+  display: flex;         /* Flexbox 레이아웃 사용 */
+  flex-direction: column; /* 자식 요소들을 세로 방향으로 쌓음 */
+  align-items: center;    /* 가로 방향에서 가운데 정렬 */
+  justify-content: center; /* 세로 방향에서 가운데 정렬 */
+  height: 100%;            /* 필요한 경우, 높이 설정 */
 }
 
 /* @media (max-width: 768px) {  */

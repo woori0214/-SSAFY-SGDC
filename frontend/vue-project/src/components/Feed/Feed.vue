@@ -8,7 +8,7 @@
           <div class="feed_user_name">{{ userName }}</div>
         </div>
         <button @click="handleDeclareClick" class="declare_button">
-          <img src="@/assets/declare.png" alt="Declare Icon" class="declare_icon" />
+          <img src="@/assets/siren.png" alt="Declare Icon" class="declare_icon" />
         </button>
       </div>
       <div class="feed_content">{{ content }}</div>
@@ -18,8 +18,9 @@
     </div>
     <div class="feed_footbar">
       <div class="feed_heart_cnt">
-        <button @click="pushFeedLike">
+        <button @click="pushFeedLike" class="heart_button">
           <img :src="heartIcon" alt="heart Icon" class="heart_icon" />
+          <!-- <span class="material-symbols-outlined">favorite</span> -->
         </button>
         {{ heartCnt }}
       </div>
@@ -32,7 +33,7 @@
 <script>
 import { useFeedStore } from "@/stores/feed";
 import { useUserStorageStore } from "@/stores/userStorage";
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
 import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
@@ -83,7 +84,11 @@ export default {
     const userStorage = useUserStorageStore();
     const heartIcon = ref(emptyHeart);
     const showComplaintBox = ref(false);
+    const isLiked = ref(false); // 좋아요 상태를 추적하는 ref 추가
 
+    watch(isLiked, (newValue) => {
+      heartIcon.value = newValue ? fullHeart : emptyHeart;
+    });
     // 피드 좋아요 누르기 함수
     const pushFeedLike = () => {
       alert("좋아요 누름" + props.feed_id);
@@ -94,14 +99,14 @@ export default {
           console.log("feed 좋아요 누름");
 
           const userData = userStorage.getUserInformation();
-
+          isLiked.value = !isLiked.value;
           feedjs
             .addfeedLikeUser(props.feed_id, userData.user_id)
             .then((res) => {
               console.log("feed 좋아요 유저 추가");
-              heartIcon.value = heartIcon.value === emptyHeart
-                ? fullHeart
-                : emptyHeart;
+              // heartIcon.value = heartIcon.value === emptyHeart
+              //   ? fullHeart
+              //   : emptyHeart;
             })
             .catch((err) => {
               console.log(err);
@@ -128,6 +133,7 @@ export default {
       handleDeclareClick,
       showComplaintBox,
       closeComplaintBox,
+      isLiked,
     };
   },
 };
@@ -171,7 +177,9 @@ export default {
 .feed_content {
   /* border: 2px solid purple; */
 }
-
+.heart_button{
+  margin-left: 10px;
+}
 .feed_image_frame {
   border: 2px solid white;
   border-radius: 30px;
@@ -180,6 +188,7 @@ export default {
   justify-content: center;
   margin: 10px;
   padding: 20px;
+  margin-top: 5px;
 }
 
 .feed_image {
@@ -207,16 +216,16 @@ export default {
 }
 
 .declare_icon {
-  width: 50px;
+  width: 40px;
   /* Adjust the width of the image */
   height: 40px;
   /* Adjust the height of the image */
-  margin-right: 5px;
+  
 }
 
 .heart_icon {
-  width: 15px;
-  height: 15px;
+  width: 25px;
+  height: 25px;
 }
 .feed_frame2 {
   background-color: #aecbeb; 
@@ -226,4 +235,12 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
   
 }
+/* .material-symbols-outlined {
+  font-variation-settings:
+    /* 'FILL' 0, */
+    /* 'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+  color: red; 
+} */ 
 </style>
