@@ -77,7 +77,7 @@ export default {
 
         // // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
         const goUnssallow = function (followingId) {
-            const unssallow_info = { user_id: userId.value, following_id: followingId };
+            const unssallow_info = { user_id: mypageUser.value, following_id: followingId };
             follow.deleteSsallowing(unssallow_info)
                 .then((res) => {
                     console.log(res);
@@ -89,7 +89,7 @@ export default {
 
         // // 쌀로우 버튼 클릭 시 상태 변경 및 처리
         const goSsallowing = function (followId) {
-            const ssallowing_info = { user_id: userId.value, following_id: followId }
+            const ssallowing_info = { user_id: mypageUser.value, following_id: followId }
             follow.plusSsallowing(ssallowing_info)
                 .then((res) => {
                     console.log(res);
