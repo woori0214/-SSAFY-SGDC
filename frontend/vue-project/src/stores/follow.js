@@ -60,15 +60,15 @@ export const useFollowStore = defineStore('follow', () => {
     const plusSsallowing = function (ssallowingData) {
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
-                .then((res) => {
-                    console.log(res);
-                    resolve(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                });
+            .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
+            .then((res) => {
+                console.log(res);
+                resolve(res);
+            })
+            .catch((err) => {
+                console.log(err);
+                reject(err);
+            });
         });
     }
     // 쌀로잉 삭제

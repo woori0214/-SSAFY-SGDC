@@ -19,7 +19,7 @@
                     <div class="popup-content">
                         <!-- Time -->
                         <div class="time">
-                            <h1>{{ formatTime(selectedMatchingData[0].compet_expiration_time) }}</h1>
+                            {{ formatTime(selectedMatchingData[0].compet_expiration_time) }}
                         </div>
 
                         <!-- Sender and Receiver with Images -->
@@ -305,6 +305,7 @@ export default {
      align-items: center;
      justify-content: center;
      flex-direction: column;
+     background: rgba(0, 0, 0, 0.5);
  }
 
  .popup-content {
@@ -314,18 +315,19 @@ export default {
      border: #aecbeb 5px solid;
      border-radius: 50px;
      width: 50%;
-     height: 80%;
+     height: calc(70% - 20px);
      max-width: 80%;
-     max-height: 80%;
+     max-height: 70%;
      overflow: auto;
      text-align: center;
      justify-content: center;
  }
 
- .time,
- .match-details,
- .result {
+ .time {
+     margin-top: 10px;
      margin-bottom: 20px;
+     font-size: 30px;
+     font-weight: bold;
  }
 
  .match-details {
@@ -371,15 +373,6 @@ export default {
      color: white;
  }
 
- @media screen and (max-width: 320px),
- (max-height: 616px) {
-     .popup-content {
-         width: 90%;
-         height: 90%;
-         max-width: none;
-         max-height: none;
-     }
- }
 
  .time,
  .match-details,
@@ -387,11 +380,6 @@ export default {
      margin-bottom: 20px;
  }
 
- .match-details {
-     display: flex;
-     justify-content: space-around;
-     align-items: center;
- }
 
  .sender,
  .receiver {
@@ -421,6 +409,37 @@ export default {
      border-radius: 20px;
      cursor: pointer;
      color: white;
+ }
+
+ @media screen and (max-width: 768px) {
+     .popup-content {
+         width: 60%;
+         height: calc(70% - 10px);
+     }
+
+     .time {
+         font-size: 25px;
+     }
+
+ }
+
+ @media screen and (max-width: 570px) {
+     .popup-content {
+         width: 90%;
+     }
+
+     .match-details img {
+         width: 100px;
+         height: 100px;
+         border-radius: 30px;
+         object-fit: cover;
+     }
+
+     .result {
+     font-size: 1.0em;
+     font-weight: bolder;
+     color: rgb(255, 0, 0);
+ }
  }
 </style>
   
