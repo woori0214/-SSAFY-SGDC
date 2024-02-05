@@ -245,6 +245,8 @@ const feeds = ref([]);
 
 const feedjs = useFeedStore();
 
+const now_page = ref(null);
+
 onMounted(() => {
   //Feed List 스크롤 핸들러
   if (feedContainer.value) {
@@ -284,6 +286,8 @@ const moreFeedList = (page) => {
       feeds.value = [...feeds.value, ...res.data];
       console.log("feed 데이터가 추가되었습니다.");
       console.log(feeds.value);
+
+
     })
     .catch((err) => {
       console.log(err);

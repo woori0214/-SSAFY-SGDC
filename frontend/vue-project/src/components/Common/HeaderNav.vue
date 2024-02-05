@@ -4,6 +4,17 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
+      rel="stylesheet"
+    />
+
     <div class="header-wrapper-top">
       <div class="header-music-box" v-show="!closeLogo">
         <BackGroundMusic class="header-music"></BackGroundMusic>
@@ -61,8 +72,10 @@
           </div>
           <!-- 로그아웃 상태 -->
           <div v-else class="user-nav">
-            <span>{{ userLoginStore.userNickname }}님, 안녕하세요!</span>
-            <a @click="logout" class="nav-link logout">로그아웃</a>
+            <span>{{ userLoginStore.userNickname }}님</span>
+            <a @click="logout" class="nav-link logout"
+              ><span class="material-symbols-outlined"> logout </span></a
+            >
           </div>
         </div>
       </div>
@@ -70,10 +83,11 @@
     </div>
     <div class="nav-wrapper">
       <nav v-if="!closeLogo">
-        <RouterLink to="/">Main</RouterLink>
-        <a href="#" @click="handleNavigation('/competition')">Competition</a>
-        <a href="#" @click="handleNavigation('/solo')">Solo</a>
-        <a href="#" @click="handleNavigation('/feed')">Feed</a>
+        <RouterLink to="/" class="protest-riot-regular">Main</RouterLink>
+        <a href="#" @click="handleNavigation('/competition')" class="protest-riot-regular">Competition</a>
+        <a href="#" @click="handleNavigation('/solo')" class="protest-riot-regular">Solo</a>
+        <a href="#" @click="handleNavigation('/feed')" class="protest-riot-regular">Feed</a>
+        <a href="#" @click="handleNavigation('/MyPage')" class="protest-riot-regular">MyPage</a>
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
         <div class="LEDtrack">
@@ -115,8 +129,13 @@ const logout = function () {
 
 const handleNavigation = (to) => {
   const userStorage = useUserStorageStore();
-  if (userStorage.getUserInformation().user_id != null) {
-    router.push(to);
+  const user_id = userStorage.getUserInformation().user_id;
+  if (user_id != null) {
+    if (to == "/MyPage") {
+      router.push({ name: "MyPage", params: { userId: 1 } }); //나중에 user_id로 바꾸기
+    } else {
+      router.push(to);
+    }
   } else {
     alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
   }
@@ -124,7 +143,7 @@ const handleNavigation = (to) => {
 
 onMounted(() => {
   userLoginStore.isLogined();
-})
+});
 </script>
 
 <style>
@@ -140,7 +159,7 @@ onMounted(() => {
 }
 
 @keyframes fadeOutUp {
-  0%{
+  0% {
     top: 30px;
     opacity: 1; /* 시작과 끝에서 투명도를 0으로 유지 */
   }
@@ -148,7 +167,7 @@ onMounted(() => {
     top: -10px;
     opacity: 0; /* 최고점에서 다시 투명해짐 */
   }
-  100%{
+  100% {
     top: 30px;
     opacity: 0;
   }
@@ -338,4 +357,11 @@ nav a {
     color: red;
   }
 }
+
+.protest-riot-regular {
+  font-family: "Protest Riot", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
 </style>  
