@@ -1,10 +1,11 @@
 package com.ssafy.sgdc.competition.service;
 
-import com.ssafy.sgdc.category.CategoryRepo;
+import com.ssafy.sgdc.category.UserCategory;
+import com.ssafy.sgdc.category.dto.UserCategoryDto;
+import com.ssafy.sgdc.category.repository.CategoryRepo;
+import com.ssafy.sgdc.category.repository.UserCategoryRepo;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
 import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
-import com.ssafy.sgdc.competition.dto.request.CreateCompetDetailDto;
-import com.ssafy.sgdc.competition.dto.request.CreateImageAuthDto;
 import com.ssafy.sgdc.competition.repository.CompetDetailRepo;
 import com.ssafy.sgdc.competition.repository.CompetitionRepo;
 import com.ssafy.sgdc.competition.repository.ImageAuthRepo;
@@ -20,6 +21,7 @@ import com.ssafy.sgdc.enums.CompetResult;
 import com.ssafy.sgdc.enums.IsSender;
 import com.ssafy.sgdc.enums.MatchStatus;
 import com.ssafy.sgdc.feed.FeedService;
+import com.ssafy.sgdc.enums.*;
 import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -54,10 +57,24 @@ public class CompetitionService {
         프론트에서 사용자가 진행 중인 경쟁목록을 가져와서 애초에 진행 중인 카테고리로는 보낼 수 없게 막아야함
         백 에서 하려면 join을 많이 해야해서..
      */
+    private final UserCategoryRepo userCategoryRepo;
 
     @Transactional
     // 랜덤 상대에게 도전장 보내기
+    // TODO: 같은 카테고리 도전장을 같은 사람에게 여러번 못보내게 해야됨
     public Matching sendRandomMatching(int userId, int categoryId) {
+
+        // 해당 카테고리 경기를 진행 중이면 막아주는 로직
+        Optional<UserCategory> optionalUserCategory =
+                userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(userId, categoryId);
+
+        if (optionalUserCategory.isPresent()) {
+            UserCategory userCategory = optionalUserCategory.get();
+            if (userCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
+                throw new RuntimeException("해당 카테고리는 현재 진행 중입니다.");
+            }
+        }
+
         // 사용자. 도전장 보내는 주체.
         User user = userRepo.findByUserId(userId);
 
@@ -67,14 +84,14 @@ public class CompetitionService {
         }
         user.setChallengeCnt(user.getChallengeCnt() - 1);
 
-        User randomUser = getRandomUser(userId);
+        User randomUser = getRandomUser(userId, categoryId);
 
-//        // 보내는 사람 도전장
+        // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.Y,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
 
-//        //받는 사람 도전장
+        //받는 사람 도전장
         CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.N,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
@@ -87,18 +104,27 @@ public class CompetitionService {
 
     // 랜덤 상대를 뽑는 함수
     // 중간에 아이디가 빈 값을 고려하여 최소값 최대값의 범위로 하나 뽑음
-    // TODO: 친구인 상대 제외하기
-    private User getRandomUser(int userId) {
+    // 상대방이 해당 카테고리를 진행 중이면 다시 뽑음
+    // TODO: 친구인 상대 제외하기 -> 랜덤으로 친구가 걸려도 괜찮을 듯
+    private User getRandomUser(int userId, int categoryId) {
 
         int minId = userRepo.findMinUserId();
         int maxId = userRepo.findMaxUserId();
         Random random = new Random();
 
         User randomUser;
+        boolean isPlayingCategory;
         do {
             int randomId = minId + (int) (random.nextDouble() * (maxId - minId));
             randomUser = userRepo.findByUserId(randomId);
-        } while (randomUser == null || randomUser.getUserId() == userId);
+
+            // 랜덤 상대가 해당 카테고리 경기를 진행 중이면 막아주는 로직
+            isPlayingCategory = randomUser != null &&
+                    userCategoryRepo.findByUserUserIdAndCategoryCategoryIdAndCategoryStatus(
+                            randomId, categoryId, CategoryStatus.PLAY_STATUS
+                    ).isPresent();
+
+        } while (randomUser == null || randomUser.getUserId() == userId || isPlayingCategory);
         //유저가 없거나 보낸 사람 아이디가 값으면 다시 뽑음
 
         return randomUser;
@@ -106,8 +132,30 @@ public class CompetitionService {
 
     @Transactional
     // 친구에게 도전장 보내기
-    // TODO: 같은 카테고리로 보내지 못하게 하기
+    // TODO: 같은 카테고리 도전장을 같은 사람에게 여러번 못보내게 해야됨
     public Matching sendFriendMatching(int userId, int friendId, int categoryId) {
+
+        // 해당 카테고리 경기를 진행 중이면 막아주는 로직
+        Optional<UserCategory> optionalUserCategory =
+                userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(userId, categoryId);
+
+        if (optionalUserCategory.isPresent()) {
+            UserCategory userCategory = optionalUserCategory.get();
+            if (userCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
+                throw new RuntimeException("해당 카테고리는 현재 진행 중입니다.");
+            }
+        }
+
+        // 해당 카테고리 경기를 친구가 진행 중이면 막아주는 로직
+        Optional<UserCategory> optionalFriendCategory =
+                userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(friendId, categoryId);
+
+        if (optionalFriendCategory.isPresent()) {
+            UserCategory friendCategory = optionalFriendCategory.get();
+            if (friendCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
+                throw new RuntimeException("상대방이 해당 카테고리를 현재 진행 중입니다.");
+            }
+        }
 
         if (userId == friendId) {
             throw new RuntimeException("자신에게 도전장을 보낼 수 없습니다.");
@@ -175,11 +223,14 @@ public class CompetitionService {
     }
 
     // 도전장 리스트 반환
-    public List<MatchingDto> getmatchingList(int userId) {
+    public List<MatchingDto> getMatchingList(int userId) {
         return matchingRepo.findMatchingListByUserId(userId).stream().map(MatchingDto::of).toList();
     }
 
-
+    // 받은 도전장 리스트 반환
+    public List<MatchingDto> getReceiveMatchingList(int userId) {
+        return matchingRepo.findByUserUserIdAndIsSender(userId, IsSender.N).stream().map(MatchingDto::of).toList();
+    }
 
     //종료된 경쟁 목록 조회
     public List<CompetitionDto> getCompleteCompetitionList(int userId) {
@@ -282,6 +333,11 @@ public class CompetitionService {
 
         return details;
 
+    }
+
+    // 유저 카테고리 목록 조회
+    public List<UserCategoryDto> getUserCategoryList(int userId) {
+        return userCategoryRepo.findUserCategoryByUserUserId(userId).stream().map(UserCategoryDto::of).toList();
     }
 
     // 일정 시간마다 경쟁결과 확인
