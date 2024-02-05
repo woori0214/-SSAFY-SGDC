@@ -145,6 +145,7 @@ const closeMailBox = () => {
 const userLoginStore = useLoginStore();
 const logout = function () {
   userLoginStore.isLogout();
+  router.push("/");
 };
 
 const handleNavigation = (to) => {
