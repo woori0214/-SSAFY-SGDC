@@ -4,13 +4,20 @@
     <div class="feed_container" ref="feedContainer">
       <Feed
         class="feed"
-        v-for="(item, index) in init_feeds"
+        v-for="(item, index) in feeds"
         :key="index"
-        :userName="item.userName"
-        :content="item.content"
-        :feedImage="item.feedImage"
-        :heartCnt="item.heartCnt"
-        :viewCnt="item.viewCnt"
+        :feedId="item.feedId"
+        :feedTitle="item.feedTitle"
+        :feedContent="item.feedContent"
+        :feedLikeNum="item.feedLikeNum"
+        :views="item.views"
+        :privacy="item.privacy"
+        :createAt="item.createAt"
+        :updateAt="item.updateAt"
+        :feedImg="item.feedImg"
+        :userId="item.userId"
+        :userNickname="item.userNickname"
+        :userImg="item.userImg"
       ></Feed>
     </div>
   </div>
@@ -266,9 +273,9 @@ onUnmounted(() => {
 // 피드 조회할 함수 << onMounted
 const resetFeedList = () => {
   feedjs
-    .getFeedList()
+    .getFeedListPage(0)
     .then((res) => {
-      feeds.value = [...res.data];
+      feeds.value = [...res.data.data.content];
 
       console.log("feed 데이터가 초기화 되었습니다.");
       console.log(feeds.value);
@@ -279,15 +286,15 @@ const resetFeedList = () => {
 };
 
 // 피드 추가 요청할 함수
-const moreFeedList = (page) => {
+const moreFeedList = () => {
+  console.log('마지막 피드 아이디 : ');
+  console.log(feeds.value[feeds.value.length - 1].feedId);
   feedjs
-    .getFeedListPage(page)
+    .getFeedListPage(feeds.value[feeds.value.length - 1].feedId)
     .then((res) => {
-      feeds.value = [...feeds.value, ...res.data];
+      feeds.value = [...feeds.value, ...res.data.data.content];
       console.log("feed 데이터가 추가되었습니다.");
       console.log(feeds.value);
-
-
     })
     .catch((err) => {
       console.log(err);
@@ -296,6 +303,8 @@ const moreFeedList = (page) => {
 
 // 현재 피드 리스트에 저장된 양이 넘칠 경우 FIFO할 함수
 const deleteFeedItem = () => {
+  console.log('피드 삭제');
+  console.log(feeds.value.length);
   if (feeds.value.length > 10) {
     feeds.value.splice(0, 10);
   } else {
@@ -314,11 +323,13 @@ const handleScroll = () => {
 };
 
 const plusFeedItem = () => {
-  init_feeds.value = [...init_feeds.value, ...plus_feeds.value];
+  // init_feeds.value = [...init_feeds.value, ...plus_feeds.value];
   console.log("피드 추가 테스트");
+  moreFeedList();
 
-  if (init_feeds.value.length > 30) {
-    init_feeds.value.splice(0, 10);
+  if (feeds.value.length > 30) {
+    // init_feeds.value.splice(0, 10);
+    deleteFeedItem();
     console.log("피드 넘쳐서 삭제함");
   }
 };

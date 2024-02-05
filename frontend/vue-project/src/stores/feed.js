@@ -54,11 +54,16 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 리스트(페이지 당 10개씩)
-    const getFeedListPage = function (page) {
+    const getFeedListPage = function (last_feed_id) {
+        console.log('getFeedListPage 실행...');
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/feed-list/pages`, { page: page, size: 10 })
+                .get(`${URL}/feed-list/pages`, {
+                    params: { feedId: last_feed_id, page: 0, size: 10 }
+                })
                 .then((response) => {
+                    console.log('get List : ');
+                    console.log(response);
                     resolve(response);
                 })
                 .catch((e) => {

@@ -65,14 +65,14 @@
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
-          <!-- 로그인 상태 -->
+          <!-- 로그아웃 상태 -->
           <div v-if="!userLoginStore.loginUser" class="login-signup-links">
             <RouterLink to="/login" class="nav-link">로그인</RouterLink>
             <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
           </div>
-          <!-- 로그아웃 상태 -->
+          <!-- 로그인 상태 -->
           <div v-else class="user-nav">
-            <span>{{ userLoginStore.userNickname }}님</span>
+            {{ userLoginStore.userNickname }}님
             <a @click="logout" class="nav-link logout"
               ><span class="material-symbols-outlined"> logout </span></a
             >
@@ -84,10 +84,30 @@
     <div class="nav-wrapper">
       <nav v-if="!closeLogo">
         <RouterLink to="/" class="protest-riot-regular">Main</RouterLink>
-        <a href="#" @click="handleNavigation('/competition')" class="protest-riot-regular">Competition</a>
-        <a href="#" @click="handleNavigation('/solo')" class="protest-riot-regular">Solo</a>
-        <a href="#" @click="handleNavigation('/feed')" class="protest-riot-regular">Feed</a>
-        <a href="#" @click="handleNavigation('/MyPage')" class="protest-riot-regular">MyPage</a>
+        <a
+          href="#"
+          @click="handleNavigation('/competition')"
+          class="protest-riot-regular"
+          >Competition</a
+        >
+        <a
+          href="#"
+          @click="handleNavigation('/solo')"
+          class="protest-riot-regular"
+          >Solo</a
+        >
+        <a
+          href="#"
+          @click="handleNavigation('/feed')"
+          class="protest-riot-regular"
+          >Feed</a
+        >
+        <a
+          href="#"
+          @click="handleNavigation('/MyPage')"
+          class="protest-riot-regular"
+          >MyPage</a
+        >
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
         <div class="LEDtrack">
@@ -220,7 +240,6 @@ onMounted(() => {
   gap: 8px;
 }
 .profile-tmp {
-  overflow: auto;
 }
 .login-signup-links {
   display: flex;
@@ -246,6 +265,11 @@ onMounted(() => {
 .user-nav {
   display: flex;
   align-items: center;
+  background-color: #e1ecf7;
+  padding-left: 8px;
+  border-radius: 5px;
+  font-size: large;
+  font-weight: 600;
 }
 
 .logout {
@@ -329,32 +353,32 @@ nav a {
   position: absolute;
   white-space: nowrap;
   will-change: transform;
-  animation: marquee 5s linear infinite;
+  animation: marquee 10s linear infinite;
 }
 @keyframes marquee {
   0% {
     transform: translateX(0);
-    color: red;
+    color: #71a5de
   }
   20% {
     transform: translateX(-10%);
-    color: orange;
+    color: #aecbeb;
   }
   40% {
     transform: translateX(-20%);
-    color: yellow;
+    color: #83b0e1;
   }
   60% {
     transform: translateX(-30%);
-    color: green;
+    color: #e1ecf7;
   }
   80% {
     transform: translateX(-40%);
-    color: blue;
+    color: #83b0e1;
   }
   100% {
     transform: translateX(-50%);
-    color: red;
+    color: #71a5de;
   }
 }
 
@@ -363,5 +387,4 @@ nav a {
   font-weight: 400;
   font-style: normal;
 }
-
 </style>  
