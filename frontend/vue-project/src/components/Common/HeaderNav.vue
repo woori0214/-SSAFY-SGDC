@@ -115,7 +115,7 @@ const logout = function () {
 
 const handleNavigation = (to) => {
   const userStorage = useUserStorageStore();
-  if (userStorage.getUserInformation().user_id.value != null) {
+  if (userStorage.getUserInformation().user_id != null) {
     router.push(to);
   } else {
     alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");

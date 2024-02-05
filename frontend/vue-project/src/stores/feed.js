@@ -24,7 +24,6 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 조회수 업데이트
-
     const updateFeedView = function (feedId) {
         return new Promise((resolve, reject) => {
             axios
