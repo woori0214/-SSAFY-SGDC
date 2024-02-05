@@ -1,5 +1,5 @@
 <template>
-  <div class="view_body">
+  <div class="competmode_div">
     <h1 class="compet_title">경쟁모드</h1>
     <div class="select_body">
       <CompetitionSelect></CompetitionSelect>
@@ -23,7 +23,9 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
   flex: 1;
 }
 
-.select_body {
+.select_body[data-v-ccb05c14] {
+    display: flex;
+    justify-content: center;
 }
 
 .mail_box_body {
@@ -32,10 +34,27 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .compet_title {
-    background-color: #83b0e1;
-    border-radius: 25px;
-    width: calc(100% - 20px);
-    color: white;
-    padding: 10px;
+  background-color: #83b0e1;
+  border-radius: 10px;
+  width: 60%;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  margin: auto; 
 }
+
+.competmode_div {
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center;
+    align-items: center; */
+    background-color: #e1ecf7;
+    border-radius: 30px;
+    text-align: center;
+}
+
+
+
+
 </style>

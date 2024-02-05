@@ -325,7 +325,7 @@ const plusFeedItem = () => {
 .feed_container {
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 20px;
   margin-inline: 20px;
   background-color: #e1ecf7;
   border-radius: 15px;
@@ -345,8 +345,26 @@ const plusFeedItem = () => {
   border-radius: 10px;
 }
 
-.feed_frame.feed{
-  margin-bottom: 80px;
+.feed_frame.feed {
+  margin-bottom: 10px; /* 마진을 줄입니다 */
+  width: 90%; /* 너비를 조절합니다 */
+  max-width: 500px; /* 최대 너비를 설정 */
+  height: auto; /* 높이를 자동으로 조절 */
+  margin-left: auto; /* 좌측 마진을 자동으로 설정 */
+  margin-right: auto; /* 우측 마진을 자동으로 설정 */
+  /* border: 2px solid #71a5de; 밝은 파란색 테두리 */
+  border-radius: 15px; /* 테두리 둥글게 */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 약간의 그림자 효과 */
+  background-color: #f8f9fb; /* 배경색을 흰색으로 */
+  padding: 15px; /* 내부 여백 */
+  margin-top: 15px;
+  transition: transform 0.3s ease; /* 호버 시 약간의 변형을 위한 전환 효과 */
 }
+
+.feed_frame.feed:hover {
+  transform: translateY(-5px); /* 호버 시 약간 위로 올라가는 효과 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자를 조금 더 강조 */
+}
+
 
 </style>
