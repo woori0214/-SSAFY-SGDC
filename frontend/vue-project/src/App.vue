@@ -28,7 +28,7 @@
         <div class="wrapper">
           <div class="headbar">
             <HeaderNav></HeaderNav>
-            <SearchNickname></SearchNickname>
+            
           </div>
         </div>
       </header>
