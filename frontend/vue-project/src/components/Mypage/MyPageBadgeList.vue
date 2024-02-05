@@ -4,13 +4,15 @@
       <h2>보유 뱃지</h2>
       <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
     </div>
-    <div class="accordion-content" :class="{ 'open': isOpen }">
-      <div v-for="badge in badge_list" :key="badge.badge_name" class="badge">
-        <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
-        <h3 class="badge_info">{{ badge.badge_name }}</h3>
-        <p>{{ badge.badge_detail }}</p>
+    <transition>
+      <div class="accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
+        <div v-for="badge in badge_list" :key="badge.badge_name" class="badge">
+          <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
+          <h3 class="badge_info">{{ badge.badge_name }}</h3>
+          <p>{{ badge.badge_detail }}</p>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
   
@@ -103,8 +105,10 @@ export default {
 <style scoped>
 .badge {
   text-align: center;
-  box-sizing: border-box; /* 패딩과 테두리를 너비에 포함 */
-  padding: 5px; /* 뱃지 간격을 위한 패딩 추가 */
+  box-sizing: border-box;
+  /* 패딩과 테두리를 너비에 포함 */
+  padding: 5px;
+  /* 뱃지 간격을 위한 패딩 추가 */
 }
 
 .badge_img {
@@ -159,12 +163,12 @@ export default {
 }
 
 .accordion-content::-webkit-scrollbar {
-    height: 5px;
+  height: 5px;
 }
 
 .accordion-content::-webkit-scrollbar-thumb {
-    background-color: #71a5de;
-    border-radius: 10px;
+  background-color: #71a5de;
+  border-radius: 10px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
