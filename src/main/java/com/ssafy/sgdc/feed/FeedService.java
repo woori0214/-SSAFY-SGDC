@@ -93,6 +93,17 @@ public class FeedService {
         return feedPage.map(this::convertToDto);
     }
 
+    public Page<FeedOneDto> findItemsAfter(int feedId, Pageable pageable) {
+        if (feedId==0) {
+            // 처음 페이지를 로드할 때
+            Page<Feed> feedPage = feedRepo.findAll(pageable);
+            return feedPage.map(this::convertToDto);
+        } else {
+            // 커서 기반 페이지네이션: lastId 이후의 아이템을 조회
+            Page<Feed> feedPage = feedRepo.findByFeedIdGreaterThan(feedId, pageable);
+            return feedPage.map(this::convertToDto);
+        }
+    }
     private FeedOneDto convertToDto(Feed feed) {
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);

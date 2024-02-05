@@ -14,6 +14,9 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,7 +37,6 @@ public class FeedController {
 
     private final FeedService feedService;
 
-
     @Operation(summary = "특정 피드 조회", description="특정한 피드를 확인합니다.")
     @Parameter(name = "feedId", schema = @Schema(implementation = int.class), description = "특정 피드의 PK", in = ParameterIn.PATH)
     @GetMapping("/feed-info/{feedId}")
@@ -43,7 +45,6 @@ public class FeedController {
         return DataResponseDto.of(feedData, "특정 피드 조회");
     }
 
-
     @Operation(summary = "피드 10개씩 조회", description="피드를 10개씩 확인합니다.")
     @Parameters({
             @Parameter(name = "page", schema = @Schema(implementation = int.class), description = "기준 페이지"),
@@ -51,11 +52,12 @@ public class FeedController {
     })
     @GetMapping("/feed-list/pages")
     public DataResponseDto<Page<FeedOneDto>> getFeeds(
+            @RequestParam(defaultValue = "0") int feedId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        return DataResponseDto.of(feedService.getFeeds(page, size),"피드 10개씩 조회");
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "createAt");
+        return DataResponseDto.of(feedService.findItemsAfter(feedId, pageable),"피드 10개씩 조회");
     }
-
 
 
 }
