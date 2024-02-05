@@ -1,39 +1,42 @@
-<template> 
+<template>
     <div>
         <div class="accordion-header" @click="toggleAccordion">
             <h2>쌀로우</h2>
             <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
         </div>
-        <div class="accordion-content-ssallow" :class="{ 'open': isOpen }">
-            <div class="sallowing_body">
-                <h2>쌀로잉</h2>
-                <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
-                    <div class="ssallow_info">
-                        <img :src="ssallowing.user_img" alt="" class="ssallow_img">
-                        {{ ssallowing.user_nickname }}
+        <transition>
+            <div class="accordion-content-ssallow" :class="{ 'open': isOpen }" v-show="isOpen">
+                <div class="sallowing_body">
+                    <h2>쌀로잉</h2>
+                    <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
+                        <div class="ssallow_info">
+                            <img :src="ssallowing.user_img" alt="" class="ssallow_img">
+                            {{ ssallowing.user_nickname }}
+                        </div>
+                        <div class="ssallow_btns">
+                            <button @click="gotoProfile(ssallowing.user_id)" class="ssallow_btn">프로필 페이지</button>
+                            <button @click="toggleFollow(ssallowing)"
+                                class="ssallow_btn">{{ getButtonText(ssallowing.isFollowing) }}</button>
+                        </div>
                     </div>
-                    <div class="ssallow_btns">
-                        <button @click="gotoProfile(ssallowing.user_id)" class="ssallow_btn">프로필 페이지</button>
-                        <button @click="toggleFollow(ssallowing)" class="ssallow_btn">{{getButtonText(ssallowing.isFollowing) }}</button>
+                </div>
+                <div class="ssallower_body">
+                    <h2>쌀로워</h2>
+                    <div v-for="ssallower in ssallowers" :key="ssallower.user_id" class="ssallow">
+                        <div class="ssallow_info">
+                            <img :src="ssallower.user_img" alt="" class="ssallow_img">
+                            {{ ssallower.user_nickname }}
+                        </div>
+                        <div class="ssallow_btns">
+                            <button @click="gotoProfile(ssallower.user_id)" class="ssallow_btn">프로필 페이지</button>
+                            <button @click="toggleFollow(ssallower)" class="ssallow_btn">{{
+                                getButtonText(ssallower.isFollowing) }}</button>
+
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="ssallower_body">
-                <h2>쌀로워</h2>
-                <div v-for="ssallower in ssallowers" :key="ssallower.user_id" class="ssallow">
-                    <div class="ssallow_info">
-                        <img :src="ssallower.user_img" alt="" class="ssallow_img">
-                        {{ ssallower.user_nickname }}
-                    </div>
-                    <div class="ssallow_btns">
-                        <button @click="gotoProfile(ssallower.user_id)" class="ssallow_btn">프로필 페이지</button>
-                        <button @click="toggleFollow(ssallower)" class="ssallow_btn">{{ getButtonText(ssallower.isFollowing)}}</button>
-
-                    </div>
-                </div>
-            </div>
-
-        </div>
+        </transition>
     </div>
 </template>
     
@@ -169,6 +172,7 @@ export default {
     height: 300px;
     overflow: scroll;
 }
+
 .sallowing_body::-webkit-scrollbar,
 .ssallower_body::-webkit-scrollbar {
     width: 5px;
@@ -179,6 +183,7 @@ export default {
     background-color: #71a5de;
     border-radius: 10px;
 }
+
 .ssallow {
     display: flex;
     align-items: center;
@@ -210,6 +215,7 @@ export default {
     font-size: 20px;
     font-weight: bold;
 }
+
 .ssallow_btn:hover {
     background: #83b0e1;
     color: white;
@@ -279,38 +285,42 @@ export default {
         font-size: 17px;
     }
 }
+
 @media screen and (max-width: 450px) {
     .ssallow_info {
         font-size: 15px;
     }
+
     .ssallow_img {
         margin: 15px 5px;
     }
+
     .ssallow_btns {
         flex-direction: column;
     }
-    .ssallow_btn {
-    width: 130px;
-    height: 30px;
-    font-size: 15px;
-    margin: 3px 10px;
-}
-@media screen and (max-width: 350px) {
-    .ssallow {
-        flex-direction: column;
-    }
-    .ssallow_btns {
-        flex-direction: row;
-    }
-    .ssallow_btn {
-    width: 110px;
-    height: 30px;
-    font-size: 15px;
-    margin: 2px;
-}
-}
-}
 
+    .ssallow_btn {
+        width: 130px;
+        height: 30px;
+        font-size: 15px;
+        margin: 3px 10px;
+    }
 
-</style>
+    @media screen and (max-width: 350px) {
+        .ssallow {
+            flex-direction: column;
+        }
+
+        .ssallow_btns {
+            flex-direction: row;
+        }
+
+        .ssallow_btn {
+            width: 110px;
+            height: 30px;
+            font-size: 15px;
+            margin: 2px;
+        }
+    }
+}</style>
     

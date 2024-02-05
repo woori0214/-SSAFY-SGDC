@@ -4,43 +4,41 @@
       <h2>분석</h2>
       <span :class="{ 'rotate-icon': true, rotate: isOpen }"></span>
     </div>
-    <div class="accordion-content" :class="{ open: isOpen }">
-      <div class="analysis">
-        <!-- 솔로 -->
-        <div class="solo_analysis" ref="compet_analysis_component">
-          <div class="analysis_head">
-            <div class="analysis_head_item">솔로모드</div>
-          </div>
-          <div class="solo_analysis_contents">
-            <div class="solo_analysis_cnt">
-              <h1>{{ success_solo }} 회</h1>
-              <h3>성공한 솔로 도전 횟수</h3>
+    <transition>
+      <div class="accordion-content" :class="{ open: isOpen }" v-show="isOpen">
+        <div class="analysis">
+          <!-- 솔로 -->
+          <div class="solo_analysis" ref="compet_analysis_component">
+            <div class="analysis_head">
+              <div class="analysis_head_item">솔로모드</div>
             </div>
-            <div class="solo_analysis_category">
-              <img
-                :src="many_solo_challenge_image"
-                alt="Category Image"
-                class="many_solo_img"
-              />
-              <h3>많이 도전한 카테고리</h3>
+            <div class="solo_analysis_contents">
+              <div class="solo_analysis_cnt">
+                <h1>{{ success_solo }} 회</h1>
+                <h3>성공한 솔로 도전 횟수</h3>
+              </div>
+              <div class="solo_analysis_category">
+                <img :src="many_solo_challenge_image" alt="Category Image" class="many_solo_img" />
+                <h3>많이 도전한 카테고리</h3>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 경쟁 -->
-        <div class="compet_analysis" ref="compet_analysis_component">
-          <div class="compet_analysis_head">
-            <div class="compet_analysis_head_item">경쟁모드</div>
-          </div>
-          <div class="compet_analysis_contents">
-            <h1>{{ total_analysis }}%</h1>
-            <h3>
-              {{ all_wincount }}승 {{ all_failcount }}패 {{ all_count }}전
-            </h3>
+          <!-- 경쟁 -->
+          <div class="compet_analysis" ref="compet_analysis_component">
+            <div class="compet_analysis_head">
+              <div class="compet_analysis_head_item">경쟁모드</div>
+            </div>
+            <div class="compet_analysis_contents">
+              <h1>{{ total_analysis }}%</h1>
+              <h3>
+                {{ all_wincount }}승 {{ all_failcount }}패 {{ all_count }}전
+              </h3>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
   

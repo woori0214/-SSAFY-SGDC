@@ -4,13 +4,15 @@
       <h2>솔로모드 내역</h2>
       <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
     </div>
-    <div class="solo_accordion-content" :class="{ 'open': isOpen }">
-      <div v-for="solodata in soloListData" :key="solodata.category_id" class="solo_record">
-        <div v-if="solodata.solo_status === 0 && solodata.solo_result === 0" class="solo_img_div">
-          <img :src="getImageUrl(solodata.category_id)" alt="" class="soloimg" />
+    <transition>
+      <div class="solo_accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
+        <div v-for="solodata in soloListData" :key="solodata.category_id" class="solo_record">
+          <div v-if="solodata.solo_status === 0 && solodata.solo_result === 0" class="solo_img_div">
+            <img :src="getImageUrl(solodata.category_id)" alt="" class="soloimg" />
+          </div>
         </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
   
@@ -79,13 +81,13 @@ export default {
           console.error('Error fetching soloTodayData:', error);
         });
     });
-    
+
     // 이미지 매칭
     const getImageUrl = (categoryId) => {
       const category = categories.value.find(c => c.id === categoryId);
       return category ? category.img : null;
     };
-    
+
     // 아코디언 펼치기/접기
     const isOpen = ref(true);
 
@@ -93,9 +95,9 @@ export default {
       isOpen.value = !isOpen.value;
     };
 
-    
 
-    return { userId, solo, soloListData, categories, isOpen, toggleAccordion, getImageUrl}
+
+    return { userId, solo, soloListData, categories, isOpen, toggleAccordion, getImageUrl }
   }
 };
 
@@ -106,12 +108,12 @@ export default {
 <style scoped>
 /* 아코디언 헤더 스타일링 */
 .accordion-header {
-    display: flex; 
-    align-items: center;
-    background-color: #83b0e1;
-    padding: 10px;
-    cursor: pointer;
-    border-radius: 15px;
+  display: flex;
+  align-items: center;
+  background-color: #83b0e1;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 15px;
 }
 
 .rotate-icon {
@@ -144,12 +146,12 @@ export default {
 }
 
 .solo_accordion-content::-webkit-scrollbar {
-    height: 5px;
+  height: 5px;
 }
 
 .solo_accordion-content::-webkit-scrollbar-thumb {
-    background-color: #71a5de;
-    border-radius: 10px;
+  background-color: #71a5de;
+  border-radius: 10px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
@@ -163,11 +165,13 @@ export default {
 .solo_img_div {
   margin: 10px;
 }
+
 .soloimg {
   background: #f8f9fb;
   border-radius: 100%;
   width: 110px;
   margin: 5px;
 
-}</style>
+}
+</style>
   
