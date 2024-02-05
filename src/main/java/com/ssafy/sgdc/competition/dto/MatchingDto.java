@@ -17,6 +17,7 @@ public class MatchingDto {
 
     private int matching_id;
     private int user_id;
+    private String user_nickname;
     private int category_id;
     private CompetKind compet_kind;
     private IsSender is_sender;
@@ -28,6 +29,7 @@ public class MatchingDto {
         return new MatchingDto(
                 matching.getMatchingId(),
                 matching.getUser().getUserId(),
+                matching.getUser().getUserNickname(),
                 matching.getCategory().getCategoryId(),
                 matching.getCompetKind(),
                 matching.getIsSender(),

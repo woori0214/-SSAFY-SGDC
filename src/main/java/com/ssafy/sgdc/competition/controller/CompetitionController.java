@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.competition.controller;
 
+import com.ssafy.sgdc.category.dto.UserCategoryDto;
 import com.ssafy.sgdc.competition.domain.Matching;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
 import com.ssafy.sgdc.competition.dto.MatchingDto;
@@ -69,9 +70,19 @@ public class CompetitionController {
 
     @GetMapping("/list/{userId}")
     public ResponseEntity<?> getMatchingList(@PathVariable int userId) {
-        List<MatchingDto> result = competitionService.getmatchingList(userId);
+        List<MatchingDto> result = competitionService.getMatchingList(userId);
         return new ResponseEntity<>(MatchingListResponse
                 .builder().status(200).message("도전장 리스트 조회")
+                .matching(result).build()
+                , HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/receive-list/{userId}")
+    public ResponseEntity<?> getReceiveMatchingList(@PathVariable int userId) {
+        List<MatchingDto> result = competitionService.getReceiveMatchingList(userId);
+        return new ResponseEntity<>(MatchingListResponse
+                .builder().status(200).message("받은 도전장 리스트 조회")
                 .matching(result).build()
                 , HttpStatus.OK
         );
@@ -102,6 +113,15 @@ public class CompetitionController {
         return new ResponseEntity<>(ProgressCompetitionDetailResponse.builder()
                 .status(200).message("경쟁 모드 인증 현황 조회 완료").competitions(result)
                 .build(), HttpStatus.OK);
+    }
+
+    @GetMapping("/compet/analysis/{userId}")
+    public ResponseEntity<?> getUserCategoryList(@PathVariable int userId) {
+        List<UserCategoryDto> result = competitionService.getUserCategoryList(userId);
+        return new ResponseEntity<>(UserCategoryListResponse.builder()
+                .status(200).message("유저 카테고리 목록 조회 성공").user_categories(result)
+                .build(), HttpStatus.OK
+        );
     }
 
 }
