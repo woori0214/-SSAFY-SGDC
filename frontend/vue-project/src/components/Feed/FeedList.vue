@@ -275,6 +275,18 @@ const resetFeedList = () => {
     .then((res) => {
       feeds.value = [...res.data.data.content];
 
+      res.data.data.content.forEach((element) => {
+        feedjs
+          .updateFeedView(element.feedId)
+          .then((res) => {
+            console.log("feed 조회수가 증가하였습니다.");
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+
       console.log("feed 데이터가 초기화 되었습니다.");
       console.log(feeds.value);
     })
@@ -285,12 +297,25 @@ const resetFeedList = () => {
 
 // 피드 추가 요청할 함수
 const moreFeedList = () => {
-  console.log('마지막 피드 아이디 : ');
+  console.log("마지막 피드 아이디 : ");
   console.log(feeds.value[feeds.value.length - 1].feedId);
   feedjs
     .getFeedListPage(feeds.value[feeds.value.length - 1].feedId)
     .then((res) => {
       feeds.value = [...feeds.value, ...res.data.data.content];
+
+      res.data.data.content.forEach((element) => {
+        feedjs
+          .updateFeedView(element.feedId)
+          .then((res) => {
+            console.log("feed 조회수가 증가하였습니다.");
+            console.log(res);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+
       console.log("feed 데이터가 추가되었습니다.");
       console.log(feeds.value);
     })
@@ -301,7 +326,7 @@ const moreFeedList = () => {
 
 // 현재 피드 리스트에 저장된 양이 넘칠 경우 FIFO할 함수
 const deleteFeedItem = () => {
-  console.log('피드 삭제');
+  console.log("피드 삭제");
   console.log(feeds.value.length);
   if (feeds.value.length > 10) {
     feeds.value.splice(0, 10);
@@ -378,6 +403,4 @@ const plusFeedItem = () => {
   transform: translateY(-5px); /* 호버 시 약간 위로 올라가는 효과 */
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자를 조금 더 강조 */
 }
-
-
 </style>

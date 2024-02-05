@@ -24,7 +24,7 @@
         </button>
         {{ feedLikeNum }}
       </div>
-      <div class="feed_view_cnt">조회수 {{ feedId }}</div>
+      <div class="feed_view_cnt">조회수 {{ views }}</div>
     </div>
     <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox"/>
   </div>
