@@ -212,7 +212,7 @@ export default {
   justify-content: center;
   margin: 10px;
   padding: 20px;
-  margin-top: 5px;
+  
 }
 
 .feed_image {

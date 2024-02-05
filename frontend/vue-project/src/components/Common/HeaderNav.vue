@@ -83,31 +83,11 @@
     </div>
     <div class="nav-wrapper">
       <nav v-if="!closeLogo">
-        <RouterLink to="/" class="protest-riot-regular">Main</RouterLink>
-        <a
-          href="#"
-          @click="handleNavigation('/competition')"
-          class="protest-riot-regular"
-          >Competition</a
-        >
-        <a
-          href="#"
-          @click="handleNavigation('/solo')"
-          class="protest-riot-regular"
-          >Solo</a
-        >
-        <a
-          href="#"
-          @click="handleNavigation('/feed')"
-          class="protest-riot-regular"
-          >Feed</a
-        >
-        <a
-          href="#"
-          @click="handleNavigation('/MyPage')"
-          class="protest-riot-regular"
-          >MyPage</a
-        >
+        <RouterLink to="/">Main</RouterLink>
+        <a href="#" @click="handleNavigation('/competition')">Competition</a>
+        <a href="#" @click="handleNavigation('/solo')">Solo</a>
+        <a href="#" @click="handleNavigation('/feed')">Feed</a>
+        <SearchNickname></SearchNickname>
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
         <div class="LEDtrack">
@@ -129,6 +109,7 @@ import router from "@/router";
 import { useLoginStore } from "@/stores/login";
 import BackGroundMusic from "./BackGroundMusic.vue";
 import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";
+import SearchNickname from "./SearchNickname.vue";
 import { useUserStorageStore } from "@/stores/userStorage";
 
 const showMailBox = ref(false);
