@@ -121,6 +121,10 @@ const handleNavigation = (to) => {
     alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
   }
 };
+
+onMounted(() => {
+  userLoginStore.isLogined();
+})
 </script>
 
 <style>

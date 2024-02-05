@@ -83,6 +83,17 @@ export const useLoginStore = defineStore('login', () => {
         // );
     }
 
+
+    const isLogined = function () {
+        console.log('isLogined 되고있나');
+
+        if(userStorage.getUserInformation().user_id != null){
+            loginUser.value = userStorage.getUserInformation().user_id;
+            userNickname.value = userStorage.getUserInformation().user_nickname;
+        }
+        //저장된 토큰의 유효기간을 검사해서 로그인을 막기도 하기....? 그럼 페이지 넘어가다가 자동으로 로그아웃 되기도 하는 거 아닌가?
+    }
+
     // const isLogout = function () {
     //     console.log('isLogout 되고있나');
 
@@ -110,7 +121,7 @@ export const useLoginStore = defineStore('login', () => {
         userInfo,
         loginUser,
         userNickname,
-
+        isLogined,
 
     }
 })
