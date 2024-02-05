@@ -87,6 +87,7 @@
         <a href="#" @click="handleNavigation('/competition')">Competition</a>
         <a href="#" @click="handleNavigation('/solo')">Solo</a>
         <a href="#" @click="handleNavigation('/feed')">Feed</a>
+        <a href="#" @click="handleNavigation('/MyPage')">MyPage</a>
         <SearchNickname></SearchNickname>
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
