@@ -15,10 +15,10 @@
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
                 <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns">
-                <div class="myprofile_btns">
-                    <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
-                    <button @click="toggleFollow()" class="myprofile_btn">{{ getButtonText(isFollowing) }} </button>
-                </div>
+                    <div class="myprofile_btns">
+                        <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
+                        <button @click="toggleFollow()" class="myprofile_btn">{{ getButtonText(isFollowing) }} </button>
+                    </div>
                 </div>
                 <div v-if="mypageUser.user_id === loginUser" class="myprofile_btns">
                     <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
@@ -183,8 +183,8 @@ export default {
         const selectCategory = (category) => {
             selectedCategory.value = category.id;
             selectedCategoryNickname.value = category.name;
-            console.log(selectedCategory.value)
-            console.log(selectedCategoryNickname.value)
+            // console.log(selectedCategory.value)
+            // console.log(selectedCategoryNickname.value)
         };
         const sendmsg = function () {
             // selectedCategory의 현재 값으로 작업을 수행
@@ -195,6 +195,7 @@ export default {
                     friend_id: mypageUser.value.user_id,
                     category_id: selectedCategory.value,
                 }
+                // console.log(friendSendmsg)
                 competStore.friendSend(friendSendmsg)
                     .then((res) => {
                         console.log('도전장 보내기 성공')
@@ -229,7 +230,6 @@ export default {
             followStore.plusSsallowing(ssallowingData)
                 .then((res) => {
                     console.log(res);
-                    console.log('팔로우됨');
                 })
                 .catch((err) => {
                     console.log(err);
@@ -241,7 +241,6 @@ export default {
             followStore.deleteSsallowing(UnssallowingData)
                 .then((res) => {
                     console.log(res);
-                    console.log('언팔함')
                 })
                 .catch((err) => {
                     console.log(err)
@@ -434,7 +433,8 @@ export default {
     border: #aecbeb 2px solid;
     border-radius: 20px;
     width: 50%;
-    height: 60%;
+    /* height: 60%; */
+    height: calc(80% - 30px);
     padding: 30px;
 }
 
@@ -446,7 +446,8 @@ export default {
     background-color: #e1ecf7;
     border-radius: 20px;
     width: 60%;
-    height: 50%;
+    padding: 10px;
+    /* height: calc(70% - 10px); */
     text-align: center;
 }
 
@@ -472,12 +473,12 @@ export default {
     padding: 30px;
     padding-top: 10px;
     width: 80%;
-    height: 60%;
+    height: calc(80% - 10px);
     text-align: center;
 }
 
 .sendmsg_selectcategory {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
 }
 
@@ -497,9 +498,9 @@ export default {
     border-radius: 20px;
     border: none;
 
-    width: 150px;
+    width: 120px;
     color: black;
-    font-size: larger;
+    font-size: 16px;
     font-weight: bolder;
 }
 
@@ -586,6 +587,7 @@ export default {
 }
 
 @media screen and (max-width: 768px) {
+
     .complain_img {
         width: 20px;
         height: 20px;
@@ -627,9 +629,11 @@ export default {
         font-size: 25px;
     }
 
-    .mailbox_content {
-        width: 60%;
-        height: 60%;
+    .sendmsg_btn {
+        width: 150px;
+        height: 40px;
+        padding: 10px;
+        font-size: 15px;
     }
 }
 
@@ -673,5 +677,30 @@ export default {
         padding-bottom: 5px;
     }
 
-}
-</style>
+    .sendmsg_info {
+        width: 200px;
+        font-size: 15px;
+    }
+
+    .sendmsg_category {
+        height: calc(80% - 10px);
+    }
+
+    .sendmsg_category_btn {
+        width: 90%;
+        font-size: 13px;
+        margin: 3px;
+    }
+
+    .sendmsg_btns {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .sendmsg_btn {
+        width: 90%;
+        height: 30px;
+        font-size: 13px;
+        margin: 3px;
+    }
+}</style>

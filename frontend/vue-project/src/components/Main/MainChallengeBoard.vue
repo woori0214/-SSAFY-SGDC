@@ -419,6 +419,7 @@ onMounted(() => {
 .solo {
   /* border: 1px #aecbeb solid; */
   width: 50%;
+  height: 100%;
   /* margin: 5px; */
   text-align: center;
 }
@@ -448,6 +449,7 @@ onMounted(() => {
   border-radius: 20px;
   padding: 15px;
   display: flex;
+  height: calc(100% - 74px);
 }
 
 .success_graph {
@@ -508,8 +510,8 @@ onMounted(() => {
   transition: background-color 0.3s ease;
 }
 .category_btn:hover{
-  background-color: #aecbeb;
-  border: 3px solid #e1ecf7;
+  background-color: #3f8bc9;
+  color: #f8f9fb;
 }
 
 .compet {
@@ -564,12 +566,12 @@ onMounted(() => {
 
   background-color: #aecbeb;
   border-radius: 20px;
-  height: 80%;
+  /* height: 80%; */
 }
 
 .carousel_container {
   position: relative;
-  overflow: hidden;
+  /* overflow: hidden; */
   /* 필요에 따라 여기도 추가할 수 있습니다 */
   width: 100%;
   /* 혹은 필요한 너비로 조정하세요 */

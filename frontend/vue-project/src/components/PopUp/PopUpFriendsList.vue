@@ -155,14 +155,8 @@ export default {
 
 .friendList_content {
     background-color: white;
-    max-width: 80%;
-    /* 최대 너비 설정 */
-    max-height: 80%;
-    /* 최대 높이 설정 */
-    width: 50%;
-    /* 너비 자동 조절 */
-    height: auto;
-    /* 높이 자동 조절 */
+    width: calc(50% - 20px);
+    height: calc(90% - 20px);
     padding: 20px;
     border-radius: 10px;
     text-align: center;
@@ -303,7 +297,16 @@ export default {
     color: white;
 }
 
+
+
 @media screen and (max-width: 450px) {
+
+    .friendList_content {
+        width: calc(70% - 20px);
+        height: calc(90% - 20px);
+        overflow: scroll;
+    }
+
     .popup_ssallowing {
         display: flex;
         flex-direction: column;
@@ -314,10 +317,11 @@ export default {
     }
 
     .popup_ssallowing_name {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    }
 }
-}</style>
+</style>

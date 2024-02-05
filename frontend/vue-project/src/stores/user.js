@@ -11,7 +11,6 @@ export const useUserStore = defineStore('user', () => {
     
     // 마이페이지 사용자 정보
     const userData = function (userId) {
-        console.log(userId)
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/user-info/${userId}`)
@@ -30,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
     const userUpdate = function (userId, updateData) {
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URL}/user-info/${userId.value}`, updateData)
+                .patch(`${URL}/user-info/${userId}`, updateData)
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -46,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
     const mainBadge = function (userId, badgeId) {
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URL}/${userId.value}/${badgeId.value}`, {})
+                .patch(`${URL}/${userId}/${badgeId}`, {})
                 .then((res) => {
                     console.log(res);
                     resolve(res);

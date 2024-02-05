@@ -3,18 +3,18 @@
     <div class="feed_frame2">
       <div class="feed_profile">
         <div class="user_profile">
-          <img :src="feedImage" class="feed_profile_image" />
-          <img :src="feedImage" class="feed_profile_badge" />
+          <img :src="userImg" class="feed_profile_image" />
+          <img :src="userImg" class="feed_profile_badge" />
           <div class="feed_user_name">{{ userName }}</div>
         </div>
         <button @click="handleDeclareClick" class="declare_button">
           <img src="@/assets/siren.png" alt="Declare Icon" class="declare_icon" />
         </button>
       </div>
-      <div class="feed_content">{{ content }}</div>
+      <div class="feed_content">{{ feedTitle }}</div>
     </div>
     <div class="feed_image_frame" @click="routeDetailFeed()">
-      <img :src="feedImage" class="feed_image" />
+      <img :src="feedImg" class="feed_image" />
     </div>
     <div class="feed_footbar">
       <div class="feed_heart_cnt">
@@ -22,9 +22,9 @@
           <img :src="heartIcon" alt="heart Icon" class="heart_icon" />
           <!-- <span class="material-symbols-outlined">favorite</span> -->
         </button>
-        {{ heartCnt }}
+        {{ feedLikeNum }}
       </div>
-      <div class="feed_view_cnt">조회수 {{ viewCnt }}</div>
+      <div class="feed_view_cnt">조회수 {{ feedId }}</div>
     </div>
     <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox"/>
   </div>
@@ -41,29 +41,53 @@ import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
 export default {
   name: "feed_item",
   props: {
-    feed_id: {
+    feedId: {
       type: Number,
-      default: 9999,
+      default: null,
     },
-    userName: {
+    feedTitle: {
       type: String,
       default: "XXX",
     },
-    content: {
+    feedContent: {
       type: String,
-      default: "content",
+      default: "XXX",
     },
-    feedImage: {
+    feedLikeNum: {
+      type: Number,
+      default: -1,
+    },
+    views: {
+      type: Number,
+      default: -1,
+    },
+    privacy: {
+      type: Boolean,
+      default: false,
+    },
+    createAt: {
+      type: String,
+      default: "2000-01-01T01:00:00.000001",
+    },
+    updateAt: {
+      type: String,
+      default: null,
+    },
+    feedImg: {
       type: String,
       default: "/src/components/Feed/FeedImage/no_image_logo.png",
     },
-    heartCnt: {
-      type: String,
-      default: "heartCnt",
+    userId: {
+      type: Number,
+      default: 0,
     },
-    viewCnt: {
+    userNickname: {
       type: String,
-      default: "viewCnt",
+      default: "NULL",
+    },
+    userImg: {
+      type: String,
+      default: "/src/components/Feed/FeedImage/no_image_logo.png",
     },
   },
   methods: {

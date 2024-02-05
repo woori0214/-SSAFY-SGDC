@@ -36,7 +36,7 @@
       <RouterView />
     </div>
     <!-- 개발용 라우터 바 -->
-    <div class="developBar">
+    <!-- <div class="developBar">
       <RouterLink to="/">Main</RouterLink>
       <RouterLink to="/competition">Competition</RouterLink>
       <RouterLink to="/solo">Solo</RouterLink>
@@ -47,7 +47,7 @@
       >
       <RouterLink to="/login">Login</RouterLink>
       <RouterLink to="/signup">SignUp</RouterLink>
-    </div>
+    </div> -->
     <!-- 개발용 라우터 바 End-->
 
     <div class="ServiceInformation">

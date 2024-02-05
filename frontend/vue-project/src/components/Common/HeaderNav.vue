@@ -4,6 +4,17 @@
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
     />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Protest+Riot&display=swap"
+      rel="stylesheet"
+    />
+
     <div class="header-wrapper-top">
       <div class="header-music-box" v-show="!closeLogo">
         <BackGroundMusic class="header-music"></BackGroundMusic>
@@ -54,15 +65,17 @@
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
-          <!-- 로그인 상태 -->
+          <!-- 로그아웃 상태 -->
           <div v-if="!userLoginStore.loginUser" class="login-signup-links">
             <RouterLink to="/login" class="nav-link">로그인</RouterLink>
             <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
           </div>
-          <!-- 로그아웃 상태 -->
+          <!-- 로그인 상태 -->
           <div v-else class="user-nav">
-            <span>{{ userLoginStore.userNickname }}님, 안녕하세요!</span>
-            <a @click="logout" class="nav-link logout">로그아웃</a>
+            {{ userLoginStore.userNickname }}님
+            <a @click="logout" class="nav-link logout"
+              ><span class="material-symbols-outlined"> logout </span></a
+            >
           </div>
         </div>
       </div>
@@ -113,16 +126,26 @@ const closeMailBox = () => {
 const userLoginStore = useLoginStore();
 const logout = function () {
   userLoginStore.isLogout();
+  router.push("/");
 };
 
 const handleNavigation = (to) => {
   const userStorage = useUserStorageStore();
-  if (userStorage.getUserInformation().user_id != null) {
-    router.push(to);
+  const user_id = userStorage.getUserInformation().user_id;
+  if (user_id != null) {
+    if (to == "/MyPage") {
+      router.push({ name: "MyPage", params: { userId: 1 } }); //나중에 user_id로 바꾸기
+    } else {
+      router.push(to);
+    }
   } else {
     alert("다른 페이지에 접근하기 위해서는 로그인이 필요합니다 :)");
   }
 };
+
+onMounted(() => {
+  userLoginStore.isLogined();
+});
 </script>
 
 <style>
@@ -138,7 +161,7 @@ const handleNavigation = (to) => {
 }
 
 @keyframes fadeOutUp {
-  0%{
+  0% {
     top: 30px;
     opacity: 1; /* 시작과 끝에서 투명도를 0으로 유지 */
   }
@@ -146,7 +169,7 @@ const handleNavigation = (to) => {
     top: -10px;
     opacity: 0; /* 최고점에서 다시 투명해짐 */
   }
-  100%{
+  100% {
     top: 30px;
     opacity: 0;
   }
@@ -199,7 +222,6 @@ const handleNavigation = (to) => {
   gap: 8px;
 }
 .profile-tmp {
-  overflow: auto;
 }
 .login-signup-links {
   display: flex;
@@ -225,6 +247,12 @@ const handleNavigation = (to) => {
 .user-nav {
   display: flex;
   align-items: center;
+  background-color: #e1ecf7;
+  padding-left: 8px;
+  border-radius: 5px;
+  /* font-size: large; */
+  font-size: 1.2em;
+  font-weight: 600;
 }
 
 .logout {
@@ -308,32 +336,38 @@ nav a {
   position: absolute;
   white-space: nowrap;
   will-change: transform;
-  animation: marquee 5s linear infinite;
+  animation: marquee 10s linear infinite;
 }
 @keyframes marquee {
   0% {
     transform: translateX(0);
-    color: red;
+    color: #71a5de
   }
   20% {
     transform: translateX(-10%);
-    color: orange;
+    color: #aecbeb;
   }
   40% {
     transform: translateX(-20%);
-    color: yellow;
+    color: #83b0e1;
   }
   60% {
     transform: translateX(-30%);
-    color: green;
+    color: #e1ecf7;
   }
   80% {
     transform: translateX(-40%);
-    color: blue;
+    color: #83b0e1;
   }
   100% {
     transform: translateX(-50%);
-    color: red;
+    color: #71a5de;
   }
+}
+
+.protest-riot-regular {
+  font-family: "Protest Riot", sans-serif;
+  font-weight: 400;
+  font-style: normal;
 }
 </style>  
