@@ -269,7 +269,8 @@ onMounted(() => {
   background-color: #e1ecf7;
   padding-left: 8px;
   border-radius: 5px;
-  font-size: large;
+  /* font-size: large; */
+  font-size: 1.2em;
   font-weight: 600;
 }
 
