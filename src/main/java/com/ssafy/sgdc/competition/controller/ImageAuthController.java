@@ -43,9 +43,9 @@ public class ImageAuthController {
     })
     @PostMapping("/upload")
     public DataResponseDto<String> imageAuth(
-            @RequestParam("user_id") int userId,
-            @RequestParam("compet_id") int competId,
-            @RequestParam("auth_img") MultipartFile authImg
+            @RequestParam int userId,
+            @RequestParam int competId,
+            @RequestParam MultipartFile authImg
     ) {
         String imageUrl = imageAuthService.saveImageAuth(userId,
                 competId, authImg);
