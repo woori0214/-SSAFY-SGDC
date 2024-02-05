@@ -56,7 +56,7 @@ export const useSignupStore = defineStore('signup', () => {
 
     // 닉네임 중복 확인
     const isnickname = function (NicknameData) {
-        console.log('isnickname 되고있나')
+        // console.log('isnickname 되고있나')
 
         return new Promise((resolve, reject) => {
             axios

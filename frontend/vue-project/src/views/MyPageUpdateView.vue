@@ -79,8 +79,36 @@ const profileImageUrl = ref(''); // 서버로부터 받은 프로필 이미지 U
 const profileImageFile = ref(null);
 const isNicknameFormatValid = ref(true);
 
+// 닉네임
 const validateNickname = () => {
     isNicknameFormatValid.value = /^[가-힣]{2,10}$/.test(editNickname.value);
+};
+
+const checkNickname = () => {
+    if (!editNickname.value) {
+        alert('닉네임을 입력해주세요.');
+        return;
+    }
+    console.log(editNickname)
+    userSignupStore.isnickname(editNickname.value)
+    .then(response => {
+        if (response.data.status === 200) {
+            nicknameValid.value = true;
+        } else {
+            nicknameValid.value = false;
+        }
+        nicknameCheck.value = true;
+    }).catch(error => {
+        console.error('닉네임 중복 확인 중 오류 발생:', error);
+    });
+};
+
+const updateNickname = () => {
+    if (isNicknameFormatValid.value && nicknameValid.value) {
+        const update_data = updateData().updateData
+        userStore.userUpdate(userId.value, update_data);
+        // 업데이트 로직 구현
+    }
 };
 
 const loadBadgeList = () => {
@@ -93,39 +121,6 @@ const loadBadgeList = () => {
         console.error('리스트 못 갖고왔음:', error);
     });
 };
-
-const checkNickname = () => {
-    if (!editNickname.value) {
-        alert('닉네임을 입력해주세요.');
-        return;
-    }
-    userSignupStore().isnickname(editNickname.value).then(response => {
-        if (response.data.status === 200) {
-            nicknameValid.value = true;
-        } else {
-            nicknameValid.value = false;
-        }
-        nicknameCheck.value = true;
-    }).catch(error => {
-        console.error('닉네임 중복 확인 중 오류 발생:', error);
-    });
-};
-
-onMounted(() => {
-    const userInformation = useUserStorage.getUserInformation();
-    userId.value = userInformation.user_id;
-
-    userStore.userData(userId.value).then(res => {
-        nickname.value = res.data.user.user_nickname;
-        selectedBadge.value = res.data.badge_id;
-        phoneNumber.value = res.data.user_phone;
-        profileImageUrl.value = res.data.user_img;
-    }).catch(error => {
-        console.error('Error fetching user data:', error);
-    });
-    loadBadgeList();
-});
-
 const handleImageUpload = (event) => {
     profileImageFile.value = event.target.files[0];
     profileImageUrl.value = URL.createObjectURL(event.target.files[0]);
@@ -135,26 +130,19 @@ const updateProfileImage = () => {
     const formData = new FormData();
     if (profileImageFile.value) {
         formData.append('profileImage', profileImageFile.value);
-        useUserStore.userUpdate(userId.value, updateData());
+        userStore.userUpdate(userId.value, updateData());
     }
     
-};
-
-const updateNickname = () => {
-    if (isNicknameFormatValid.value && nicknameValid.value) {
-        useUserStore.userUpdate(userId.value, updateData());
-        // 업데이트 로직 구현
-    }
 };
 
 const updateBadge = () => {
     if (selectedBadge.value !== null) {
         // 뱃지를 수정한 경우
-        useUserStore.userUpdate(userId.value, updateData());
+        userStore.userUpdate(userId.value, updateData());
     } else {
         // 뱃지를 수정하지 않은 경우
         const selectedBadgeId = badgeList.find(badge => badge.badge_name === selectedBadge).badge_id;
-        useUserStore.userUpdate(userId.value, {
+        userStore.userUpdate(userId.value, {
             userId: userId.value,
             updateData: {
                 badge_id: selectedBadgeId
@@ -164,7 +152,7 @@ const updateBadge = () => {
 };
 
 const updatePhoneNumber = () => {
-    useUserStore.userUpdate(userId.value, updateData());
+    userStore.userUpdate(userId.value, updateData());
 };
 
 const updateData = function () {
@@ -174,11 +162,28 @@ const updateData = function () {
             user_nickname: editNickname.value || nickname.value,
             user_phone: editPhoneNumber.value || phoneNumber.value,
             user_img: profileImageUrl.value,  // 이미지 업로드 로직에 따라 수정
-            badge_id: badge.badge_id || selectedBadge.value
+            badge_id:selectedBadge.value
         }
     };
 };
 
+onMounted(() => {
+    const userInformation = useUserStorage.getUserInformation();
+    userId.value = userInformation.user_id;
+    console.log(userId.value)
+    userStore.userData(userId.value)
+        .then(res => {
+            console.log(res.data.data)
+            nickname.value = res.data.data.user_nickname;
+            selectedBadge.value = res.data.data.badge_id;
+            console.log(selectedBadge.value)
+            phoneNumber.value = res.data.data.user_phone;
+            profileImageUrl.value = res.data.data.user_img;
+        }).catch(error => {
+            console.error('Error fetching user data:', error);
+        });
+    loadBadgeList();
+});
 </script>
 
 <style scoped>
@@ -227,7 +232,7 @@ button {
 }
 
 button:hover {
-    background-color: #83b0e1 ;
+    background-color: #83b0e1;
     color: white;
 }
 
