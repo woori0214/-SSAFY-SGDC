@@ -34,7 +34,7 @@ export const useLoginStore = defineStore('login', () => {
                         user_id: response.data.data.user_id,
                         user_name: response.data.data.user_name,
                         user_nickname: response.data.data.user_nickname,
-                        // token: response.data.token,
+                        token: response.data.data.accessToken,
                     });
                     loginUser.value = userInfo.user_id;
                     userNickname.value = userInfo.user_nickname;

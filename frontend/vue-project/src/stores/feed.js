@@ -9,7 +9,7 @@ export const useFeedStore = defineStore('feed', () => {
     const URL = serverURL + v1_URL + 'feed';
 
     //게시물 한 개
-    const getFeed = function(feedId){
+    const getFeed = function (feedId) {
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/feed-info/${feedId}`)
@@ -27,7 +27,7 @@ export const useFeedStore = defineStore('feed', () => {
     const updateFeedView = function (feedId) {
         return new Promise((resolve, reject) => {
             axios
-                .patch(`${URL}/feed-views/${feedId}`,{})
+                .patch(`${URL}/feed-views/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
                     console.log('조회수 +1')
@@ -39,7 +39,7 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 리스트 조회
-    const getFeedList = function(){
+    const getFeedList = function () {
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/feed-list`)
@@ -54,10 +54,10 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 리스트(페이지 당 10개씩)
-    const getFeedListPage = function(page){
+    const getFeedListPage = function (page) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/feed-list/pages`, page)
+                .get(`${URL}/feed-list/pages`, { page: page, size: 10 })
                 .then((response) => {
                     resolve(response);
                 })
@@ -89,7 +89,7 @@ export const useFeedStore = defineStore('feed', () => {
     const addfeedLikeUser = function (feedId, userId) {
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/feed-like/${feedId}/${userId}`,{} )
+                .post(`${URL}/feed-like/${feedId}/${userId}`, {})
                 .then((response) => {
                     resolve(response);
                 })
@@ -125,7 +125,7 @@ export const useFeedStore = defineStore('feed', () => {
         updateFeedView,
         getFeedList,
 
-        
+
 
 
 
@@ -133,4 +133,4 @@ export const useFeedStore = defineStore('feed', () => {
 
 
     }
-  })
+})

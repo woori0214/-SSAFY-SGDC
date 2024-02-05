@@ -32,7 +32,7 @@ export const useUserStorageStore = defineStore('userStorage', () => {
     localStorage.setItem("user_id", data.user_id);
     localStorage.setItem("user_name", data.user_name);
     localStorage.setItem("user_nickname", data.user_nickname);
-    // localStorage.setItem("token", data.token);
+    localStorage.setItem("token", data.token);
   }
 
   // 유저 로그인 정보 가져오기
