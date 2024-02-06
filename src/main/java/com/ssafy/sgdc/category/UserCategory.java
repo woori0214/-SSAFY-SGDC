@@ -17,6 +17,7 @@ import lombok.Setter;
 public class UserCategory {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_category_id")
     private int userCategoryId;
 
@@ -37,5 +38,25 @@ public class UserCategory {
     @Column(name = "category_status")
     @Enumerated(EnumType.STRING)
     private CategoryStatus categoryStatus;
+
+    public UserCategory(User user, Category category, int categoryWinCnt, int categoryFailCnt, CategoryStatus categoryStatus) {
+        this.user = user;
+        this.category = category;
+        this.categoryWinCnt = categoryWinCnt;
+        this.categoryFailCnt = categoryFailCnt;
+        this.categoryStatus = categoryStatus;
+    }
+
+    public void increaseWinCount() {
+        this.categoryWinCnt += 1;
+    }
+
+    public void increaseFailCount() {
+        this.categoryFailCnt += 1;
+    }
+
+    public void updateCategoryStatus(CategoryStatus categoryStatus) {
+        this.categoryStatus = categoryStatus;
+    }
 
 }
