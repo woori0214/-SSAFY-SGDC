@@ -4,12 +4,11 @@ import axios from 'axios';
 import { serverURL, v1_URL } from '@/main.js';
 
 const URL = serverURL + v1_URL + 'user/re-auth/';
-const userStorage = useUserStorageStore();
+const user_auth_token = useUserStorageStore().getUserInformation().token;
 
 export const authorizationAPI = axios.create({
-    baseURL: 'https://your-api-endpoint.com',
     headers: {
-        'Authorization': `Bearer YOUR_ACCESS_TOKEN`, // 인증 토큰을 헤더에 추가
+        'Authorization': `Bearer ${user_auth_token}`, // 인증 토큰을 헤더에 추가
         'Content-Type': 'application/json'
     }
 });

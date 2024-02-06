@@ -136,6 +136,7 @@ onMounted(() => {
   z-index: 1;
 
   max-width: 1000px;
+  min-width: 850px;
   height: calc(100vh - 139px);
   margin: auto;
 
