@@ -3,7 +3,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+import { authorizationAPI } from './authAPI';
+import { serverURL, v1_URL } from './config';
 
 
 export const useFollowStore = defineStore('follow', () => {

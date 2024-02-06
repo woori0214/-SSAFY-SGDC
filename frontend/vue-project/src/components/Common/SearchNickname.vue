@@ -11,13 +11,14 @@
             </ul>
         </div>
     </div>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
 import { useUserStore } from "@/stores/user";
 
-const nickname = ref('');
+const nickname = ref("");
 const searchResults = ref(null);
 const userStore = useUserStore();
 
@@ -53,68 +54,91 @@ const searchFriends = async() => {
 };
 
 const followUser = (userId) => {
-    // 팔로우 기능을 구현하는 코드 작성
-    console.log(`팔로우 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
+  // 팔로우 기능을 구현하는 코드 작성
+  console.log(`팔로우 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
 };
 
 const viewProfile = (userId) => {
-    // 프로필 보기 기능을 구현하는 코드 작성
-    console.log(`프로필 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
+  // 프로필 보기 기능을 구현하는 코드 작성
+  console.log(`프로필 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
 };
 
 onMounted(() => {
-    document.body.addEventListener('click', closeSearchResults);
-    window.addEventListener('scroll', closeSearchResultsOnScroll);
+  document.body.addEventListener("click", closeSearchResults);
+  window.addEventListener("scroll", closeSearchResultsOnScroll);
 });
 
 onUnmounted(() => {
-    document.body.removeEventListener('click', closeSearchResults);
-    window.removeEventListener('scroll', closeSearchResultsOnScroll);
+  document.body.removeEventListener("click", closeSearchResults);
+  window.removeEventListener("scroll", closeSearchResultsOnScroll);
 });
 
 const closeSearchResults = () => {
-    searchResults.value = null;
+  searchResults.value = null;
 };
 
 const closeSearchResultsOnScroll = () => {
-    if (searchResults.value !== null) {
-        searchResults.value = null;
-    }
+  if (searchResults.value !== null) {
+    searchResults.value = null;
+  }
 };
 </script>
 
 <style scoped>
+.main-search-borad {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.searchBar {
+  height: calc(80% - 5px);
+  border: 2px solid #83b0e1;
+  border-radius: 3px;
+  padding: none;
+}
+.searchBtn {
+  height: 80%;
+    background-color: #83b0e1;
+    border: 0px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+}
+.searchBtn:hover{
+    background-color: #e1ecf7;
+    color: #83b0e1;
+}
 .search-results {
-    position: absolute;
-    z-index: 1000;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 5px;
-    list-style: none;
+  position: absolute;
+  z-index: 1000;
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 5px;
+  list-style: none;
 }
 
 .search-results ul {
-    margin: 0;
-    padding: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .search-results li {
-    margin: 5px 0;
+  margin: 5px 0;
 }
 
 .follow-button,
 .profile-button {
-    /* 버튼에 대한 공통 스타일 */
-    margin-left: 10px;
-    padding: 5px 10px;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  /* 버튼에 대한 공통 스타일 */
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .follow-button:hover,
 .profile-button:hover {
-    background-color: #83b0e1;
-    color: #fff;
+  background-color: #83b0e1;
+  color: #fff;
 }
 </style>

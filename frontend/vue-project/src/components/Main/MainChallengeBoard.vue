@@ -6,7 +6,9 @@
       <div class="betweenBlock-item"></div>
     </div>
 
-    <div class="current_board">
+
+    <div class="not-logined-box" v-show="userId == null">로그인이 필요한 기능입니다 :) {{userId}}</div>
+    <div class="current_board" v-show="userId != null">
       <div class="solo">
         <div class="solo_head">
           <div class="solo_head_item">솔로 모드 현황</div>
@@ -186,7 +188,7 @@ const items = ref([
 
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId) {
-  userId.value = loginStore.loginUser;
+  // userId.value = loginStore.loginUser;
   selectedCategory.value = categoryId;
   const challenge = { user_id: userId, category_id: categoryId };
   soloStore.soloChallenge(challenge);
@@ -206,8 +208,8 @@ const isAuthenticated = (authImage) => {
 };
 
 // 사용자가 sender인지 receiver인지 확인하는 함수
-const isCurrentUser = (userId) => {
-  return loggedInUserId === userId;
+const isCurrentUser = (msgUserId) => {
+  return userId === msgUserId;
 };
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
@@ -218,7 +220,7 @@ const authenticate = (item) => {
 const fetchCompetitionData = async () => {
   try {
     const response = await competitionStore.competitionProgressDetail(
-      loggedInUserId
+      userId
     );
     if (response.status === 200 && response.data.compet) {
       competData.value = response.data.compet.map((compet) => ({
@@ -320,10 +322,10 @@ const solo_percent = ref(0);
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
-  const userId = ref(userInformation.user_id);
-  if (userId) {
+  userId.value = userInformation.user_id;
+  if (userId.value) {
     soloStore
-      .soloToday(userId)
+      .soloToday(userId.value)
       .then((response) => {
         todayChallenges.value = response.data["solo_id"].map((challenge) => ({
           category_id: challenge.category_id,
@@ -680,5 +682,15 @@ onMounted(() => {
   border-radius: 5px;
   width: 98%;
   height: 4px;
+}
+
+.not-logined-box{
+  background-color: #aecbeb;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding-inline: 10%;
+  font-size: 2rem;
+  padding-block: 10px;
+  font-weight: 600;
 }
 </style>

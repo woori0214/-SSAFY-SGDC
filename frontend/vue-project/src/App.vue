@@ -10,7 +10,7 @@
           v-if="web_width > 1470"
         />
         <img src="./assets/cloud_side_left.png" alt="" class="cloud_left" />
-        <img src="./assets/coster.png" alt="" class="coster" />
+        <!-- <img src="./assets/coster.png" alt="" class="coster" /> -->
       </div>
       <div class="back-side-item" v-if="web_width > 1070">
         <img
@@ -20,7 +20,7 @@
           v-if="web_width > 1470"
         />
         <img src="./assets/cloud_side_right.png" alt="" class="cloud_right" />
-        <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel" />
+        <!-- <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel" /> -->
       </div>
     </div>
     <div id="main-body">
@@ -28,7 +28,6 @@
         <div class="wrapper">
           <div class="headbar">
             <HeaderNav></HeaderNav>
-            
           </div>
         </div>
       </header>
@@ -85,6 +84,18 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: "jua";
+  src: url("../public/fonts/BMJUA_ttf.ttf");
+}
+
+button,
+div,
+a,
+span {
+  font-family: "jua";
+}
+
 .coster {
   position: fixed;
   width: 400px;
@@ -120,14 +131,14 @@ onMounted(() => {
 .pinokio {
   position: fixed;
   width: 350px;
-  bottom: 100px;
+  bottom: 70px;
   right: -30px;
 }
 
 .bear {
   position: fixed;
   width: 200px;
-  bottom: 100px;
+  bottom: 70px;
   left: 0px;
   transform: scaleX(-1);
 }
@@ -137,7 +148,7 @@ onMounted(() => {
 
   max-width: 1000px;
   min-width: 850px;
-  height: calc(100vh - 139px);
+  height: calc(100vh - 96px);
   margin: auto;
 
   display: flex;
@@ -173,7 +184,7 @@ onMounted(() => {
   height: 100vh;
 
   background-color: #f8f9fb;
-  background-image: url("./assets/pixil_background_winter.png");
+  background-image: url("./assets/pixil_background_winter2.png");
   background-size: 220px;
   background-repeat: repeat-x;
   background-position: bottom;
