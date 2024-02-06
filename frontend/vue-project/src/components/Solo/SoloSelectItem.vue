@@ -334,4 +334,7 @@ export default {
   }
 
 }
+* {
+  font-family: "jua";
+}
 </style>

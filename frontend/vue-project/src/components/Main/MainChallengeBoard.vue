@@ -6,7 +6,10 @@
       <div class="betweenBlock-item"></div>
     </div>
 
-    <div class="current_board">
+    <div class="not-logined-box" v-show="userId == null">
+      로그인이 필요한 기능입니다 :) {{ userId }}
+    </div>
+    <div class="current_board" v-show="userId != null">
       <div class="solo">
         <div class="solo_head">
           <div class="solo_head_item">솔로 모드 현황</div>
@@ -43,12 +46,18 @@
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템 -->
-              <div class="carousel_item" v-for="(item, index) in items" :key="index">
+              <div
+                class="carousel_item"
+                v-for="(item, index) in items"
+                :key="index"
+              >
                 <!--sender부분-->
                 <div class="player1">
-                  <img :src="item.imageUrl1" alt="..." class="player_img">
+                  <img :src="item.imageUrl1" alt="..." class="player_img" />
                   <p>{{ item.name1 }}</p>
-                  <button>{{ item.challenge_status1 }}</button>
+                  <button>
+                    <span>{{ item.challenge_status1 }}</span>
+                  </button>
                   <!-- <img :src="item.sender_user_img" alt="sender image" class="player_img" />
                   <p>{{ item.sender_user_nickname }}</p>
                   <button
@@ -62,7 +71,7 @@
                   <div v-else-if="item.sender_authenticated">인증 완료</div>
                   <div v-else>진행중</div> -->
                 </div>
-                <div class =item_category_vs>
+                <div class="item_category_vs">
                   <h1 class="item_category">{{ item.category }}</h1>
                   <!-- <h1>{{ item.category_id }}</h1> -->
                   <h1 class="item_vs">vs</h1>
@@ -82,9 +91,11 @@
                   </button>
                   <div v-else-if="item.receiver_authenticated">인증 완료</div>
                   <div v-else>진행중</div> -->
-                  <img :src="item.imageUrl2" alt="..." class="player_img">
+                  <img :src="item.imageUrl2" alt="..." class="player_img" />
                   <p>{{ item.name2 }}</p>
-                  <button>{{ item.challenge_status2 }}</button>
+                  <button>
+                    <span>{{ item.challenge_status2 }}</span>
+                  </button>
                 </div>
               </div>
             </div>
@@ -186,7 +197,7 @@ const items = ref([
 
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId) {
-  userId.value = loginStore.loginUser;
+  // userId.value = loginStore.loginUser;
   selectedCategory.value = categoryId;
   const challenge = { user_id: userId, category_id: categoryId };
   soloStore.soloChallenge(challenge);
@@ -206,8 +217,8 @@ const isAuthenticated = (authImage) => {
 };
 
 // 사용자가 sender인지 receiver인지 확인하는 함수
-const isCurrentUser = (userId) => {
-  return loggedInUserId === userId;
+const isCurrentUser = (msgUserId) => {
+  return userId === msgUserId;
 };
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
@@ -217,9 +228,7 @@ const authenticate = (item) => {
 };
 const fetchCompetitionData = async () => {
   try {
-    const response = await competitionStore.competitionProgressDetail(
-      loggedInUserId
-    );
+    const response = await competitionStore.competitionProgressDetail(userId);
     if (response.status === 200 && response.data.compet) {
       competData.value = response.data.compet.map((compet) => ({
         ...compet,
@@ -320,10 +329,10 @@ const solo_percent = ref(0);
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
-  const userId = ref(userInformation.user_id);
-  if (userId) {
+  userId.value = userInformation.user_id;
+  if (userId.value) {
     soloStore
-      .soloToday(userId)
+      .soloToday(userId.value)
       .then((response) => {
         todayChallenges.value = response.data["solo_id"].map((challenge) => ({
           category_id: challenge.category_id,
@@ -401,7 +410,7 @@ onMounted(() => {
 
 .challenge_board_head {
   font-size: 44px;
-  font-weight: 700;
+  font-weight: 600;
   margin-left: 15px;
   padding-inline: 20px;
   padding-top: 10px;
@@ -509,7 +518,7 @@ onMounted(() => {
   text-align: center;
   transition: background-color 0.3s ease;
 }
-.category_btn:hover{
+.category_btn:hover {
   background-color: #3f8bc9;
   color: #f8f9fb;
 }
@@ -598,7 +607,8 @@ onMounted(() => {
   /* 텍스트 색상 */
 }
 
-.player1, .player2 {
+.player1,
+.player2 {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -615,29 +625,30 @@ onMounted(() => {
   border: #2e2e2e;
 }
 
-
-.player1 p, .player2 p {
+.player1 p,
+.player2 p {
   margin: 0; /* 이름과 버튼 사이의 기본 마진을 제거 또는 조정 */
   font-size: 1rem; /* 필요에 따라 폰트 사이즈 조정 */
 }
 
-.player1 button, .player2 button {
+.player1 button,
+.player2 button {
   margin-top: 0px; /* 버튼 위의 간격을 조정 */
   padding: 4px 8px; /* 버튼 내부 패딩 조정 */
   font-size: 0.875rem; /* 버튼 폰트 사이즈 조정 */
 }
-.item_category{
+.item_category {
   margin-bottom: 1px;
 }
-.item_vs{
+.item_vs {
   margin-top: 1px;
 }
 .item_category_vs {
-  display: flex;         /* Flexbox 레이아웃 사용 */
+  display: flex; /* Flexbox 레이아웃 사용 */
   flex-direction: column; /* 자식 요소들을 세로 방향으로 쌓음 */
-  align-items: center;    /* 가로 방향에서 가운데 정렬 */
+  align-items: center; /* 가로 방향에서 가운데 정렬 */
   justify-content: center; /* 세로 방향에서 가운데 정렬 */
-  height: 100%;            /* 필요한 경우, 높이 설정 */
+  height: 100%; /* 필요한 경우, 높이 설정 */
 }
 
 /* @media (max-width: 768px) {  */
@@ -680,5 +691,19 @@ onMounted(() => {
   border-radius: 5px;
   width: 98%;
   height: 4px;
+}
+
+.not-logined-box {
+  background-color: #aecbeb;
+  border-radius: 10px;
+  margin: 0 auto;
+  padding-inline: 10%;
+  font-size: 2rem;
+  padding-block: 10px;
+  font-weight: 500;
+}
+
+* {
+  font-family: "jua";
 }
 </style>

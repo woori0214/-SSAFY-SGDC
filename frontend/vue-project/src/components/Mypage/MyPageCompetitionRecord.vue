@@ -9,7 +9,7 @@
                 <!--승패에 따라 이미지 다르게 보여주기-->
                 <div v-for="competdata in competList" :key="competdata.compet_id" class="result_div">
                     <div class="result_img_div">
-                        <img :src="competdata.compet_result === 1 ? winimg : loseimg" alt="" class="result_img"
+                        <img :src="competdata.compet_result === 'SEND_WIN' || competdata.compet_result === 'BOTH_WIN' ? winimg : loseimg" alt="" class="result_img"
                             @click="openPopup(competdata)">
                     </div>
                 </div>
@@ -19,27 +19,27 @@
                     <div class="popup-content">
                         <!-- Time -->
                         <div class="time">
-                            {{ formatTime(selectedMatchingData[0].compet_expiration_time) }}
+                            {{ formatTime(selectedMatchingData.compet_expiration_time) }}
                         </div>
 
                         <!-- Sender and Receiver with Images -->
                         <div class="match-details">
                             <div class="sender">
-                                <img :src="getAuthImage(popupdata.sender_id)" alt="Sender Image">
-                                <h3>{{ popupdata.sender_nickname }}</h3>
+                                <img :src=selectedMatchingData.user_image_auth alt="Sender Image">
+                                <h3>{{ userNickname }}</h3>
                             </div>
                             <div class="result_category">
-                                <span>{{ getCategoryName(selectedMatchingData[0].category_id) }}</span>
+                                <span>{{ selectedMatchingData.category_id }}</span>
                                 <h2>vs</h2>
                             </div>
                             <div class="receiver">
-                                <img :src="getAuthImage(popupdata.receiver_id)" alt="Receiver Image">
-                                <h3>{{ popupdata.receiver_nickname }}</h3>
+                                <img :src=selectedMatchingData.other_image_auth alt="Receiver Image">
+                                <h3>{{ selectedMatchingData.other_nickname }}</h3>
                             </div>
                         </div>
 
                         <!-- Result -->
-                        <div class="result">{{ popupdata.compet_result === 1 ? 'Win' : 'Lose' }}</div>
+                        <div class="result">{{ selectedMatchingData.compet_result}}</div>
                         <!-- Close Button -->
                         <button @click="showPopup = false" class="popup_close_btn">닫기</button>
                     </div>
@@ -51,7 +51,8 @@
 </template>
   
 <script>
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user';
 import { useCompetionStore } from '@/stores/competition';
 
 import winimg from '@/assets/pose_win_boy.png';
@@ -61,99 +62,37 @@ import authimg from '@/assets/camera.png'
 export default {
     props: ['userId', 'categories'],
 
-    setup(props) {
+    setup(props) { 
+
+        const userStore = useUserStore();
+        const competStore = useCompetionStore();
+
         const userId = ref(props.userId);
         const categories = ref(props.categories);
-        const compet = useCompetionStore()
+        const userNickname = ref(null);
+
+        const competList = ref([]);
+        // 선택한 싸강두천 전적
+        const selectedMatchingData = ref([]);
+        
         const showPopup = ref(false);
-        const popupdata = ref(null)
-        const selectedMatchingData = ref([
-            {
-                "matcing_id": 1,
-                "send_id": 1,
-                "category_id": 1,
-                "compet_kind": "친구",
-                "is_sender": "Y",
-                "compet_expiration_time": "2024-01-25T12:00:00"
-            },
-            {
-                "matcing_id": 1,
-                "send_id": 2,
-                "category_id": 1,
-                "compet_kind": "친구",
-                "is_sender": "N",
-                "compet_expiration_time": "2024-01-25T12:00:00"
-            },
-        ]);
-
-        const selectedAuthData = ref([
-            {
-                "auth_id": 1,
-                "auth_img": authimg,
-                "create_at": "2024-01-20T15:00:00",
-                "matcing_id": 1,
-                "compet_id": 1
-            },
-            {
-                "auth_id": 2,
-                "auth_img": authimg,
-                "create_at": "2024-01-20T15:00:00",
-                "matcing_id": 1,
-                "compet_id": 1
-            },
-        ]);
-
-        const competList = ref([
-            {
-                compet_id: 1, compet_result_id: 1, compet_result: 1, matching_id: 1,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 2, receiver_nickname: '화석', tooltip_info: '경기1'
-            },
-            {
-                compet_id: 2, compet_result_id: 2, compet_result: 0, matching_id: 2,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 3, receiver_nickname: '태범', tooltip_info: '경기2'
-            },
-            {
-                compet_id: 3, compet_result_id: 3, compet_result: 1, matching_id: 3,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 4, receiver_nickname: '지은', tooltip_info: '경기3'
-            },
-            {
-                compet_id: 4, compet_result_id: 4, compet_result: 1, matching_id: 4,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 5, receiver_nickname: '현춘', tooltip_info: '경기4'
-            },
-            {
-                compet_id: 5, compet_result_id: 5, compet_result: 0, matching_id: 5,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 6, receiver_nickname: '수안', tooltip_info: '경기5'
-            },
-            {
-                compet_id: 6, compet_result_id: 6, compet_result: 1, matching_id: 6,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 7, receiver_nickname: '우리', tooltip_info: '경기6'
-            },
-            {
-                compet_id: 7, compet_result_id: 7, compet_result: 1, matching_id: 7,
-                sender_id: 1, sender_nickname: '우리다', receiver_id: 2, receiver_nickname: '화석', tooltip_info: '경기7'
-            },
-
-        ])
+        const popupdata = ref(null);
 
         // 팝업창
         const openPopup = (competdata) => {
-            // compet.competitionFinishDetail(userId, competdata.compet_id)
-            //     .then((res) => {
-            //         console.log(res)
-            //         selectedMatchingData.value = res.matchings;
-            //         selectedAuthData.value = res.image_auths;
-            //         showPopup.value = true;
-            //     })
-            //     .catch((err) => {
-            //         console.log(err)
-            //     })
-            popupdata.value = competdata
-            showPopup.value = true;
+            // compet.competitionFinishDetail(userId.value, competdata.compet_id)
+            competStore.competitionFinishDetail(101, competdata.compet_id)
+                .then((res) => {
+                    selectedMatchingData.value = res.data.competition;
+                    showPopup.value = true;
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
         };
 
         // 시간 포맷 변경
         const formatTime = (timeString) => {
-            console.log(timeString)
             const date = new Date(timeString);
             // 유효한 날짜인지 확인
             if (!isNaN(date.getTime())) {
@@ -165,12 +104,6 @@ export default {
             }
         };
 
-        // 인증 이미지 가져오기
-        const getAuthImage = (authId) => {
-            const auth = selectedAuthData.value.find(auth => auth.auth_id === authId);
-            return auth ? auth.auth_img : '';
-        };
-
         // 카테고리 이름 가져오기
         const getCategoryName = (categoryId) => {
             const category = categories.value.find(cat => cat.id === categoryId);
@@ -178,16 +111,33 @@ export default {
         };
 
         // 페이지 열었을 때 정보 가져오기
-        // onMounted(() => {
-        //   compet.competitionFinish(userId)
+        onMounted(() => {
+        //   competStore.competitionFinish(userId.value)
         //     .then((res) => {
-        //       console.log(res)
-        //       competList.value = res.compet
+        //       competList.value = res.data.competitions
         //     })
         //     .catch((err) => {
         //       console.log(err)
         //     });
-        // });
+        competStore.competitionFinish(101)
+            .then((res) => {
+              competList.value = res.data.competitions
+            //   console.log(competList.value)
+            })
+            .catch((err) => {
+              console.log(err)
+            });
+
+            // 마이페이지 사용자 닉네임 가져오기
+        userStore.userData(userId.value)
+            .then((res) => {
+                userNickname.value = res.data.data.user_nickname
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
+        });
 
         // 아코디언
         const isOpen = ref(true);
@@ -197,18 +147,15 @@ export default {
         };
 
         return {
-            userId,
+            userId, userNickname,
             categories,
-            popupdata,
             winimg, loseimg,
-            compet,
+            userStore, competStore,
             competList,
             isOpen,
             selectedMatchingData,
-            selectedAuthData,
             showPopup,
             formatTime,
-            getAuthImage,
             getCategoryName,
             toggleAccordion,
             openPopup

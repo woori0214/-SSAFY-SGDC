@@ -85,7 +85,7 @@ const feedlist_ = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await feedInfo.getFeedList();
+    const response = await feedInfo.getFeedListPage(0);
     if (response.message === "success") {
       // const sortedFeed = response.feed.sort((a, b) => new Date(b.update_at) - new Date(a.update_at));
       // feedlist.value = sortedFeed.slice(0, 10);
@@ -140,7 +140,7 @@ const more_feed = () => {
 
 .more_feed_head {
   font-size: 44px;
-  font-weight: 700;
+  font-weight: 600;
   margin-left: 15px;
   display: flex;
   justify-content: center;
@@ -174,7 +174,7 @@ const more_feed = () => {
   padding-inline: 20px;
   padding-block: 5px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 

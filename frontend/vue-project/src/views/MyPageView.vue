@@ -1,31 +1,25 @@
 <template>
     <div class="mypageview_body">
         <div class="profile_body">
-            <MyPageProfileBar :userData="userData" :loginUser="loginUser"/>
+            <MyPageProfileBar :user-id="userId" :login-user="loginUser" />
         </div>
         <div class="compet_body">
-            <MyPageCompetitionRecord :userId="userId" :categories="categories" />
+            <MyPageCompetitionRecord :user-id="userId" :categories="categories" />
         </div>
         <div class="solo_body">
-            <MyPageSoloRecord :userId="userId" :categories="categories" />
+            <MyPageSoloRecord :user-id="userId" :categories="categories" />
         </div>
         <div class="analysis_body">
-            <MyPageAnalysis :userId="userId" :categories="categories" />
+            <MyPageAnalysis :user-id="userId" :categories="categories" />
         </div>
         <div class="badge_body">
-            <MyPageBadgeList :userId="userId" />
+            <MyPageBadgeList :user-id="userId" />
         </div>
-        <!-- <div v-if="isCurrentUser" class="challenge_body">
+        <div v-if="isCurrentUser" class="challenge_body">
             <MyPageChallengeBoard />
         </div>
         <div v-if="isCurrentUser" class="ssallow_body">
-            <MyPageSsallow :userId="userId" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData" />
-        </div> -->
-        <div class="challenge_body">
-            <MyPageChallengeBoard />
-        </div>
-        <div class="ssallow_body">
-            <MyPageSsallow :userId="userId" :ssallowingData="ssallowingData" :ssallowerData="ssallowerData" />
+            <MyPageSsallow :userId="userId" />
         </div>
     </div>
 </template>
@@ -43,6 +37,7 @@ import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useFollowStore } from '@/stores/follow';
 import { useLoginStore } from '@/stores/login';
+import { useUserStorageStore } from '@/stores/userStorage';
 import { ref, onMounted, computed } from 'vue';
 
 // 유저 이미지 가져오는 거 변경해야함
@@ -54,17 +49,15 @@ import fightingImage from '@/assets/fighting.png';
 import studyImage from '@/assets/study.png';
 import healthImage from '@/assets/health.png';
 
-const user = useUserStore();
-const follow = useFollowStore();
-const login = useLoginStore();
+const userStore = useUserStore();
+const followStore = useFollowStore();
+const loginStore = useLoginStore();
 const route = useRoute();
 
-const userId = ref(1);  // userId를 저장할 ref 추가
-// const userData = ref({});
-// const ssallowingData = ref([]);
-// const ssallowerData = ref([]);
-// const loginUser = ref(login.loginUser);
-const loginUser = ref(1);
+const userId = ref(route.params.userId);  // userId를 저장할 ref 추가
+const ssallowingData = ref([]);
+const ssallowerData = ref([]);
+const loginUser = ref(loginStore.loginUser);
 
 const categories = ref([
     { id: 1, name: "기상", img: timerImage },
@@ -75,56 +68,6 @@ const categories = ref([
     { id: 6, name: '절제', img: fightingImage },
 ]);
 
-const userData = {
-    user_id: 1,
-    login_id: "ssafy1234",
-    user_ssafy_id: 1044422,
-    user_email: "ssafy1234@gamil.com",
-    user_nickname: "우리다",
-    user_name: "우리",
-    is_alert: "Y",
-    user_img: userimg,
-    created_at: "2024-01-12",
-    updated_at: "2024-01-24",
-    signout: "Y",
-    badge_id: 1,
-    user_phone: "010-5555-5555",
-    challenge_cnt: 15,
-    complain_cnt: 2
-}
-
-const ssallowingData = ref([
-    {
-        user_nickname: "지은",
-        user_id: 2,
-        user_img: userimg,
-    },
-    {
-        user_nickname: "화석",
-        user_id: 3,
-        user_img: userimg,
-    },
-    {
-        user_nickname: "태범",
-        user_id: 4,
-        user_img: userimg,
-    },
-
-])
-
-const ssallowerData = ref([
-    {
-        user_nickname: "현춘",
-        user_id: 5,
-        user_img: userimg,
-    },
-    {
-        user_nickname: "수안",
-        user_id: 6,
-        user_img: userimg,
-    },
-])
-
 // 로그인 유저와 마이페이지 유저가 같은지
 const isCurrentUser = computed(() => loginUser.value === userId.value);
 
@@ -132,36 +75,42 @@ const isCurrentUser = computed(() => loginUser.value === userId.value);
 // user 정보, 팔로우 정보는 props
 onMounted(() => {
     userId.value = route.params.userId;
-    console.log(userId.value)
-    // user 정보
-    user.userData(userId)
-        .then((res) => {
-            userData.value = res.user
-        })
-        .catch((err) => {
-            console.log(err)
-        })
 
+    
     // 쌀로우
-    follow.ssallowing(userId)
+    // followStore.ssallowing(userId.value)
+    //     .then((res) => {
+    //         ssallowingData.value = res.ssafy_friend
+    //     })
+    //     .catch((err) => {
+    //         console.log(err)
+    //     })
+    followStore.ssallowing(101)
         .then((res) => {
-            ssallowingData.value = res.ssafy_friend
+            ssallowingData.value = res.data.data
+            // console.log(ssallowingData.value)
         })
         .catch((err) => {
             console.log(err)
         })
 
     // 쌀로워
-    follow.ssallower(userId)
+    // followStore.ssallower(userId.value)
+    //     .then((res) => {
+    //         ssallowerData.value = res.ssafy_friend
+    //     })
+    //     .catch((err) => {
+    //         console.log(err)
+    //     })
+    followStore.ssallower(101)
         .then((res) => {
-            ssallowerData.value = res.ssafy_friend
+            ssallowerData.value = res.data.data
         })
         .catch((err) => {
             console.log(err)
         })
 
 })
-
 
 </script>
 
