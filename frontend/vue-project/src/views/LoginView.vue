@@ -36,7 +36,7 @@
         :disabled="isSubmitButtonDisabled"
       >
         <span class="material-symbols-outlined"> login </span>
-        로그인
+        <span>로그인</span>
       </button>
 
       <!-- <button class="go-signup-btn" @click="">

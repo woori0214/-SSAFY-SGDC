@@ -89,10 +89,17 @@ onMounted(() => {
   src: url("../public/fonts/BMJUA_ttf.ttf");
 }
 
-button,
-div,
-a,
+* {
+  font-family: "jua";
+}
 span {
+  font-family: "jua";
+}
+html {
+  font-family: "jua";
+}
+
+body {
   font-family: "jua";
 }
 
