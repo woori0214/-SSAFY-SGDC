@@ -24,7 +24,5 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     @Query("SELECT MAX(u.userId) FROM User u")
     int findMaxUserId();
 
-    //회원수정
-    User updateByUserId(int userId);
 }
 

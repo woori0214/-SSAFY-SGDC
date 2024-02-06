@@ -201,24 +201,5 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
-    // 마이페이지 수정
-    @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.PATCH)
-    public ResponseEntity<GeneralResponse> userInfoModify(@PathVariable int userId, @RequestBody UserInfoModifyDto userInfoModifyDto){
-        Map<String, String> response = new HashMap<>();
-
-        User user = userService.updateUserInfo(userInfoModifyDto);
-
-        response.put("user_id", String.valueOf(user.getUserId()));
-        response.put("user_nickname", user.getUserNickname());
-        response.put("user_img", user.getUserImg());
-        response.put("badge_id", String.valueOf(user.getBadgeId()));
-        response.put("user_phone", String.valueOf(user.getUserPhone()));
-
-        return new ResponseEntity<>(GeneralResponse.builder()
-                .status(200)
-                .message("회원수정")
-                .data(response)
-                .build(), HttpStatus.OK);
-    }
 
 }

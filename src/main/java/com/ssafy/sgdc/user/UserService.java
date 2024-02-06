@@ -93,17 +93,6 @@ public class UserService {
         User user = userRepo.findByUserId(userId);
         return user;
     }
-
-    public User updateUserInfo(UserInfoModifyDto userInfoModifyDto){
-        User userInfoModify = userRepo.updateByUserId(userInfoModifyDto.getUserId());
-
-        userInfoModify.setUserImg(userInfoModify.getUserImg());
-        userInfoModify.setBadgeId(userInfoModify.getBadgeId());
-        userInfoModify.setUserNickname(userInfoModifyDto.getUserNickname());
-        userInfoModify.setUserPhone(userInfoModifyDto.getUserPhone());
-
-        return userInfoModify;
-
-    }
+    
 
 }
