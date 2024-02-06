@@ -1,9 +1,6 @@
 package com.ssafy.sgdc.badge.repo;
 
-import com.ssafy.sgdc.badge.Badge;
 import com.ssafy.sgdc.badge.UserBadge;
-import com.ssafy.sgdc.competition.domain.Matching;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

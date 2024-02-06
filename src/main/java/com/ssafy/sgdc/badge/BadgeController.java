@@ -1,6 +1,5 @@
 package com.ssafy.sgdc.badge;
 
-
 import com.ssafy.sgdc.badge.dto.BadgeListDto;
 import com.ssafy.sgdc.badge.response.ListResponse;
 import com.ssafy.sgdc.badge.response.ObjectResponse;
@@ -25,6 +24,7 @@ public class BadgeController {
 
     @Autowired
     BadgeService badgeService;
+
     @Autowired
     UserService userService;
 
@@ -36,6 +36,7 @@ public class BadgeController {
         Map<String, Object> response = new HashMap<>();
 
         response.put("badge", addBadge);
+        System.out.println("싸강두천 뱃지 추가");
         return new ResponseEntity<>(ObjectResponse.builder()
                 .status(200)
                 .message("뱃지 추가완료")
@@ -47,7 +48,7 @@ public class BadgeController {
     @RequestMapping(value = "/add-user-badge/{userId}/{badgeId}", method = RequestMethod.POST)
     public ResponseEntity<ObjectResponse> addUserBadge(@PathVariable int userId, @PathVariable int badgeId){
         badgeService.addUserBadge(userService.getUserById(userId), badgeService.getBadge(badgeId));
-
+        System.out.println("유저에 뱃지 부여");
         return new ResponseEntity<>(ObjectResponse.builder()
                 .status(200)
                 .message("유저뱃지에 뱃지 추가완료")
@@ -55,11 +56,12 @@ public class BadgeController {
                 .build(), HttpStatus.OK);
     }
 
-    // 뱃지 리스트 조회
+    // 유저가 보유한 뱃지 리스트 조회
     @RequestMapping(value = "/{userId}/",  method = RequestMethod.GET)
     public ResponseEntity<ListResponse<BadgeListDto>> getUserBadges(@PathVariable int userId) {
         List<UserBadge> userBadgeList = badgeService.getUserBadgeList(userId);
         List<BadgeListDto> badgeList = new ArrayList<>();
+        System.out.println("유저가 보유한 뱃지리스트 조회");
 
         for (int i = 0; i < userBadgeList.size(); i++) {
             UserBadge userBadge = userBadgeList.get(i);

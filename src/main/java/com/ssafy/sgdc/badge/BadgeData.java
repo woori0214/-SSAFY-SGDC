@@ -30,7 +30,6 @@ public class BadgeData implements CommandLineRunner {
         if(!badgeRepository.existsById(0)){
             badge1 = badgeRepository.save(badge1);
         }
-
         // 유저 뱃지 더미 데이터 생성
         UserBadge userBadge1 = new UserBadge(0, badge1, new User());
         UserBadge userBadge2 = new UserBadge(1, badge2, new User());
@@ -38,11 +37,4 @@ public class BadgeData implements CommandLineRunner {
         userBadgeRepo.save(userBadge1);
     }
 }
-
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('0', '기상', '기상 잘한사람', 'null');
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('1', '알고리즘', '알고리즘 잘한사람', 'null');
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('2', '운동', '만보기', 'null');
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('3', '공부시간', '공부체크', 'null');
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('4', '식단', '다이어트식단', 'null');
-//    INSERT INTO badge (badge_id, badge_name, badge_detail, badge_img) VALUES ('5', '절제', '절제하기', 'null');
 
