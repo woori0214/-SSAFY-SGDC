@@ -43,6 +43,7 @@ export const useCompetionStore = defineStore('competition', () => {
     // };
     //친구에게 도전장 보내기
     const friendSend = function (friendSend) {
+        console.log(friendSend)
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .post(`${URL}/friend-send`, friendSend)

@@ -19,9 +19,10 @@
             <MyPageChallengeBoard />
         </div>
         <div v-if="isCurrentUser" class="ssallow_body">
-            <MyPageSsallow :userId="userId" />
+            <MyPageSsallow :user-id="userId" />
         </div>
     </div>
+    <router-view :key="$route.fullPath" />
 </template>
 
 <script setup>
@@ -38,7 +39,7 @@ import { useUserStore } from '@/stores/user';
 import { useFollowStore } from '@/stores/follow';
 import { useLoginStore } from '@/stores/login';
 import { useUserStorageStore } from '@/stores/userStorage';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, defineProps, watch } from 'vue';
 
 // 유저 이미지 가져오는 거 변경해야함
 import userimg from '@/assets/image1.png';
@@ -58,6 +59,9 @@ const userId = ref(route.params.userId);  // userId를 저장할 ref 추가
 const ssallowingData = ref([]);
 const ssallowerData = ref([]);
 const loginUser = ref(loginStore.loginUser);
+const props = defineProps({
+    userId: String
+});
 
 const categories = ref([
     { id: 1, name: "기상", img: timerImage },
@@ -68,6 +72,12 @@ const categories = ref([
     { id: 6, name: '절제', img: fightingImage },
 ]);
 
+
+watch(() => route.params.userId, (newUserId) => {
+    userId.value = newUserId;
+    // loadData();
+}, { immediate: true });
+
 // 로그인 유저와 마이페이지 유저가 같은지
 const isCurrentUser = computed(() => loginUser.value === userId.value);
 
@@ -76,7 +86,7 @@ const isCurrentUser = computed(() => loginUser.value === userId.value);
 onMounted(() => {
     userId.value = route.params.userId;
 
-    
+
     // 쌀로우
     // followStore.ssallowing(userId.value)
     //     .then((res) => {
