@@ -5,6 +5,7 @@ import { useRouter } from 'vue-router';
 import { useUserStorageStore } from "@/stores/userStorage";
 // import { useLoginStore } from "@/stores/login";
 import axios from 'axios';
+import { authorizationAPI, updateAuthToken } from './authAPI';
 import { serverURL, v1_URL } from '@/main.js';
 
 export const useLoginStore = defineStore('login', () => {
@@ -39,7 +40,8 @@ export const useLoginStore = defineStore('login', () => {
                     loginUser.value = userInfo.user_id;
                     userNickname.value = userInfo.user_nickname;
 
-                    
+                    updateAuthToken(response.data.data.accessToken);
+
                     resolve(response);
                     // router.push({ name: "Main" });
 

@@ -6,6 +6,10 @@ import { serverURL, v1_URL } from '@/main.js';
 const URL = serverURL + v1_URL + 'user/re-auth/';
 const user_auth_token = useUserStorageStore().getUserInformation().token;
 
+export const updateAuthToken = (updateToken) => {
+    user_auth_token = updateToken;
+}
+
 export const authorizationAPI = axios.create({
     headers: {
         'Authorization': `Bearer ${user_auth_token}`, // 인증 토큰을 헤더에 추가
@@ -36,6 +40,7 @@ const reciveRefreshToken = function () {
             .then((response) => {
                 console.log(response);
                 userStorage.setStorage("token", response.data.data.accessToken);
+                updateAuthToken(response.data.data.accessToken);
 
                 resolve(response);
             })
