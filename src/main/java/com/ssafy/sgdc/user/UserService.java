@@ -36,13 +36,12 @@ public class UserService {
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .signOut(false)
-                .badgeId(0) //보류
+//                .badgeId(0) //보류
                 .kakaoPush(userSignDto.getKakaoPush())
                 .challengeCnt(3)
                 .complainCnt(0)
                 .auth("ROLE_USER").build();
         System.out.println("ssafy_user 확인===>");
-        System.out.println(userRepo.save(user));
         return userRepo.save(user);
     }
     @Transactional
@@ -99,7 +98,6 @@ public class UserService {
         User user = userRepo.findByUserId(userId);
         return user;
     }
-
     /**
      * 유저 닉네임 검색
      */

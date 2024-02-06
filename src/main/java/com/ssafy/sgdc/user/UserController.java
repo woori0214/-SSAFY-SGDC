@@ -200,7 +200,6 @@ public class UserController {
                 .data(response)
                 .build(), HttpStatus.OK);
     }
-
     /**
      * 유저 닉네임 검색
      */
