@@ -28,7 +28,6 @@
         <div class="wrapper">
           <div class="headbar">
             <HeaderNav></HeaderNav>
-            
           </div>
         </div>
       </header>
@@ -86,12 +85,15 @@ onMounted(() => {
 
 <style scoped>
 @font-face {
-  font-family: 'jua';
-  src: url('../public/fonts/BMJUA_ttf.ttf');
+  font-family: "jua";
+  src: url("../public/fonts/BMJUA_ttf.ttf");
 }
 
-div, button, a, span {
-  font-family: 'jua';
+button,
+div,
+a,
+span {
+  font-family: "jua";
 }
 
 .coster {

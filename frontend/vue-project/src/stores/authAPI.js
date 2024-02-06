@@ -12,7 +12,7 @@ const userAuthToken = ref(null);
 export let authorizationAPI = axios.create({
     headers: {
         'Authorization': `Bearer ${userAuthToken.value}`, // 인증 토큰을 헤더에 추가
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
     }
 });
 
@@ -30,7 +30,7 @@ export const updateAuthToken = (updateToken) => {
     console.log('=================================');
     console.log(authorizationAPI.defaults.headers['Authorization']);
     console.log('=================================');
-}
+};
 
 
 

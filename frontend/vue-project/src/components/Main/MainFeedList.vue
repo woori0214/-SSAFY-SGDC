@@ -85,7 +85,7 @@ const feedlist_ = ref([]);
 
 onMounted(async () => {
   try {
-    const response = await feedInfo.getFeedList();
+    const response = await feedInfo.getFeedListPage(0);
     if (response.message === "success") {
       // const sortedFeed = response.feed.sort((a, b) => new Date(b.update_at) - new Date(a.update_at));
       // feedlist.value = sortedFeed.slice(0, 10);

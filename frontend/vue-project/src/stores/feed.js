@@ -42,13 +42,13 @@ export const useFeedStore = defineStore('feed', () => {
 
     //게시물 리스트 조회
     const getFeedList = function () {
+        console.log('Start Get Feed List ::');
+        console.log(authorizationAPI.defaults.headers['Authorization']);
+        console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list`)
                 .then((response) => {
-                    console.log('Get Feed List ::');
-                    console.log(authorizationAPI.defaults.headers['Authorization']);
-                    console.log('----------------------------------------------');
                     resolve(response);
                 })
                 .catch((e) => {
@@ -61,15 +61,15 @@ export const useFeedStore = defineStore('feed', () => {
     //게시물 리스트(페이지 당 10개씩)
     const getFeedListPage = function (last_feed_id) {
         console.log('getFeedListPage 실행...');
+        console.log('인증 토큰 확인 ::');
+        console.log(authorizationAPI.defaults.headers['Authorization']);
+        console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list/pages`, {
                     params: { feedId: last_feed_id, page: 0, size: 10 }
                 })
                 .then((response) => {
-                    console.log('Get Feed List ::');
-                    console.log(authorizationAPI.defaults.headers['Authorization']);
-                    console.log('----------------------------------------------');
                     console.log('get List : ');
                     console.log(response);
                     resolve(response);
