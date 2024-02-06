@@ -137,7 +137,7 @@ const handleNavigation = (to) => {
   const user_id = userStorage.getUserInformation().user_id;
   if (user_id != null) {
     if (to == "/MyPage") {
-      router.push({ name: "MyPage", params: { userId: 1 } }); //나중에 user_id로 바꾸기
+      router.push({ name: "MyPage", params: { userId: user_id } }); //나중에 user_id로 바꾸기
     } else {
       router.push(to);
     }

@@ -12,11 +12,12 @@ export const useFollowStore = defineStore('follow', () => {
     
     // 쌀로우 수 조회
     const getSsallowCount = function (userId) {
+
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/follow-count/${userId.value}`)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -27,11 +28,11 @@ export const useFollowStore = defineStore('follow', () => {
     }
     // 쌀로잉 조회
     const ssallowing = function (userId) {
+        // console.log(userId)
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/following/${userId.value}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -47,7 +48,6 @@ export const useFollowStore = defineStore('follow', () => {
             authorizationAPI
                 .get(`${URL}/follower/${userId.value}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -63,7 +63,7 @@ export const useFollowStore = defineStore('follow', () => {
             authorizationAPI
             .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 resolve(res);
             })
             .catch((err) => {
@@ -93,6 +93,7 @@ export const useFollowStore = defineStore('follow', () => {
             authorizationAPI
                 .get(`${URL}/follow-check/${checkusers.user_id}/${checkusers.following_id}`)
                 .then((res) => {
+                    // console.log(res)
                     resolve(res);
                 })
                 .catch((err) => {
