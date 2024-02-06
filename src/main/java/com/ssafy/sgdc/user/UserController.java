@@ -1,16 +1,21 @@
 package com.ssafy.sgdc.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ssafy.sgdc.user.dto.TokenDto;
-import com.ssafy.sgdc.user.dto.UserInfoDto;
-import com.ssafy.sgdc.user.dto.UserLoginDto;
-import com.ssafy.sgdc.user.dto.UserSignUpDto;
+import com.ssafy.sgdc.base.dto.DataResponseDto;
+import com.ssafy.sgdc.user.dto.*;
 import com.ssafy.sgdc.util.JwtUtil;
 import com.ssafy.sgdc.util.response.Code;
 import com.ssafy.sgdc.util.response.CustomException;
 import com.ssafy.sgdc.util.response.GeneralResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -195,4 +200,19 @@ public class UserController {
                 .data(response)
                 .build(), HttpStatus.OK);
     }
+
+    /**
+     * 유저 닉네임 검색
+     */
+    @Operation(summary = "닉네임 검색", description="닉네임을 검색합니다.")
+    @Parameter(name = "keyword", schema = @Schema(implementation = String.class), description = "  PK", in = ParameterIn.QUERY)
+    @GetMapping("/search-nickname")
+    public DataResponseDto<Page<SearchNameResponseDto>> searchNickname (
+            @RequestParam(value="keyword",required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "userNickname");
+        return DataResponseDto.of(userService.searchNickname(keyword,pageable), "닉네임 검색");
+    }
+
 }
