@@ -1,9 +1,15 @@
 package com.ssafy.sgdc.user;
 
 import com.ssafy.sgdc.user.User;
+import com.ssafy.sgdc.user.dto.UserInfoDto;
+import com.ssafy.sgdc.user.dto.UserInfoModifyDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.stereotype.Repository;
 
+@Repository
+@EnableJpaRepositories
 public interface UserRepo extends JpaRepository<User, Integer> {
 
     boolean existsByLoginId(String loginId);
@@ -17,4 +23,8 @@ public interface UserRepo extends JpaRepository<User, Integer> {
 
     @Query("SELECT MAX(u.userId) FROM User u")
     int findMaxUserId();
+
+    //회원수정
+    User updateByUserId(int userId);
 }
+
