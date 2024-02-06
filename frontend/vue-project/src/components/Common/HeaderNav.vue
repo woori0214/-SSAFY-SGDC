@@ -252,7 +252,7 @@ onMounted(() => {
   text-decoration: none;
   color: #131313;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   background-color: #aecbeb;
   padding-block: 5px;
   padding-inline: 8px;

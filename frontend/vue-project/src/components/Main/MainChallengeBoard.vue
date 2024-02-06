@@ -410,7 +410,7 @@ onMounted(() => {
 
 .challenge_board_head {
   font-size: 44px;
-  font-weight: 700;
+  font-weight: 600;
   margin-left: 15px;
   padding-inline: 20px;
   padding-top: 10px;
@@ -700,7 +700,7 @@ onMounted(() => {
   padding-inline: 10%;
   font-size: 2rem;
   padding-block: 10px;
-  font-weight: 600;
+  font-weight: 500;
 }
 
 * {

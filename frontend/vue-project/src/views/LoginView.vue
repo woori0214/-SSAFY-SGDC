@@ -166,7 +166,10 @@ export default {
   min-width: 130px;
   height: 50px;
   font-size: 25px;
-  font-weight: 600;
+  font-weight: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .go-signup-btn {
   border: 2px solid #aecbeb;
@@ -178,7 +181,7 @@ export default {
   min-width: 130px;
   height: 30px;
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
   text-align: center;
   display: flex;
   justify-content: center;
