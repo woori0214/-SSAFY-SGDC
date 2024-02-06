@@ -15,7 +15,7 @@ export const useFollowStore = defineStore('follow', () => {
 
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follow-count/${userId.value}`)
+                .get(`${URL}/follow-count/${userId}`)
                 .then((res) => {
                     // console.log(res);
                     resolve(res);
@@ -31,7 +31,7 @@ export const useFollowStore = defineStore('follow', () => {
         // console.log(userId)
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/following/${userId.value}`)
+                .get(`${URL}/following-list/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -46,7 +46,7 @@ export const useFollowStore = defineStore('follow', () => {
     const ssallower = function (userId) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follower/${userId.value}`)
+                .get(`${URL}/follower-list/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -76,7 +76,7 @@ export const useFollowStore = defineStore('follow', () => {
     const plusSsallowing = function (ssallowingData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-            .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
+            .post(`${URL}/${ssallowingData.to_user_id}/${ssallowingData.from_user_id}`, ssallowingData)
             .then((res) => {
                 // console.log(res);
                 resolve(res);
@@ -105,7 +105,7 @@ export const useFollowStore = defineStore('follow', () => {
     const deleteSsallowing = function (unSsallowingData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .delete(`${URL}/${unSsallowingData.user_id}/${unSsallowingData.following_id}`)
+                .delete(`${URL}/${unSsallowingData.to_user_id}/${unSsallowingData.from_user_id}`)
                 .then((res) => {
                     resolve(res);
                 })
