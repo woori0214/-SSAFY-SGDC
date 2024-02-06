@@ -1,9 +1,9 @@
 <template>
     <div>
         <div class="top">
-            <h2> {{ mypageUser.user_nickname }} 님 프로필</h2>
-            <div>
-                <img v-for="complain in mypageUser.complain_cnt" :key="complain" src="@/assets/pinno.png" alt="pinno"
+            <h2> {{ userData.user_nickname }} 님 프로필</h2>
+            <div v-if="userData.complain_cnt > 0">
+                <img v-for="complain in userData.complain_cnt" :key="complain" src="@/assets/pinno.png" alt="pinno"
                     class="complain_img">
             </div>
         </div>
@@ -11,16 +11,16 @@
             <!--사용자 이미지, 버튼-->
             <div class="middle1">
                 <div class="user_img_badge">
-                    <img :src="mypageUser.user_img" alt="use_img" class="user_img">
+                    <img :src="userData.user_img" alt="use_img" class="user_img">
                     <img :src="userBadgeImage" alt="badge_img" class="badge_img">
                 </div>
-                <div v-if="mypageUser.user_id != loginUser" class="myprofile_btns">
+                <div v-if="mypageUserId != loginUserId" class="myprofile_btns">
                     <div class="myprofile_btns">
                         <button class="myprofile_btn" @click="openSendMsg">도전장 보내기</button>
                         <button @click="toggleFollow()" class="myprofile_btn">{{ getButtonText(isFollowing) }} </button>
                     </div>
                 </div>
-                <div v-if="mypageUser.user_id === loginUser" class="myprofile_btns">
+                <div v-if="mypageUserId === loginUserId" class="myprofile_btns">
                     <button class="myprofile_btn" @click="openCompetMailbox">도전장함</button>
 
                     <RouterLink to="/mypageupdate" tag="button" class="myprofile_btn"
@@ -87,6 +87,7 @@
 
 <script>
 import { ref, computed, onMounted } from 'vue';
+import { useUserStore } from '@/stores/user';
 import { useBadgeStore } from '@/stores/badge';
 import { useCompetionStore } from '@/stores/competition';
 import { useFollowStore } from '@/stores/follow';
@@ -103,9 +104,13 @@ import fightingImage from '@/assets/fighting.png';
 const mypageUser = ref([])
 
 export default {
-    props: ['userData', 'loginUser'],
+    props: {
+        userId: String,
+        loginUser: String,
+    },
 
     setup(props) {
+
         const categories = ref([
             {
                 id: 1,
@@ -144,19 +149,19 @@ export default {
                 img: fightingImage
             },
         ]);
-
+        
+        const userStore = useUserStore();
         const badgeStore = useBadgeStore();
         const competStore = useCompetionStore();
         const followStore = useFollowStore();
 
-        const mypageUser = ref(props.userData);
-        const loginUser = ref(props.loginUser);
+        const mypageUserId = ref(props.userId);
+        const loginUserId = ref(props.loginUser);
 
         // 나중에 주석 풀기
-        // const ssallowing_cnt = ref(null);
-        // const ssallower_cnt = ref(null);
-        const ssallowing_cnt = ref(3);
-        const ssallower_cnt = ref(2);
+        const userData = ref({})
+        const ssallowing_cnt = ref(0);
+        const ssallower_cnt = ref(0);
         const selectedCategory = ref(null);
         const selectedCategoryNickname = ref(null);
 
@@ -226,7 +231,7 @@ export default {
         };
 
         const goSsallowing = function () {
-            const ssallowingData = { user_id: mypageUser.value.user_id, following_id: loginUser.value };
+            const ssallowingData = { user_id: mypageUserId.value, following_id: loginUserId.value };
             followStore.plusSsallowing(ssallowingData)
                 .then((res) => {
                     console.log(res);
@@ -237,7 +242,7 @@ export default {
         };
 
         const goUnssallow = function () {
-            const UnssallowingData = { user_id: mypageUser.value.user_id, following_id: loginUser.value };
+            const UnssallowingData = { user_id: mypageUserId.value, following_id: loginUserId.value };
             followStore.deleteSsallowing(UnssallowingData)
                 .then((res) => {
                     console.log(res);
@@ -252,21 +257,29 @@ export default {
         };
 
         onMounted(() => {
-            // 페이지 열었을 때 쌀로우 수
-            followStore.getSsallowCount(mypageUser)
+            userStore.userData(mypageUserId.value)
                 .then((res) => {
-                    ssallowing_cnt.value = res.data.followingCount
-                    ssallower_cnt.value = res.data.followerCount
+                    userData.value = res.data.data
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+            // 페이지 열었을 때 쌀로우 수
+            followStore.getSsallowCount(mypageUserId.value)
+                .then((res) => {
+                    ssallowing_cnt.value = res.data.data.followingCount
+                    ssallower_cnt.value = res.data.data.followerCount
                 })
                 .catch((err) => {
                     console.log(err)
                 })
 
             // 팔로우 했는지 안했는지 확인
-            const checkusers = { user_id: mypageUser.value, following_id: loginUser.value }
+            const checkusers = { user_id: mypageUserId.value, following_id: loginUserId.value }
             followStore.checkSsallowing(checkusers)
                 .then((res) => {
-                    isFollowing.value = res.success
+                    isFollowing.value = res.data.success
                 })
                 .catch((err) => {
                     console.log(err)
@@ -277,7 +290,8 @@ export default {
         return {
             categories,
             selectedCategoryNickname,
-            mypageUser, loginUser,
+            mypageUserId, loginUserId,
+            userData,
             userBadgeImage,
             isopenSendMsg,
             ssallowing_cnt, ssallower_cnt,
@@ -703,4 +717,5 @@ export default {
         font-size: 13px;
         margin: 3px;
     }
-}</style>
+}
+</style>

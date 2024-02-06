@@ -11,11 +11,11 @@ export const useUserStore = defineStore('user', () => {
     
     // 마이페이지 사용자 정보
     const userData = function (userId) {
+
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/user-info/${userId}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {

@@ -11,11 +11,12 @@ export const useFollowStore = defineStore('follow', () => {
     
     // 쌀로우 수 조회
     const getSsallowCount = function (userId) {
+
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/follow-count/${userId.value}`)
+                .get(`${URL}/follow-count/${userId}`)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -26,11 +27,11 @@ export const useFollowStore = defineStore('follow', () => {
     }
     // 쌀로잉 조회
     const ssallowing = function (userId) {
+        // console.log(userId)
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/following/${userId.value}`)
+                .get(`${URL}/following-list/${userId}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -44,9 +45,8 @@ export const useFollowStore = defineStore('follow', () => {
     const ssallower = function (userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/follower/${userId.value}`)
+                .get(`${URL}/follower-list/${userId}`)
                 .then((res) => {
-                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -62,7 +62,7 @@ export const useFollowStore = defineStore('follow', () => {
             axios
             .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 resolve(res);
             })
             .catch((err) => {
@@ -92,6 +92,7 @@ export const useFollowStore = defineStore('follow', () => {
             axios
                 .get(`${URL}/follow-check/${checkusers.user_id}/${checkusers.following_id}`)
                 .then((res) => {
+                    // console.log(res)
                     resolve(res);
                 })
                 .catch((err) => {

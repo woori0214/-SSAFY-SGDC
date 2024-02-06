@@ -10,13 +10,13 @@
                     <h2>쌀로잉</h2>
                     <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
                         <div class="ssallow_info">
-                            <img :src="ssallowing.user_img" alt="" class="ssallow_img">
-                            {{ ssallowing.user_nickname }}
+                            <img :src="ssallowing.userImg" alt="" class="ssallow_img">
+                            {{ ssallowing.userNickname }}
                         </div>
                         <div class="ssallow_btns">
-                            <button @click="gotoProfile(ssallowing.user_id)" class="ssallow_btn">프로필 페이지</button>
-                            <button @click="toggleFollow(ssallowing)"
-                                class="ssallow_btn">{{ getButtonText(ssallowing.isFollowing) }}</button>
+                            <button @click="gotoProfile(ssallowing.userId)" class="ssallow_btn">프로필 페이지</button>
+                            <button @click="toggleFollow(ssallowing)" class="ssallow_btn">{{
+                                getButtonText(ssallowing.isFollowing) }}</button>
                         </div>
                     </div>
                 </div>
@@ -24,11 +24,11 @@
                     <h2>쌀로워</h2>
                     <div v-for="ssallower in ssallowers" :key="ssallower.user_id" class="ssallow">
                         <div class="ssallow_info">
-                            <img :src="ssallower.user_img" alt="" class="ssallow_img">
-                            {{ ssallower.user_nickname }}
+                            <img :src="ssallower.userImg" alt="" class="ssallow_img">
+                            {{ ssallower.userNickname }}
                         </div>
                         <div class="ssallow_btns">
-                            <button @click="gotoProfile(ssallower.user_id)" class="ssallow_btn">프로필 페이지</button>
+                            <button @click="gotoProfile(ssallower.userId)" class="ssallow_btn">프로필 페이지</button>
                             <button @click="toggleFollow(ssallower)" class="ssallow_btn">{{
                                 getButtonText(ssallower.isFollowing) }}</button>
 
@@ -41,44 +41,43 @@
 </template>
     
 <script>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useFollowStore } from '@/stores/follow';
 
 
 
 export default {
-    props: ['userId', 'ssallowingData', 'ssallowerData'],
+    props: ['userId',],
 
     setup(props) {
-        const router = useRouter()
-        const follow = useFollowStore()
+        const route = useRoute();
+        const router = useRouter();
+        const followStore = useFollowStore();
 
         const mypageUser = ref(props.userId);
-        // const ssallowings = ref(props.ssallowingData);
-        // const ssallowers = ref(props.ssallowerData);
         const isFollowing = ref(false);
 
-        const ssallowings = ref(props.ssallowingData.map(ssallowing => ({
-            ...ssallowing,
-            isFollowing: true,
-        })));
+        const ssallowingData = ref([]);
+        const ssallowerData = ref([]);
+        const ssallowings = ref([]);
+        const ssallowers = ref([]);
 
-        const ssallowers = ref(props.ssallowerData.map(ssallower => ({
-            ...ssallower,
-            isFollowing: false,
-        })));
+        // userId 파라미터 감지
+        watch(() => route.params.userId, (newUserId) => {
+            mypageUser.value = newUserId;
+        });
 
         // 사용자 프로필 페이지로 이동
-        const gotoProfile = function (user_id) {
-            console.log(userId)
-            router.push({ name: 'MyPage', params: { userId: user_id } });
-        }
+        const gotoProfile = (user_id) => {
+            router.push({ name: 'MyPage', params: { userId: user_id } })
 
-        // // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
+        };
+
+        // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
         const goUnssallow = function (followingId) {
             const unssallow_info = { user_id: mypageUser.value, following_id: followingId };
-            follow.deleteSsallowing(unssallow_info)
+            followStore.deleteSsallowing(unssallow_info)
                 .then((res) => {
                     console.log(res);
                 })
@@ -87,10 +86,10 @@ export default {
                 })
         };
 
-        // // 쌀로우 버튼 클릭 시 상태 변경 및 처리
+        // 쌀로우 버튼 클릭 시 상태 변경 및 처리
         const goSsallowing = function (followId) {
             const ssallowing_info = { user_id: mypageUser.value, following_id: followId }
-            follow.plusSsallowing(ssallowing_info)
+            followStore.plusSsallowing(ssallowing_info)
                 .then((res) => {
                     console.log(res);
                 })
@@ -114,18 +113,12 @@ export default {
             return isFollowing ? '언쌀로우' : '쌀로우';
         };
 
-        // 아코디언 펼치기/접기
-        const isOpen = ref(true);
-
-        const toggleAccordion = () => {
-            isOpen.value = !isOpen.value;
-        };
 
         const updateFollowStatus = () => {
             // ssallower에 대한 팔로우 상태 업데이트
             const ssallowerPromises = ssallowers.value.map(ssallower => {
                 const checkData = { user_id: mypageUser.value, following_id: ssallower.user_id };
-                return follow.checkSsallowing(checkData).then(response => {
+                return followStore.checkSsallowing(checkData).then(response => {
                     ssallower.isFollowing = response.data.isFollowing;
                 }).catch(error => {
                     console.error("Error checking follow status for ssallower:", error);
@@ -141,14 +134,52 @@ export default {
         };
 
         onMounted(() => {
+
+            // 쌀로우
+            
+            followStore.ssallowing(mypageUser.value)
+                .then((res) => {
+                    ssallowingData.value = res.data.data
+                    // console.log(ssallowingData.value)
+                    ssallowings.value = ssallowingData.value.map(ssallowing => ({
+                        ...ssallowing,
+                        isFollowing: true,
+                    }));
+                    console.log(ssallowings.value)
+
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
+
+            // 쌀로워
+            
+            followStore.ssallower(mypageUser.value)
+                .then((res) => {
+                    ssallowerData.value = res.data.data
+                    ssallowers.value = ssallowerData.value.map(ssallower => ({
+                        ...ssallower,
+                        isFollowing: false,
+                    }));
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
             updateFollowStatus();
         });
+
+        // 아코디언 펼치기/접기
+        const isOpen = ref(true);
+
+        const toggleAccordion = () => {
+            isOpen.value = !isOpen.value;
+        };
 
         return {
             mypageUser,
             ssallowings,
             ssallowers,
-            follow,
+            followStore,
             isOpen,
             gotoProfile,
             getButtonText,
@@ -322,5 +353,6 @@ export default {
             margin: 2px;
         }
     }
-}</style>
+}
+</style>
     

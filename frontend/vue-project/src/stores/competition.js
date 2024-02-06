@@ -131,7 +131,7 @@ export const useCompetionStore = defineStore('competition', () => {
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/finish-compet-datil/${userId}/${cometId}`)
+                .get(`${URL}/finish-compet-detail/${userId}/${cometId}`)
                 .then((response) => {
                     resolve(response);
                 })

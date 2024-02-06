@@ -38,7 +38,6 @@ export const useLoginStore = defineStore('login', () => {
                     });
                     loginUser.value = userInfo.user_id;
                     userNickname.value = userInfo.user_nickname;
-
                     
                     resolve(response);
                     // router.push({ name: "Main" });
