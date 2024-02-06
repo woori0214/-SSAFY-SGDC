@@ -1,5 +1,7 @@
 package com.ssafy.sgdc.user;
 
+import com.ssafy.sgdc.badge.Badge;
+import com.ssafy.sgdc.badge.UserBadge;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -61,10 +63,9 @@ public class User {
     @Column(name = "signout")
     private Boolean signOut;
 
-    //    @OneToOne
-//    @JoinColumn(name = "badge_id")
-    @Column(name = "badge_id")
-    private int badgeId;
+    @ManyToOne
+    @JoinColumn(name = "badge_id")
+    private UserBadge badgeId;
 
     @Column(name = "challenge_cnt")
     private int challengeCnt;
