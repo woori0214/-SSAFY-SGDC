@@ -3,17 +3,18 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+import { authorizationAPI } from './authAPI';
+import { serverURL, v1_URL } from './config';
 
 
 export const useUserStore = defineStore('user', () => {
     const URL = serverURL + v1_URL + 'user';
-    
+
     // 마이페이지 사용자 정보
     const userData = function (userId) {
 
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/user-info/${userId}`)
                 .then((res) => {
                     resolve(res);
@@ -28,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
     // 마이페이지 회원 수정
     const userUpdate = function (userId, updateData) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .patch(`${URL}/user-info/${userId}`, updateData)
                 .then((res) => {
                     console.log(res);
@@ -44,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
     // 대표 뱃지
     const mainBadge = function (userId, badgeId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .patch(`${URL}/${userId}/${badgeId}`, {})
                 .then((res) => {
                     console.log(res);
@@ -60,8 +61,12 @@ export const useUserStore = defineStore('user', () => {
     // 닉네임 검색(전체)
     const findAllfriends = function (user_nickname) {
         return new Promise((resolve, reject) => {
-            axios
-                .get(`${URL}/search`,user_nickname)
+            authorizationAPI
+                .get(`${URL}/search-nickname`, {
+                    params: {
+                        keyword: user_nickname
+                    }
+                })
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -76,8 +81,8 @@ export const useUserStore = defineStore('user', () => {
     // 닉네임 검색(친구)
     const findMyfriends = function (userId, user_nickname) {
         return new Promise((resolve, reject) => {
-            axios
-                .get(`${URL}/friends/${userId.value}`, user_nickname)
+            authorizationAPI
+                .get(`${URL}/friends/${userId.value}`, { params: { user_nickname } })
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -91,9 +96,9 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         userData,
-        userUpdate, 
-        mainBadge, 
-        findAllfriends, 
+        userUpdate,
+        mainBadge,
+        findAllfriends,
         findMyfriends,
     }
 })

@@ -2,7 +2,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+import { authorizationAPI } from './authAPI';
+import { serverURL, v1_URL } from './config';
 
 
 import wakebadge from '@/assets/badges/wake1.png';
@@ -57,7 +58,7 @@ export const useBadgeStore = defineStore('badge', () => {
     // 전체뱃지 리스트 조회
     const getBadgeList = function() {
         return new Promise((resolve, reject) => {
-            axios
+          authorizationAPI
                 .get(`${URL}/list`)
                 .then((res) => {
                     badgeList.value = res.badge_List
@@ -73,7 +74,7 @@ export const useBadgeStore = defineStore('badge', () => {
     // 유저뱃지 리스트 조회
     const getUserBadgeList = function(userId) {
         return new Promise((resolve, reject) => {
-            axios
+          authorizationAPI
                 .get(`${URL}/list/${userId}`)
                 .then((res) => {
                     resolve(res);

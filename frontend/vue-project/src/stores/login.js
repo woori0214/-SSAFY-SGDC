@@ -5,7 +5,8 @@ import { useRouter } from 'vue-router';
 import { useUserStorageStore } from "@/stores/userStorage";
 // import { useLoginStore } from "@/stores/login";
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+import { authorizationAPI, updateAuthToken } from './authAPI';
+import { serverURL, v1_URL } from './config';
 
 export const useLoginStore = defineStore('login', () => {
     const URL = serverURL + v1_URL + 'user';
@@ -38,7 +39,9 @@ export const useLoginStore = defineStore('login', () => {
                     });
                     loginUser.value = userInfo.user_id;
                     userNickname.value = userInfo.user_nickname;
-                    
+
+                    updateAuthToken(response.data.data.accessToken);
+
                     resolve(response);
                     // router.push({ name: "Main" });
 
@@ -89,6 +92,7 @@ export const useLoginStore = defineStore('login', () => {
         if(userStorage.getUserInformation().user_id != null){
             loginUser.value = userStorage.getUserInformation().user_id;
             userNickname.value = userStorage.getUserInformation().user_nickname;
+            updateAuthToken(userStorage.getUserInformation().token);
         }
         //저장된 토큰의 유효기간을 검사해서 로그인을 막기도 하기....? 그럼 페이지 넘어가다가 자동으로 로그아웃 되기도 하는 거 아닌가?
     }

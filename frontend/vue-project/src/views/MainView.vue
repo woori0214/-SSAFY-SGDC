@@ -2,7 +2,7 @@
     <div class="main_view">
         <MainFeedList />
         <MainChallengeBoard />
-        <MainRanking />
+        <!-- <MainRanking /> -->
         <MainModeButton />
     </div>
 </template>

@@ -61,7 +61,7 @@
       </div>
 
       <div class="header-links" v-if="!closeLogo">
-        <button @click="popUpMailBox">
+        <button @click="popUpMailBox" class="notify-icon">
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
@@ -88,7 +88,9 @@
         <a href="#" @click="handleNavigation('/solo')">Solo</a>
         <a href="#" @click="handleNavigation('/feed')">Feed</a>
         <a href="#" @click="handleNavigation('/MyPage')">MyPage</a>
-        <SearchNickname></SearchNickname>
+        <div class="nav-searchUser">
+          <SearchNickname></SearchNickname>
+        </div>
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
         <div class="LEDtrack">
@@ -150,6 +152,21 @@ onMounted(() => {
 </script>
 
 <style>
+.notify-icon{
+  border-radius: 100%;
+  border: 0px;
+  height: 38px;
+  width: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+.notify-icon:hover{
+  background-color: #71a5de;
+  color: #e1ecf7;
+}
+
 .fade-out-up {
   padding: 5px;
   background-color: #aecbeb;
@@ -235,7 +252,7 @@ onMounted(() => {
   text-decoration: none;
   color: #131313;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   background-color: #aecbeb;
   padding-block: 5px;
   padding-inline: 8px;
@@ -322,6 +339,16 @@ nav a {
   }
 }
 
+.nav-searchUser{
+  /* border: 1px solid red; */
+  flex: 1;
+  display: flex;
+  justify-content: end;
+  padding-right: 10px;
+  height: 35px;
+  align-items: center;
+}
+
 .animationed-LED {
   font-size: 35px;
   font-weight: 600;
@@ -342,7 +369,7 @@ nav a {
 @keyframes marquee {
   0% {
     transform: translateX(0);
-    color: #71a5de
+    color: #71a5de;
   }
   20% {
     transform: translateX(-10%);

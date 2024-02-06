@@ -2,7 +2,9 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+// import { serverURL, v1_URL } from '@/main.js';
+import { serverURL, v1_URL } from './config';
+import { authorizationAPI } from './authAPI';
 
 
 export const useFeedStore = defineStore('feed', () => {
@@ -26,7 +28,7 @@ export const useFeedStore = defineStore('feed', () => {
     //게시물 조회수 업데이트
     const updateFeedView = function (feedId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .patch(`${URL}/feed-views/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
@@ -40,8 +42,11 @@ export const useFeedStore = defineStore('feed', () => {
 
     //게시물 리스트 조회
     const getFeedList = function () {
+        console.log('Start Get Feed List ::');
+        console.log(authorizationAPI.defaults.headers['Authorization']);
+        console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/feed-list`)
                 .then((response) => {
                     resolve(response);
@@ -56,8 +61,11 @@ export const useFeedStore = defineStore('feed', () => {
     //게시물 리스트(페이지 당 10개씩)
     const getFeedListPage = function (last_feed_id) {
         console.log('getFeedListPage 실행...');
+        console.log('인증 토큰 확인 ::');
+        console.log(authorizationAPI.defaults.headers['Authorization']);
+        console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/feed-list/pages`, {
                     params: { feedId: last_feed_id, page: 0, size: 10 }
                 })

@@ -2,7 +2,8 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
-import { serverURL, v1_URL } from '@/main.js';
+import { authorizationAPI } from './authAPI';
+import { serverURL, v1_URL } from './config';
 
 
 export const useCompetionStore = defineStore('competition', () => {
@@ -13,7 +14,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/random-send`, randomSend)
                 .then((response) => {
                     resolve(response);
@@ -43,7 +44,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //친구에게 도전장 보내기
     const friendSend = function (friendSend) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/friend-send`, friendSend)
                 .then((response) => {
                     resolve(response);
@@ -71,7 +72,7 @@ export const useCompetionStore = defineStore('competition', () => {
         //친구,랜덤도전장 수락하기
     const bothAccept = function (matchingId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/accept/${matchingId}`, {})
                 .then((response) => {
                     resolve(response);
@@ -85,7 +86,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/list/${userId}`)
                 .then((response) => {
                     resolve(response);
@@ -100,7 +101,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //경쟁인증
     const competitionImage = function (image) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/image-auth`, image)
                 .then((response) => {
                     resolve(response);
@@ -115,7 +116,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //종료 경쟁 목록 조회
     const competitionFinish = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/finish-compet-list/${userId}`)
                 .then((res) => {
                     resolve(res);
@@ -130,8 +131,8 @@ export const useCompetionStore = defineStore('competition', () => {
     //종료 경쟁 정보 상세 조회(개별)
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
-            axios
-                .get(`${URL}/finish-compet-detail/${userId}/${cometId}`)
+            authorizationAPI
+                .get(`${URL}/finish-compet-datil/${userId}/${cometId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -145,7 +146,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //경쟁모드인증현황
     const competitionProgressDetail = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/progress-compet-detail/${userId}`)
                 .then((response) => {
                     resolve(response);
@@ -161,7 +162,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //친구 리스트 조회
     const competitionFriendList = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL2}/friends/list/${userId}`)
                 .then((response) => {
                     resolve(response);
@@ -176,8 +177,21 @@ export const useCompetionStore = defineStore('competition', () => {
     //사용자경쟁모드 분석
     const competitionAnalysis = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/analysis/${userId}`)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    };
+    const competitionAnalysisCategory = function (userId, userCategory) {
+        return new Promise((resolve, reject) => {
+            authorizationAPI
+                .get(`${URL}/analysis/${userId}/${userCategory}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -200,5 +214,6 @@ export const useCompetionStore = defineStore('competition', () => {
         competitionProgressDetail,
         competitionFriendList,
         competitionAnalysis,
+        competitionAnalysisCategory,
     };
 })

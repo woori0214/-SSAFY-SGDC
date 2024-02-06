@@ -9,7 +9,7 @@ User
         <button v-for="category in Categories" :key="category.id"
           :class="{ 'active': selectedCategory === category.id, 'disabled': disabledCategories.includes(category.id) }"
           @click="selectCategory(category)" class="category-button">
-          {{ category.name }}
+          <span>{{ category.name }}</span>
         </button>
       </div>
     </div>
@@ -18,11 +18,11 @@ User
       <p class="matching_title">STEP2. 매칭모드를 선택해주세요</p>
       <div class="buttons_container">
         <button class="matching_btn" @click="openRandomMatchingModal">
-          랜덤 매치
+          <span>랜덤 매치</span>
         </button>
 
         <button class="matching_btn" @click="openFriendMatchingModal">
-          친구와 매치
+          <span>친구와 매치</span>
         </button>
       </div>
     </div>
@@ -91,7 +91,7 @@ const userId = userInformation.user_id;
 const disabledCategories = ref([]);
 const userMatchingStatus = () => {
   const userId = userInformation.user_id;
-  competSelect.CompetitionMailbox(userId)
+  competSelect.competitionMailbox(userId)
     .then((response) => {
       const matching = response.data.matching;
       const matchedCategories = matching.map(match => match.category_id);
@@ -160,9 +160,9 @@ const handleFriendSelect = (friendId) => {
 const closeFriendsList = () => {
   isFriendMatchingListVisible.value = false;
 };
-// onMounted(() => {
-//   userMatchingStatus();
-// });
+onMounted(() => {
+  userMatchingStatus();
+});
 
 const selectCategory = (category) => {
   if (disabledCategories.value.includes(category.id)) {
@@ -287,5 +287,8 @@ const selectCategory = (category) => {
   background-color: #ff5c5c;
   color: white;
   cursor: not-allowed;
+}
+span {
+  font-family: "jua";
 }
 </style>
