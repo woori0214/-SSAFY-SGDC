@@ -54,16 +54,16 @@ export const useUserStorageStore = defineStore('userStorage', () => {
   // 유저 로그인 정보를 사용하는
   // API 인증 함수
   //  해당 함수는 실제로 API 연결들을 완료하고 나서 추가로 선택하여 넣어야할 것 같습니다. 보안을 위한 것이기 때문에
-  const userAuthentication = function () {
-    const user_id = localStorage.getItem("user_id");
-    const token = localStorage.getItem("token");
+  // const userAuthentication = function () {
+  //   const user_id = localStorage.getItem("user_id");
+  //   const token = localStorage.getItem("token");
 
-    // 유저 로그인 토큰 인증 API 들어갈 자리
-    // API에 user_id와 token를 같이 보내고 
-    // 해당 user_id의 현재 로그인 token이 일치하는지 확인
-    // 해당 정보가 인증되면 return true
-    // 아니면 return false
-  }
+  //   // 유저 로그인 토큰 인증 API 들어갈 자리
+  //   // API에 user_id와 token를 같이 보내고 
+  //   // 해당 user_id의 현재 로그인 token이 일치하는지 확인
+  //   // 해당 정보가 인증되면 return true
+  //   // 아니면 return false
+  // }
 
   return {
     setStorage,

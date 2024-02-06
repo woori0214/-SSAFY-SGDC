@@ -6,7 +6,7 @@ import { useUserStorageStore } from "@/stores/userStorage";
 // import { useLoginStore } from "@/stores/login";
 import axios from 'axios';
 import { authorizationAPI, updateAuthToken } from './authAPI';
-import { serverURL, v1_URL } from '@/main.js';
+import { serverURL, v1_URL } from './config';
 
 export const useLoginStore = defineStore('login', () => {
     const URL = serverURL + v1_URL + 'user';
