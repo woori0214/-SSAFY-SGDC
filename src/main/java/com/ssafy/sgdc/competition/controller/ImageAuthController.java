@@ -45,7 +45,7 @@ public class ImageAuthController {
     public DataResponseDto<String> imageAuth(
             @RequestParam int userId,
             @RequestParam int competId,
-            @RequestParam MultipartFile authImg
+            @RequestPart MultipartFile authImg
     ) {
         String imageUrl = imageAuthService.saveImageAuth(userId,
                 competId, authImg);
