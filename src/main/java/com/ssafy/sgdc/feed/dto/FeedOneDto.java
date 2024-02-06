@@ -1,9 +1,6 @@
 package com.ssafy.sgdc.feed.dto;
 
-import com.ssafy.sgdc.competition.domain.Competition;
-import com.ssafy.sgdc.feed.Feed;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
@@ -21,8 +18,8 @@ public class FeedOneDto {
     private int userId;
     private String userNickname;
     private String userImg;
-
-    public FeedOneDto(int feedId, String feedTitle, String feedContent, int feedLikeNum, int views, boolean privacy, LocalDateTime createAt, LocalDateTime updateAt, String feedImg, int userId, String userNickname, String userImg) {
+    private boolean isLiked;
+    public FeedOneDto(int feedId, String feedTitle, String feedContent, int feedLikeNum, int views, boolean privacy, LocalDateTime createAt, LocalDateTime updateAt, String feedImg, int userId, String userNickname, String userImg, boolean isLiked) {
         this.feedId = feedId;
         this.feedTitle = feedTitle;
         this.feedContent = feedContent;
@@ -35,5 +32,6 @@ public class FeedOneDto {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userImg = userImg;
+        this.isLiked = isLiked;
     }
 }

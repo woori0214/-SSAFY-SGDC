@@ -1,6 +1,7 @@
-package com.ssafy.sgdc.feed;
+package com.ssafy.sgdc.feed.repository;
 
 
+import com.ssafy.sgdc.feed.entity.Feed;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,7 +31,8 @@ public interface FeedRepo extends JpaRepository<Feed, Integer> {
     Page<Feed> findByFeedIdGreaterThan(int feedId, Pageable pageable);
 
     // 피드 좋아요 수 업데이트
-    // 피드 좋아요 유저 추가
-    // 피드 좋아요 유저 삭제
-    // 피드 좋아요(본인이 눌렀는지 확인)
+    @Modifying
+    @Query("UPDATE Feed f SET f.feedLikeNum= :feedLikeCount WHERE f.feedId= :feedId")
+    int updateLike(int feedId, int feedLikeCount);
+
 }

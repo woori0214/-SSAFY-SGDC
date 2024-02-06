@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.feed;
+package com.ssafy.sgdc.feed.entity;
 
 import com.ssafy.sgdc.competition.domain.Competition;
 import jakarta.persistence.*;

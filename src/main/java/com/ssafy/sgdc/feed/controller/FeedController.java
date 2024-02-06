@@ -1,10 +1,10 @@
-package com.ssafy.sgdc.feed;
+package com.ssafy.sgdc.feed.controller;
 
 
 import com.ssafy.sgdc.base.dto.DataResponseDto;
 import com.ssafy.sgdc.feed.dto.FeedOneDto;
 import com.ssafy.sgdc.feed.dto.UpdateViewDto;
-import com.ssafy.sgdc.follow.dto.FollowerListResponseDto;
+import com.ssafy.sgdc.feed.service.FeedService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -19,9 +19,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Objects;
 
 @ApiResponses({
         @ApiResponse(responseCode = "200", description = "OK"),
@@ -40,9 +37,9 @@ public class FeedController {
 
     @Operation(summary = "특정 피드 조회", description="특정한 피드를 확인합니다.")
     @Parameter(name = "feedId", schema = @Schema(implementation = int.class), description = "특정 피드의 PK", in = ParameterIn.PATH)
-    @GetMapping("/feed-info/{feedId}")
-    public DataResponseDto<FeedOneDto> getFeedOne(@PathVariable int feedId) {
-        FeedOneDto feedData = feedService.getFeedOne(feedId);
+    @GetMapping("/feed-info/{feedId}/{userId}")
+    public DataResponseDto<FeedOneDto> getFeedOne(@PathVariable int feedId, @PathVariable int userId) {
+        FeedOneDto feedData = feedService.getFeedOne(feedId,userId);
         return DataResponseDto.of(feedData, "특정 피드 조회");
     }
 
@@ -53,11 +50,12 @@ public class FeedController {
     })
     @GetMapping("/feed-list/pages")
     public DataResponseDto<Page<FeedOneDto>> getFeeds(
+            @RequestParam(value="userId") int userId,
             @RequestParam(defaultValue = "0") int feedId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "createAt");
-        return DataResponseDto.of(feedService.findItemsAfter(feedId, pageable),"피드 10개씩 조회");
+        return DataResponseDto.of(feedService.findItemsAfter(feedId, userId, pageable),"피드 10개씩 조회");
     }
 
 

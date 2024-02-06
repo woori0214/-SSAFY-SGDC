@@ -1,7 +1,6 @@
-package com.ssafy.sgdc.feed;
+package com.ssafy.sgdc.feed.service;
 
 
-import com.ssafy.sgdc.competition.domain.CompetDetail;
 import com.ssafy.sgdc.competition.domain.Competition;
 import com.ssafy.sgdc.competition.domain.ImageAuth;
 import com.ssafy.sgdc.competition.domain.Matching;
@@ -11,10 +10,13 @@ import com.ssafy.sgdc.competition.repository.ImageAuthRepo;
 import com.ssafy.sgdc.competition.repository.MatchingRepo;
 import com.ssafy.sgdc.enums.CompetResult;
 import com.ssafy.sgdc.enums.IsSender;
+import com.ssafy.sgdc.feed.repository.FeedLikeRepo;
+import com.ssafy.sgdc.feed.repository.FeedRepo;
 import com.ssafy.sgdc.feed.dto.FeedOneDto;
+import com.ssafy.sgdc.feed.entity.Feed;
+import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,9 +30,9 @@ import java.util.List;
 public class FeedService {
     private final FeedRepo feedRepo;
     private final CompetitionRepo competitionRepo;
-    private final CompetDetailRepo competDetailRepo;
     private final MatchingRepo matchingRepo;
     private final ImageAuthRepo imageAuthRepo;
+    private final FeedLikeRepo feedLikeRepo;
 
     /**
      * 피드 생성
@@ -57,12 +59,13 @@ public class FeedService {
      * 특정 피드 불러오기
      */
 
-    public FeedOneDto getFeedOne(int feedId) {
+    public FeedOneDto getFeedOne(int feedId, int userId) {
         Feed feed = feedRepo.findByFeedId(feedId)
                 .orElseThrow(() -> new RuntimeException("해당 피드를 찾을 수 없습니다."));
 
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
+        boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feedId);
 
         return new FeedOneDto(
                 feed.getFeedId(),
@@ -76,7 +79,8 @@ public class FeedService {
                 feed.getFeedImg(),
                 senderMatching.getUser().getUserId(),
                 senderMatching.getUser().getUserNickname(),
-                senderMatching.getUser().getUserImg()
+                senderMatching.getUser().getUserImg(),
+                isLiked
         );
     }
 
@@ -85,15 +89,15 @@ public class FeedService {
      *  피드 게시물 10개씩 불러오기
      */
 
-    public Page<FeedOneDto> findItemsAfter(int feedId, Pageable pageable) {
+    public Page<FeedOneDto> findItemsAfter(int feedId, int userId, Pageable pageable) {
         if (feedId==0) {
             // 처음 페이지를 로드할 때
             Page<Feed> feedPage = feedRepo.findAll(pageable);
-            return feedPage.map(this::convertToDto);
+            return feedPage.map(item -> convertToDto(item, userId));
         } else {
             // 커서 기반 페이지네이션: lastId 이후의 아이템을 조회
             Page<Feed> feedPage = feedRepo.findByFeedIdGreaterThan(feedId, pageable);
-            return feedPage.map(this::convertToDto);
+            return feedPage.map(item -> convertToDto(item, userId));
         }
     }
 
@@ -114,9 +118,10 @@ public class FeedService {
     }
 
 
-    private FeedOneDto convertToDto(Feed feed) {
+    private FeedOneDto convertToDto(Feed feed, int userId) {
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
+        boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feed.getFeedId());
 
         // Feed 엔티티의 데이터를 사용하여 FeedOneDto 객체를 생성합니다.
         return new FeedOneDto(
@@ -132,7 +137,8 @@ public class FeedService {
                 // 매칭된 사용자 정보를 설정
                 senderMatching.getUser().getUserId(),
                 senderMatching.getUser().getUserNickname(),
-                senderMatching.getUser().getUserImg()
+                senderMatching.getUser().getUserImg(),
+                isLiked
         );
     }
 

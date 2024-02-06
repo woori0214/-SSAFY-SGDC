@@ -205,7 +205,7 @@ public class UserController {
      * 유저 닉네임 검색
      */
     @Operation(summary = "닉네임 검색", description="닉네임을 검색합니다.")
-    @Parameter(name = "keyword", schema = @Schema(implementation = String.class), description = "  PK", in = ParameterIn.QUERY)
+    @Parameter(name = "keyword", schema = @Schema(implementation = String.class), description = "사용자가 검색하는 키워드", in = ParameterIn.QUERY)
     @GetMapping("/search-nickname")
     public DataResponseDto<Page<SearchNameResponseDto>> searchNickname (
             @RequestParam(value="keyword",required = false) String keyword,
