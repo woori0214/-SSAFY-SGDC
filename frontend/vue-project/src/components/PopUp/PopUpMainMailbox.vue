@@ -26,6 +26,7 @@
           </div>
 
           <!-- 도전장 도착 알림 -->
+          <!-- 도전장 도착 알림 -->
           <div class="mainMailBox-list-item" v-if="mail_item.kind == 'reciveChallenge'">
             <div class="mainMailBox-list-item-content">
               {{ mail_item.content }}
@@ -81,9 +82,12 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
-
+import { defineProps, ref, onMounted } from "vue";
+import { useCompetionStore } from "@/stores/competition";
+import { useUserStorageStore } from "@/stores/userStorage";
+const userStorage = useUserStorageStore();
 const max_mail_cnt = ref(20);
+const userCompet = useCompetionStore();
 
 const props = defineProps({
   showModal: Boolean,
@@ -93,54 +97,126 @@ const props = defineProps({
 const close_mainMailBox = () => {
   props.close();
 };
+//받은 도전장 함수 불러오기
+const fetchMailbox = () => {
+  const userId = userStorage.getUserInformation().user_id;
+  userCompet.competitionMailbox(userId)
+    .then(response => {
+      const mailbox = response.data.matching.map(item => ({
+        matchingId: item.matchingId,
+        category: categoryMapping[item.category_id],
+        expirationTime: item.competExpriationTime,
+        nickname: item.userNickname,
+        matchkind: item.competKind,
+        kind: reciveChallenge,
+        content: `[${item.competKind}]${item.userNickname}님이 당신에게  ${categoryMapping[item.category_id]}를 신청하였습니다.       만료시간: ${item.competExpriationTime}`,
 
+      }));
+      mainmailList.value = mailbox;
+    })
+    .catch(error => {
+      console.error("도전장을 갖고오지 못했습니다", error);
+    });
+};
+
+onMounted(() => {
+  fetchMailbox();
+})
+const categoryMapping = {
+  1: '기상',
+  2: '알고리즘',
+  3: '운동',
+  4: '스터디',
+  5: '식단',
+  6: '절제',
+};
+
+//받은 도전장 수락하기
+const acceptChallenge = (matchingId) => {
+  const selectedItem = mainmailList.value.find(item => item.matchingId === matchingId);
+  if (!selectedItem) {
+    console.error("선택된 도전장이 목록에 없습니다.");
+    return;
+  }
+  userCompet.competitionAnalysisCategory(userId, selectedItem.category)
+    .then(analysis => {
+      const categoryStatus = analysis.data.user_category.categoryStauts;
+      if (categoryStatus === "NONE_STATUS" || categoryStatus === "MATCH_STATUS") {
+        return userCompet.bothAccept(matchingId);
+      } else if (categoryStatus === "PLAY_STATUS") {
+        throw new Error("유효하지 않은 도전장입니다.");
+      }
+    })
+    .then(() => {
+      console.log("Challenge accepted:", matchingId);
+      // 도전과제 목록에서 해당 항목 제거
+      const index = mainmailList.value.findIndex(mail_item => mail_item.id === matchingId);
+      if (index !== -1) {
+        mainmailList.value.splice(index, 1);
+      }
+    })
+    .catch(error => {
+      if (error.message === "유효하지 않은 도전장입니다.") {
+        alert(error.message);
+        // 해당 리스트 항목 제거
+        const index = mainmailList.value.findIndex(item => item.matchingId === matchingId);
+        if (index !== -1) {
+          mainmailList.value.splice(index, 1);
+        }
+      } else {
+        console.error("Error processing challenge:", error);
+      }
+    });
+
+
+};
 const mainmailList = ref([
-  {
-    kind: "follow",
-    content: "나나양(이)가 당신을 팔로우 했습니다",
-  },
-  {
-    kind: "reciveChallenge",
-    content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  },
-  {
-    kind: "getChallenge",
-    content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  },
-  {
-    kind: "completeChallenge",
-    content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  }, {
-    kind: "follow",
-    content: "나나양(이)가 당신을 팔로우 했습니다",
-  },
-  {
-    kind: "reciveChallenge",
-    content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  },
-  {
-    kind: "getChallenge",
-    content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  },
-  {
-    kind: "completeChallenge",
-    content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  }, {
-    kind: "follow",
-    content: "나나양(이)가 당신을 팔로우 했습니다",
-  },
-  {
-    kind: "reciveChallenge",
-    content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  },
-  {
-    kind: "getChallenge",
-    content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  },
-  {
-    kind: "completeChallenge",
-    content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  },
+  // {
+  //   kind: "follow",
+  //   content: "나나양(이)가 당신을 팔로우 했습니다",
+  // },
+  // {
+  //   kind: "reciveChallenge",
+  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
+  // },
+  // {
+  //   kind: "getChallenge",
+  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
+  // },
+  // {
+  //   kind: "completeChallenge",
+  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
+  // }, {
+  //   kind: "follow",
+  //   content: "나나양(이)가 당신을 팔로우 했습니다",
+  // },
+  // {
+  //   kind: "reciveChallenge",
+  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
+  // },
+  // {
+  //   kind: "getChallenge",
+  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
+  // },
+  // {
+  //   kind: "completeChallenge",
+  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
+  // }, {
+  //   kind: "follow",
+  //   content: "나나양(이)가 당신을 팔로우 했습니다",
+  // },
+  // {
+  //   kind: "reciveChallenge",
+  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
+  // },
+  // {
+  //   kind: "getChallenge",
+  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
+  // },
+  // {
+  //   kind: "completeChallenge",
+  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
+  // },
 ]);
 </script>
 
