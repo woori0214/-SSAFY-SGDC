@@ -45,7 +45,7 @@ public class BadgeController {
     }
 
     // 유저뱃지에 뱃지 추가
-    @RequestMapping(value = "/add-user-badge/{userId}/{badgeId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/add-user-badge/{userId}/{badgeId}/", method = RequestMethod.POST)
     public ResponseEntity<ObjectResponse> addUserBadge(@PathVariable int userId, @PathVariable int badgeId){
         badgeService.addUserBadge(userService.getUserById(userId), badgeService.getBadge(badgeId));
         System.out.println("유저에 뱃지 부여");
