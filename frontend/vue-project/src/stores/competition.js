@@ -2,6 +2,7 @@ import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import { authorizationAPI } from './authAPI';
 import { serverURL, v1_URL } from './config';
 
 
@@ -85,7 +86,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/list/${userId}`)
                 .then((response) => {
                     resolve(response);

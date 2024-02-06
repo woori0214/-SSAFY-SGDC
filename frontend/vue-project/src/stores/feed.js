@@ -46,6 +46,9 @@ export const useFeedStore = defineStore('feed', () => {
             authorizationAPI
                 .get(`${URL}/feed-list`)
                 .then((response) => {
+                    console.log('Get Feed List ::');
+                    console.log(authorizationAPI.defaults.headers['Authorization']);
+                    console.log('----------------------------------------------');
                     resolve(response);
                 })
                 .catch((e) => {
@@ -64,6 +67,9 @@ export const useFeedStore = defineStore('feed', () => {
                     params: { feedId: last_feed_id, page: 0, size: 10 }
                 })
                 .then((response) => {
+                    console.log('Get Feed List ::');
+                    console.log(authorizationAPI.defaults.headers['Authorization']);
+                    console.log('----------------------------------------------');
                     console.log('get List : ');
                     console.log(response);
                     resolve(response);

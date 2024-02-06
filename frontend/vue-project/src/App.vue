@@ -85,6 +85,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'jua';
+  src: url('../public/fonts/BMJUA_ttf.ttf');
+}
+
+div, button, a, span {
+  font-family: 'jua';
+}
+
 .coster {
   position: fixed;
   width: 400px;

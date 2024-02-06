@@ -8,20 +8,6 @@ const URL = serverURL + v1_URL + 'user/re-auth/';
 const userAuthToken = ref(null);
 // userStorage.getUserInformation().token
 
-export const updateAuthToken = (updateToken) => {
-    userAuthToken.value = updateToken;
-    authorizationAPI = axios.create({
-        headers: {
-            'Authorization': `Bearer ${userAuthToken.value}`, // 인증 토큰을 헤더에 추가
-            'Content-Type': 'application/json'
-        }
-    });
-    console.log('인증 토큰 업데이트');
-    console.log(userAuthToken.value);
-    console.log('=================================');
-    console.log(authorizationAPI);
-    console.log('=================================');
-}
 
 export let authorizationAPI = axios.create({
     headers: {
@@ -29,6 +15,24 @@ export let authorizationAPI = axios.create({
         'Content-Type': 'application/json'
     }
 });
+
+export const updateAuthToken = (updateToken) => {
+    userAuthToken.value = updateToken;
+    authorizationAPI = axios.create({
+        headers: {
+            'Authorization': `Bearer ${userAuthToken.value}`, // 인증 토큰을 헤더에 추가
+            'Content-Type': 'application/json',
+        }
+    });
+
+    console.log('인증 토큰 업데이트');
+    console.log(userAuthToken.value);
+    console.log('=================================');
+    console.log(authorizationAPI.defaults.headers['Authorization']);
+    console.log('=================================');
+}
+
+
 
 // 인터셉터 수정
 authorizationAPI.interceptors.response.use(response => response, function (error) {
