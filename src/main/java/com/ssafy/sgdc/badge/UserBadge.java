@@ -1,6 +1,5 @@
 package com.ssafy.sgdc.badge;
 
-import com.ssafy.sgdc.badge.Badge;
 import com.ssafy.sgdc.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -20,6 +19,7 @@ public class UserBadge {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // auto increment
     @Column(name = "user_badge_id")
     private int userBadgeId;
+
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "badge_id")

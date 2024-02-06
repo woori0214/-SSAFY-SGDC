@@ -29,7 +29,7 @@ public class BadgeService {
 
     // 유저 뱃지 리스트에 넣기
     @Transactional
-    public void addUserBadge(User userId, Badge badgeId){
+    public void addUserBadge(User userId, Badge badgeId) {
         UserBadge userBadge = new UserBadge();
 
         userBadge.setBadgeId(badgeId);

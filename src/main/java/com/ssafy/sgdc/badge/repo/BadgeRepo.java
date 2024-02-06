@@ -10,6 +10,8 @@ import java.util.List;
 @Repository
 public interface BadgeRepo extends JpaRepository<Badge, Integer> {
 
-//     뱃지 이름 찾기
+
+//    뱃지 아이디 찾기
     Badge findByBadgeId(int badgeId);
+
 }
