@@ -94,7 +94,7 @@ public class UserService {
         return userInfo;
     }
 
-    public User getUserById(int userId){
+    public User getUserById(int userId) {
         User user = userRepo.findByUserId(userId);
         return user;
     }

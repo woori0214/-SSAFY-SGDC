@@ -34,20 +34,20 @@ public class UserController {
     private JwtUtil jwt;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getRoot(){
+    public String getRoot() {
         System.out.println("user경로입니다.");
         return "Hello User";
     }
 
     @RequestMapping(value = "/signup/", method = RequestMethod.POST)
-    public ResponseEntity<GeneralResponse> signUp(@RequestBody UserSignUpDto userSignUpDto){
+    public ResponseEntity<GeneralResponse> signUp(@RequestBody UserSignUpDto userSignUpDto) {
         System.out.println("회원가입 경로.");
         userService.signUp(userSignUpDto);
 
         Map<String, String> result = new HashMap<>();
         result.put("result", "true");
 
-        return new ResponseEntity<> (GeneralResponse.builder()
+        return new ResponseEntity<>(GeneralResponse.builder()
                 .status(200)
                 .message("회원가입")
                 .data(result)
@@ -56,7 +56,7 @@ public class UserController {
 
     // 아이디 중복체크
     @RequestMapping(value = "/signup/check-id/{loginId}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> checkId(@PathVariable String loginId){
+    public ResponseEntity<GeneralResponse> checkId(@PathVariable String loginId) {
         Map<String, String> response = new HashMap<>();
         System.out.println("아이디 중복체크");
         boolean result = userService.checkId(loginId);
@@ -75,12 +75,12 @@ public class UserController {
 
     // 닉네임 중복체크
     @RequestMapping(value = "/signup/check-nick/{userNickname}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> checkNickname(@PathVariable String userNickname){
+    public ResponseEntity<GeneralResponse> checkNickname(@PathVariable String userNickname) {
         Map<String, String> response = new HashMap<>();
         System.out.println("닉네임 중복체크");
         boolean result = userService.checkNickname(userNickname);   // 중복시 true, 중복X false
         response.put("result", String.valueOf(!result)); // 닉네임 사용가능 result : true
-        System.out.println("check-nickname "+String.valueOf(!result));
+        System.out.println("check-nickname " + String.valueOf(!result));
 //        return ResponseEntity.ok(response);              // 닉네임 사용불가 result : false
 
         return new ResponseEntity<>(GeneralResponse.builder()
@@ -92,13 +92,13 @@ public class UserController {
 
     // 싸피 학번중복체크
     @RequestMapping(value = "/signup/check-student-num/{userSsafyId}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> checkSsafyId(@PathVariable String userSsafyId){
+    public ResponseEntity<GeneralResponse> checkSsafyId(@PathVariable String userSsafyId) {
         Map<String, String> response = new HashMap<>();
         System.out.println("학번체크");
         boolean result = userService.checkSsafyId(Integer.parseInt(userSsafyId));   // 중복시 true, 중복X false
 
         response.put("result", String.valueOf(!result));
-        System.out.println("check-ssafyNumber "+String.valueOf(!result));
+        System.out.println("check-ssafyNumber " + String.valueOf(!result));
 
         // 학번 사용가능 result : true
         // 학번 사용불가 result : false
@@ -111,13 +111,13 @@ public class UserController {
 
     // 싸피 핸드폰인증
     @RequestMapping(value = "/signup/check-phoneNum/{userPhone}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> checkPhone(@PathVariable String userPhone){
+    public ResponseEntity<GeneralResponse> checkPhone(@PathVariable String userPhone) {
         Map<String, String> response = new HashMap<>();
         System.out.println("폰 번호 체크");
         boolean result = userService.checkPhone(String.valueOf(userPhone));   // 중복시 true, 중복X false
 
         response.put("result", String.valueOf(!result));
-        System.out.println("check-phone "+String.valueOf(!result));
+        System.out.println("check-phone " + String.valueOf(!result));
         // 번호 사용가능 result : true
         // 번호 사용불가 result : false
         return new ResponseEntity<>(GeneralResponse.builder()
@@ -128,16 +128,15 @@ public class UserController {
     }
 
     // 로그인
-    @RequestMapping(value = "/login/" ,method = RequestMethod.POST)
+    @RequestMapping(value = "/login/", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> login(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
         Map<String, String> response = new HashMap<>();
 
         User user = userService.login(userLoginDto);
 
-        if(user==null){
+        if (user == null) {
             throw new CustomException(Code.INVALID_ID_PW);
-        }
-        else{
+        } else {
             String accessToken = jwt.generateAccessToken(user);
             String refreshToken = jwt.generateRefreshToken(user);
 
@@ -159,13 +158,13 @@ public class UserController {
     }
 
     @RequestMapping(value = "/re-auth/", method = RequestMethod.POST)
-    public ResponseEntity<GeneralResponse> reAuth(@RequestBody TokenDto tokenDto){
+    public ResponseEntity<GeneralResponse> reAuth(@RequestBody TokenDto tokenDto) {
         User user = userService.getUserById(tokenDto.getUserId());
-        if(user!=null && jwt.validateToken(tokenDto.getRefreshToken(), user)){ //refreshToken 검증 완료
+        if (user != null && jwt.validateToken(tokenDto.getRefreshToken(), user)) { //refreshToken 검증 완료
             String accessToken = jwt.generateAccessToken(user);
             String refreshToken = jwt.generateRefreshToken(user);
 
-            Map<String, String > response = new HashMap<>();
+            Map<String, String> response = new HashMap<>();
             response.put("accessToken", accessToken);
             response.put("refreshToken", refreshToken);
 
@@ -174,15 +173,24 @@ public class UserController {
                     .message("토큰 재발급 완료")
                     .data(response)
                     .build(), HttpStatus.OK);
-        }
-        else{
+        } else {
             throw new CustomException(Code.INVALID_TOKEN);
         }
     }
+
+    //대표뱃지
+//    @RequestMapping(value = "/{userId}/{badgeId}", method = RequestMethod.PATCH)
+//    public ResponseEntity<GeneralResponse> userMainBadge(@RequestBody UserBadge badgeId) {
+//        Map<String,String> response = new HashMap<>();
+//
+//        User user = userService.
+//                response.put("badge_id", user.)
+//    }
+
     // 마이페이지 사용자 정보 표시
     @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto){
-        Map<String, String > response = new HashMap<>();
+    public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto) {
+        Map<String, String> response = new HashMap<>();
 
         User user = userService.userInfo(userInfoDto);
         response.put("user_id", String.valueOf(user.getUserId()));
