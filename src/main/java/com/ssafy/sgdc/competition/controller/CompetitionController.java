@@ -115,11 +115,20 @@ public class CompetitionController {
                 .build(), HttpStatus.OK);
     }
 
-    @GetMapping("/compet/analysis/{userId}")
+    @GetMapping("/analysis/{userId}")
     public ResponseEntity<?> getUserCategoryList(@PathVariable int userId) {
         List<UserCategoryDto> result = competitionService.getUserCategoryList(userId);
         return new ResponseEntity<>(UserCategoryListResponse.builder()
                 .status(200).message("유저 카테고리 목록 조회 성공").user_categories(result)
+                .build(), HttpStatus.OK
+        );
+    }
+
+    @GetMapping("/analysis/{userId}/{categoryId}")
+    public ResponseEntity<?> getUserCategory(@PathVariable int userId, @PathVariable int categoryId) {
+        UserCategoryDto result = competitionService.getUserCategory(userId, categoryId);
+        return new ResponseEntity<>(UserCategoryResponse.builder()
+                .status(200).message("유저 카테고리 조회 성공").user_category(result)
                 .build(), HttpStatus.OK
         );
     }

@@ -20,7 +20,6 @@ public class Competition {
     @Column(name = "compet_id")
     private int competId;
 
-    @Setter
     @OneToOne
     @JoinColumn(name = "compet_detail_id")
     private CompetDetail competDetail;
@@ -38,4 +37,9 @@ public class Competition {
         this.createAt = createAt;
         this.doneAt = doneAt;
     }
+
+    public void updateCompetitionDetail(CompetDetail competDetail) {
+        this.competDetail = competDetail;
+    }
+
 }

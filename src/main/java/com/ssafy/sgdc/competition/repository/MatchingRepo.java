@@ -33,4 +33,6 @@ public interface MatchingRepo extends JpaRepository<Matching, Integer> {
     @Query("SELECT m FROM Matching m WHERE m.competition.competId = :competId AND m.matchingId != :matchingId")
     Optional<Matching> findOtherMatching(int competId, int matchingId);
 
+    Optional<Matching> findByCompetitionCompetIdAndIsSender(int competId, IsSender isSender);
+
 }

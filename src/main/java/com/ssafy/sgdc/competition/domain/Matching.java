@@ -47,7 +47,6 @@ public class Matching {
     @Column(name = "compet_expiration_time")
     private LocalDateTime competExpirationTime;
 
-    @Setter
     @Column(name = "match_status")
     @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus;
@@ -59,6 +58,14 @@ public class Matching {
         this.isSender = isSender;
         this.competExpirationTime = competExpirationTime;
         this.matchStatus = matchStatus;
+    }
+
+    public void updateMatchingStatus(MatchStatus matchStatus) {
+        this.matchStatus = matchStatus;
+    }
+
+    public void updateCompetition(Competition competition) {
+        this.competition = competition;
     }
 
 }
