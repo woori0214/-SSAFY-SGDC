@@ -61,7 +61,7 @@
       </div>
 
       <div class="header-links" v-if="!closeLogo">
-        <button @click="popUpMailBox">
+        <button @click="popUpMailBox" class="notify-icon">
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
@@ -152,6 +152,21 @@ onMounted(() => {
 </script>
 
 <style>
+.notify-icon{
+  border-radius: 100%;
+  border: 0px;
+  height: 38px;
+  width: 38px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+.notify-icon:hover{
+  background-color: #71a5de;
+  color: #e1ecf7;
+}
+
 .fade-out-up {
   padding: 5px;
   background-color: #aecbeb;
