@@ -1,66 +1,35 @@
 <template>
-  <div class="mail">
-    <div class="mail_content">
-      <div class="mail_content_text">
-        {{ mail_sender }}가 {{ mail_category }}를 신청하였습니다.
-      </div>
-      <div class="mail_content_details">
-        <div class="mail_content_time">
-          남은시간: {{ mail_remain_time }}
-          <button class="accept_btn" @click="acceptChallenge">수락</button>
-        </div>
-      </div>
+  <div class="competition-mailbox-item">
+    <div class="mail-item-content">
+      <p>{{ mail_sender }}님이 {{ mail_category }}를 신청하였습니다.</p>
+      <p>만료시간: {{ mail_remain_time }}</p>
     </div>
-    <PopUpReceiverCompetitionApprove :showModal="showChallengeAcceptBox" :close="closeChallengeAcceptBox" />
+    <button class="accept-button" @click="emitAcceptChallenge">수락</button>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
-import PopUpReceiverCompetitionApprove from "../PopUp/PopUpReceiverCompetitionApprove.vue";
-
 export default {
-  name: "mail-item",
+  name: 'CompetitionMailboxItem',
   props: {
     mail_sender: {
       type: String,
-      default: "XXX",
+      required: true
     },
     mail_category: {
-      type: Number,
-      default: "X",
+      type: String,
+      required: true
     },
     mail_remain_time: {
       type: String,
-      default: "[??:??]",
+      required: true
     },
   },
   methods: {
-    acceptChallenge() {
-      this.$emit("acceptChallenge");
-      this.popUpChallengeAcceptBox();
-    },
-  },
-  components: {
-    PopUpReceiverCompetitionApprove,
-  },
-  setup() {
-    const showChallengeAcceptBox = ref(false);
-
-    const popUpChallengeAcceptBox = () => {
-      showChallengeAcceptBox.value = true;
-    };
-
-    const closeChallengeAcceptBox = () => {
-      showChallengeAcceptBox.value = false;
-    };
-
-    return {
-      showChallengeAcceptBox,
-      popUpChallengeAcceptBox,
-      closeChallengeAcceptBox,
+    emitAcceptChallenge() {
+      this.$emit('acceptChallenge');
     }
-  },
+  }
 };
 </script>
 
@@ -105,4 +74,5 @@ export default {
   /* 호버 시 배경색 변경 */
   color: #ffffff;
   /* 호버 시 텍스트 색 변경 */
-}</style>
+}
+</style>

@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useCompetionStore } from "@/stores/competition";
 import mailbox from "@/assets/mailbox.png";
 import { useUserStorageStore } from "@/stores/userStorage";
@@ -25,41 +25,41 @@ import CompetitionMailboxItem from "./CompetitionMailboxItem.vue";
 const competitionStore = useCompetionStore();
 const userStorage = useUserStorageStore();
 const mailParameters = ref([
-  {
-    is_sender: "John Doe",
-    category_id: 1,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
-  {
-    is_sender: "Alice Smith",
-    category_id: 2,
-    compet_expiration_time: "02:00",
-  },
+  // {
+  //   is_sender: "John Doe",
+  //   category_id: 1,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
+  // {
+  //   is_sender: "Alice Smith",
+  //   category_id: 2,
+  //   compet_expiration_time: "02:00",
+  // },
 ]);
 const userInformation = userStorage.getUserInformation();
 const userId = userInformation.user_Id;
@@ -77,31 +77,68 @@ const mapCategoryIdToName = (categoryId) => {
   return categoryNames[categoryId] || "알 수 없는 카테고리";
 };
 
-const acceptChallenge = async (index) => {
-  const item = mailParameters.value[index];
-  const acceptUser = {
-    userId: userId,
-    matchingId: item.matchingId,
-  };
-  try {
-    let isAccepted = false; // 수락 성공 여부를 추적하기 위한 변수
-    if (item.competKind === "random") {
-      await competitionStore.randomAccept(acceptUser);
-      isAccepted = true;
-    } else if (item.competKind === "friend") {
-      await competitionStore.friendAccept(acceptUser);
-      isAccepted = true;
-    }
+onMounted(() => {
+  const userId = userStorage.getUserInformation().user_id;
+  competitionStore.competitionMailbox(userId)
+    .then(response => {
+      const mailbox = response.data.matching.map(item => ({
+        matchingId: item.matchingId,
+        category: categoryMapping[item.category_id],
+        expirationTime: item.competExpriationTime,
+        nickname: item.userNickname,
+        matchkind: item.competKind,
+        kind: reciveChallenge,
+        content: `[${item.competKind}]${item.userNickname}님이 당신에게  ${categoryMapping[item.category_id]}를 신청하였습니다.       만료시간: ${item.competExpriationTime}`,
 
-    if (isAccepted) {
-      console.log(`인덱스 ${index}의 도전을 수락했습니다.`);
-      // 해당 아이템을 배열에서 제거
-      mailParameters.value.splice(index, 1);
-    }
-  } catch (error) {
-    console.error("도전 수락 중 오류 발생:", error);
-  }
+      }));
+      mailParameters.value = mailbox;
+      console.log('도전장 잘 갖고왔따');
+
+    })
+    .catch(error => {
+      console.error("도전장을 갖고오지 못했습니다", error);
+    });
+})
+const acceptChallenge = (matchingId) => {
+  userCompet.bothAccept(matchingId)
+    .then(() => {
+      console.log("Challenge accepted:", matchingId);
+      // 도전과제 목록에서 해당 항목 제거
+      const index = mainmailList.value.findIndex(mail_item => mail_item.id === matchingId);
+      if (index !== -1) {
+        mainmailList.value.splice(index, 1);
+      }
+    })
+    .catch(error => {
+      console.error("Error accepting challenge:", error);
+    });
 };
+
+// const acceptChallenge = async (index) => {
+//   const item = mailParameters.value[index];
+//   const acceptUser = {
+//     userId: userId,
+//     matchingId: item.matchingId,
+//   };
+//   try {
+//     let isAccepted = false; // 수락 성공 여부를 추적하기 위한 변수
+//     if (item.competKind === "random") {
+//       await competitionStore.randomAccept(acceptUser);
+//       isAccepted = true;
+//     } else if (item.competKind === "friend") {
+//       await competitionStore.friendAccept(acceptUser);
+//       isAccepted = true;
+//     }
+
+//     if (isAccepted) {
+//       console.log(`인덱스 ${index}의 도전을 수락했습니다.`);
+//       // 해당 아이템을 배열에서 제거
+//       mailParameters.value.splice(index, 1);
+//     }
+//   } catch (error) {
+//     console.error("도전 수락 중 오류 발생:", error);
+//   }
+// };
 </script>
 
 <style scoped>

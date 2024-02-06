@@ -91,7 +91,7 @@ const userId = userInformation.user_id;
 const disabledCategories = ref([]);
 const userMatchingStatus = () => {
   const userId = userInformation.user_id;
-  competSelect.CompetitionMailbox(userId)
+  competSelect.competitionMailbox(userId)
     .then((response) => {
       const matching = response.data.matching;
       const matchedCategories = matching.map(match => match.category_id);
@@ -160,9 +160,9 @@ const handleFriendSelect = (friendId) => {
 const closeFriendsList = () => {
   isFriendMatchingListVisible.value = false;
 };
-// onMounted(() => {
-//   userMatchingStatus();
-// });
+onMounted(() => {
+  userMatchingStatus();
+});
 
 const selectCategory = (category) => {
   if (disabledCategories.value.includes(category.id)) {
