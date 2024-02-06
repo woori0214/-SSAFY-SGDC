@@ -15,13 +15,23 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from "vue";
-import { useUserStore } from "@/stores/user";
+import { useRouter } from 'vue-router';
 
+import { useUserStore } from "@/stores/user";
+import { useFollowStore } from "@/stores/follow";
+import { useUserStorageStore } from "@/stores/userStorage";
+const userStore = useUserStore();
+const userFollowStore = useFollowStore();
+const useUserStorage = useUserStorageStore();
+const userInformation = useUserStorage.getUserInformation();
+const useridMe = userInformation.user_Id;
 const nickname = ref('');
 const searchResults = ref(null);
-const userStore = useUserStore();
+const router = useRouter();
 
-const searchFriends = async() => {
+
+
+const searchFriends = async () => {
     const trimmedNickname = nickname.value.trim();
     if (trimmedNickname === '') {
         searchResults.value = null;
@@ -37,11 +47,11 @@ const searchFriends = async() => {
             searchResults.value = response.data.data.content.map((user) => {
                 //console.log(user.userId, user.userNickname, "잘들어옴!")
                 return {
-                userId: user.userId,
-                userNickname: user.userNickname
-            };
+                    userId: user.userId,
+                    userNickname: user.userNickname
+                };
             });
-            console.log(searchResults.value,"2222222");
+            console.log(searchResults.value, "2222222");
         } else {
             console.error('올바르지 않은 API 응답 형식:', response);
             searchResults.value = [];
@@ -53,13 +63,34 @@ const searchFriends = async() => {
 };
 
 const followUser = (userId) => {
-    // 팔로우 기능을 구현하는 코드 작성
-    console.log(`팔로우 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
+    return new Promise((resolve, reject) => {
+        console.log(userId);
+        console.log(useUserStorage.getUserInformation().user_id);
+        const useridMe = useUserStorage.getUserInformation().user_id;
+        // const ssallowingData = {
+        //     toUserId: userId, 
+        //     fromUserId: useridMe
+        // };
+
+        userFollowStore.plusSsallowing2(userId, useridMe)
+
+            .then((response) => {
+                console.log('통신은 연결됨');
+                console.log(response, "팔로우 성공!");
+                resolve(response);
+
+            })
+            .catch((error) => {
+                console.error('팔로우 실패:', error);
+                reject(error);
+
+            });
+    });
 };
 
 const viewProfile = (userId) => {
-    // 프로필 보기 기능을 구현하는 코드 작성
-    console.log(`프로필 버튼이 클릭되었습니다. 사용자 ID: ${userId}`);
+    // 'mypage/:userId' 경로로 라우팅합니다. userId를 동적 세그먼트로 사용합니다.
+    router.push({ name: 'MyPage', params: { userId: userId } });
 };
 
 onMounted(() => {
