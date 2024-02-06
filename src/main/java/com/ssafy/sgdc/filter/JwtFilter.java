@@ -37,8 +37,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String jwt = resolveToken(request);
         String requestURI = request.getRequestURI();
 
-        System.out.println("안녕하세요 피러");
-
         if(jwt == null){
             logger.debug("토큰이 없습니다.");
         }

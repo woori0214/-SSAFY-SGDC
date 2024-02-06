@@ -4,6 +4,8 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.sgdc.category.UserCategory;
+import com.ssafy.sgdc.category.repository.UserCategoryRepo;
 import com.ssafy.sgdc.competition.domain.CompetDetail;
 import com.ssafy.sgdc.competition.domain.Competition;
 import com.ssafy.sgdc.competition.domain.Matching;
@@ -13,12 +15,14 @@ import com.ssafy.sgdc.competition.repository.CompetDetailRepo;
 import com.ssafy.sgdc.competition.repository.CompetitionRepo;
 import com.ssafy.sgdc.competition.repository.ImageAuthRepo;
 import com.ssafy.sgdc.competition.repository.MatchingRepo;
+import com.ssafy.sgdc.enums.CategoryStatus;
 import com.ssafy.sgdc.enums.CompetResult;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -33,6 +37,7 @@ public class ImageAuthService {
     private final ImageAuthRepo imageAuthRepo;
     private final CompetitionRepo competitionRepo;
     private final CompetDetailRepo competDetailRepo;
+    private final UserCategoryRepo userCategoryRepo;
 
     private String bucketName="sgdc-test-bucket"; // S3 버킷 이름
 
@@ -40,6 +45,7 @@ public class ImageAuthService {
     AmazonS3 amazonS3Client; // S3에 업로드를 위한 서비스
 
     // 이미지 저장
+    @Transactional
     public String saveImageAuth(int userId, int competId, MultipartFile authImg) {
 
 
@@ -66,16 +72,33 @@ public class ImageAuthService {
         CreateImageAuthDto imageAuthDto = new CreateImageAuthDto(authImgUrl, LocalDateTime.now(), competition, matching);
         imageAuthRepo.save(CreateImageAuthDto.from(imageAuthDto));
 
-
         // 두 사용자 모두 인증했으면 경쟁 상태 업데이트
         if (imageAuthRepo.countByCompetitionCompetId(competId) == 2) {
             CreateCompetDetailDto competDetailDto = new CreateCompetDetailDto(CompetResult.BOTH_WIN);
 
+            // 유저 카테고리 업데이트
+            UserCategory sendUserCategory = userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(
+                    userId, matching.getCategory().getCategoryId()
+            ).orElseThrow(() -> new RuntimeException("해당 유저의 유저카테고리가 존재하지 않습니다."));
+
+            Matching otherMatching = matchingRepo.findOtherMatching(competId, matching.getMatchingId())
+                    .orElseThrow(() -> new RuntimeException("상대방 도전장이 없습니다."));
+
+            UserCategory receiveUserCategory = userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(
+                    otherMatching.getUser().getUserId(), otherMatching.getCategory().getCategoryId()
+            ).orElseThrow(() -> new RuntimeException("해당 유저의 유저카테고리가 존재하지 않습니다."));
+
+            sendUserCategory.increaseWinCount();
+            receiveUserCategory.increaseWinCount();
+
             CompetDetail competDetail = CreateCompetDetailDto.from(competDetailDto);
             competDetailRepo.save(competDetail);
 
-            competition.setCompetDetail(competDetail);
-            competitionRepo.save(competition);
+            // 유저 카테고리 업데이트
+            sendUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
+            receiveUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
+
+            competition.updateCompetitionDetail(competDetail);
         }
         return authImgUrl;
     }
