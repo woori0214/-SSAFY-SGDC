@@ -1,10 +1,13 @@
 package com.ssafy.sgdc.user;
 
+import com.ssafy.sgdc.user.dto.SearchNameResponseDto;
 import com.ssafy.sgdc.user.dto.UserInfoDto;
 import com.ssafy.sgdc.user.dto.UserLoginDto;
 import com.ssafy.sgdc.user.dto.UserSignUpDto;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -95,6 +98,23 @@ public class UserService {
     public User getUserById(int userId){
         User user = userRepo.findByUserId(userId);
         return user;
+    }
+
+    /**
+     * 유저 닉네임 검색
+     */
+    @Transactional
+    public Page<SearchNameResponseDto> searchNickname(String keyword, Pageable pageable) {
+
+        Page<User> userPage = userRepo.findByUserNicknameContaining(keyword, pageable);
+        return userPage.map(this::convertToSearchNicknameDto);
+    }
+
+    private SearchNameResponseDto convertToSearchNicknameDto(User user) {
+        return new SearchNameResponseDto(
+                user.getUserId(),
+                user.getUserNickname()
+        );
     }
 
 }
