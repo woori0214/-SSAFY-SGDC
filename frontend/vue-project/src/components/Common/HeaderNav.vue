@@ -88,7 +88,9 @@
         <a href="#" @click="handleNavigation('/solo')">Solo</a>
         <a href="#" @click="handleNavigation('/feed')">Feed</a>
         <a href="#" @click="handleNavigation('/MyPage')">MyPage</a>
-        <SearchNickname></SearchNickname>
+        <div class="nav-searchUser">
+          <SearchNickname></SearchNickname>
+        </div>
       </nav>
       <div class="animationed-LED" v-if="closeLogo">
         <div class="LEDtrack">
@@ -322,6 +324,16 @@ nav a {
   }
 }
 
+.nav-searchUser{
+  /* border: 1px solid red; */
+  flex: 1;
+  display: flex;
+  justify-content: end;
+  padding-right: 10px;
+  height: 35px;
+  align-items: center;
+}
+
 .animationed-LED {
   font-size: 35px;
   font-weight: 600;
@@ -342,7 +354,7 @@ nav a {
 @keyframes marquee {
   0% {
     transform: translateX(0);
-    color: #71a5de
+    color: #71a5de;
   }
   20% {
     transform: translateX(-10%);
