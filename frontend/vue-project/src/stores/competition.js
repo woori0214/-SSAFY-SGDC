@@ -188,6 +188,19 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    const competitionAnalysisCategory = function (userId, userCategory) {
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/analysis/${userId}/${userCategory}`)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    };
     return {
         randomSend,
         // randomAccept,
@@ -201,5 +214,6 @@ export const useCompetionStore = defineStore('competition', () => {
         competitionProgressDetail,
         competitionFriendList,
         competitionAnalysis,
+        competitionAnalysisCategory,
     };
 })

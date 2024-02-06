@@ -9,7 +9,7 @@ import { serverURL, v1_URL } from './config';
 
 export const useUserStore = defineStore('user', () => {
     const URL = serverURL + v1_URL + 'user';
-    
+
     // 마이페이지 사용자 정보
     const userData = function (userId) {
         return new Promise((resolve, reject) => {
@@ -62,7 +62,11 @@ export const useUserStore = defineStore('user', () => {
     const findAllfriends = function (user_nickname) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/search`,user_nickname)
+                .get(`${URL}/search-nickname`, {
+                    params: {
+                        keyword: user_nickname
+                    }
+                })
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -78,7 +82,7 @@ export const useUserStore = defineStore('user', () => {
     const findMyfriends = function (userId, user_nickname) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/friends/${userId.value}`, user_nickname)
+                .get(`${URL}/friends/${userId.value}`, { params: { user_nickname } })
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -92,9 +96,9 @@ export const useUserStore = defineStore('user', () => {
 
     return {
         userData,
-        userUpdate, 
-        mainBadge, 
-        findAllfriends, 
+        userUpdate,
+        mainBadge,
+        findAllfriends,
         findMyfriends,
     }
 })
