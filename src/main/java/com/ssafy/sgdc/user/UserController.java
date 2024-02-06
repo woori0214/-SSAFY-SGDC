@@ -205,10 +205,10 @@ public class UserController {
      * 유저 닉네임 검색
      */
     @Operation(summary = "닉네임 검색", description="닉네임을 검색합니다.")
-    @Parameter(name = "keyword", schema = @Schema(implementation = int.class), description = "팔로우 하는 유저 PK", in = ParameterIn.PATH)
+    @Parameter(name = "keyword", schema = @Schema(implementation = String.class), description = "  PK", in = ParameterIn.QUERY)
     @GetMapping("/search-nickname")
-    public DataResponseDto<Page<SearchNameResponseDto>> followingList (
-            @RequestParam("userNickname") String keyword,
+    public DataResponseDto<Page<SearchNameResponseDto>> searchNickname (
+            @RequestParam(value="keyword",required = false) String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "userNickname");
