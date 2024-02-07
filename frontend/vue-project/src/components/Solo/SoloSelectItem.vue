@@ -161,18 +161,31 @@ export default {
     };
 
     // 이미지 업로드
-    const handleImageUpload = (uploadedImageSrc) => {
+    const handleImageUpload = file => {
       // 이미지 업로드 이벤트 핸들러
-      console.log('이미지 업로드 완료:', uploadedImageSrc);
-      const challengeData = {
-        user_id: user_id,
-        category_id: selectedCategory.value.id,
-        isSoloMode: true,
-        uploadedImage: uploadedImageSrc,
-      };
-      solo.soloAuth(challengeData);
-      console.log(challengeData)
-      closeTestModal();
+      console.log('이미지 업로드 완료:', file);
+      const challengeRequestJson = ref({
+        userId: user_id,
+        categoryId: selectedCategory.value.id,
+        // isSoloMode: true,
+        // uploadedImage: uploadedImageSrc,
+        soloAuthImg: ''
+      });
+      const formData = new FormData();
+      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson.value));
+      formData.append('soloAuthImage', file);
+      solo.soloAuth(formData)
+        .then((response) => {
+          console.log('이미지 업로드 완료:', response);
+
+          closeTestModal();
+        })
+        .catch((error) => {
+          console.error('이미지 업로드 실패:', error);
+
+        });
+      console.log(formData);
+
     };
 
     return {
@@ -334,6 +347,7 @@ export default {
   }
 
 }
+
 * {
   font-family: "jua";
 }

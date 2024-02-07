@@ -106,7 +106,7 @@ onMounted(() => {
     });
 });
 const acceptChallenge = (matchingId) => {
-  userCompet.bothAccept(matchingId)
+  competitionStore.bothAccept(matchingId)
     .then(() => {
       console.log("Challenge accepted:", matchingId);
       // 도전과제 목록에서 해당 항목 제거

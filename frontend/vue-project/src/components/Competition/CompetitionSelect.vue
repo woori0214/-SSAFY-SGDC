@@ -94,14 +94,17 @@ const userMatchingStatus = () => {
   competSelect.competitionMailbox(userId)
     .then((response) => {
       const matching = response.data.matching;
-      const matchedCategories = matching.map(match => match.category_id);
-      disabledCategories.value = matchedCategories;
-      console.log("진행중인 카테고리 갖고왔습니다.")
+      const playStatusCategories = matching
+        .filter(match => match.match_status === "PLAY_STATUS")
+        .map(match => match.category_id);
+      disabledCategories.value = playStatusCategories;
+      console.log("진행 중인 카테고리를 가져왔습니다.");
     })
     .catch((error) => {
-      console.error("이미 진행중인 카테고리를 가지고 오지 못했습니다.", error);
-    })
-}
+      console.error("이미 진행 중인 카테고리를 가져오지 못했습니다.", error);
+    });
+};
+
 // 랜덤 매칭
 const openRandomMatchingModal = () => {
   if (selectedCategory.value === null) {
@@ -283,11 +286,13 @@ const selectCategory = (category) => {
   color: white;
   /* 마우스를 갖다댔을 때 텍스트 색상 */
 }
+
 .category-button.disabled {
   background-color: #ff5c5c;
   color: white;
   cursor: not-allowed;
 }
+
 span {
   font-family: "jua";
 }

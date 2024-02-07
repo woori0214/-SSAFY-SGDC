@@ -62,7 +62,7 @@ export const useSoloStore = defineStore('solo', () => {
 
     //솔로모드 도전
     const soloChallenge = function (challenge) {
-        const category = { user_id: challenge.user_id, category_id: challenge.category_id }
+        const category = { userId: challenge.user_id, category_id: challenge.category_id }
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .post(`${URL}/${category.category_id}`, category)
@@ -79,11 +79,11 @@ export const useSoloStore = defineStore('solo', () => {
     //솔로모드 인증
     const soloAuth = function (challengeData) {
 
-        const solo_auth = { user_id: challengeData.user_id, category_id: challengeData.category_id, solo_img: challengeData.uploadedImage }
+        const solo_auth = { userId: challengeData.userId, categoryId: challengeData.categoryId, soloAuthImg: challengeData.soloAuthImage }
 
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .patch(`${URL}/solo/${solo_auth.user_id}/${solo_auth.category_id}/challenge-auth`, solo_auth.solo_img)
+                .patch(`${URL}/solo/${solo_auth.userId}/${solo_auth.categoryId}/challenge-auth`, solo_auth.soloAuthImg)
                 .then((res) => {
                     resolve(res);
                     console.log('업로드 완료')
