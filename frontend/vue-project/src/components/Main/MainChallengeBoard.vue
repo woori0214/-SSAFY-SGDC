@@ -370,6 +370,21 @@ onMounted(() => {
   const donut = document.querySelector(".donut");
   const totalMinwon = ref((completed_solo.value / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
 
+  const donut_parent = document.getElementsByClassName("donut_percent")[0];
+  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
+
+  setFontSize();
+  // adjustDonutFontSize();
+  window.addEventListener("resize", setFontSize);
+  // window.addEventListener('resize', adjustDonutFontSize);
+
+  function adjustChildMargin() {
+    const parentHeight = donut_parent.offsetHeight;
+    donut_child.style.marginTop = (parentHeight / 3) * -2 + "px"; // 예시: 부모 높이의 절반을 마진 탑으로 설정
+  }
+
+  adjustChildMargin(); // 초기 마진 설정
+  window.addEventListener("resize", adjustChildMargin); 
   
   if (donut) {
     solo_percent.value = 0;
@@ -384,23 +399,7 @@ onMounted(() => {
       }
       solo_percent.value++;
     }, 30);
-  }
-
-  setFontSize();
-  // adjustDonutFontSize();
-  window.addEventListener("resize", setFontSize);
-  // window.addEventListener('resize', adjustDonutFontSize);
-
-  const donut_parent = document.getElementsByClassName("donut_percent")[0];
-  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
-
-  function adjustChildMargin() {
-    const parentHeight = donut_parent.offsetHeight;
-    donut_child.style.marginTop = (parentHeight / 3) * -2 + "px"; // 예시: 부모 높이의 절반을 마진 탑으로 설정
-  }
-
-  adjustChildMargin(); // 초기 마진 설정
-  window.addEventListener("resize", adjustChildMargin); // 창 크기 조절 시 마진 재조정
+  }// 창 크기 조절 시 마진 재조정
 });
 // if (chartRef.value) {
 //   const ctx = chartRef.value.getContext("2d");
@@ -538,7 +537,7 @@ onMounted(() => {
   border-radius: 20px;
   cursor: pointer;
   flex-basis: calc(50% - 10px);
-  font-size: 22px;
+  font-size: 20px;
   /* font-size: 2.0vw;
   font-size: 1.7vh; */
   font-weight: 600;
