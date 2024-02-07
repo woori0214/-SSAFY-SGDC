@@ -38,11 +38,8 @@ public class SoloService {
         User user = userRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("createChallenge -> 해당 유저를 찾을 수 없습니다."));
 
-        Category category = categoryRepo.findByCategoryId(categoryId);
-
-        if (category == null) {
-            throw new RuntimeException("사용자를 찾을 수 없습니다.");
-        }
+        Category category = categoryRepo.findByCategoryId(categoryId)
+                .orElseThrow(() -> new RuntimeException("createChallenge -> 해당 카테고리를 찾을 수 없습니다."));
 
         LocalDate today = LocalDate.now();
         LocalDateTime startOfDay = today.atStartOfDay();

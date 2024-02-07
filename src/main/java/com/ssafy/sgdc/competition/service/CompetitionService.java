@@ -90,15 +90,6 @@ public class CompetitionService {
 
         // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,
-<<<<<<< Updated upstream
-                categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.Y,
-                LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
-
-        //받는 사람 도전장
-        CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
-                categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.N,
-                LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
-=======
                 category, CompetKind.RANDOM, IsSender.Y,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
 
@@ -106,7 +97,6 @@ public class CompetitionService {
         CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
                 category, CompetKind.RANDOM, IsSender.N,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
->>>>>>> Stashed changes
 
         // 유저 카테고리 진행 상태 업데이트
         categoryStatusUpdate(userId, randomUser.getUserId(), categoryId, CategoryStatus.MATCH_STATUS);
@@ -189,14 +179,18 @@ public class CompetitionService {
         User Friend = userRepo.findByUserId(friendId)
                 .orElseThrow(() -> new RuntimeException("sendFriendMatching -> 해당 친구를 찾을 수 없습니다."));
 
+        Category category = categoryRepo.findByCategoryId(categoryId)
+                .orElseThrow(() -> new RuntimeException("sendFriendMatching -> 해당 카테고리가 존재하지 않습니다."));
+
+
         // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,
-                categoryRepo.findByCategoryId(categoryId), CompetKind.FRIEND, IsSender.Y,
+                category, CompetKind.FRIEND, IsSender.Y,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
 
         //받는 사람 도전장
         CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(Friend,
-                categoryRepo.findByCategoryId(categoryId), CompetKind.FRIEND, IsSender.N,
+                category, CompetKind.FRIEND, IsSender.N,
                 LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
 
         // 유저 카테고리 진행 상태 업데이트
