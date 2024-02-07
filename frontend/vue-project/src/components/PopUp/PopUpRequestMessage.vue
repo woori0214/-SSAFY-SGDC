@@ -10,7 +10,7 @@
             </div>
             <div v-else-if="modalType === 'friendMatching'">
                 <h2>카테고리 : {{ category_name }}</h2>
-                <h1>{{ friendId }} 님에게 도전장을 보냈습니다.</h1>
+                <h1>{{ friendNickname }} 님에게 도전장을 보냈습니다.</h1>
             </div>
 
             <button @click="closeModal" class="closeMsg">닫기</button>
@@ -35,8 +35,9 @@ const props = defineProps({
     modalType: String,
     category_id: Number,
     category_name: String,
-    user_id: String,
-    friendId: String
+    userId: String,
+    friendId: Number,
+    friendNickname: String,
 });
 const closeModal = () => {
     props.close();
@@ -46,10 +47,12 @@ const friendList = ref([]);
 const friendRecord = ref([]);
 const showResponseModal = ref(false);
 const responseMessage = ref("");
+
+console.log(props.friendNickname)
 onMounted(() => {
 
     competion
-        .competitionFriendList(props.user_id)
+        .competitionFriendList(props.userId)
         .then((response) => {
             friendList.value = response.data;
         })
@@ -58,7 +61,7 @@ onMounted(() => {
         });
 
     competion
-        .competitionAnalysis(props.user_id)
+        .competitionAnalysis(props.userId)
         .then((response) => {
             friendRecord.value = response.data;
 
@@ -74,7 +77,7 @@ const submitSendToFriend = async (friendId, categoryId) => {
     try {
         // API 요청을 위한 데이터 객체를 생성합니다.
         const sendFriendData = {
-            userId: props.user_id,
+            userId: props.userId,
             friendId: friendId,
             categoryId: categoryId
         };
