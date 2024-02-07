@@ -1,9 +1,8 @@
 package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.user.dto.SearchNameResponseDto;
-import com.ssafy.sgdc.user.dto.UserInfoDto;
-import com.ssafy.sgdc.user.dto.UserLoginDto;
-import com.ssafy.sgdc.user.dto.UserSignUpDto;
+import com.ssafy.sgdc.badge.Badge;
+import com.ssafy.sgdc.badge.BadgeService;
+import com.ssafy.sgdc.user.dto.*;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +18,8 @@ public class UserService {
 
     @Autowired
     private UserRepo userRepo;
+    @Autowired
+    private BadgeService badgeService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -36,7 +37,7 @@ public class UserService {
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .signOut(false)
-//                .badgeId(0) //보류
+                .badgeId(null) //보류
                 .kakaoPush(userSignDto.getKakaoPush())
                 .challengeCnt(3)
                 .complainCnt(0)
@@ -114,5 +115,19 @@ public class UserService {
                 user.getUserNickname()
         );
     }
+
+    // 회원수정
+    @Transactional
+    public User modifyUser(UserInfoModifyDto userInfoModifyDto) {
+        Badge badge = badgeService.getBadge(userInfoModifyDto.getBadgeId());
+        User user = userRepo.findByUserId(userInfoModifyDto.getUserId());
+
+        user.setUserNickname(userInfoModifyDto.getUserNickname());
+        user.setUserPhone(userInfoModifyDto.getUserPhone());
+        user.setUserImg(userInfoModifyDto.getUserImg());
+        user.setBadgeId(badge);
+        return user;
+    }
+
 
 }

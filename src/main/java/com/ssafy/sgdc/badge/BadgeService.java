@@ -43,4 +43,6 @@ public class BadgeService {
     public List<UserBadge> getUserBadgeList(int userId){
         return userBadgeRepo.findByUserId(userId).get();
     }
+
+
 }

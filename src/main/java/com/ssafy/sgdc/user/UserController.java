@@ -1,6 +1,7 @@
 package com.ssafy.sgdc.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.ssafy.sgdc.badge.Badge;
 import com.ssafy.sgdc.base.dto.DataResponseDto;
 import com.ssafy.sgdc.user.dto.*;
 import com.ssafy.sgdc.util.JwtUtil;
@@ -220,6 +221,25 @@ public class UserController {
             @RequestParam(defaultValue = "10") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.Direction.ASC, "userNickname");
         return DataResponseDto.of(userService.searchNickname(keyword,pageable), "닉네임 검색");
+    }
+
+    // 마이페이지수정  닉네임, 폰, 프로필, 대표뱃지설정
+    @RequestMapping(value = "/user-info-modify/{userId}", method = RequestMethod.PATCH)
+    public ResponseEntity<GeneralResponse> userInfoModify(@RequestBody UserInfoModifyDto userInfoModifyDto) {
+        Map<String, String> response = new HashMap<>();
+        System.out.println("회원수정");
+
+        User user = userService.modifyUser(userInfoModifyDto);
+         response.put("user_nickName", userInfoModifyDto.getUserNickname());
+         response.put("user_phone", userInfoModifyDto.getUserPhone());
+         response.put("user_img", userInfoModifyDto.getUserImg());
+         response.put("badge_id", String.valueOf(userInfoModifyDto.getBadgeId()));
+
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("마이페이지 수정")
+                .data(response)
+                .build(), HttpStatus.OK);
     }
 
 }

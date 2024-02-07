@@ -4,6 +4,7 @@ import com.ssafy.sgdc.badge.Badge;
 import com.ssafy.sgdc.badge.UserBadge;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.mapping.Bag;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
@@ -65,7 +66,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "badge_id")
-    private UserBadge badgeId;
+    private Badge badgeId;
 
     @Column(name = "challenge_cnt")
     private int challengeCnt;
