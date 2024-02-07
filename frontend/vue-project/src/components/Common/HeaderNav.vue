@@ -66,7 +66,7 @@
         </button>
         <div class="profile-tmp">
           <!-- 로그아웃 상태 -->
-          <div v-if="!userLoginStore.loginUser" class="login-signup-links">
+          <div v-if="!isLogined_ref" class="login-signup-links">
             <RouterLink to="/login" class="nav-link">로그인</RouterLink>
             <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
           </div>
@@ -115,8 +115,12 @@ import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";
 import SearchNickname from "./SearchNickname.vue";
 import { useUserStorageStore } from "@/stores/userStorage";
 
+const userLoginStore = useLoginStore();
+
 const showMailBox = ref(false);
 const closeLogo = ref(false);
+
+const isLogined_ref = ref(userLoginStore.loginUser);
 
 const popUpMailBox = () => {
   showMailBox.value = true;
@@ -126,9 +130,9 @@ const closeMailBox = () => {
   showMailBox.value = false;
 };
 
-const userLoginStore = useLoginStore();
 const logout = function () {
   userLoginStore.isLogout();
+  isLogined_ref.value = userLoginStore.loginUser;
   router.push("/");
 };
 
@@ -146,8 +150,23 @@ const handleNavigation = (to) => {
   }
 };
 
+if (isLogined_ref) {
+  let logined_check_cnt = 0;
+  setInterval(function() {
+    // 반복 실행할 코드
+    logined_check_cnt++;
+    isLogined_ref.value = userLoginStore.loginUser;
+    console.log("로그인 확인 함수");
+
+    if(logined_check_cnt > 10 || isLogined_ref.value){
+      return;
+    }
+  }, 500); // 500밀리초(0.5초) 간격으로 코드 실행
+}
+
 onMounted(() => {
   userLoginStore.isLogined();
+  isLogined_ref.value = userLoginStore.loginUser;
 });
 </script>
 
