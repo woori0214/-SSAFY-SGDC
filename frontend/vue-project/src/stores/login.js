@@ -13,7 +13,6 @@ export const useLoginStore = defineStore('login', () => {
 
     const userStorage = useUserStorageStore();
     const userInfo = userStorage.getUserInformation();
-    const loginUser = ref(null);
     const userNickname = ref(null);
 
 
@@ -37,7 +36,6 @@ export const useLoginStore = defineStore('login', () => {
                         user_nickname: response.data.data.user_nickname,
                         token: response.data.data.accessToken,
                     });
-                    loginUser.value = userInfo.user_id;
                     userNickname.value = userInfo.user_nickname;
 
                     updateAuthToken(response.data.data.accessToken);
@@ -63,7 +61,6 @@ export const useLoginStore = defineStore('login', () => {
     const isLogout = function () {
         console.log('isLogout 되고있나');
         userStorage.deleteAllStorage();
-        loginUser.value = null; 
         userNickname.value = null;
         // router.push({ name: "Main" });
 
@@ -90,7 +87,6 @@ export const useLoginStore = defineStore('login', () => {
         console.log('isLogined 되고있나');
 
         if(userStorage.getUserInformation().user_id != null){
-            loginUser.value = userStorage.getUserInformation().user_id;
             userNickname.value = userStorage.getUserInformation().user_nickname;
             updateAuthToken(userStorage.getUserInformation().token);
         }
@@ -122,7 +118,6 @@ export const useLoginStore = defineStore('login', () => {
         isLogin,
         isLogout,
         userInfo,
-        loginUser,
         userNickname,
         isLogined,
 

@@ -707,7 +707,7 @@ export default {
       isAlert.value = !isAlert.value;
     };
 
-    // 회원가입 성공시 가입 정보로 자동 로그인하는 함수
+    // 회원가입 성공시 가입 정보로 자동 로그인하는 함수 << 현재 사용 안하는 함수
     const autoLoginForSignup = (signupInformation) => {
       const User = {
         loginId: signupInformation.loginId,
