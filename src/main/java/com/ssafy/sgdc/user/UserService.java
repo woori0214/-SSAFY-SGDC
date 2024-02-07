@@ -84,8 +84,10 @@ public class UserService {
         return userPhoneDuplicate;
     }
 
+    // TODO : 아이디를 찾지 못하면 orElseThrow로 런타임 에러 띄우고 else를 하는 게 아닌 로직 진행
     public User login(UserLoginDto userLoginDto){
-        User userLoginId = userRepo.findByLoginId(userLoginDto.getLoginId());
+        User userLoginId = userRepo.findByLoginId(userLoginDto.getLoginId())
+                .orElse(null);
 
         if(userLoginId==null){
             System.out.println("아이디 못찾음");
@@ -107,12 +109,15 @@ public class UserService {
     }
 
     public User userInfo(UserInfoDto userInfoDto){
-        User userInfo = userRepo.findByUserId(userInfoDto.getUserId());
+        User userInfo = userRepo.findByUserId(userInfoDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
         return userInfo;
     }
 
+    // TODO : 일단 없으면 null로 로직 수정 필요
     public User getUserById(int userId) {
-        User user = userRepo.findByUserId(userId);
+        User user = userRepo.findByUserId(userId)
+                .orElse(null);
         return user;
     }
     /**
@@ -136,7 +141,8 @@ public class UserService {
     @Transactional
     public User modifyUser(UserInfoModifyDto userInfoModifyDto) {
         Badge badge = badgeService.getBadge(userInfoModifyDto.getBadgeId());
-        User user = userRepo.findByUserId(userInfoModifyDto.getUserId());
+        User user = userRepo.findByUserId(userInfoModifyDto.getUserId())
+                .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 
         user.setUserNickname(userInfoModifyDto.getUserNickname());
         user.setUserPhone(userInfoModifyDto.getUserPhone());

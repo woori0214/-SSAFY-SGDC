@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.competition.service;
 
+import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.category.UserCategory;
 import com.ssafy.sgdc.category.dto.UserCategoryDto;
 import com.ssafy.sgdc.category.repository.CategoryRepo;
@@ -73,7 +74,8 @@ public class CompetitionService {
         }
 
         // 사용자. 도전장 보내는 주체.
-        User user = userRepo.findByUserId(userId);
+        User user = userRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("sendRandomMatching -> 해당 유저를 찾을 수 없습니다."));
 
         //도전장 개수 빼기
         if (user.getChallengeCnt() <= 0) {
@@ -83,8 +85,12 @@ public class CompetitionService {
 
         User randomUser = getRandomUser(userId, categoryId);
 
+        Category category = categoryRepo.findByCategoryId(categoryId)
+                .orElseThrow(() -> new RuntimeException("sendRandomMatching -> 해당 카테고리가 존재하지 않습니다."));
+
         // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,
+<<<<<<< Updated upstream
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.Y,
                 LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
 
@@ -92,6 +98,15 @@ public class CompetitionService {
         CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.N,
                 LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
+=======
+                category, CompetKind.RANDOM, IsSender.Y,
+                LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
+
+        //받는 사람 도전장
+        CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
+                category, CompetKind.RANDOM, IsSender.N,
+                LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
+>>>>>>> Stashed changes
 
         // 유저 카테고리 진행 상태 업데이트
         categoryStatusUpdate(userId, randomUser.getUserId(), categoryId, CategoryStatus.MATCH_STATUS);
@@ -116,7 +131,8 @@ public class CompetitionService {
         boolean isPlayingCategory;
         do {
             int randomId = minId + (int) (random.nextDouble() * (maxId - minId));
-            randomUser = userRepo.findByUserId(randomId);
+            randomUser = userRepo.findByUserId(randomId)
+                    .orElse(null);
 
             // 랜덤 상대가 해당 카테고리 경기를 진행 중이면 막아주는 로직
             isPlayingCategory = randomUser != null &&
@@ -161,7 +177,8 @@ public class CompetitionService {
             throw new RuntimeException("자신에게 도전장을 보낼 수 없습니다.");
         }
 
-        User user = userRepo.findByUserId(userId);
+        User user = userRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("sendFriendMatching -> 해당 유저(자신)를 찾을 수 없습니다."));
 
         //도전장 개수 빼기
         if (user.getChallengeCnt() <= 0) {
@@ -169,7 +186,8 @@ public class CompetitionService {
         }
         user.setChallengeCnt(user.getChallengeCnt() - 1);
 
-        User Friend = userRepo.findByUserId(friendId);
+        User Friend = userRepo.findByUserId(friendId)
+                .orElseThrow(() -> new RuntimeException("sendFriendMatching -> 해당 친구를 찾을 수 없습니다."));
 
         // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,

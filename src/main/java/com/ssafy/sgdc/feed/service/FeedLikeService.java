@@ -26,7 +26,8 @@ public class FeedLikeService {
      */
     @Transactional
     public String toggleLike(int userId, int feedId) {
-        User user = userRepo.findByUserId(userId);
+        User user = userRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("toggleList -> 해당 유저를 찾을 수 없습니다."));
         Optional<Feed> feed = feedRepo.findByFeedId(feedId);
         if (feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feedId)) {
             feedLikeRepo.deleteByUser_UserIdAndFeed_FeedId(userId, feedId);

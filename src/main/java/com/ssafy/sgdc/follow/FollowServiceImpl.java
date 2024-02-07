@@ -63,7 +63,8 @@ public class FollowServiceImpl implements FollowService {
         for (Follow follow : followList) {
             //// 유저정보
             //// 이후 세션 추가하면 수정될 부분
-            User userInfo = userRepository.findByUserId(follow.getUserId().getUserId());
+            User userInfo = userRepository.findByUserId(follow.getUserId().getUserId())
+                    .orElseThrow(() -> new RuntimeException("followerList -> 해당 유저를 찾을 수 없습니다."));
 
             followDtoList.add(new FollowerListResponseDto(userInfo.getUserId(),userInfo.getUserNickname(),userInfo.getUserImg()));
         }
@@ -81,7 +82,8 @@ public class FollowServiceImpl implements FollowService {
         for (Follow follow : followList) {
             //// 유저정보
             //// 이후 세션 추가하면 수정될 부분
-            User userInfo = userRepository.findByUserId(follow.getFollowingId().getUserId());
+            User userInfo = userRepository.findByUserId(follow.getFollowingId().getUserId())
+                    .orElseThrow(() -> new RuntimeException("followingList -> 해당 유저를 찾을 수 없습니다."));
             followDtoList.add(new FollowingListResponseDto(userInfo.getUserId(),userInfo.getUserNickname(),userInfo.getUserImg()));
         }
         return followDtoList;

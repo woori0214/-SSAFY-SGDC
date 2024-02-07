@@ -44,9 +44,11 @@ public class JwtFilter extends OncePerRequestFilter {
 
             try {
                 String loginId = jwtUtil.getUsernameFromToken(jwt);
-                User user = userRepo.findByLoginId(loginId);
+                User user = userRepo.findByLoginId(loginId)
+                        .orElseThrow(() -> new RuntimeException("doFilterInternal -> 해당 유저를 찾을 수 없습니다."));
 
                 System.out.println(user.toString());
+                // TODO: user != null 수정
                 if (user != null && jwtUtil.validateToken(jwt, user)) {
                     System.out.println(user.getAuthorities());
                     // authentication하기

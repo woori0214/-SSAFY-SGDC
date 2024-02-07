@@ -35,11 +35,8 @@ public class SoloService {
     // 솔로 모드 생성
     public void createChallenge(int userId, int categoryId) {
 
-        User user = userRepo.findByUserId(userId);
-
-        if (user == null) {
-            throw new RuntimeException("사용자를 찾을 수 없습니다.");
-        }
+        User user = userRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("createChallenge -> 해당 유저를 찾을 수 없습니다."));
 
         Category category = categoryRepo.findByCategoryId(categoryId);
 
