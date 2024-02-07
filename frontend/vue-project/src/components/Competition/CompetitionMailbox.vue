@@ -62,7 +62,7 @@ const mailParameters = ref([
   // },
 ]);
 const userInformation = userStorage.getUserInformation();
-const userId = userInformation.user_Id;
+const userId = userInformation.user_id;
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {
@@ -89,23 +89,22 @@ onMounted(() => {
     .then(response => {
       const mailbox = response.data.matching.map(item => ({
         matchingId: item.matchingId,
-        category: categoryMapping[item.category_id],
+        // category: categoryMapping[item.category_id], // 이전 코드
+        category: mapCategoryIdToName(item.category_id), // 수정된 코드
         expirationTime: item.competExpriationTime,
         nickname: item.userNickname,
         matchkind: item.competKind,
-        kind: reciveChallenge,
-        content: `[${item.competKind}]${item.userNickname}님이 당신에게  ${categoryMapping[item.category_id]}를 신청하였습니다.       만료시간: ${item.competExpriationTime}`,
-
+        kind: 'reciveChallenge',
+        content: `[${item.competKind}]${item.userNickname}님이 당신에게 ${mapCategoryIdToName(item.category_id)}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
       }));
       mailParameters.value = mailbox;
       console.log('도전장 잘 갖고왔따');
       setInterval(removeExpiredChallenges, 60000);
-
     })
     .catch(error => {
       console.error("도전장을 갖고오지 못했습니다", error);
     });
-})
+});
 const acceptChallenge = (matchingId) => {
   userCompet.bothAccept(matchingId)
     .then(() => {
