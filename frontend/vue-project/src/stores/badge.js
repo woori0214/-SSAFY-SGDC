@@ -18,64 +18,50 @@ export const useBadgeStore = defineStore('badge', () => {
 
     const badgeList = ref([
         {
-            badge_id: 1,
-            badge_name: "기린이",
-            badge_detail: "기상 챌린지",
-            badge_img: wakebadge
+            badgeId: 1,
+            badgeName: "기린이",
+            badgeDetail: "기상 챌린지",
+            badgeImg: wakebadge
           },
           {
-            badge_id: 2,
-            badge_name: "따뜻한 로봇",
-            badge_detail: "알고리즘 챌린지",
-            badge_img: algobadge
+            badgeId: 2,
+            badgeName: "따뜻한 로봇",
+            badgeDetail: "알고리즘 챌린지",
+            badgeImg: algobadge
           },
           {
-            badge_id: 3,
-            badge_name: "짐종국",
-            badge_detail: "운동 챌린지",
-            badge_img: healthbadge
+            badgeId: 3,
+            badgeName: "짐종국",
+            badgeDetail: "운동 챌린지",
+            badgeImg: healthbadge
           },
           {
-            badge_id: 4,
-            badge_name: "스터디윗미",
-            badge_detail: "스터디 챌린지",
-            badge_img: studybadge
+            badgeId: 4,
+            badgeName: "스터디윗미",
+            badgeDetail: "스터디 챌린지",
+            badgeImg: studybadge
           },
           {
-            badge_id: 5,
-            badge_name: "코끼리",
-            badge_detail: "식단 챌린지",
-            badge_img: dietbadge
+            badgeId: 5,
+            badgeName: "코끼리",
+            badgeDetail: "식단 챌린지",
+            badgeImg: dietbadge
           },
           {
-            badge_id: 6,
-            badge_name: "참자",
-            badge_detail: "절제 챌린지",
-            badge_img: fightingbadge
+            badgeId: 6,
+            badgeName: "참자",
+            badgeDetail: "절제 챌린지",
+            badgeImg: fightingbadge
           },
     ])
     
-    // 전체뱃지 리스트 조회
-    const getBadgeList = function() {
-        return new Promise((resolve, reject) => {
-          authorizationAPI
-                .get(`${URL}/list`)
-                .then((res) => {
-                    badgeList.value = res.badge_List
-                    resolve(res);
-                })
-                .catch((err) => {
-                    console.log(err)
-                    reject(err);
-                });
-        })
-    }
 
     // 유저뱃지 리스트 조회
     const getUserBadgeList = function(userId) {
+      console.log(userId)
         return new Promise((resolve, reject) => {
           authorizationAPI
-                .get(`${URL}/list/${userId}`)
+                .get(`${URL}/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -88,7 +74,6 @@ export const useBadgeStore = defineStore('badge', () => {
 
     return {
         badgeList,
-        getBadgeList,
         getUserBadgeList
     }
   })

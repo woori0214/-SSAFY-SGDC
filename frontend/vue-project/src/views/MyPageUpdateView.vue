@@ -19,7 +19,7 @@
 
         <div class="profile-field">
             <label for="badge">현재 대표뱃지:</label>
-            <img :src=userBadgeImg alt="현재 대표뱃지" class="nowbadge">
+            <img :src=userBadgeImg alt="현재 대표뱃지" class="nowbadge" v-if="userBadgeImg">
         </div>
         <!-- 뱃지 ID 수정 필드 -->
         <div class="profile-field">
@@ -93,8 +93,8 @@ const userId = ref('');
 const nickname = ref('');
 // const badgeList = ref([]);
 const badgeId = ref(null);
-// const userBadgeImg = ref(''); // 주석풀기
-const userBadgeImg = userbadge;
+const userBadgeImg = ref(''); // 주석풀기
+// const userBadgeImg = userbadge;
 const phoneNumber = ref('');
 const profileImageUrl = ref(''); // 서버로부터 받은 프로필 이미지 URL 저장
 

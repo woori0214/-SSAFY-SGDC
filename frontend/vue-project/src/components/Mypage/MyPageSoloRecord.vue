@@ -7,7 +7,7 @@
     <transition>
       <div class="solo_accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
         <div v-for="solodata in soloListData" :key="solodata.category_id" class="solo_record">
-          <div v-if="solodata.solo_status === 0 && solodata.solo_result === 0" class="solo_img_div">
+          <div v-if="solodata.solo_status === 'DONE' && solodata.solo_result === 'COMPLETE'" class="solo_img_div">
             <img :src="getImageUrl(solodata.category_id)" alt="" class="soloimg" />
           </div>
         </div>
@@ -24,61 +24,21 @@ export default {
   props: ['userId', 'categories'],
 
   setup(props) {
+    const soloStore = useSoloStore();
+
     const userId = ref(props.userId);
     const categories = ref(props.categories);
-    const solo = useSoloStore();
-    const soloListData = ref([
-      {
-        solo_status: 0, // 0 종료, 1 진행
-        solo_result: 0, // 0 완료, 1 미완료
-        category_id: 1,
-      },
-      {
-        solo_status: 0,
-        solo_result: 1,
-        category_id: 2,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 3,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 4,
-      },
-      {
-        solo_status: 0,
-        solo_result: 1,
-        category_id: 5,
-      },
-      {
-        solo_status: 1,
-        solo_result: 0,
-        category_id: 6,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 1,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 2,
-      },
-    ]);
+    const soloListData = ref([]);
 
     // 페이지 열었을 때 정보 가져오기
     onMounted(() => {
-      solo.soloList(userId)
+      soloStore.soloList(userId.value)
         .then((res) => {
           console.log(res)
-          soloListData.value = res.solo_id
+          soloListData.value = res.data.solos
         })
         .catch((error) => {
-          console.error('Error fetching soloTodayData:', error);
+          console.log(error)
         });
     });
 
@@ -97,7 +57,7 @@ export default {
 
 
 
-    return { userId, solo, soloListData, categories, isOpen, toggleAccordion, getImageUrl }
+    return { userId, soloListData, categories, isOpen, toggleAccordion, getImageUrl }
   }
 };
 

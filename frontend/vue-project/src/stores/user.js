@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', () => {
     const userUpdate = function (userId, updateData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .patch(`${URL}/user-info/${userId}`, updateData)
+                .patch(`${URL}/user-info-modify/${userId}`, updateData)
                 .then((res) => {
                     console.log(res);
                     resolve(res);

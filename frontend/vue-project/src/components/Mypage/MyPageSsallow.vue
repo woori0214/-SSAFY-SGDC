@@ -1,50 +1,38 @@
 <template>
     <div>
-        <div class="accordion-header" @click="toggleAccordion">
-            <h2>쌀로우</h2>
-            <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
-        </div>
-        <transition>
-            <div class="accordion-content-ssallow" :class="{ 'open': isOpen }" v-show="isOpen">
-                <div class="sallowing_body">
-                    <h2>쌀로잉</h2>
-                    <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
-                        <div class="ssallow_info">
-                            <img :src="ssallowing.userImg" alt="" class="ssallow_img">
-                            {{ ssallowing.userNickname }}
-                        </div>
-                        <div class="ssallow_btns">
-                            <button @click="gotoProfile(ssallowing.userId)" class="ssallow_btn">프로필 페이지</button>
-                            <button @click="toggleFollow(ssallowing)" class="ssallow_btn">{{
-                                getButtonText(ssallowing.isFollowing) }}</button>
-                        </div>
+        <div class="ssallow_div">
+            <h2>쌀로잉</h2>
+            <div class="sallowing_body">
+                <div v-for="ssallowing in ssallowings" :key="ssallowing.user_id" class="ssallow">
+                    <div class="ssallow_info">
+                        <img :src="ssallowing.userImg" alt="" class="ssallow_img">
+                        {{ ssallowing.userNickname }}
                     </div>
-                </div>
-                <div class="ssallower_body">
-                    <h2>쌀로워</h2>
-                    <div v-for="ssallower in  ssallowers " :key="ssallower.user_id" class="ssallow">
-                        <div class="ssallow_info">
-                            <img :src="ssallower.userImg" alt="" class="ssallow_img">
-                            {{ ssallower.userNickname }}
-                        </div>
-                        <div class="ssallow_btns">
-                            <button @click="gotoProfile(ssallower.userId)" class="ssallow_btn">프로필 페이지</button>
-                            <RouterLink :to="{ name: 'MyPage', params: { userId: ssallower.userId } }" tag="button"
-                                class="ssallow_btn"
-                                style="text-decoration: none; text-align: center; display: flex; flex-direction: column; align-items: center;">
-
-                                <span style="margin-top: auto; margin-bottom: auto;">프로필 페이지</span>
-
-                            </RouterLink>
-                            <button @click="toggleFollow(ssallower)" class="ssallow_btn">{{
-                                getButtonText(ssallower.isFollowing) }}</button>
-
-                            
-                        </div>
+                    <div class="ssallow_btns">
+                        <button @click="gotoProfile(ssallowing.userId)" class="ssallow_btn">프로필 페이지</button>
+                        <button v-if="mypageUser === loginUser" @click="toggleFollow(ssallowing)" class="ssallow_btn">{{
+                            getButtonText(ssallowing.isFollowing) }}</button>
                     </div>
                 </div>
             </div>
-        </transition>
+        </div>
+        <div class="ssallow_div">
+            <h2>쌀로워</h2>
+            <div class="ssallower_body">
+                <div v-for="ssallower in  ssallowers " :key="ssallower.user_id" class="ssallow">
+                    <div class="ssallow_info">
+                        <img :src="ssallower.userImg" alt="" class="ssallow_img">
+                        {{ ssallower.userNickname }}
+                    </div>
+                    <div class="ssallow_btns">
+                        <button @click="gotoProfile(ssallower.userId)" class="ssallow_btn">프로필 페이지</button>
+                        <button v-if="mypageUser === loginUser" @click="toggleFollow(ssallower)" class="ssallow_btn">{{
+                            getButtonText(ssallower.isFollowing) }}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button @click="goback" class="backbtn">뒤로</button>
     </div>
 </template>
   
@@ -55,7 +43,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useFollowStore } from "@/stores/follow";
 
 export default {
-    props: ['userId',],
+    props: ['userId', 'loginUser'],
 
     setup(props) {
         const route = useRoute();
@@ -63,23 +51,16 @@ export default {
         const followStore = useFollowStore();
 
         const mypageUser = ref(props.userId);
+        const loginuser = ref(props.loginUser);
         const isFollowing = ref(false);
 
         const ssallowings = ref([]);
         const ssallowers = ref([]);
 
-        // userId 파라미터 감지
-        watch(() => route.params.userId, (newUserId) => {
-            mypageUser.value = newUserId;
-            console.log(mypageUser.value)
-            // loadData();
-        }, { immediate: true });
-
 
         // 사용자 프로필 페이지로 이동
         const gotoProfile = (user_id) => {
-            router.push({ name: 'MyPage', params: { userId: user_id } })
-            // router.go()
+            router.push({ name: 'Profile', params: { userId: user_id } })
         };
 
         // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
@@ -142,6 +123,10 @@ export default {
             });
         };
 
+        const goback = () => {
+            router.go(-1)
+        };
+
         onMounted(() => {
 
             // 쌀로우 (팔로잉) 데이터 처리
@@ -197,6 +182,7 @@ export default {
 
         return {
             mypageUser,
+            loginuser,
             ssallowings,
             ssallowers,
             followStore,
@@ -205,6 +191,7 @@ export default {
             getButtonText,
             toggleAccordion,
             toggleFollow,
+            goback,
         }
     }
 };
@@ -213,6 +200,13 @@ export default {
 </script>
   
 <style scoped>
+.ssallow_div {
+    background-color: #e1ecf7;
+    border-radius: 20px;
+    padding: 20px;
+    margin: 10px;
+}
+
 .sallowing_body,
 .ssallower_body {
     background: #f8f9fb;
@@ -235,12 +229,14 @@ export default {
     border-radius: 10px;
 }
 
+
 .ssallow {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
 }
 
 .ssallow_info {
@@ -323,6 +319,24 @@ export default {
 .accordion-content-ssallow.open {
     max-height: 1000px;
     transition: max-height 0.3s ease;
+}
+
+.backbtn {
+    margin: 10px;
+    background: #e1ecf7;
+    border: none;
+    border-radius: 30px;
+    color: black;
+
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.backbtn:hover {
+    background: #83b0e1;
+    color: white;
 }
 
 @media screen and (max-width: 768px) {

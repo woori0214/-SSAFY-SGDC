@@ -6,6 +6,7 @@ import FeedView from '@/views/FeedView.vue'
 import FeedDetailView from '@/views/FeedDetailView.vue'
 import MyPageView from '@/views/MyPageView.vue'
 import MyPageUpdateView from '@/views/MyPageUpdateView.vue'
+import SsallowView from '@/views/SsallowView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
 import test from '@/components/PopUp/test.vue'
@@ -55,9 +56,20 @@ const router = createRouter({
       props: true,
     },
     {
+      path: '/profile/:userId',
+      name: 'Profile',
+      component: MyPageView,
+      props: true,
+    },
+    {
       path: '/mypageupdate',
       name: 'MyPageUpdate',
       component: MyPageUpdateView,
+    },
+    {
+      path: '/ssallow/:userId',
+      name: 'Ssallow',
+      component: SsallowView,
     },
     {
       path: '/login',

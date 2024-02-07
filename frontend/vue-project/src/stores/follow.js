@@ -76,7 +76,7 @@ export const useFollowStore = defineStore('follow', () => {
     const plusSsallowing = function (ssallowingData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-            .post(`${URL}/${ssallowingData.to_user_id}/${ssallowingData.from_user_id}`, ssallowingData)
+            .post(`${URL}/${ssallowingData.to_user_id}/${ssallowingData.from_user_id}`, {})
             .then((res) => {
                 // console.log(res);
                 resolve(res);

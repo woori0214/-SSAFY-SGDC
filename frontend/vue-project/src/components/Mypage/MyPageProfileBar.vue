@@ -12,7 +12,7 @@
       <div class="middle1">
         <div class="user_img_badge">
           <img :src="userData.user_img" alt="use_img" class="user_img">
-          <img :src="userBadgeImage" alt="badge_img" class="badge_img">
+          <img :src="userBadgeImage" alt="badge_img" class="badge_img" v-if="userBadgeImage">
         </div>
         <div v-if="mypageUserId != loginUserId" class="myprofile_btns">
           <div class="myprofile_btns">
@@ -34,11 +34,11 @@
       </div>
       <!--팔로우 수-->
       <div class="follow_cnt">
-        <div class="follow_div">
+        <div class="follow_div" @click="goSsallowPage">
           <div class="follow_cnt_num">{{ ssallower_cnt }}</div>
           <div>쌀로워</div>
         </div>
-        <div class="follow_div">
+        <div class="follow_div" @click="goSsallowPage">
           <div class="follow_cnt_num">{{ ssallowing_cnt }}</div>
           <div>쌀로잉</div>
         </div>
@@ -86,8 +86,8 @@
 </template>
 
 <script>
-import { ref, computed, onMounted } from "vue";
-import { useRoute,useRouter } from "vue-router";
+import { ref, computed, onMounted, } from "vue";
+import { useRoute, useRouter, } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useBadgeStore } from "@/stores/badge";
 import { useCompetionStore } from "@/stores/competition";
@@ -150,7 +150,7 @@ export default {
         img: fightingImage
       },
     ]);
-    
+
     const route = useRoute();
     const router = useRouter();
     const userStore = useUserStore();
@@ -158,8 +158,8 @@ export default {
     const competStore = useCompetionStore();
     const followStore = useFollowStore();
 
-    // const mypageUserId = ref(props.userId);
-    const mypageUserId = ref(route.params.userId);
+    const mypageUserId = ref(props.userId);
+    // const mypageUserId = ref(route.params.userId);
     const loginUserId = ref(props.loginUser);
 
     // 나중에 주석 풀기
@@ -175,11 +175,56 @@ export default {
     const isFollowing = ref(false);
     const showResponseModal = ref(false);
 
-    
+    onMounted(() => {
+      userStore
+        .userData(mypageUserId.value)
+        .then((res) => {
+          console.log(res)
+          userData.value = res.data.data;
+          console.log(userData.value)
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // 페이지 열었을 때 쌀로우 수
+      followStore
+        .getSsallowCount(mypageUserId.value)
+        .then((res) => {
+          // console.log(res)
+          ssallowing_cnt.value = res.data.data.followingCount;
+          ssallower_cnt.value = res.data.data.followerCount;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      // 팔로우 했는지 안했는지 확인
+      const checkusers = {
+        user_id: mypageUserId.value,
+        following_id: loginUserId.value,
+      };
+      followStore
+        .checkSsallowing(checkusers)
+        .then((res) => {
+          // console.log(res)
+          isFollowing.value = res.data.success;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+
     // 사용자의 뱃지 이미지 찾기
     const userBadgeImage = computed(() => {
-      const badge = badgeStore.badgeList.find(badge => badge.badge_id === mypageUser.value.badge_id);
-      return badge ? badge.badge_img : ''; // 일치하는 뱃지가 있으면 이미지 반환, 없으면 빈 문자열 반환
+      // userData.value.badge_id 값이 null이면 0을 반환
+      if (userData.value.badge_id === null) {
+        return 0;
+      }
+
+      const badge = badgeStore.badgeList.find(badge => badge.badge_id === userData.value.badge_id);
+      // 일치하는 뱃지가 있으면 이미지 반환, 없으면 0 반환
+      return badge ? badge.badge_img : 0;
     });
 
     // 도전장함
@@ -194,8 +239,7 @@ export default {
     const selectCategory = (category) => {
       selectedCategory.value = category.id;
       selectedCategoryNickname.value = category.name;
-      // console.log(selectedCategory.value)
-      // console.log(selectedCategoryNickname.value)
+
     };
     const sendmsg = function () {
       // selectedCategory의 현재 값으로 작업을 수행
@@ -264,43 +308,12 @@ export default {
       return isFollowing ? '언쌀로우' : '쌀로우';
     };
 
-    onMounted(() => {
-      userStore
-        .userData(mypageUserId.value)
-        .then((res) => {
-          userData.value = res.data.data;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    // 쌀로우페이지 이동
+    const goSsallowPage = () => {
+      router.push({ name: 'Ssallow', params: { userId: mypageUserId.value } })
+    }
 
-      // 페이지 열었을 때 쌀로우 수
-      followStore
-        .getSsallowCount(mypageUserId.value)
-        .then((res) => {
-          // console.log(res)
-          ssallowing_cnt.value = res.data.data.followingCount;
-          ssallower_cnt.value = res.data.data.followerCount;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
 
-      // 팔로우 했는지 안했는지 확인
-      const checkusers = {
-        user_id: mypageUserId.value,
-        following_id: loginUserId.value,
-      };
-      followStore
-        .checkSsallowing(checkusers)
-        .then((res) => {
-          // console.log(res)
-          isFollowing.value = res.data.success;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
 
 
     return {
@@ -318,6 +331,7 @@ export default {
       toggleFollow, getButtonText,
       openSendMsg, selectCategory, sendmsg,
       openCompetMailbox,
+      goSsallowPage,
     };
   },
   components: { CompetitionMailbox }
