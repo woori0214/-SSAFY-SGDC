@@ -5,16 +5,19 @@ import axios from 'axios';
 // import { serverURL, v1_URL } from '@/main.js';
 import { serverURL, v1_URL } from './config';
 import { authorizationAPI } from './authAPI';
+import { useUserStorageStore } from './userStorage';
 
 
 export const useFeedStore = defineStore('feed', () => {
     const URL = serverURL + v1_URL + 'feed';
 
+    const userStorage = useUserStorageStore();
+
     //게시물 한 개
-    const getFeed = function (feedId) {
+    const getFeed = function (feedId, userId) {
         return new Promise((resolve, reject) => {
             axios
-                .get(`${URL}/feed-info/${feedId}`)
+                .get(`${URL}/feed-info/${feedId}/${userId}`)
                 .then((response) => {
                     resolve(response);
                 })
@@ -67,7 +70,7 @@ export const useFeedStore = defineStore('feed', () => {
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list/pages`, {
-                    params: { feedId: last_feed_id, page: 0, size: 10 }
+                    params: { userId: userStorage.getUserInformation().user_id, feedId: last_feed_id, page: 0, size: 10 }
                 })
                 .then((response) => {
                     console.log('get List : ');
@@ -81,7 +84,7 @@ export const useFeedStore = defineStore('feed', () => {
         })
     };
 
-    //피드 좋아요 업데이트
+    //피드 좋아요 업데이트 <<< 안씀
     const updateFeedLike = function (feedId) {
 
 

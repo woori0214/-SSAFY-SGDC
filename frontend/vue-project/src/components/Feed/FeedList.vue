@@ -18,6 +18,7 @@
         :userId="item.userId"
         :userNickname="item.userNickname"
         :userImg="item.userImg"
+        :isLiked="item.liked"
       ></Feed>
     </div>
   </div>
