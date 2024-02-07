@@ -9,8 +9,8 @@
                 <!--승패에 따라 이미지 다르게 보여주기-->
                 <div v-for="competdata in competList" :key="competdata.compet_id" class="result_div">
                     <div class="result_img_div">
-                        <img :src="competdata.compet_result === 'SEND_WIN' || competdata.compet_result === 'BOTH_WIN' ? winimg : loseimg" alt="" class="result_img"
-                            @click="openPopup(competdata)">
+                        <img :src="competdata.compet_result === 'SEND_WIN' || competdata.compet_result === 'BOTH_WIN' ? winimg : loseimg"
+                            alt="" class="result_img" @click="openPopup(competdata)">
                     </div>
                 </div>
 
@@ -19,7 +19,7 @@
                     <div class="popup-content">
                         <!-- Time -->
                         <div class="time">
-                            {{ formatTime(selectedMatchingData.compet_expiration_time) }}
+                            {{ formatTime(selectedMatchingData.done_at) }}
                         </div>
 
                         <!-- Sender and Receiver with Images -->
@@ -39,7 +39,7 @@
                         </div>
 
                         <!-- Result -->
-                        <div class="result">{{ selectedMatchingData.compet_result}}</div>
+                        <div class="result">{{ selectedMatchingData.compet_result }}</div>
                         <!-- Close Button -->
                         <button @click="showPopup = false" class="popup_close_btn">닫기</button>
                     </div>
@@ -51,7 +51,8 @@
 </template>
   
 <script>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router'; 
 import { useUserStore } from '@/stores/user';
 import { useCompetionStore } from '@/stores/competition';
 
@@ -62,8 +63,9 @@ import authimg from '@/assets/camera.png'
 export default {
     props: ['userId', 'categories'],
 
-    setup(props) { 
+    setup(props) {
 
+        const route = useUserStore();
         const userStore = useUserStore();
         const competStore = useCompetionStore();
 
@@ -74,9 +76,13 @@ export default {
         const competList = ref([]);
         // 선택한 싸강두천 전적
         const selectedMatchingData = ref([]);
-        
+
         const showPopup = ref(false);
         const popupdata = ref(null);
+
+        // watch(() => route.params.userId, (newUserId) => {
+        //     userId.value = newUserId;
+        // }, { immediate: true });
 
         // 팝업창
         const openPopup = (competdata) => {
@@ -93,6 +99,8 @@ export default {
 
         // 시간 포맷 변경
         const formatTime = (timeString) => {
+            console.log(selectedMatchingData)
+            console.log(timeString)
             const date = new Date(timeString);
             // 유효한 날짜인지 확인
             if (!isNaN(date.getTime())) {
@@ -112,30 +120,24 @@ export default {
 
         // 페이지 열었을 때 정보 가져오기
         onMounted(() => {
-        //   competStore.competitionFinish(userId.value)
-        //     .then((res) => {
-        //       competList.value = res.data.competitions
-        //     })
-        //     .catch((err) => {
-        //       console.log(err)
-        //     });
-        competStore.competitionFinish(101)
-            .then((res) => {
-              competList.value = res.data.competitions
-            //   console.log(competList.value)
-            })
-            .catch((err) => {
-              console.log(err)
-            });
+            competStore.competitionFinish(userId.value)
+                .then((res) => {
+                    console.log('싸강두천 전적 가져옴')
+                    competList.value = res.data.competitions
+                })
+                .catch((err) => {
+                    console.log('싸강두천 전적 못가져옴')
+                    console.log(err)
+                });
 
             // 마이페이지 사용자 닉네임 가져오기
-        userStore.userData(userId.value)
-            .then((res) => {
-                userNickname.value = res.data.data.user_nickname
-            })
-            .catch((err) => {
-                console.log(err)
-            })
+            userStore.userData(userId.value)
+                .then((res) => {
+                    userNickname.value = res.data.data.user_nickname
+                })
+                .catch((err) => {
+                    console.log(err)
+                })
 
         });
 
@@ -383,10 +385,10 @@ export default {
      }
 
      .result {
-     font-size: 1.0em;
-     font-weight: bolder;
-     color: rgb(255, 0, 0);
- }
+         font-size: 1.0em;
+         font-weight: bolder;
+         color: rgb(255, 0, 0);
+     }
  }
 </style>
   
