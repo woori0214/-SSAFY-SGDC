@@ -87,6 +87,8 @@ export const useCompetionStore = defineStore('competition', () => {
     //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
+            console.log('axios');
+            console.log(userId);
             authorizationAPI
                 .get(`${URL}/list/${userId}`)
                 .then((response) => {

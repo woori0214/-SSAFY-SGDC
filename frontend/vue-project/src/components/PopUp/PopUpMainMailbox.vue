@@ -25,7 +25,7 @@
             </button>
           </div>
 
-          <!-- 도전장 도착 알림 -->
+
           <!-- 도전장 도착 알림 -->
           <div class="mainMailBox-list-item" v-if="mail_item.kind == 'reciveChallenge'">
             <div class="mainMailBox-list-item-content">
@@ -82,24 +82,40 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted } from "vue";
+import { defineProps, ref, onMounted, watch, onUnmounted } from "vue";
 import { useCompetionStore } from "@/stores/competition";
 import { useUserStorageStore } from "@/stores/userStorage";
+import { useLoginStore } from "@/stores/login"; // 로그인 스토어 사용
+
 const userStorage = useUserStorageStore();
 const max_mail_cnt = ref(20);
+const userLogin = useLoginStore();
 const userCompet = useCompetionStore();
 
 const props = defineProps({
   showModal: Boolean,
   close: Function,
 });
-
+const removeExpiredItems = () => {
+  const currentTime = new Date();
+  mainmailList.value = mainmailList.value.filter((item) => {
+    const expireTime = new Date(item.expirationTime);
+    return expireTime > currentTime;
+  });
+};
 const close_mainMailBox = () => {
   props.close();
 };
+watch(() => userLogin.loginUser, (newUserId) => {
+  if (newUserId) {
+    fetchMailbox();
+  }
+}, { immediate: true }); // 컴포넌트 마운트 시 즉시 실행
 //받은 도전장 함수 불러오기
 const fetchMailbox = () => {
   const userId = userStorage.getUserInformation().user_id;
+  console.log(userId);
+  console.log('도전장 갖고오고싶어');
   userCompet.competitionMailbox(userId)
     .then(response => {
       const mailbox = response.data.matching.map(item => ({
@@ -113,6 +129,8 @@ const fetchMailbox = () => {
 
       }));
       mainmailList.value = mailbox;
+
+      console.log('도전장을 갖고왔습니다');
     })
     .catch(error => {
       console.error("도전장을 갖고오지 못했습니다", error);
@@ -120,8 +138,18 @@ const fetchMailbox = () => {
 };
 
 onMounted(() => {
-  fetchMailbox();
-})
+  fetchMailbox(); // 초기 도전장 알림 체크
+  const fetchIntervalId = setInterval(fetchMailbox, 60000); // 1분마다 새로운 도전장 알림 체크
+
+  // 만료된 항목 제거 로직도 여기에 포함할 수 있습니다.
+  const removeIntervalId = setInterval(removeExpiredItems, 60000); // 1분마다 만료된 항목 체크
+
+  // 컴포넌트가 언마운트될 때 인터벌을 정리합니다.
+  onUnmounted(() => {
+    clearInterval(fetchIntervalId);
+    clearInterval(removeIntervalId); // 만약 만료된 항목 체크 로직도 사용한다면
+  });
+});
 const categoryMapping = {
   1: '기상',
   2: '알고리즘',

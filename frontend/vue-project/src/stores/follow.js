@@ -1,4 +1,4 @@
-
+ 
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router';
@@ -15,7 +15,7 @@ export const useFollowStore = defineStore('follow', () => {
 
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follow-count/${userId}`)
+                .get(`${URL}/follow-count/${userId.value}`)
                 .then((res) => {
                     // console.log(res);
                     resolve(res);
@@ -31,7 +31,7 @@ export const useFollowStore = defineStore('follow', () => {
         // console.log(userId)
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/following-list/${userId}`)
+                .get(`${URL}/following/${userId.value}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -46,7 +46,7 @@ export const useFollowStore = defineStore('follow', () => {
     const ssallower = function (userId) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follower-list/${userId}`)
+                .get(`${URL}/follower/${userId.value}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -87,10 +87,15 @@ export const useFollowStore = defineStore('follow', () => {
             });
         });
     }
-    const plusSsallowing2 = function (fromUserId, toUserId) {
+
+    const plusSsallowing2 = function (toUserId, fromUserId) {
+        console.log('통신연결');
+        console.log(toUserId);
+        console.log(fromUserId);
+        
         return new Promise((resolve, reject) => {
             axios
-                .post(`${URL}/${fromUserId}/${toUserId}`, {})
+                .post(`${URL}/${toUserId}/${fromUserId}`, {})
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -105,7 +110,7 @@ export const useFollowStore = defineStore('follow', () => {
     const deleteSsallowing = function (unSsallowingData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .delete(`${URL}/${unSsallowingData.to_user_id}/${unSsallowingData.from_user_id}`)
+                .delete(`${URL}/${unSsallowingData.user_id}/${unSsallowingData.following_id}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -115,6 +120,7 @@ export const useFollowStore = defineStore('follow', () => {
                 });
         });
     }
+
 
     // 사용자가 팔로잉했는지
     const checkSsallowing = function (checkusers) {
@@ -138,9 +144,7 @@ export const useFollowStore = defineStore('follow', () => {
         plusSsallowing,
         plusSsallowing2,
         deleteSsallowing,
+
         checkSsallowing
     }
 })
-
-
-

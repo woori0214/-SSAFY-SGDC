@@ -1194,7 +1194,6 @@ export default {
     /* Remove margins */
     box-sizing: border-box;
     /* Include padding in width calculation */
-    font-family: 'jua';
   }
 
   .input_error,

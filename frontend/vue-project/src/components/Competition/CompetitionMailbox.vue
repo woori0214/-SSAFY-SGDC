@@ -76,7 +76,13 @@ const mapCategoryIdToName = (categoryId) => {
 
   return categoryNames[categoryId] || "알 수 없는 카테고리";
 };
-
+const removeExpiredChallenges = () => {
+  const currentTime = new Date();
+  mailParameters.value = mailParameters.value.filter((item) => {
+    const expirationTime = new Date(item.compet_expiration_time); // compet_expiration_time 형식 확인 필요
+    return expirationTime > currentTime;
+  });
+};
 onMounted(() => {
   const userId = userStorage.getUserInformation().user_id;
   competitionStore.competitionMailbox(userId)
@@ -93,6 +99,7 @@ onMounted(() => {
       }));
       mailParameters.value = mailbox;
       console.log('도전장 잘 갖고왔따');
+      setInterval(removeExpiredChallenges, 60000);
 
     })
     .catch(error => {
