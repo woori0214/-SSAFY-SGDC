@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 @EnableJpaRepositories
 public interface UserRepo extends JpaRepository<User, Integer> {
@@ -15,8 +17,8 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     boolean existsByUserNickname(String userNickname);
     boolean existsByUserSsafyId(int userSsafyId);
     boolean existsByUserPhone(String userPhone);
-    User findByLoginId(String loginId);
-    User findByUserId(int userId);
+    Optional<User> findByLoginId(String loginId);
+    Optional<User> findByUserId(int userId);
     @Query("SELECT MIN(u.userId) FROM User u")
     int findMinUserId();
 
