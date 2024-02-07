@@ -1,15 +1,41 @@
 <template>
   <div class="solomode_container">
     <div class="category_container">
-      <div v-for="category in categories" :key="category.id" class="category_item">
+      <div
+        v-for="category in today_categories"
+        :key="category.id"
+        class="category_item"
+      >
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
-        <button @click="openModal(category)" class="solo_btn" :style="solobtncolor(category.id)">
-          <div class="solo_btn_content">
-            <img :src="category.img" alt="category" class="solo_bnt_img">
-            <div class="category_text">{{ category.name }}</div>
-          </div>
-          <div class="extra_text">{{ category.contents }}</div>
-        </button>
+        <!-- 완료 미션 -->
+        <div class="solo-btn-wrap" v-if="category.soloResult === 'COMPLETE'">
+          <button
+            @click="openModal(category.id, category.soloStatus)"
+            class="solo_btn"
+            style="background-color: #71a5de; pointer-events: none"
+          >
+            <div class="solo_btn_content">
+              <img :src="category.img" alt="category" class="solo_bnt_img" />
+              <div class="category_text">{{ category.name }}</div>
+            </div>
+            <div class="extra_text">{{ category.contents }}</div>
+          </button>
+        </div>
+
+        <!-- 미완료 미션 -->
+        <div class="solo-btn-wrap" v-else>
+          <button
+            @click="openModal(category.id, category.soloStatus)"
+            class="solo_btn"
+            style="background-color: #aecbeb; pointer-events: auto"
+          >
+            <div class="solo_btn_content">
+              <img :src="category.img" alt="category" class="solo_bnt_img" />
+              <div class="category_text">{{ category.name }}</div>
+            </div>
+            <div class="extra_text">{{ category.contents }}</div>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -23,100 +49,117 @@
     </div>
 
     <!-- PopUpProofPicture.vue 모달로 추가 -->
-    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleImageUpload"
-      :selectedCategory="selectedCategory" :isSoloMode="true" />
-
+    <PopUpProofPicture
+      :show="isTestModalOpen"
+      @update:show="closeTestModal"
+      @uploadImage="handleImageUpload"
+      :selectedCategory="selectedCategory"
+      :isSoloMode="true"
+    />
   </div>
 </template>
   
 <script>
-import { ref, onMounted, computed } from 'vue';
-import { useSoloStore } from '@/stores/solo';
-import { useLoginStore } from '@/stores/login';
+import { ref, onMounted, computed } from "vue";
+import { useSoloStore } from "@/stores/solo";
 
-import timerImage from '@/assets/wake.png';
-import algoImage from '@/assets/algo.png';
-import healthImage from '@/assets/health.png';
-import studyImage from '@/assets/study.png';
-import dietImage from '@/assets/diet.png';
-import fightingImage from '@/assets/fighting.png';
-import PopUpProofPicture from '@/components/PopUp/PopUpProofPicture.vue';
+import timerImage from "@/assets/wake.png";
+import algoImage from "@/assets/algo.png";
+import healthImage from "@/assets/health.png";
+import studyImage from "@/assets/study.png";
+import dietImage from "@/assets/diet.png";
+import fightingImage from "@/assets/fighting.png";
+import PopUpProofPicture from "@/components/PopUp/PopUpProofPicture.vue";
+import { useUserStorageStore } from "../../stores/userStorage";
 
 export default {
   // PopUpProofPicture.vue 컴포넌트로 등록
   components: {
-    PopUpProofPicture
+    PopUpProofPicture,
   },
 
   setup() {
     const solo = useSoloStore();
-    const login = useLoginStore();
     const isModalOpen = ref(false);
+    const userStorage = useUserStorageStore();
     const isTestModalOpen = ref(false);
     const selectedCategory = ref(null);
-    const user_id = login.loginUser;///지우기
-    const soloTodayData = solo.soloTodayData
+    const soloTodayData = ref([]);
 
-    console.log(soloTodayData)
     // 카테고리
-    const categories = ref([
+    const today_categories = ref([
       {
         id: 1,
-        name: '기상',
-        contents: 'SSAFY 입실체크 인증',
-        img: timerImage
+        name: "기상",
+        contents: "SSAFY 입실체크 인증",
+        img: timerImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
       {
         id: 2,
-        name: '알고리즘',
-        contents: '1일 1알고리즘',
-        img: algoImage
+        name: "알고리즘",
+        contents: "1일 1알고리즘",
+        img: algoImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
       {
         id: 3,
-        name: '운동',
-        contents: '운동 인증샷',
-        img: healthImage
+        name: "운동",
+        contents: "운동 인증샷",
+        img: healthImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
       {
         id: 4,
-        name: '스터디',
-        contents: '공부시간 인증샷',
-        img: studyImage
+        name: "스터디",
+        contents: "공부시간 인증샷",
+        img: studyImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
       {
         id: 5,
-        name: '식단',
-        contents: '샐러드 빈그릇 인증샷',
-        img: dietImage
+        name: "식단",
+        contents: "샐러드 빈그릇 인증샷",
+        img: dietImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
       {
         id: 6,
-        name: '절제',
-        contents: '오늘 나는 ___ 을 참았다.',
-        img: fightingImage
+        name: "절제",
+        contents: "오늘 나는 ___ 을 참았다.",
+        img: fightingImage,
+        soloStatus: null,
+        soloResult: "INCOMPLETE",
       },
     ]);
 
     // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
     onMounted(() => {
-      solo.soloToday(user_id)
+      solo
+        .soloToday(userStorage.getUserInformation().user_id)
         .then((res) => {
-          console.log(solo.soloTodayData)
-          soloTodayData.value = res.solo_id
+          console.log('오늘의 진행중 리스트는?');
+          console.log(res);
+          soloTodayData.value = res.data.solos;
+
+          soloTodayData.value.forEach((soloItem) => {
+            today_categories.value.forEach((todayItem) => {
+              if (todayItem.id == soloItem.category_id) {
+                todayItem.soloStatus = soloItem.solo_status;
+                todayItem.soloResult = soloItem.result;
+              }
+            });
+          });
         })
         .catch((error) => {
-          console.error('Error fetching soloTodayData:', error);
+          console.error("Error fetching soloTodayData:", error);
         });
     });
-
-    // 확인 모달창
-    const openModal = (category) => {
-      // console.log(category)
-      selectedCategory.value = category;
-      console.log(selectedCategory)
-      isModalOpen.value = true;
-    };
 
     // 확인 모달창
     const closeModal = () => {
@@ -124,30 +167,47 @@ export default {
     };
 
     // 현황
-    const soloStatusMap = computed(() => {
-      const statusMap = {};
-      soloTodayData.forEach(item => {
-        statusMap[item.category_id] = item.solo_status;
-      });
-      return statusMap;
-    });
+    // const soloStatusMap = computed(() => {
+    //   const statusMap = {};
+    //   soloTodayData.forEach((item) => {
+    //     statusMap[item.category_id] = item.solo_status;
+    //   });
+    //   return statusMap;
+    // });
 
     // 버튼 활성화 상태 및 스타일 조정
-    const solobtncolor = (categoryId) => {
-      return {
-        backgroundColor: soloStatusMap.value[categoryId] === 1 ? '#71a5de' : '#aecbeb',
-        pointerEvents: soloStatusMap.value[categoryId] === 1 ? 'none' : 'auto',
-      };
-    };
+    // const solobtncolor = (categoryId) => {
+    //   return {
+    //     backgroundColor:
+    //       soloStatusMap.value[categoryId] === 1 ? "#71a5de" : "#aecbeb",
+    //     pointerEvents: soloStatusMap.value[categoryId] === 1 ? "none" : "auto",
+    //   };
+    // };
 
     // 솔로모드 도전
     const confirmChallenge = () => {
       if (selectedCategory.value) {
-        const challenge = { user_id: user_id, category_id: selectedCategory.value.id };
+        const challenge = {
+          user_id: userStorage.getUserInformation().user_id,
+          category_id: selectedCategory.value.id,
+        };
         solo.soloChallenge(challenge);
-        openTestModal()
+        openTestModal();
       }
       closeModal();
+    };
+
+    // 확인 모달창
+    const openModal = (category, solo_stauts) => {
+      // console.log(category)
+      selectedCategory.value = category;
+      console.log(selectedCategory);
+
+      if (solo_stauts === null) {
+        isModalOpen.value = true;
+      } else {
+        confirmChallenge();
+      }
     };
 
     // 인증 모달창
@@ -163,24 +223,24 @@ export default {
     // 이미지 업로드
     const handleImageUpload = (uploadedImageSrc) => {
       // 이미지 업로드 이벤트 핸들러
-      console.log('이미지 업로드 완료:', uploadedImageSrc);
+      console.log("이미지 업로드 완료:", uploadedImageSrc);
       const challengeData = {
-        user_id: user_id,
+        user_id: userStorage.getUserInformation().user_id,
         category_id: selectedCategory.value.id,
         isSoloMode: true,
         uploadedImage: uploadedImageSrc,
       };
       solo.soloAuth(challengeData);
-      console.log(challengeData)
+      console.log(challengeData);
       closeTestModal();
     };
 
     return {
-      categories,
+      today_categories,
       openModal,
       closeModal,
       confirmChallenge,
-      solobtncolor,
+      // solobtncolor,
       isModalOpen,
       isTestModalOpen,
       openTestModal,
@@ -210,7 +270,6 @@ export default {
   border: #aecbeb 2px solid;
   padding: 20px;
 }
-
 
 .category_item {
   background-color: #aecbeb;
@@ -302,7 +361,6 @@ export default {
   .solo_btn_content {
     font-size: 18px;
   }
-
 }
 
 @media screen and (max-width: 768px) {
@@ -332,7 +390,6 @@ export default {
     width: 250px;
     height: 150px;
   }
-
 }
 * {
   font-family: "jua";
