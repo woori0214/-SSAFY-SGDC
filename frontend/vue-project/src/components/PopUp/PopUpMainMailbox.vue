@@ -124,7 +124,7 @@ const fetchMailbox = () => {
         expirationTime: item.competExpriationTime,
         nickname: item.userNickname,
         matchkind: item.competKind,
-        kind: reciveChallenge,
+        kind: 'reciveChallenge',
         content: `[${item.competKind}]${item.userNickname}님이 당신에게  ${categoryMapping[item.category_id]}를 신청하였습니다.       만료시간: ${item.competExpriationTime}`,
 
       }));
