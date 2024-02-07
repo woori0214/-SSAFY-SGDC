@@ -2,6 +2,8 @@ package com.ssafy.sgdc.solo.service;
 
 import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.category.repository.CategoryRepo;
+import com.ssafy.sgdc.competition.service.ImageAuthService;
+import com.ssafy.sgdc.enums.S3ImageFolder;
 import com.ssafy.sgdc.enums.SoloResult;
 import com.ssafy.sgdc.enums.SoloStatus;
 import com.ssafy.sgdc.solo.domain.Solo;
@@ -14,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -27,6 +30,7 @@ public class SoloService {
     private final UserRepo userRepo;
     private final CategoryRepo categoryRepo;
     private final SoloRepo soloRepo;
+    private final ImageAuthService imageAuthService;
 
     // 솔로 모드 생성
     public void createChallenge(int userId, int categoryId) {
@@ -71,14 +75,21 @@ public class SoloService {
 
     // 솔로 모드 이미지 인증
     @Transactional
-    public void soloImageAuth(int userId, int categoryId, String soloAuthImg) {
+    public void soloImageAuth(int userId, int categoryId, MultipartFile soloAuthImage) {
 
         Solo solo = soloRepo.findSoloByUserUserIdAndCategoryCategoryIdAndSoloStatus(userId, categoryId, SoloStatus.PROGRESS)
                 .orElseThrow(() -> new RuntimeException("진행 중인 솔로모드가 존재하지 않습니다."));
 
-        solo.updateImageAuth(soloAuthImg);
-        solo.updateStatus(SoloStatus.DONE, SoloResult.COMPLETE);
+        // S3 업로드
+        String authImgUrl = imageAuthService.uploadS3(userId,categoryId,soloAuthImage, S3ImageFolder.SOLO_AUTH_IMAGE);
 
+        // 이미지 경로 없을 때 처리
+        if (authImgUrl.isEmpty()) {
+            throw new RuntimeException("이미지 경로 없음");
+        }
+
+        solo.updateImageAuth(authImgUrl);
+        solo.updateStatus(SoloStatus.DONE, SoloResult.COMPLETE);
     }
 
     // 진행한 리스트를 최신 순으로 30개 조회
