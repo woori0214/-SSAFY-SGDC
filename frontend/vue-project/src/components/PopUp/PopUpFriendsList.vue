@@ -16,7 +16,7 @@
                             <h3>{{ ssallowing.userNickname }}</h3>
                         </div>
                     </div>
-                    <button class="popup_ssallowing_btn" @click="sendRequest(ssallowing.userId)">신청</button>
+                    <button class="popup_ssallowing_btn" @click="sendRequest(ssallowing)">신청</button>
                 </div>
             </div>
             <div v-else>
@@ -28,7 +28,7 @@
                                 <h3>{{ friend.userNickname }}</h3>
                             </div>
                         </div>
-                        <button class="popup_ssallowing_btn" @click="sendRequest(friend.userId)">신청</button>
+                        <button class="popup_ssallowing_btn" @click="sendRequest(friend)">신청</button>
                     </div>
                 </div>
                 <div v-else>
@@ -54,40 +54,13 @@ export default {
         const followStore = useFollowStore();
         const userStore = useUserStore();
 
-        const userId = props.userId;
-
+        const userId = ref(props.userId);
+        console.log(userId.value)
         const searchQuery = ref(''); // 검색어 바인딩을 위한 ref
         const searchResults = ref([]); // 검색 결과를 저장할 ref
         const searchPerformed = ref(false); // 검색 수행 여부 확인을 위한 ref
 
-        // const ssallowings = ref([]);
-        const ssallowings = ref([
-            // {
-            //     userId: 101,
-            //     userNickname: '파이어스톤',
-            //     userImg: userimg,
-            // },
-            // {
-            //     userId: 102,
-            //     userNickname: '춘춘',
-            //     userImg: userimg,
-            // },
-            // {
-            //     userId: 103,
-            //     userNickname: '범스꿍스',
-            //     userImg: userimg,
-            // },
-            // {
-            //     userId: 104,
-            //     userNickname: '우리언니',
-            //     userImg: userimg,
-            // },
-            // {
-            //     userId: 105,
-            //     userNickname: '도파민중독',
-            //     userImg: userimg,
-            // },
-        ])
+        const ssallowings = ref([]);
 
         // 검색 수행 함수
         const searchFriends = () => {
@@ -104,8 +77,9 @@ export default {
         };
 
         // 친구 선택 emit
-        const sendRequest = (friendId) => {
-            emit('friend-selected', friendId); // 친구 선택 시 이벤트 발송
+        const sendRequest = (friend) => {
+            console.log(friend)
+            emit('friend-selected', friend); // 친구 선택 시 이벤트 발송
         };
 
         const closeList = () => {
@@ -115,9 +89,10 @@ export default {
 
         onMounted(() => {
 
-            followStore.ssallowing(userId)
+            followStore.ssallowing(userId.value)
                 .then((res) => {
-                    ssallowings.value = res.data
+                    ssallowings.value = res.data.data
+                    console.log(ssallowings.value)
                 })
                 .catch((err) => {
                     console.log(err)
