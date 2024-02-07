@@ -62,31 +62,31 @@ export default {
 
         // const ssallowings = ref([]);
         const ssallowings = ref([
-            {
-                userId: 101,
-                userNickname: '파이어스톤',
-                userImg: userimg,
-            },
-            {
-                userId: 102,
-                userNickname: '춘춘',
-                userImg: userimg,
-            },
-            {
-                userId: 103,
-                userNickname: '범스꿍스',
-                userImg: userimg,
-            },
-            {
-                userId: 104,
-                userNickname: '우리언니',
-                userImg: userimg,
-            },
-            {
-                userId: 105,
-                userNickname: '도파민중독',
-                userImg: userimg,
-            },
+            // {
+            //     userId: 101,
+            //     userNickname: '파이어스톤',
+            //     userImg: userimg,
+            // },
+            // {
+            //     userId: 102,
+            //     userNickname: '춘춘',
+            //     userImg: userimg,
+            // },
+            // {
+            //     userId: 103,
+            //     userNickname: '범스꿍스',
+            //     userImg: userimg,
+            // },
+            // {
+            //     userId: 104,
+            //     userNickname: '우리언니',
+            //     userImg: userimg,
+            // },
+            // {
+            //     userId: 105,
+            //     userNickname: '도파민중독',
+            //     userImg: userimg,
+            // },
         ])
 
         // 검색 수행 함수

@@ -6,10 +6,10 @@
     </div>
     <transition>
       <div class="accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
-        <div v-for="badge in badge_list" :key="badge.badge_name" class="badge">
+        <div v-for="badge in badge_list" :key="badge.badgeName" class="badge">
           <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
-          <h3 class="badge_info">{{ badge.badge_name }}</h3>
-          <p>{{ badge.badge_detail }}</p>
+          <h3 class="badge_info">{{ badge.badgeName }}</h3>
+          <p>{{ badge.badgeDetail }}</p>
         </div>
       </div>
     </transition>
@@ -33,53 +33,25 @@ export default {
 
   setup(props) {
     const userId = ref(props.userId)
-    const badge = useBadgeStore();
-    const badge_list = badge.badgeList
-    const user_badge = ref([
-      {
-        badge_name: "기린이",
-        badge_detail: "기상 챌린지",
-        badge_img: wakebadge
-      },
-      {
-        badge_name: "코끼리",
-        badge_detail: "식단 챌린지",
-        badge_img: dietbadge
-      },
-      {
-        badge_name: "짐종국",
-        badge_detail: "운동 챌린지",
-        badge_img: healthbadge
-      },
-      {
-        badge_name: "절제왕",
-        badge_detail: "절제 챌린지",
-        badge_img: fightingbadge
-      },
-    ]);
+    const badgeStore = useBadgeStore();
+    const badge_list = badgeStore.badgeList
+    const user_badge = ref([]);
 
     // 사용자의 뱃지 이미지를 반환하는 함수
     const getUserBadgeImage = (badge) => {
-      // 사용자의 뱃지 리스트를 순회하면서 뱃지 이름이 일치하는지 확인
-      const userBadge = user_badge.value.find(userBadge => userBadge.badge_name === badge.badge_name);
+      // 사용자의 뱃지 리스트를 순회하면서 뱃지 ID가 일치하는지 확인
+      const userBadge = user_badge.value.find(userBadge => userBadge.badgeId === badge.badgeId);
       // 일치하는 뱃지가 있으면 해당 이미지를 반환, 없으면 기본 이미지 반환
-      return userBadge ? userBadge.badge_img : nobadgeimg;
+      return userBadge ? badgeImages[userBadge.badgeId] || nobadgeimg : nobadgeimg;
     };
 
     // 페이지 열었을 때 정보 가져오기(유저 뱃지 리스트)
     onMounted(() => {
-      badge.getBadgeList()
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log(err)
-        });
 
-      badge.getUserBadgeList(userId)
+      badgeStore.getUserBadgeList(userId.value)
         .then((res) => {
-          console.log(res)
-          user_badge.value = res.badge_List
+          console.log('유저뱃지 가져옴')
+          user_badge.value = res.data.data
         })
         .catch((err) => {
           console.log(err)
@@ -94,7 +66,7 @@ export default {
     };
 
 
-    return { userId, badge, badge_list, user_badge, isOpen, getUserBadgeImage, toggleAccordion }
+    return { userId, badge_list, user_badge, isOpen, getUserBadgeImage, toggleAccordion }
   }
 };
 

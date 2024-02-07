@@ -8,9 +8,9 @@ import { serverURL, v1_URL } from './config';
 
 export const useCompetionStore = defineStore('competition', () => {
     const URL = serverURL + v1_URL + 'compet';
-    const URL2 = serverURL  + v1_URL;
+    const URL2 = serverURL + v1_URL;
 
-    
+
     //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {
@@ -70,7 +70,7 @@ export const useCompetionStore = defineStore('competition', () => {
     //             });
     //     })
     // };
-        //친구,랜덤도전장 수락하기
+    //친구,랜덤도전장 수락하기
     const bothAccept = function (matchingId) {
         return new Promise((resolve, reject) => {
             authorizationAPI
@@ -87,6 +87,8 @@ export const useCompetionStore = defineStore('competition', () => {
     //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
+            console.log('axios');
+            console.log(userId);
             authorizationAPI
                 .get(`${URL}/list/${userId}`)
                 .then((response) => {
@@ -98,7 +100,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
-    
+
     //경쟁인증
     const competitionImage = function (image) {
         return new Promise((resolve, reject) => {
@@ -133,7 +135,7 @@ export const useCompetionStore = defineStore('competition', () => {
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/finish-compet-datil/${userId}/${cometId}`)
+                .get(`${URL}/finish-compet-detail/${userId}/${cometId}`)
                 .then((response) => {
                     resolve(response);
                 })
