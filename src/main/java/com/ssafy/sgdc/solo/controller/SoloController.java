@@ -1,14 +1,18 @@
 package com.ssafy.sgdc.solo.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.sgdc.solo.dto.SoloDto;
 import com.ssafy.sgdc.solo.dto.request.ChallengeRequest;
 import com.ssafy.sgdc.solo.dto.response.SoloListResponse;
 import com.ssafy.sgdc.solo.service.SoloService;
+import com.ssafy.sgdc.user.dto.UserSignUpDto;
 import com.ssafy.sgdc.util.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,8 +32,12 @@ public class SoloController {
     }
 
     @PatchMapping("/challenge-auth")
-    public ResponseEntity<?> challengeAuth(@RequestBody ChallengeRequest request) {
-        soloService.soloImageAuth(request.getUserId(), request.getCategoryId(), request.getSoloAuthImg());
+    public ResponseEntity<?> challengeAuth(
+            @RequestPart String challengeRequestJson,
+            @RequestPart(value = "soloAuthImage") MultipartFile challengeAuthImg) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ChallengeRequest challengeRequest = objectMapper.readValue(challengeRequestJson, ChallengeRequest.class);
+        soloService.soloImageAuth(challengeRequest.getUserId(), challengeRequest.getCategoryId(), challengeAuthImg);
         return new ResponseEntity<>(Message.builder().status(200).message("이미지 인증 완료")
                 .build(), HttpStatus.OK);
     }
