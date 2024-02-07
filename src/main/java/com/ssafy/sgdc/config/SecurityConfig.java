@@ -42,11 +42,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
 
                         (authorize) -> authorize
-//                                .requestMatchers("/api/v1/user/signup/").permitAll()
-//                                .requestMatchers("/api/v1/user/login/").permitAll()
-//                                .requestMatchers("/api/v1/user/re-auth/").permitAll()
-//                                .anyRequest().authenticated()
-                                .anyRequest().permitAll()
+                                .requestMatchers("/api/v1/user/signup/**").permitAll()
+                                .requestMatchers("/api/v1/user/login/**").permitAll()
+                                .requestMatchers("/api/v1/user/re-auth/**").permitAll()
+                                .anyRequest().authenticated()
+//                                .anyRequest().permitAll()
                 )
                 .exceptionHandling((exceptionHandling) ->
                         exceptionHandling.authenticationEntryPoint(entryPoint) //customEntryPoint
