@@ -244,7 +244,7 @@ public class CompetitionService {
                 recieveMatching.getUser().getUserId(),
                 sendMatching.getCategory().getCategoryId(),
                 CategoryStatus.PLAY_STATUS
-                );
+        );
 
         return recieveMatching;
 
@@ -275,13 +275,22 @@ public class CompetitionService {
                 Matching otherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
                                 matching.getMatchingId())
                         .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+
+                ImageAuth userImageAuth =
+                        imageAuthRepo.findByMatcingMatchingId(matching.getMatchingId()).orElse(null);
+                ImageAuth otherImageAuth =
+                        imageAuthRepo.findByMatcingMatchingId(otherMatching.getMatchingId()).orElse(null);
+
                 CompetitionDto competitionDto = CompetitionDto.of(
                         matching.getCompetition(),
                         matching.getMatchingId(),
                         matching.getIsSender(),
                         otherMatching.getUser().getUserId(),
-                        otherMatching.getUser().getUserNickname()
-                );
+                        otherMatching.getUser().getUserNickname(),
+                        userImageAuth != null ? userImageAuth.getAuthImg() : null,
+                        otherImageAuth != null ? otherImageAuth.getAuthImg() : null,
+                        matching.getCompetition().getDoneAt()
+                        );
 
                 competitionDtoList.add(competitionDto);
             }
@@ -300,16 +309,24 @@ public class CompetitionService {
             throw new RuntimeException("아직 종료되지 않은 경쟁입니다.");
         }
 
-        Matching oherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
+        Matching otherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
                         matching.getMatchingId())
                 .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+
+        ImageAuth userImageAuth =
+                imageAuthRepo.findByMatcingMatchingId(matching.getMatchingId()).orElse(null);
+        ImageAuth otherImageAuth =
+                imageAuthRepo.findByMatcingMatchingId(otherMatching.getMatchingId()).orElse(null);
 
         return CompetitionDto.of(
                 matching.getCompetition(),
                 matching.getMatchingId(),
                 matching.getIsSender(),
-                oherMatching.getUser().getUserId(),
-                oherMatching.getUser().getUserNickname()
+                otherMatching.getUser().getUserId(),
+                otherMatching.getUser().getUserNickname(),
+                userImageAuth != null ? userImageAuth.getAuthImg() : null,
+                otherImageAuth != null ? otherImageAuth.getAuthImg() : null,
+                matching.getCompetition().getDoneAt()
         );
     }
 
@@ -455,11 +472,8 @@ public class CompetitionService {
             competition.updateCompetitionDetail(competDetailRepo.save(CreateCompetDetailDto.from(competDetail)));
 
             // 유저 카테고리 상태 업데이트
-            categoryStatusUpdate(senderUserCategory.getUser().getUserId(),
-                    receiverUserCategory.getUser().getUserId(),
-                    senderUserCategory.getCategory().getCategoryId(),
-                    CategoryStatus.NONE_STATUS
-            );
+            senderUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
+            receiverUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
 
             feedService.createFeed(competition);
 
