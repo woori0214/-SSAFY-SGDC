@@ -86,12 +86,12 @@ public class CompetitionService {
         // 보내는 사람 도전장
         CreateMatchingDto sendMatchingDto = new CreateMatchingDto(user,
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.Y,
-                LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
+                LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
 
         //받는 사람 도전장
         CreateMatchingDto receiveMatchingDto = new CreateMatchingDto(randomUser,
                 categoryRepo.findByCategoryId(categoryId), CompetKind.RANDOM, IsSender.N,
-                LocalDateTime.now().plusHours(2), MatchStatus.WAIT);
+                LocalDateTime.now().plusMinutes(4), MatchStatus.WAIT);
 
         // 유저 카테고리 진행 상태 업데이트
         categoryStatusUpdate(userId, randomUser.getUserId(), categoryId, CategoryStatus.MATCH_STATUS);
@@ -230,7 +230,7 @@ public class CompetitionService {
 
         // 경기 생성
         Competition competition = Competition.of(LocalDateTime.now(),
-                recieveMatching.getCompetExpirationTime().plusHours(4));
+                recieveMatching.getCompetExpirationTime().plusMinutes(4));
         competitionRepo.save(competition);
 
         //도전장 상태 업데이트

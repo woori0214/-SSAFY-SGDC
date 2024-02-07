@@ -42,6 +42,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(
 
                         (authorize) -> authorize
+                                /////////////////// 개발 편의를 위해 추가 이후 삭제 예정
+                                .requestMatchers("/api/**").permitAll()
+                                .requestMatchers( "/swagger-ui/**").permitAll()
+                                .requestMatchers("/api-docs/**").permitAll()
+                                .requestMatchers("/api/authenticate").permitAll()
+                                ///////////////////
                                 .requestMatchers("/api/v1/user/signup/**").permitAll()
                                 .requestMatchers("/api/v1/user/login/**").permitAll()
                                 .requestMatchers("/api/v1/user/re-auth/**").permitAll()
