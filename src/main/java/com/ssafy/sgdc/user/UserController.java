@@ -37,12 +37,14 @@ public class UserController {
     @Autowired
     private JwtUtil jwt;
 
+    @Operation(summary = "서버 접속")
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getRoot() {
         System.out.println("user경로입니다.");
         return "Hello User";
     }
 
+    @Operation(summary = "회원가입")
     @RequestMapping(value = "/signup/", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> signUp(
             @RequestPart String userSignUpJson,
@@ -65,7 +67,7 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
-    // 아이디 중복체크
+    @Operation(summary = "아이디 중복검사")
     @RequestMapping(value = "/signup/check-id/{loginId}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> checkId(@PathVariable String loginId) {
         Map<String, String> response = new HashMap<>();
@@ -84,7 +86,7 @@ public class UserController {
 
     }
 
-    // 닉네임 중복체크
+    @Operation(summary = "닉네임 중복검사")
     @RequestMapping(value = "/signup/check-nick/{userNickname}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> checkNickname(@PathVariable String userNickname) {
         Map<String, String> response = new HashMap<>();
@@ -101,7 +103,7 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
-    // 싸피 학번중복체크
+    @Operation(summary = "싸피 학번 중복검사")
     @RequestMapping(value = "/signup/check-student-num/{userSsafyId}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> checkSsafyId(@PathVariable String userSsafyId) {
         Map<String, String> response = new HashMap<>();
@@ -120,7 +122,7 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
-    // 싸피 핸드폰인증
+    @Operation(summary = "폰 번호 중복검사")
     @RequestMapping(value = "/signup/check-phoneNum/{userPhone}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> checkPhone(@PathVariable String userPhone) {
         Map<String, String> response = new HashMap<>();
@@ -138,7 +140,7 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
-    // 로그인
+    @Operation(summary = "로그인")
     @RequestMapping(value = "/login/", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> login(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
         Map<String, String> response = new HashMap<>();
@@ -168,6 +170,7 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "토큰 만료 전", description="토큰만료 전 토큰을 재발급합니다.")
     @RequestMapping(value = "/re-auth/", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> reAuth(@RequestBody TokenDto tokenDto) {
         User user = userService.getUserById(tokenDto.getUserId());
@@ -189,16 +192,7 @@ public class UserController {
         }
     }
 
-    //대표뱃지
-//    @RequestMapping(value = "/{userId}/{badgeId}", method = RequestMethod.PATCH)
-//    public ResponseEntity<GeneralResponse> userMainBadge(@RequestBody UserBadge badgeId) {
-//        Map<String,String> response = new HashMap<>();
-//
-//        User user = userService.
-//                response.put("badge_id", user.)
-//    }
-
-    // 마이페이지 사용자 정보 표시
+    @Operation(summary = "마이페이지 정보 확인", description="마이페이지 정보를 표시합니다.")
     @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
     public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto) {
         Map<String, String> response = new HashMap<>();
@@ -233,7 +227,7 @@ public class UserController {
         return DataResponseDto.of(userService.searchNickname(keyword,pageable), "닉네임 검색");
     }
 
-    // 마이페이지수정  닉네임, 폰, 프로필, 대표뱃지설정
+    @Operation(summary = "마이페이지 수정", description="닉네임, 폰, 프로필, 대표뱃지를 수정할 수 있습니다.")
     @RequestMapping(value = "/user-info-modify/{userId}", method = RequestMethod.PATCH)
     public ResponseEntity<GeneralResponse> userInfoModify(@RequestBody UserInfoModifyDto userInfoModifyDto) {
         Map<String, String> response = new HashMap<>();

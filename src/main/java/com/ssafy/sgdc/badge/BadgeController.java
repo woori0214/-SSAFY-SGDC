@@ -5,6 +5,7 @@ import com.ssafy.sgdc.badge.dto.UserBadgeListDto;
 import com.ssafy.sgdc.badge.response.ListResponse;
 import com.ssafy.sgdc.badge.response.ObjectResponse;
 import com.ssafy.sgdc.user.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -58,7 +59,7 @@ public class BadgeController {
                 .build(), HttpStatus.OK);
     }
 
-    // 유저가 보유한 뱃지 리스트 조회
+    @Operation(summary = "유저뱃지 조회", description="유저가 보유한 뱃지리스트를 조회합니다.")
     @RequestMapping(value = "/list/{userId}",  method = RequestMethod.GET)
     public ResponseEntity<ListResponse<BadgeListDto>> getUserBadges(@PathVariable int userId) {
         List<UserBadge> userBadgeList = badgeService.getUserBadgeList(userId);
@@ -76,7 +77,7 @@ public class BadgeController {
 
             badgeList.add(badgeListDto);
         }
-//         사용자가 보유한 뱃지 목록과 함께 200 OK 응답//
+
         return new ResponseEntity<>(ListResponse.<BadgeListDto>builder()
                  .status(200)
                  .message("유저 뱃지 리스트")

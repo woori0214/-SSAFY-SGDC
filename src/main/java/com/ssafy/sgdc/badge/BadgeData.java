@@ -35,11 +35,11 @@ public class BadgeData implements CommandLineRunner {
 //        UserBadge userBadge2 = new UserBadge(1, badge2, new User());
 //
 //        userBadgeRepo.save(userBadge1);
-        Badge badge1 = new Badge(0, "기상", "매일 아침 8시 이전 기상", "morning.png");
-        Badge badge2 = new Badge(1, "알고리즘", "알고리즘 문제 5개 이상 해결", "algorithm.png");
-        if(!badgeRepository.existsById(0)){
-            badge1 = badgeRepository.save(badge1);
-        }
+//        Badge badge1 = new Badge(0, "기상", "매일 아침 8시 이전 기상", "morning.png");
+//        Badge badge2 = new Badge(1, "알고리즘", "알고리즘 문제 5개 이상 해결", "algorithm.png");
+//        if(!badgeRepository.existsById(0)){
+//            badge1 = badgeRepository.save(badge1);
+//        }
     }
 }
 
