@@ -15,7 +15,7 @@ export const useFollowStore = defineStore('follow', () => {
 
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follow-count/${userId.value}`)
+                .get(`${URL}/follow-count/${userId}`)
                 .then((res) => {
                     // console.log(res);
                     resolve(res);
@@ -31,7 +31,7 @@ export const useFollowStore = defineStore('follow', () => {
         // console.log(userId)
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/following/${userId.value}`)
+                .get(`${URL}/following/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
@@ -46,7 +46,7 @@ export const useFollowStore = defineStore('follow', () => {
     const ssallower = function (userId) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .get(`${URL}/follower/${userId.value}`)
+                .get(`${URL}/follower/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })
