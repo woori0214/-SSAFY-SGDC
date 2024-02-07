@@ -109,45 +109,17 @@ const isNicknameFormatValid = ref(true);
 const updatedUser = ref(null);
 
 
-// 뱃지리스트(더미)
-const badgeList = ref([
-    {
-        badge_id: 1,
-        badge_name: "기린이",
-        badge_detail: "기상 챌린지",
-        badge_img: wakebadge
-    },
-    {
-        badge_id: 2,
-        badge_name: "따뜻한 로봇",
-        badge_detail: "알고리즘 챌린지",
-        badge_img: algobadge
-    },
-    {
-        badge_id: 3,
-        badge_name: "짐종국",
-        badge_detail: "운동 챌린지",
-        badge_img: healthbadge
-    },
-    {
-        badge_id: 4,
-        badge_name: "스터디윗미",
-        badge_detail: "스터디 챌린지",
-        badge_img: studybadge
-    },
-    {
-        badge_id: 5,
-        badge_name: "코끼리",
-        badge_detail: "식단 챌린지",
-        badge_img: dietbadge
-    },
-    {
-        badge_id: 6,
-        badge_name: "참자",
-        badge_detail: "절제 챌린지",
-        badge_img: fightingbadge
-    },
-])
+// 뱃지리스트
+const badgeList = ref([])
+
+const updateData = function () {
+    return {
+        user_nickname: editNickname.value || nickname.value,
+        user_phone: editPhoneNumber.value || phoneNumber.value,
+        user_img: profileImageUrl.value,  // 이미지 업로드 로직에 따라 수정
+        badge_id: selectedBadge.value ? selectedBadge.value.badge_id : badgeId.value
+    }
+};
 
 // 닉네임
 const validateNickname = () => {
@@ -176,6 +148,7 @@ const checkNickname = () => {
 const updateNickname = () => {
     if (isNicknameFormatValid.value && nicknameValid.value) {
         const update_data = updateData()
+        console.log(update_data)
         userStore.userUpdate(userId.value, update_data);
         // 업데이트 로직 구현
     }
@@ -213,11 +186,14 @@ const loadBadgeList = () => {
 };
 
 const updateBadge = () => {
-    if (selectedBadge.value !== null) {
-        // 뱃지를 수정한 경우
-        const update_data = updateData()
-        userStore.userUpdate(userId.value, update_data);
-    }
+    const dataToUpdate = updateData(); // 업데이트할 데이터 가져오기
+    // 서버에 업데이트 요청 보내기
+    userStore.userUpdate(userId.value, dataToUpdate).then(() => {
+        // 성공 처리 로직
+    }).catch((error) => {
+        // 오류 처리 로직
+        console.error("Error updating user badge:", error);
+    });
 };
 
 
@@ -238,17 +214,11 @@ const updateProfileImage = () => {
 
 const updatePhoneNumber = () => {
     const update_data = updateData()
+    console.log(update_data)
     userStore.userUpdate(userId.value, update_data);
 };
 
-const updateData = function () {
-    return {
-        user_nickname: editNickname.value || nickname.value,
-        user_phone: editPhoneNumber.value || phoneNumber.value,
-        user_img: profileImageUrl.value,  // 이미지 업로드 로직에 따라 수정
-        badge_id: selectedBadge.value.badge_id || badgeId.value
-    }
-};
+
 
 onMounted(() => {
     // 사용자 정보 가져오기
@@ -256,6 +226,7 @@ onMounted(() => {
     userId.value = userInformation.user_id;
     userStore.userData(userId.value)
         .then(res => {
+            console.log(res)
             nickname.value = res.data.data.user_nickname;
             badgeId.value = res.data.data.badge_id;
             phoneNumber.value = res.data.data.user_phone;
@@ -316,6 +287,7 @@ onMounted(() => {
     display: flex;
     justify-content: right;
 }
+
 .updatebtn {
     background-color: #e1ecf7;
     /* Green */
