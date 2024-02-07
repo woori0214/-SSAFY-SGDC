@@ -26,6 +26,7 @@
         <input
           type="password"
           class="login-form-item-input"
+          style="font-family: sans-serif;"
           v-model="password"
           id="password"
         />

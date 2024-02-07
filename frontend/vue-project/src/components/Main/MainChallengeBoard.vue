@@ -197,7 +197,6 @@ const items = ref([
 
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId) {
-  // userId.value = loginStore.loginUser;
   selectedCategory.value = categoryId;
   const challenge = { user_id: userId, category_id: categoryId };
   soloStore.soloChallenge(challenge);

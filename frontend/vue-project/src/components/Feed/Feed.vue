@@ -1,5 +1,13 @@
 <template>
   <div class="feed_frame">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <div class="feed_frame2">
       <div class="feed_profile">
         <div class="user_profile">
@@ -8,7 +16,11 @@
           <div class="feed_user_name">{{ userName }}</div>
         </div>
         <button @click="handleDeclareClick" class="declare_button">
-          <img src="@/assets/siren.png" alt="Declare Icon" class="declare_icon" />
+          <img
+            src="@/assets/siren.png"
+            alt="Declare Icon"
+            class="declare_icon"
+          />
         </button>
       </div>
       <div class="feed_content">{{ feedTitle }}</div>
@@ -19,21 +31,25 @@
     <div class="feed_footbar">
       <div class="feed_heart_cnt">
         <button @click="pushFeedLike" class="heart_button">
-          <img :src="heartIcon" alt="heart Icon" class="heart_icon" />
-          <!-- <span class="material-symbols-outlined">favorite</span> -->
+          <img
+            src="@/assets/favorite.svg"
+            class="heart_icon_yet"
+            v-if="!refIsLiked"
+          />
+          <img src="@/assets/heart_check.svg" class="heart_icon_done" v-else />
         </button>
-        {{ feedLikeNum }}
+        {{ refFeedLikedNum }}
       </div>
       <div class="feed_view_cnt">조회수 {{ views }}</div>
     </div>
-    <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox"/>
+    <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox" />
   </div>
 </template>
 
 <script>
 import { useFeedStore } from "@/stores/feed";
 import { useUserStorageStore } from "@/stores/userStorage";
-import { ref, watch } from 'vue';
+import { ref, watch } from "vue";
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
 import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
@@ -89,54 +105,61 @@ export default {
       type: String,
       default: "/src/components/Feed/FeedImage/no_image_logo.png",
     },
+    isLiked: {
+      type: Boolean,
+      default: false,
+    },
   },
   methods: {
     routeDetailFeed() {
       this.$router.push({
         name: "FeedDetail",
         params: {
-          feed_id: this.feed_id,
+          feed_id: this.feedId,
         },
       });
     },
   },
-  components:{
+  components: {
     PopUpComplaint,
   },
   setup(props) {
     const feedjs = useFeedStore();
     const userStorage = useUserStorageStore();
-    const heartIcon = ref(emptyHeart);
     const showComplaintBox = ref(false);
-    const isLiked = ref(false); // 좋아요 상태를 추적하는 ref 추가
 
-    watch(isLiked, (newValue) => {
-      heartIcon.value = newValue ? fullHeart : emptyHeart;
-    });
+    const refIsLiked = ref(props.isLiked);
+    const refFeedLikedNum = ref(props.feedLikeNum);
+
     // 피드 좋아요 누르기 함수
     const pushFeedLike = () => {
-      alert("좋아요 누름" + props.feed_id);
+      // alert("좋아요 누름" + props.feedId);
+
+      const userData = userStorage.getUserInformation();
 
       feedjs
-        .updateFeedLike(props.feed_id)
+        .addfeedLikeUser(props.feedId, userData.user_id)
         .then((res) => {
-          console.log("feed 좋아요 누름");
+          console.log(refIsLiked.value);
+          refIsLiked.value = !refIsLiked.value;
 
-          const userData = userStorage.getUserInformation();
-          isLiked.value = !isLiked.value;
+          if (refIsLiked.value) {
+            console.log("feed 좋아요 유저 추가");
+          } else {
+            console.log("feed 좋아요 취소");
+          }
+
+          console.log(refIsLiked.value);
+
           feedjs
-            .addfeedLikeUser(props.feed_id, userData.user_id)
+            .getFeed(props.feedId, userData.user_id)
             .then((res) => {
-              console.log("feed 좋아요 유저 추가");
-              // heartIcon.value = heartIcon.value === emptyHeart
-              //   ? fullHeart
-              //   : emptyHeart;
+              refFeedLikedNum.value = res.data.data.feedLikeNum;
             })
             .catch((err) => {
               console.log(err);
             });
-
-          //증가된 좋아요 수 표시하도록 하기
+          ////////////////////
         })
         .catch((err) => {
           console.log(err);
@@ -153,11 +176,11 @@ export default {
 
     return {
       pushFeedLike,
-      heartIcon,
       handleDeclareClick,
       showComplaintBox,
       closeComplaintBox,
-      isLiked,
+      refIsLiked,
+      refFeedLikedNum,
     };
   },
 };
@@ -166,7 +189,6 @@ export default {
 <style>
 .feed_frame {
   /* border: 2px solid skyblue; */
-  
 }
 
 .feed_profile {
@@ -201,7 +223,7 @@ export default {
 .feed_content {
   /* border: 2px solid purple; */
 }
-.heart_button{
+.heart_button {
   margin-left: 10px;
 }
 .feed_image_frame {
@@ -212,7 +234,6 @@ export default {
   justify-content: center;
   margin: 10px;
   padding: 20px;
-  
 }
 
 .feed_image {
@@ -220,7 +241,7 @@ export default {
   max-width: 300px;
   max-height: 500px;
 }
-.declare_button{
+.declare_button {
   border-radius: 15px;
   background-color: white;
 }
@@ -244,27 +265,20 @@ export default {
   /* Adjust the width of the image */
   height: 40px;
   /* Adjust the height of the image */
-  
-}
-
-.heart_icon {
-  width: 25px;
-  height: 25px;
 }
 .feed_frame2 {
-  background-color: #aecbeb; 
-  border-radius: 20px; 
-  padding: 10px; 
-  margin: 10px 11px; 
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-  
+  background-color: #aecbeb;
+  border-radius: 20px;
+  padding: 10px;
+  margin: 10px 11px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 /* .material-symbols-outlined {
   font-variation-settings:
     /* 'FILL' 0, */
-    /* 'wght' 400,
+/* 'wght' 400,
     'GRAD' 0,
     'opsz' 24;
   color: red; 
-} */ 
+} */
 </style>

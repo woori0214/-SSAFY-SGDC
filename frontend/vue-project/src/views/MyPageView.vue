@@ -18,9 +18,6 @@
         <div v-if="isCurrentUser" class="challenge_body">
             <MyPageChallengeBoard />
         </div>
-        <div v-if="isCurrentUser" class="ssallow_body">
-            <MyPageSsallow :user-id="userId" />
-        </div>
     </div>
     <router-view :key="$route.fullPath" />
 </template>
@@ -34,12 +31,10 @@ import MyPageProfileBar from '@/components/Mypage/MyPageProfileBar.vue';
 import MyPageSoloRecord from '@/components/Mypage/MyPageSoloRecord.vue';
 import MyPageSsallow from '@/components/Mypage/MyPageSsallow.vue';
 
-import { useRoute } from 'vue-router';
-import { useUserStore } from '@/stores/user';
-import { useFollowStore } from '@/stores/follow';
+import { useRoute, } from 'vue-router';
 import { useLoginStore } from '@/stores/login';
 import { useUserStorageStore } from '@/stores/userStorage';
-import { ref, onMounted, computed, defineProps, watch } from 'vue';
+import { ref, onMounted, computed, defineProps, } from 'vue';
 
 // 유저 이미지 가져오는 거 변경해야함
 import userimg from '@/assets/image1.png';
@@ -50,15 +45,11 @@ import fightingImage from '@/assets/fighting.png';
 import studyImage from '@/assets/study.png';
 import healthImage from '@/assets/health.png';
 
-const userStore = useUserStore();
-const followStore = useFollowStore();
-const loginStore = useLoginStore();
+const userstorageStore = useUserStorageStore();
 const route = useRoute();
 
 const userId = ref(route.params.userId);  // userId를 저장할 ref 추가
-const ssallowingData = ref([]);
-const ssallowerData = ref([]);
-const loginUser = ref(loginStore.loginUser);
+const loginUser = ref(userstorageStore.getUserInformation().user_id);
 const props = defineProps({
     userId: String
 });
@@ -73,52 +64,12 @@ const categories = ref([
 ]);
 
 
-watch(() => route.params.userId, (newUserId) => {
-    userId.value = newUserId;
-    // loadData();
-}, { immediate: true });
-
 // 로그인 유저와 마이페이지 유저가 같은지
 const isCurrentUser = computed(() => loginUser.value === userId.value);
 
-// 페이지 열었을 때, 사용자 정보 모드 받아와야함
 // user 정보, 팔로우 정보는 props
 onMounted(() => {
     userId.value = route.params.userId;
-
-
-    // 쌀로우
-    // followStore.ssallowing(userId.value)
-    //     .then((res) => {
-    //         ssallowingData.value = res.ssafy_friend
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
-    followStore.ssallowing(101)
-        .then((res) => {
-            ssallowingData.value = res.data.data
-            // console.log(ssallowingData.value)
-        })
-        .catch((err) => {
-            console.log(err)
-        })
-
-    // 쌀로워
-    // followStore.ssallower(userId.value)
-    //     .then((res) => {
-    //         ssallowerData.value = res.ssafy_friend
-    //     })
-    //     .catch((err) => {
-    //         console.log(err)
-    //     })
-    followStore.ssallower(101)
-        .then((res) => {
-            ssallowerData.value = res.data.data
-        })
-        .catch((err) => {
-            console.log(err)
-        })
 
 })
 

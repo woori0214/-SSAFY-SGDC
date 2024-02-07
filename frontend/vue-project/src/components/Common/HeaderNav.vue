@@ -61,18 +61,25 @@
       </div>
 
       <div class="header-links" v-if="!closeLogo">
-        <button @click="popUpMailBox" class="notify-icon">
+        <button
+          @click="popUpMailBox"
+          class="notify-icon"
+          v-if="isLogined_ref"
+        >
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
           <!-- 로그아웃 상태 -->
-          <div v-if="!userLoginStore.loginUser" class="login-signup-links">
+          <div
+            v-if="!isLogined_ref"
+            class="login-signup-links"
+          >
             <RouterLink to="/login" class="nav-link">로그인</RouterLink>
             <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
           </div>
           <!-- 로그인 상태 -->
           <div v-else class="user-nav">
-            {{ userLoginStore.userNickname }}님
+            {{ userStorage.getUserInformation().user_nickname }}님
             <a @click="logout" class="nav-link logout"
               ><span class="material-symbols-outlined"> logout </span></a
             >
@@ -115,8 +122,13 @@ import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";
 import SearchNickname from "./SearchNickname.vue";
 import { useUserStorageStore } from "@/stores/userStorage";
 
+const userLoginStore = useLoginStore();
+const userStorage = useUserStorageStore();
+
 const showMailBox = ref(false);
 const closeLogo = ref(false);
+
+const isLogined_ref = ref(false);
 
 const popUpMailBox = () => {
   showMailBox.value = true;
@@ -126,18 +138,17 @@ const closeMailBox = () => {
   showMailBox.value = false;
 };
 
-const userLoginStore = useLoginStore();
 const logout = function () {
   userLoginStore.isLogout();
+  isLogined_ref.value = false;
   router.push("/");
 };
 
 const handleNavigation = (to) => {
-  const userStorage = useUserStorageStore();
   const user_id = userStorage.getUserInformation().user_id;
   if (user_id != null) {
     if (to == "/MyPage") {
-      router.push({ name: "MyPage", params: { userId: user_id } }); //나중에 user_id로 바꾸기
+      router.push({ name: 'MyPage', params: { userId: user_id } }); //나중에 user_id로 바꾸기
     } else {
       router.push(to);
     }
@@ -146,13 +157,22 @@ const handleNavigation = (to) => {
   }
 };
 
+setInterval(function () {//야매 로그인 확인 방법
+  // 반복 실행할 코드
+  if(isLogined_ref.value === false){
+    if(userStorage.getUserInformation().user_id != null){
+      isLogined_ref.value = true;
+    }
+  }
+}, 1000);
+
 onMounted(() => {
   userLoginStore.isLogined();
 });
 </script>
 
 <style>
-.notify-icon{
+.notify-icon {
   border-radius: 100%;
   border: 0px;
   height: 38px;
@@ -162,7 +182,7 @@ onMounted(() => {
   align-items: center;
   transition: background-color 0.3s ease;
 }
-.notify-icon:hover{
+.notify-icon:hover {
   background-color: #71a5de;
   color: #e1ecf7;
 }
@@ -339,7 +359,7 @@ nav a {
   }
 }
 
-.nav-searchUser{
+.nav-searchUser {
   /* border: 1px solid red; */
   flex: 1;
   display: flex;

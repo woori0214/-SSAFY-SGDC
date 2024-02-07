@@ -54,7 +54,7 @@ export default {
     const isModalOpen = ref(false);
     const isTestModalOpen = ref(false);
     const selectedCategory = ref(null);
-    const user_id = login.loginUser;
+    const user_id = login.loginUser;///지우기
     const soloTodayData = solo.soloTodayData
 
     console.log(soloTodayData)

@@ -76,15 +76,15 @@ export const useFollowStore = defineStore('follow', () => {
     const plusSsallowing = function (ssallowingData) {
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .post(`${URL}/${ssallowingData.user_id}/${ssallowingData.following_id}`, ssallowingData)
-                .then((res) => {
-                    // console.log(res);
-                    resolve(res);
-                })
-                .catch((err) => {
-                    console.log(err);
-                    reject(err);
-                });
+            .post(`${URL}/${ssallowingData.to_user_id}/${ssallowingData.from_user_id}`, {})
+            .then((res) => {
+                // console.log(res);
+                resolve(res);
+            })
+            .catch((err) => {
+                console.log(err);
+                reject(err);
+            });
         });
     }
 

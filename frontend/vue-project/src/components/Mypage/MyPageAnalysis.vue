@@ -2,7 +2,7 @@
   <div>
     <div class="accordion-header" @click="toggleAccordion">
       <h2>분석</h2>
-      <span :class="{ 'rotate-icon': true, rotate: isOpen }"></span>
+      <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
     </div>
     <transition>
       <div class="accordion-content" :class="{ open: isOpen }" v-show="isOpen">
@@ -18,7 +18,10 @@
                 <h3>성공한 솔로 도전 횟수</h3>
               </div>
               <div class="solo_analysis_category">
-                <img :src="many_solo_challenge_image" alt="Category Image" class="many_solo_img" />
+                <div class="many_solo_img_div">
+                  <img :src="many_solo_challenge_image" alt="Category Image" class="many_solo_img"
+                    v-if="many_solo_challenge" />
+                </div>
                 <h3>많이 도전한 카테고리</h3>
               </div>
             </div>
@@ -53,120 +56,36 @@ export default {
   setup(props) {
     const userId = ref(props.userId);
     const categories = ref(props.categories);
-    const compet = useCompetionStore();
-    const solo = useSoloStore();
+    const competStore = useCompetionStore();
+    const soloStore = useSoloStore();
 
     let maxCount = 0;
     let mostFrequentId = null;
 
-    const compet_analysis = ref([
-      {
-        userCategoryId: 1,
-        userId: 1,
-        categoryId: 1,
-        categoryName: "기상",
-        categoryWinCount: 50,
-        categoryFailCount: 20,
-      },
-      {
-        userCategoryId: 2,
-        userId: 1,
-        categoryId: 2,
-        categoryName: "알고리즘",
-        categoryWinCount: 45,
-        categoryFailCount: 10,
-      },
-      {
-        userCategoryId: 3,
-        userId: 1,
-        categoryId: 3,
-        categoryName: "운동",
-        categoryWinCount: 6,
-        categoryFailCount: 1,
-      },
-      {
-        userCategoryId: 4,
-        userId: 1,
-        categoryId: 4,
-        categoryName: "스터디",
-        categoryWinCount: 5,
-        categoryFailCount: 2,
-      },
-      {
-        userCategoryId: 5,
-        userId: 1,
-        categoryId: 5,
-        categoryName: "식단",
-        categoryWinCount: 50,
-        categoryFailCount: 20,
-      },
-      {
-        userCategoryId: 6,
-        userId: 1,
-        categoryId: 6,
-        categoryName: "절제",
-        categoryWinCount: 50,
-        categoryFailCount: 20,
-      },
-    ]);
+    const compet_analysis = ref([]);
 
-    const soloListData = ref([
-      {
-        solo_status: 0, // 0 종료, 1 진행
-        solo_result: 0, // 0 완료, 1 미완료
-        category_id: 1,
-      },
-      {
-        solo_status: 0,
-        solo_result: 1,
-        category_id: 2,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 3,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 4,
-      },
-      {
-        solo_status: 0,
-        solo_result: 1,
-        category_id: 5,
-      },
-      {
-        solo_status: 1,
-        solo_result: 0,
-        category_id: 6,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 1,
-      },
-      {
-        solo_status: 0,
-        solo_result: 0,
-        category_id: 2,
-      },
-    ]);
+    const soloListData = ref([]);
 
-    // 승리 횟수 계산
     const all_wincount = computed(() => {
-      return compet_analysis.value.reduce(
-        (total, item) => total + item.categoryWinCount,
-        0
-      );
+      // compet_analysis가 정의되어 있고, 배열이 비어 있지 않은지 확인
+      if (compet_analysis.value && compet_analysis.value.length > 0) {
+        return compet_analysis.value.reduce(
+          (total, item) => total + item.category_win_count,
+          0
+        );
+      }
+      return 0; // 조건에 맞지 않으면 0 반환
     });
 
-    // 패배 횟수 계산
     const all_failcount = computed(() => {
-      return compet_analysis.value.reduce(
-        (total, item) => total + item.categoryFailCount,
-        0
-      );
+      // compet_analysis가 정의되어 있고, 배열이 비어 있지 않은지 확인
+      if (compet_analysis.value && compet_analysis.value.length > 0) {
+        return compet_analysis.value.reduce(
+          (total, item) => total + item.category_fail_count,
+          0
+        );
+      }
+      return 0; // 조건에 맞지 않으면 0 반환
     });
 
     // 총 횟수 계산
@@ -175,31 +94,41 @@ export default {
     });
 
     // 전적 승률 계산
+    // 전적 승률 계산
     const total_analysis = computed(() => {
+      if (all_count.value === 0) {
+        return 0; // 분모가 0일 때 0 반환
+      }
       const ans = (all_wincount.value / all_count.value) * 100;
       return ans.toFixed(0);
     });
-
     // 솔로모드 많이 시도한 카테고리 계산
     const many_solo_challenge = computed(() => {
-      const countMap = soloListData.value.reduce((acc, cur) => {
-        acc[cur.category_id] = (acc[cur.category_id] || 0) + 1;
-        return acc;
-      }, {});
+      if (soloListData.value && soloListData.value.length > 0) {
+        const countMap = soloListData.value.reduce((acc, cur) => {
+          acc[cur.category_id] = (acc[cur.category_id] || 0) + 1;
+          return acc;
+        }, {});
 
-      for (const id in countMap) {
-        if (countMap[id] > maxCount) {
-          maxCount = countMap[id];
-          mostFrequentId = id;
+        let maxCount = 0;
+        let mostFrequentId = null;
+
+        for (const id in countMap) {
+          if (countMap[id] > maxCount) {
+            maxCount = countMap[id];
+            mostFrequentId = id;
+          }
         }
-      }
 
-      return mostFrequentId;
+        return mostFrequentId;
+      }
+      return null; // 솔로 데이터가 없으면 null 반환
     });
+
 
     // 솔로모드 챌린지 성공 횟수
     const success_solo = computed(() => {
-      return soloListData.value.filter((item) => item.solo_result === 0).length;
+      return soloListData.value.filter((item) => item.solo_result === 'COMPLETE').length;
     });
 
     // 솔로모드 많이 한 카테고리 이미지 매칭
@@ -212,26 +141,18 @@ export default {
     });
 
     // 페이지 열었을 때 정보 가져오기(경쟁 리스트, 솔로 리스트)
-    onMounted(() => {
-      compet
-        .competitionAnalysis(userId)
-        .then((res) => {
-          console.log(res);
-          compet_analysis.value = res.userCategories;
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    onMounted(async () => {
+      try {
+        const compRes = await competStore.competitionAnalysis(userId.value);
+        console.log('경쟁분석 가져옴');
+        compet_analysis.value = compRes.data.userCategories;
 
-      solo
-        .soloList(userId)
-        .then((res) => {
-          console.log(res);
-          soloListData.value = res.solo_id;
-        })
-        .catch((error) => {
-          console.error("Error fetching soloTodayData:", error);
-        });
+        const soloRes = await soloStore.soloList(userId.value);
+        console.log('솔로분석 가져옴');
+        soloListData.value = soloRes.data.solos;
+      } catch (err) {
+        console.error(err);
+      }
     });
 
     // 아코디언 펼치기/접기
@@ -258,8 +179,6 @@ export default {
 
     return {
       userId,
-      compet,
-      solo,
       compet_analysis,
       categories,
       soloListData,
@@ -383,6 +302,11 @@ export default {
   justify-content: center;
   align-items: center;
   margin: 10px;
+}
+
+.many_solo_img_div {
+  width: 70px;
+  height: 70px;
 }
 
 .many_solo_img {
