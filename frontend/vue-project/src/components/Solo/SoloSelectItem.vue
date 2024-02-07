@@ -151,7 +151,7 @@ export default {
             today_categories.value.forEach((todayItem) => {
               if (todayItem.id == soloItem.category_id) {
                 todayItem.soloStatus = soloItem.solo_status;
-                todayItem.soloResult = soloItem.result;
+                todayItem.soloResult = soloItem.solo_result;
               }
             });
           });
