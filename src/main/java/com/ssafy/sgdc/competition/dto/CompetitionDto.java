@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,8 +21,13 @@ public class CompetitionDto {
     private IsSender is_sender;
     private int other_id;
     private String other_nickname;
+    private String user_image_auth;
+    private String other_image_auth;
+    private LocalDateTime done_at;
 
-    public static CompetitionDto of(Competition competition, int matching_id, IsSender is_sender, int other_id, String other_nickname) {
+    public static CompetitionDto of(Competition competition, int matching_id, IsSender is_sender,
+                                    int other_id, String other_nickname, String user_image_auth,
+                                    String other_image_auth, LocalDateTime done_at) {
         return  new CompetitionDto(
                 competition.getCompetId(),
                 competition.getCompetDetail().getCompetResultId(),
@@ -28,7 +35,10 @@ public class CompetitionDto {
                 matching_id,
                 is_sender,
                 other_id,
-                other_nickname
+                other_nickname,
+                user_image_auth,
+                other_image_auth,
+                done_at
         );
     }
 

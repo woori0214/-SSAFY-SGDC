@@ -15,7 +15,7 @@ import java.util.function.Function;
 @Component
 @Slf4j
 public class JwtUtil {
-    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 60 * 1; // 30min
+    public final static long ACCESS_TOKEN_VALIDATION = 1000L * 60 * 60; // 30min
     public final static long REFRESH_TOKEN_VALIDATION = 1000L * 60 * 60 * 24; // 24 hour
     private static final String secretKey = "SecretKey";
 
