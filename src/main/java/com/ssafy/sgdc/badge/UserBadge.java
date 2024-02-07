@@ -20,7 +20,6 @@ public class UserBadge {
     @Column(name = "user_badge_id")
     private int userBadgeId;
 
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "badge_id")
     private Badge badgeId;
