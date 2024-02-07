@@ -1,8 +1,9 @@
 package com.ssafy.sgdc.user;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ssafy.sgdc.badge.Badge;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.sgdc.base.dto.DataResponseDto;
+import com.ssafy.sgdc.enums.S3ImageFolder;
 import com.ssafy.sgdc.user.dto.*;
 import com.ssafy.sgdc.util.JwtUtil;
 import com.ssafy.sgdc.util.response.Code;
@@ -18,8 +19,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +44,16 @@ public class UserController {
     }
 
     @RequestMapping(value = "/signup/", method = RequestMethod.POST)
-    public ResponseEntity<GeneralResponse> signUp(@RequestBody UserSignUpDto userSignUpDto) {
+    public ResponseEntity<GeneralResponse> signUp(
+            @RequestPart String userSignUpJson,
+            @RequestPart(value = "profileImage") MultipartFile profile
+    ) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        UserSignUpDto userSignUpDto = objectMapper.readValue(userSignUpJson, UserSignUpDto.class);
         System.out.println("회원가입 경로.");
-        userService.signUp(userSignUpDto);
+        String ImageUrl=userService.uploadS3(userSignUpDto.getLoginId(),profile, S3ImageFolder.PROFILE_IMAGE);
+        userService.signUp(userSignUpDto,ImageUrl);
+
 
         Map<String, String> result = new HashMap<>();
         result.put("result", "true");

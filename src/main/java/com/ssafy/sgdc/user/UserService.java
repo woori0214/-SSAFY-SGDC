@@ -3,14 +3,26 @@ package com.ssafy.sgdc.user;
 import com.ssafy.sgdc.badge.Badge;
 import com.ssafy.sgdc.badge.BadgeService;
 import com.ssafy.sgdc.user.dto.*;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.sgdc.enums.S3ImageFolder;
+import com.ssafy.sgdc.user.dto.SearchNameResponseDto;
+import com.ssafy.sgdc.user.dto.UserInfoDto;
+import com.ssafy.sgdc.user.dto.UserLoginDto;
+import com.ssafy.sgdc.user.dto.UserSignUpDto;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 @Service
@@ -21,9 +33,13 @@ public class UserService {
     @Autowired
     private BadgeService badgeService;
 
+    @Autowired
+    private AmazonS3 amazonS3Client; // S3에 업로드를 위한 서비스
+    private String bucketName="sgdc-test-bucket"; // S3 버킷 이름
+
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
-    public User signUp(UserSignUpDto userSignDto){
+    public User signUp(UserSignUpDto userSignDto,String profileImageUrl){
         User user = User.builder()
                 .userId(0)
                 .loginId(userSignDto.getLoginId())
@@ -33,7 +49,7 @@ public class UserService {
                 .userName(userSignDto.getUserName())
                 .userPhone(userSignDto.getUserPhone())
                 .userPassword(passwordEncoder.encode(userSignDto.getUserPassword()))
-                .userImg(null) //보류
+                .userImg(profileImageUrl) //보류
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .signOut(false)
@@ -129,5 +145,34 @@ public class UserService {
         return user;
     }
 
+    /**
+     * 프로필 이미지 S3 업로드
+     */
+
+    public String uploadS3(String userLoginId, MultipartFile profileImage, S3ImageFolder folderName){
+
+        // S3 연결 서비스
+        String imageName = StringUtils.deleteWhitespace(folderName+"/"+userLoginId+"_"+profileImage.getOriginalFilename()); // 파일 이름
+        long size = profileImage.getSize(); // 파일 크기
+        String imagePath= "";
+
+        ObjectMetadata objectMetaData = new ObjectMetadata();
+        objectMetaData.setContentType(profileImage.getContentType());
+        objectMetaData.setContentLength(size);
+
+        try {
+
+            amazonS3Client.putObject(
+                    new PutObjectRequest(bucketName, imageName, profileImage.getInputStream(), objectMetaData)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+
+            imagePath = amazonS3Client.getUrl(bucketName, imageName).toString(); // 접근가능한 URL 가져오기
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("이미지 업로드 실패");
+        }
+        return imagePath;
+    }
 
 }

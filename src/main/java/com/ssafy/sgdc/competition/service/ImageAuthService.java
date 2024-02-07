@@ -17,6 +17,7 @@ import com.ssafy.sgdc.competition.repository.ImageAuthRepo;
 import com.ssafy.sgdc.competition.repository.MatchingRepo;
 import com.ssafy.sgdc.enums.CategoryStatus;
 import com.ssafy.sgdc.enums.CompetResult;
+import com.ssafy.sgdc.enums.S3ImageFolder;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class ImageAuthService {
 
 
         // S3 업로드
-        String authImgUrl = uploadS3(userId,competId,authImg);
+        String authImgUrl = uploadS3(userId,competId,authImg,S3ImageFolder.COMPETITION_AUTH_IMAGE);
 
         // 이미지 경로 없을 때 처리
         if (authImgUrl.isEmpty()) {
@@ -103,9 +104,9 @@ public class ImageAuthService {
         return authImgUrl;
     }
 
-    public String uploadS3(int userId, int competId, MultipartFile authImg){
+    public String uploadS3(int userId, int typeId, MultipartFile authImg, S3ImageFolder folderName){
         // S3 연결 서비스
-        String imageName = StringUtils.deleteWhitespace(userId+"_"+competId+"_"+authImg.getOriginalFilename()); // 파일 이름
+        String imageName = StringUtils.deleteWhitespace(folderName+"/"+userId+"_"+typeId+"_"+authImg.getOriginalFilename()); // 파일 이름
         long size = authImg.getSize(); // 파일 크기
         String imagePath= "";
 
