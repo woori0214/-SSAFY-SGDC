@@ -88,6 +88,8 @@ public class SoloService {
 
     // 진행한 리스트를 최신 순으로 30개 조회
     public List<SoloDto> getSoloList(int userId) {
+        userRepo.findByUserId(userId)
+                .orElseThrow(() -> new RuntimeException("getSoloList -> 해당 유저를 찾을 수 없습니다."));
         return soloRepo.findSoloList(userId, SoloResult.COMPLETE,
                 PageRequest.of(0, 30)).stream().map(SoloDto::of).toList();
     }
@@ -101,7 +103,5 @@ public class SoloService {
         return soloRepo.findSoloByUserUserIdAndCreateAtBetween(userId, startOfDay, endOfDay).stream()
                 .map(SoloDto::of).toList();
     }
-    
-    //TODO: 12시가 되면 완료되지 않은 솔로 모드 상태 업데이트 해줘야함
 
 }
