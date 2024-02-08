@@ -79,7 +79,7 @@
           </div>
           <!-- 로그인 상태 -->
           <div v-else class="user-nav">
-            {{ userStorage.getUserInformation().user_nickname }}님
+            {{ userNickname }}님
             <a @click="logout" class="nav-link logout"
               ><span class="material-symbols-outlined"> logout </span></a
             >
@@ -117,18 +117,23 @@
 import { ref, onMounted, onUnmounted } from "vue";
 import router from "@/router";
 import { useLoginStore } from "@/stores/login";
+import { useUserStorageStore } from "@/stores/userStorage";
+import { useUserStore } from "@/stores/user";
 import BackGroundMusic from "./BackGroundMusic.vue";
 import PopUpMainMailbox from "../PopUp/PopUpMainMailbox.vue";
 import SearchNickname from "./SearchNickname.vue";
-import { useUserStorageStore } from "@/stores/userStorage";
 
 const userLoginStore = useLoginStore();
+const userStore = useUserStore();
 const userStorage = useUserStorageStore();
 
 const showMailBox = ref(false);
 const closeLogo = ref(false);
 
 const isLogined_ref = ref(false);
+
+const userNickname = ref('');
+
 
 const popUpMailBox = () => {
   showMailBox.value = true;
@@ -168,6 +173,15 @@ setInterval(function () {//야매 로그인 확인 방법
 
 onMounted(() => {
   userLoginStore.isLogined();
+
+  const userId = ref(userStorage.getUserInformation().user_id)
+  userStore.userData(userId.value)
+    .then((res) => {
+      userNickname.value = res.data.data.user_nickname;
+    })
+    .catch((err) => {
+      console.log(err)
+    })
 });
 </script>
 

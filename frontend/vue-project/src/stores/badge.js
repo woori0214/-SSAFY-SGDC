@@ -58,10 +58,10 @@ export const useBadgeStore = defineStore('badge', () => {
 
     // 유저뱃지 리스트 조회
     const getUserBadgeList = function(userId) {
-      console.log(userId)
+      // console.log(userId)
         return new Promise((resolve, reject) => {
           authorizationAPI
-                .get(`${URL}/${userId}`)
+                .get(`${URL}/list/${userId}`)
                 .then((res) => {
                     resolve(res);
                 })

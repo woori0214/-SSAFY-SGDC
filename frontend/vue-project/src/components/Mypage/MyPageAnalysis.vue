@@ -63,14 +63,14 @@ export default {
     let mostFrequentId = null;
 
     const compet_analysis = ref([]);
-
+    console.log(compet_analysis.value)
     const soloListData = ref([]);
 
     const all_wincount = computed(() => {
       // compet_analysis가 정의되어 있고, 배열이 비어 있지 않은지 확인
       if (compet_analysis.value && compet_analysis.value.length > 0) {
         return compet_analysis.value.reduce(
-          (total, item) => total + item.category_win_count,
+          (total, item) => total + item.categoryWinCnt,
           0
         );
       }
@@ -81,7 +81,7 @@ export default {
       // compet_analysis가 정의되어 있고, 배열이 비어 있지 않은지 확인
       if (compet_analysis.value && compet_analysis.value.length > 0) {
         return compet_analysis.value.reduce(
-          (total, item) => total + item.category_fail_count,
+          (total, item) => total + item.categoryFailCnt,
           0
         );
       }
@@ -102,6 +102,7 @@ export default {
       const ans = (all_wincount.value / all_count.value) * 100;
       return ans.toFixed(0);
     });
+
     // 솔로모드 많이 시도한 카테고리 계산
     const many_solo_challenge = computed(() => {
       if (soloListData.value && soloListData.value.length > 0) {
@@ -144,11 +145,13 @@ export default {
     onMounted(async () => {
       try {
         const compRes = await competStore.competitionAnalysis(userId.value);
-        console.log('경쟁분석 가져옴');
-        compet_analysis.value = compRes.data.userCategories;
+        // console.log('경쟁분석 가져옴');
+        // console.log(compRes.data)
+        compet_analysis.value = compRes.data.user_categories;
 
         const soloRes = await soloStore.soloList(userId.value);
-        console.log('솔로분석 가져옴');
+        // console.log('솔로분석 가져옴');
+        // console.log(soloRes.data)
         soloListData.value = soloRes.data.solos;
       } catch (err) {
         console.error(err);

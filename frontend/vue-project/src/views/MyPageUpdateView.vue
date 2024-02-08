@@ -56,14 +56,15 @@
             </div>
         </div>
 
+
         <!-- 프로필 이미지 수정 필드 -->
         <div class="profile-field">
             <label for="profileImage">프로필 이미지:</label>
-            <!-- 현재 프로필 이미지 표시 -->
             <img :src="profileImageUrl" alt="프로필 이미지" class="current-profile-image" />
             <input type="file" id="profileImage" @change="handleImageUpload" />
             <button @click="updateProfileImage" class="updatebtn">저장하기</button>
         </div>
+
     </div>
 </template>
 
@@ -82,6 +83,7 @@ import healthbadge from '@/assets/badges/health1.png';
 import studybadge from '@/assets/badges/study1.png';
 import dietbadge from '@/assets/badges/diet1.png';
 import fightingbadge from '@/assets/badges/fighting1.png';
+import router from '@/router';
 
 const userStore = useUserStore();
 const useUserStorage = useUserStorageStore();
@@ -91,10 +93,8 @@ const userSignupStore = useSignupStore();
 // 현재 사용자 정보
 const userId = ref('');
 const nickname = ref('');
-// const badgeList = ref([]);
 const badgeId = ref(null);
-const userBadgeImg = ref(''); // 주석풀기
-// const userBadgeImg = userbadge;
+const userBadgeImg = ref('');
 const phoneNumber = ref('');
 const profileImageUrl = ref(''); // 서버로부터 받은 프로필 이미지 URL 저장
 
@@ -114,10 +114,10 @@ const badgeList = ref([])
 
 const updateData = function () {
     return {
-        user_nickname: editNickname.value || nickname.value,
-        user_phone: editPhoneNumber.value || phoneNumber.value,
-        user_img: profileImageUrl.value,  // 이미지 업로드 로직에 따라 수정
-        badge_id: selectedBadge.value ? selectedBadge.value.badge_id : badgeId.value
+        userId: userId.value,
+        userNickname: editNickname.value || nickname.value,
+        userPhone: editPhoneNumber.value || phoneNumber.value,
+        badgeId: selectedBadge.value ? selectedBadge.value.badge_id : badgeId.value
     }
 };
 
@@ -149,8 +149,12 @@ const updateNickname = () => {
     if (isNicknameFormatValid.value && nicknameValid.value) {
         const update_data = updateData()
         console.log(update_data)
-        userStore.userUpdate(userId.value, update_data);
-        // 업데이트 로직 구현
+        userStore.userUpdate(userId.value, update_data).then(() => {
+            router.go(0)
+        }).catch((error) => {
+            console.log(error)
+        });
+
     }
 };
 
@@ -185,39 +189,51 @@ const loadBadgeList = () => {
     });
 };
 
+// 뱃지 업데이트
 const updateBadge = () => {
     const dataToUpdate = updateData(); // 업데이트할 데이터 가져오기
     // 서버에 업데이트 요청 보내기
     userStore.userUpdate(userId.value, dataToUpdate).then(() => {
-        // 성공 처리 로직
+        router.go(0)
     }).catch((error) => {
-        // 오류 처리 로직
-        console.error("Error updating user badge:", error);
+        console.log(error)
     });
 };
 
+// 전화번호 업데이트
+const updatePhoneNumber = () => {
+    const update_data = updateData()
+    console.log(update_data)
+    userStore.userUpdate(userId.value, update_data).then(() => {
+        router.go(0)
+    }).catch((error) => {
+        console.log(error)
+    });
+};
 
-const handleImageUpload = (event) => {
+// 이미지 업로드
+const handleImageUpload = event => {
     profileImageFile.value = event.target.files[0];
     profileImageUrl.value = URL.createObjectURL(event.target.files[0]);
 };
 
-const updateProfileImage = () => {
-    const formData = new FormData();
-    if (profileImageFile.value) {
-        formData.append('profileImage', profileImageFile.value);
-        userStore.userUpdate(userId.value, updateData());
+const updateProfileImage = async () => {
+    if (!profileImageFile.value) {
+        alert('이미지 파일을 선택해주세요.');
+        return;
     }
 
+    const formData = new FormData();
+    formData.append('profileImage', profileImageFile.value);
+
+    userStore.userProfileUpdate(userId.value, formData).then(() => {
+        router.go(0)
+    }).catch((error) => {
+        console.log(error)
+    });
+
+
 };
-
-
-const updatePhoneNumber = () => {
-    const update_data = updateData()
-    console.log(update_data)
-    userStore.userUpdate(userId.value, update_data);
-};
-
 
 
 onMounted(() => {
@@ -234,7 +250,9 @@ onMounted(() => {
         }).catch(error => {
             console.error('Error fetching user data:', error);
         });
+
     loadBadgeList();
+
     const currentBadge = badgeList.value.find(badge => badge.badge_id === badgeId.value);
     if (currentBadge) {
         userBadgeImg.value = currentBadge.badge_img; // ref를 사용한 경우 .value로 접근
@@ -246,7 +264,9 @@ onMounted(() => {
 
 <style scoped>
 .profile-edit {
-    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    /* width: 700px; */
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ddd;
@@ -310,7 +330,7 @@ onMounted(() => {
 }
 
 .current-profile-image {
-    max-width: 100%;
+    max-width: 150px;
     height: auto;
     margin-top: 10px;
     border-radius: 4px;

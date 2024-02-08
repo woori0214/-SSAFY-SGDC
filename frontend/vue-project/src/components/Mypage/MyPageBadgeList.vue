@@ -50,10 +50,11 @@ export default {
 
       badgeStore.getUserBadgeList(userId.value)
         .then((res) => {
-          console.log('유저뱃지 가져옴')
+          // console.log('유저뱃지 가져옴')
           user_badge.value = res.data.data
         })
         .catch((err) => {
+          // console.log('뱃지못가져옴')
           console.log(err)
         });
     });
