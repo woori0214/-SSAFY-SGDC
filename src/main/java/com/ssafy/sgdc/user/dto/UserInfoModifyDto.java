@@ -10,7 +10,6 @@ import lombok.*;
 public class UserInfoModifyDto {
     private int userId;
     private String userNickname;
-    private String userImg;
     private int badgeId;
     private String userPhone;
 }

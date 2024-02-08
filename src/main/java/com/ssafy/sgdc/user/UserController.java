@@ -236,7 +236,6 @@ public class UserController {
         User user = userService.modifyUser(userInfoModifyDto);
          response.put("user_nickName", userInfoModifyDto.getUserNickname());
          response.put("user_phone", userInfoModifyDto.getUserPhone());
-         response.put("user_img", userInfoModifyDto.getUserImg());
          response.put("badge_id", String.valueOf(userInfoModifyDto.getBadgeId()));
 
         return new ResponseEntity<>(GeneralResponse.builder()
