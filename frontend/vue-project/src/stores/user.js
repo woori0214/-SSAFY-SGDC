@@ -28,12 +28,25 @@ export const useUserStore = defineStore('user', () => {
 
     // 마이페이지 회원 수정
     const userUpdate = function (userId, updateData) {
-        console.log('왜??')
-        console.log(userId)
-        console.log(updateData)
+
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .patch(`${URL}/user-info-modify/${userId}`, updateData)
+                .then((res) => {
+                    console.log(res);
+                    resolve(res);
+                })
+                .catch((err) => {
+                    console.log(err);
+                    reject(err);
+                });
+        });
+    }
+
+    const userProfileUpdate = function(userId, formData) {
+        return new Promise((resolve, reject) => {
+            authorizationAPI
+                .patch(`${URL}/user-profile-modify/${userId}`, formData)
                 .then((res) => {
                     console.log(res);
                     resolve(res);
@@ -100,6 +113,7 @@ export const useUserStore = defineStore('user', () => {
     return {
         userData,
         userUpdate,
+        userProfileUpdate,
         mainBadge,
         findAllfriends,
         findMyfriends,

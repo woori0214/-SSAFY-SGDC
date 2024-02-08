@@ -6,8 +6,11 @@
             </div>
             <div class="find_friends">
                 <input type="text" v-model="searchQuery" placeholder="닉네임을 검색하세요 :)" class="find_friends_input">
+                <input type="text" v-model="nickname" placeholder="친구 닉네임을 검색하세요 :)" @input="searchFriends"
+                    class="find_friends_input">
                 <button @click="searchFriends" class="find_friends_btn">검색</button>
             </div>
+            <!-- 검색 창-->
             <div v-if="!searchPerformed" class="list_friends">
                 <div v-for="ssallowing in ssallowings" :key="ssallowing.userId" class="popup_ssallowing">
                     <div class="popup_ssallowing_info">
@@ -21,7 +24,7 @@
             </div>
             <div v-else>
                 <div v-if="searchResults.length">
-                    <div v-for="friend in searchResults" :key="friend.userId" class="popup_ssallowing">
+                    <div v-for="friend in enhancedSearchResults" :key="friend.userId" class="popup_ssallowing">
                         <div class="popup_ssallowing_info">
                             <div class="popup_ssallowing_name">
                                 <img :src="friend.userImg" alt="" class="popup_ssallowing_img">
@@ -57,24 +60,51 @@ export default {
         const userId = ref(props.userId);
         console.log(userId.value)
         const searchQuery = ref(''); // 검색어 바인딩을 위한 ref
-        const searchResults = ref([]); // 검색 결과를 저장할 ref
+        const searchResults = ref(null); // 검색 결과를 저장할 ref
         const searchPerformed = ref(false); // 검색 수행 여부 확인을 위한 ref
 
         const ssallowings = ref([]);
 
-        // 검색 수행 함수
-        const searchFriends = () => {
-            if (searchQuery.value.trim()) {
-                searchPerformed.value = true; // 검색 수행 표시
-                userStore.findMyfriends(userId, { user_nickname: searchQuery.value }).then((res) => {
-                    searchResults.value = res.data.length ? res.data : [];
-                }).catch(() => {
+        // 검색(new)
+        const nickname = ref('');
+        const searchFriends = async () => {
+            const trimmedNickname = nickname.value.trim();
+            if (trimmedNickname === '') {
+                searchResults.value = null;
+                return;
+            }
+            try {
+                const response = await userStore.findAllfriends(trimmedNickname);
+                if (Array.isArray(response.data.data.content)) {
+                    searchResults.value = response.data.data.content.map((user) => {
+                        return {
+                            userId: user.userId,
+                            userNickname: user.userNickname
+                        };
+                    });
+                } else {
+                    console.error('올바르지 않은 API 응답 형식:', response);
                     searchResults.value = [];
-                });
-            } else {
-                searchPerformed.value = false; // 검색어가 비어있으면 검색하지 않음
+                }
+            } catch (error) {
+                console.error('검색 중 오류 발생:', error);
+                searchResults.value = [];
             }
         };
+
+        // 검색 수행 함수
+        // const searchFriends = () => {
+        //     if (searchQuery.value.trim()) {
+        //         searchPerformed.value = true; // 검색 수행 표시
+        //         userStore.findMyfriends(userId, { user_nickname: searchQuery.value }).then((res) => {
+        //             searchResults.value = res.data.length ? res.data : [];
+        //         }).catch(() => {
+        //             searchResults.value = [];
+        //         });
+        //     } else {
+        //         searchPerformed.value = false; // 검색어가 비어있으면 검색하지 않음
+        //     }
+        // };
 
         // 친구 선택 emit
         const sendRequest = (friend) => {
@@ -83,7 +113,7 @@ export default {
         };
 
         const closeList = () => {
-            console.log('닫아줘')
+            // console.log('닫아줘')
             props.Listclose();
         }
 
@@ -92,7 +122,7 @@ export default {
             followStore.ssallowing(userId.value)
                 .then((res) => {
                     ssallowings.value = res.data.data
-                    console.log(ssallowings.value)
+                    // console.log(ssallowings.value)
                 })
                 .catch((err) => {
                     console.log(err)

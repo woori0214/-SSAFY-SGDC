@@ -80,14 +80,10 @@ export default {
         const showPopup = ref(false);
         const popupdata = ref(null);
 
-        // watch(() => route.params.userId, (newUserId) => {
-        //     userId.value = newUserId;
-        // }, { immediate: true });
-
         // 팝업창
         const openPopup = (competdata) => {
-            // compet.competitionFinishDetail(userId.value, competdata.compet_id)
-            competStore.competitionFinishDetail(101, competdata.compet_id)
+            // console.log(competdata)
+            competStore.competitionFinishDetail(userId.value, competdata.compet_id)
                 .then((res) => {
                     selectedMatchingData.value = res.data.competition;
                     showPopup.value = true;
@@ -99,8 +95,8 @@ export default {
 
         // 시간 포맷 변경
         const formatTime = (timeString) => {
-            console.log(selectedMatchingData)
-            console.log(timeString)
+            // console.log(selectedMatchingData)
+            // console.log(timeString)
             const date = new Date(timeString);
             // 유효한 날짜인지 확인
             if (!isNaN(date.getTime())) {
@@ -122,11 +118,11 @@ export default {
         onMounted(() => {
             competStore.competitionFinish(userId.value)
                 .then((res) => {
-                    console.log('싸강두천 전적 가져옴')
+                    // console.log('싸강두천 전적 가져옴')
                     competList.value = res.data.competitions
                 })
                 .catch((err) => {
-                    console.log('싸강두천 전적 못가져옴')
+                    // console.log('싸강두천 전적 못가져옴')
                     console.log(err)
                 });
 

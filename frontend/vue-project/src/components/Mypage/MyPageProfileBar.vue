@@ -179,9 +179,9 @@ export default {
       userStore
         .userData(mypageUserId.value)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           userData.value = res.data.data;
-          console.log(userData.value)
+          // console.log(userData.value)
         })
         .catch((err) => {
           console.log(err);
