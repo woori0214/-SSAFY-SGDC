@@ -3,9 +3,9 @@ package com.ssafy.sgdc.solo.repository;
 import com.ssafy.sgdc.enums.SoloResult;
 import com.ssafy.sgdc.enums.SoloStatus;
 import com.ssafy.sgdc.solo.domain.Solo;
-import com.ssafy.sgdc.solo.dto.SoloDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +24,9 @@ public interface SoloRepo extends JpaRepository<Solo, Integer> {
     List<Solo> findSoloByUserUserIdAndCreateAtBetween(int userId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
     Optional<Solo> findFirstByUserUserIdAndCategoryCategoryIdAndCreateAtBetween(int userId, int categoryId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    @Modifying
+    @Query("UPDATE Solo s SET s.soloStatus = ?2 WHERE s.soloStatus = ?1")
+    void  updateSoloStatus(SoloStatus currentStatus, SoloStatus updateStatus);
 
 }
