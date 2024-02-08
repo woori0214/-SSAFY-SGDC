@@ -186,21 +186,27 @@ export default {
 
     // 솔로모드 도전
     const confirmChallenge = () => {
-      if (selectedCategory.value) {
+      if (selectedCategory.value != null) {
         const challenge = {
           user_id: userStorage.getUserInformation().user_id,
-          category_id: selectedCategory.value.id,
+          category_id: selectedCategory.value
         };
+        console.log('솔로 모드 도전');
+        console.log(challenge);
+
         solo.soloChallenge(challenge);
         openTestModal();
+      }
+      else{
+        console.log('선택된 카테고리가 없습니다.');
       }
       closeModal();
     };
 
     // 확인 모달창
-    const openModal = (category, solo_stauts) => {
+    const openModal = (category_id, solo_stauts) => {
       // console.log(category)
-      selectedCategory.value = category;
+      selectedCategory.value = category_id;
       console.log(selectedCategory);
 
       if (solo_stauts === null) {
