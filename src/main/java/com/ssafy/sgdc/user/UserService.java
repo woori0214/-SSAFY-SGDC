@@ -87,7 +87,7 @@ public class UserService {
     // TODO : 아이디를 찾지 못하면 orElseThrow로 런타임 에러 띄우고 else를 하는 게 아닌 로직 진행
     public User login(UserLoginDto userLoginDto){
         User userLoginId = userRepo.findByLoginId(userLoginDto.getLoginId())
-                .orElse(null);
+                .orElseThrow(() -> new RuntimeException("아이디 없음"));
 
         if(userLoginId==null){
             System.out.println("아이디 못찾음");
@@ -146,7 +146,6 @@ public class UserService {
 
         user.setUserNickname(userInfoModifyDto.getUserNickname());
         user.setUserPhone(userInfoModifyDto.getUserPhone());
-        user.setUserImg(userInfoModifyDto.getUserImg());
         user.setBadgeId(badge);
         return user;
     }
