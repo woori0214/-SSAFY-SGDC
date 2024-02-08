@@ -12,11 +12,11 @@
                         </div>
                     </label>
 
-                    <input id="fileInput" type="file" @change="handleFileChange" style="display: none;"/>
+                    <input id="fileInput" type="file" @change="handleFileChange" style="display: none;" />
 
                     <!-- 업로드 버튼과 닫기 버튼 컨테이너 -->
                     <div class="button-container">
-                        <button class="upload-button" @click="uploadImage">업로드</button>
+                        <button class="upload-button" @click="soloAuthImage">업로드</button>
                         <button class="close-button" @click="close">닫기</button>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
     </transition>
 </template>
 
-<script>
+<!-- <script>
 import defaultImage from '@/assets/camera.png';
 
 export default {
@@ -65,10 +65,48 @@ export default {
         },
     },
 };
+</script> -->
+
+<script setup>
+import { ref } from 'vue';
+import defaultImage from '@/assets/camera.png';
+
+const props = defineProps(['show', 'selectedCategory', 'isSoloMode']);
+const emit = defineEmits(['update:show', 'soloAuthImage']);
+
+const currentImageSrc = ref(defaultImage);
+const profile = ref(null); // 파일 객체를 저장할 ref
+
+function close() {
+    currentImageSrc.value = defaultImage;
+    emit('update:show', false);
+}
+
+const handleFileChange = event => {
+    const file = event.target.files[0];
+    profile.value = file; // 파일 객체를 profile ref에 저장
+    if (file && file.type.startsWith('image/')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            currentImageSrc.value = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        alert('유효하지 않은 파일 형식입니다. 이미지를 선택하세요.');
+    }
+};
+
+function soloAuthImage() {
+    if (profile.value) {
+        emit('soloAuthImage', profile.value); // profile에 저장된 파일 객체를 부모 컴포넌트로 전달
+        close();
+    } else {
+        alert('파일을 선택해주세요.');
+    }
+}
 </script>
-
+ 
 <style scoped>
-
 .modal_mask {
     position: fixed;
     display: flex;
@@ -93,9 +131,9 @@ export default {
     border-radius: 30px;
     border: #e1ecf7 1px solid;
     padding: 20px;
-    width: 80%; 
-    max-width: 600px; 
-    height: auto; 
+    width: 80%;
+    max-width: 600px;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -105,7 +143,7 @@ export default {
 
 /* 파일 입력을 위한 스타일 */
 input[type="file"] {
-    margin-top: 10px; 
+    margin-top: 10px;
 }
 
 /* 업로드 버튼과 닫기 버튼 컨테이너 스타일 */
@@ -130,8 +168,9 @@ input[type="file"] {
     font-size: larger;
     font-weight: bolder;
 }
+
 .upload-button {
-    margin-right: 10px; 
+    margin-right: 10px;
 }
 
 /* 이미지 스타일 */

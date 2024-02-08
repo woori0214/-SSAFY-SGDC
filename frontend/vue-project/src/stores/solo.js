@@ -84,15 +84,11 @@ export const useSoloStore = defineStore('solo', () => {
     //솔로모드 인증
     const soloAuth = function (challengeData) {
 
-        const solo_auth = {
-            "userId": challengeData.user_id,
-            "categoryId": challengeData.category_id,
-            "soloAuthImg": challengeData.uploadedImage,
-        }
+        const solo_auth = { userId: challengeData.userId, categoryId: challengeData.categoryId, soloAuthImg: challengeData.soloAuthImage }
 
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .patch(`${URL}/challenge-auth`, solo_auth)
+                .patch(`${URL}/solo/${solo_auth.userId}/${solo_auth.categoryId}/challenge-auth`, solo_auth.soloAuthImg)
                 .then((res) => {
                     resolve(res);
                     console.log('업로드 완료')

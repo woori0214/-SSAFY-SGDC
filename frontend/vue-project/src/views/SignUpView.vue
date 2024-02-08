@@ -17,35 +17,30 @@
       </button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
+        <!-- <div class="signup-question-item">
+          <div class="signup-question-context">
+            <div class="signup-userImg">
+              <label for="customFileInput" class="signup-userImg-upload"
+                :style="userImg ? `background-image: url(${userImg})` : ``"></label>
+               -->
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-userImg">
-              <label
-                for="customFileInput"
-                class="signup-userImg-upload"
-                :style="userImg ? `background-image: url(${userImg})` : ``"
-              ></label>
+              <!-- 이미지 미리보기 -->
+              <img v-if="previewUrl" :src="previewUrl" alt="Profile preview" class="thumbnail" />
+              <div v-else class="signup-userImg-upload" @click="clickFileInput">
+                <!-- <div class="signup-userImg-context">프로필을<br />업로드 하세요.</div> -->
+              </div>
 
               <!-- 실제 파일 입력 -->
-              <input
-                type="file"
-                accept="image/*"
-                id="customFileInput"
-                ref="fileInputRef"
-                @change="handleFileUpload"
-              />
+              <input type="file" accept="image/*" id="customFileInput" ref="fileInputRef" @change="handleFileUpload" />
 
               <div class="signup-userImg-context">
                 프로필을<br />업로드 하세요.
               </div>
             </div>
 
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="!fileUploadError && userImg"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="!fileUploadError && userImg">
               다음!
             </button>
           </div>
@@ -55,26 +50,16 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="id" class="signup-question-context-what"
-                >아이디</label
-              >
+              <label for="id" class="signup-question-context-what">아이디</label>
             </div>
 
             <div class="signup-question-context-box">
-              <input
-                type="text"
-                v-model="id"
-                @input="idCheck"
-                placeholder="아이디를 입력하세요"
-                class="signup-question-context-input"
-              />
+              <input type="text" v-model="id" @input="idCheck" placeholder="아이디를 입력하세요"
+                class="signup-question-context-input" />
             </div>
 
             <div class="signup-question-context-box">
-              <button
-                @click="checkIdAvailability"
-                class="signup-question-context-check"
-              >
+              <button @click="checkIdAvailability" class="signup-question-context-check">
                 중복확인
               </button>
             </div>
@@ -91,12 +76,8 @@
                 사용 가능한 아이디입니다.
               </p>
             </div>
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="!idError && !idExists && idAvailable"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
+              v-if="!idError && !idExists && idAvailable">
               다음!
             </button>
           </div>
@@ -106,16 +87,10 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="email" class="signup-question-context-what"
-                >이메일</label
-              >
+              <label for="email" class="signup-question-context-what">이메일</label>
 
-              <input
-                type="email"
-                v-model="email"
-                placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
-                class="signup-question-context-input"
-              />
+              <input type="email" v-model="email" placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
+                class="signup-question-context-input" />
             </div>
 
             <div class="signup-question-context-box">
@@ -146,12 +121,7 @@
               </div>
             </div>
 
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="isVerificationSuccess"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="isVerificationSuccess">
               다음!
             </button>
           </div>
@@ -161,25 +131,15 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="ssafyid" class="signup-question-context-what"
-                >ssafy학번</label
-              >
+              <label for="ssafyid" class="signup-question-context-what">ssafy학번</label>
             </div>
 
             <div class="signup-question-context-box">
-              <input
-                type="text"
-                v-model="ssafyid"
-                placeholder="ssafy학번을 입력하세요"
-                class="signup-question-context-input"
-              />
+              <input type="text" v-model="ssafyid" placeholder="ssafy학번을 입력하세요" class="signup-question-context-input" />
             </div>
 
             <div class="signup-question-context-box">
-              <button
-                @click="checkStudentnumAvailability"
-                class="signup-question-context-check"
-              >
+              <button @click="checkStudentnumAvailability" class="signup-question-context-check">
                 중복확인
               </button>
             </div>
@@ -193,12 +153,8 @@
               </p>
             </div>
 
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="!ssafyidExists && ssafyidAvailable"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
+              v-if="!ssafyidExists && ssafyidAvailable">
               다음!
             </button>
           </div>
@@ -208,19 +164,12 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="name" class="signup-question-context-what"
-                >이름</label
-              >
+              <label for="name" class="signup-question-context-what">이름</label>
             </div>
 
             <div class="signup-question-context-box">
-              <input
-                type="text"
-                v-model="name"
-                @input="nameCheck"
-                placeholder="이름을 입력하세요"
-                class="signup-question-context-input"
-              />
+              <input type="text" v-model="name" @input="nameCheck" placeholder="이름을 입력하세요"
+                class="signup-question-context-input" />
             </div>
 
             <div class="error-box">
@@ -229,12 +178,7 @@
               </p>
             </div>
 
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="!nameError && name != ''"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="!nameError && name != ''">
               다음!
             </button>
           </div>
@@ -244,26 +188,16 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="nickname" class="signup-question-context-what"
-                >닉네임</label
-              >
+              <label for="nickname" class="signup-question-context-what">닉네임</label>
             </div>
 
             <div class="signup-question-context-box">
-              <input
-                type="text"
-                v-model="nickname"
-                @input="nicknameCheck"
-                placeholder="닉네임을 입력하세요"
-                class="signup-question-context-input"
-              />
+              <input type="text" v-model="nickname" @input="nicknameCheck" placeholder="닉네임을 입력하세요"
+                class="signup-question-context-input" />
             </div>
 
             <div class="signup-question-context-box">
-              <button
-                @click="checkNickAvailability"
-                class="signup-question-context-check"
-              >
+              <button @click="checkNickAvailability" class="signup-question-context-check">
                 중복확인
               </button>
             </div>
@@ -280,12 +214,8 @@
               </p>
             </div>
 
-            <button
-              id="signup-clear-btn"
-              class="expandUp"
-              @click="signupSlidenext"
-              v-if="!nicknameError && !nicknameExists && nicknameAvailable"
-            >
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
+              v-if="!nicknameError && !nicknameExists && nicknameAvailable">
               다음!
             </button>
           </div>
@@ -295,26 +225,16 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="phonenumber" class="signup-question-context-what"
-                >전화번호</label
-              >
+              <label for="phonenumber" class="signup-question-context-what">전화번호</label>
             </div>
 
             <div class="signup-question-context-box">
-              <input
-                type="text"
-                v-model="phonenumber"
-                @input="phonenumberCheck"
-                placeholder="-를 제외하고 입력해주세요."
-                class="signup-question-context-input"
-              />
+              <input type="text" v-model="phonenumber" @input="phonenumberCheck" placeholder="-를 제외하고 입력해주세요."
+                class="signup-question-context-input" />
             </div>
 
             <div class="signup-question-context-box">
-              <button
-                @click="checkPhoneNumAvailability"
-                class="signup-question-context-check"
-              >
+              <button @click="checkPhoneNumAvailability" class="signup-question-context-check">
                 중복확인
               </button>
             </div>
@@ -323,16 +243,10 @@
               <p v-if="phonenumberError" class="input_error">
                 유효한 전화번호를 입력하세요.
               </p>
-              <p
-                v-show="phonenumberExists && !phonenumberAvailable"
-                class="input_error"
-              >
+              <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
                 중복된 전화번호가 있습니다.
               </p>
-              <p
-                v-show="!phonenumberExists && phonenumberAvailable"
-                class="success_message"
-              >
+              <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
                 사용 가능한 번호입니다.
               </p>
             </div>
@@ -362,110 +276,58 @@
 
     <div class="signup-history-body">
       <div class="signup-question-history">
-        <div
-          class="history-item"
-          :style="
-            !fileUploadError && userImg ? '' : 'background-color: #f8f9fb'
-          "
-        >
-          <div
-            class="history-item-isclear"
-            :style="
-              !fileUploadError && userImg ? 'background-color: #2196f3' : ''
-            "
-          ></div>
+        <div class="history-item" :style="!fileUploadError && userImg ? '' : 'background-color: #f8f9fb'
+          ">
+          <div class="history-item-isclear" :style="!fileUploadError && userImg ? 'background-color: #2196f3' : ''
+            "></div>
           프로필 사진
         </div>
-        <div
-          class="history-item"
-          :style="
-            !idError && !idExists && idAvailable
-              ? ''
-              : 'background-color: #f8f9fb'
-          "
-        >
-          <div
-            class="history-item-isclear"
-            :style="
-              !idError && !idExists && idAvailable
-                ? 'background-color: #2196f3'
-                : ''
-            "
-          ></div>
+        <div class="history-item" :style="!idError && !idExists && idAvailable
+          ? ''
+          : 'background-color: #f8f9fb'
+          ">
+          <div class="history-item-isclear" :style="!idError && !idExists && idAvailable
+            ? 'background-color: #2196f3'
+            : ''
+            "></div>
           아이디 설정
         </div>
-        <div
-          class="history-item"
-          :style="isVerificationSuccess ? '' : 'background-color: #f8f9fb'"
-        >
-          <div
-            class="history-item-isclear"
-            :style="isVerificationSuccess ? 'background-color: #2196f3' : ''"
-          ></div>
+        <div class="history-item" :style="isVerificationSuccess ? '' : 'background-color: #f8f9fb'">
+          <div class="history-item-isclear" :style="isVerificationSuccess ? 'background-color: #2196f3' : ''"></div>
           싸피 프로젝트 본인 인증
         </div>
-        <div
-          class="history-item"
-          :style="
-            !ssafyidExists && ssafyidAvailable
-              ? ''
-              : 'background-color: #f8f9fb'
-          "
-        >
-          <div
-            class="history-item-isclear"
-            :style="
-              !ssafyidExists && ssafyidAvailable
-                ? 'background-color: #2196f3'
-                : ''
-            "
-          ></div>
+        <div class="history-item" :style="!ssafyidExists && ssafyidAvailable
+          ? ''
+          : 'background-color: #f8f9fb'
+          ">
+          <div class="history-item-isclear" :style="!ssafyidExists && ssafyidAvailable
+            ? 'background-color: #2196f3'
+            : ''
+            "></div>
           싸피 학번 입력
         </div>
-        <div
-          class="history-item"
-          :style="!nameError && name != '' ? '' : 'background-color: #f8f9fb'"
-        >
-          <div
-            class="history-item-isclear"
-            :style="!nameError && name != '' ? 'background-color: #2196f3' : ''"
-          ></div>
+        <div class="history-item" :style="!nameError && name != '' ? '' : 'background-color: #f8f9fb'">
+          <div class="history-item-isclear" :style="!nameError && name != '' ? 'background-color: #2196f3' : ''"></div>
           이름 입력
         </div>
-        <div
-          class="history-item"
-          :style="
-            !nicknameError && !nicknameExists && nicknameAvailable
-              ? ''
-              : 'background-color: #f8f9fb'
-          "
-        >
-          <div
-            class="history-item-isclear"
-            :style="
-              !nicknameError && !nicknameExists && nicknameAvailable
-                ? 'background-color: #2196f3'
-                : ''
-            "
-          ></div>
+        <div class="history-item" :style="!nicknameError && !nicknameExists && nicknameAvailable
+          ? ''
+          : 'background-color: #f8f9fb'
+          ">
+          <div class="history-item-isclear" :style="!nicknameError && !nicknameExists && nicknameAvailable
+            ? 'background-color: #2196f3'
+            : ''
+            "></div>
           닉네임 설정
         </div>
-        <div
-          class="history-item"
-          :style="
-            !phonenumberError && !phonenumberExists && phonenumberAvailable
-              ? ''
-              : 'background-color: #f8f9fb'
-          "
-        >
-          <div
-            class="history-item-isclear"
-            :style="
-              !phonenumberError && !phonenumberExists && phonenumberAvailable
-                ? 'background-color: #2196f3'
-                : ''
-            "
-          ></div>
+        <div class="history-item" :style="!phonenumberError && !phonenumberExists && phonenumberAvailable
+          ? ''
+          : 'background-color: #f8f9fb'
+          ">
+          <div class="history-item-isclear" :style="!phonenumberError && !phonenumberExists && phonenumberAvailable
+            ? 'background-color: #2196f3'
+            : ''
+            "></div>
           전화번호 입력
         </div>
       </div>
@@ -716,7 +578,7 @@ export default {
       isAlert.value = !isAlert.value;
     };
 
-    // 회원가입 성공시 가입 정보로 자동 로그인하는 함수 << 현재 사용 안하는 함수
+    // 회원가입 성공시 가입 정보로 자동 로그인하는 함수
     const autoLoginForSignup = (signupInformation) => {
       const User = {
         loginId: signupInformation.loginId,
@@ -743,7 +605,7 @@ export default {
           isSubmitButtonDisabled.value = false;
         });
     };
-
+    const profile = ref(null); 
     // 회원가입 최종 제출 검사 및 회원가입
     const submitForm2 = () => {
       console.log(hasAnyError.value);
@@ -753,54 +615,106 @@ export default {
         alert("양식을 올바르게 입력해주세요.");
         return;
       }
-      const newUser = ref({
+      // const newUser = ref({
+      //   loginId: id.value,
+      //   userEmail: email.value,
+      //   userSsafyId: ssafyid.value,
+      //   userNickname: nickname.value,
+      //   userName: name.value,
+      //   userPassword: password.value,
+      //   userImg: userImg.value,
+      //   userPhone: phonenumber.value,
+      //   // isAlert: isAlert.value ? "활성" : "비활성",
+      //   kakaoPush: false,
+      // });
+      // const formData = new FormData();
+      // // 텍스트 필드 데이터 추가
+      // formData.append('loginId', id.value);
+      // formData.append('userEmail', email.value);
+      // formData.append('userSsafyId', ssafyid.value);
+      // formData.append('userNickname', nickname.value);
+      // formData.append('userName', name.value);
+      // formData.append('userPassword', password.value);
+      // formData.append('userPhone', phonenumber.value);
+      // 선택된 파일이 있다면 파일 데이터 추가
+      // 파일 저장을 위한 ref 변수
+      const userSignUp = ref({
         loginId: id.value,
         userEmail: email.value,
         userSsafyId: ssafyid.value,
         userNickname: nickname.value,
         userName: name.value,
         userPassword: password.value,
-        userImg: userImg.value,
+        userImg: '',
         userPhone: phonenumber.value,
-        // isAlert: isAlert.value ? "활성" : "비활성",
-        kakaoPush: false,
+        kakaoPush: true // 이 부분은 실제 사용하는 변수에 따라 조정하세요.
       });
+      // function onFileChange(fileInputRef) {
+      //   profile.value = fileInputRef.target.files[0];
 
-      signUp
-        .submitNewUser(newUser.value)
+      // }
+      // const jsonBlob = new Blob([JSON.stringify(userData)], { type: "application/json" });
+      // if (selectedFile.value) {
+      //   formData.append('userImg', selectedFile.value);
+      // }
+      // formData.append('kakaoPush', true);
+      // signUp.submitNewUser(formData)
+      //   .then((response) => {
+      //     console.log("회원가입 완료", response);
+      //     router.push({ name: "Main" }).catch((error) => {
+      //       alert("라우팅 에러발생함" + error);
+      //     });
+      //   })
+      //   .catch((error) => {
+      //     console.log("회원가입 실패", error);
+      //   });
+      const formData = new FormData();
+      formData.append('userSignUpJson', JSON.stringify(userSignUp.value));
+      formData.append('profileImage', profile.value);
+      signUp.submitNewUser(formData)
         .then((response) => {
-          console.log("회원가입 완료");
-          console.log(response);
-          console.log(userImg.value);
-
-          //autoLoginForSignup(newUser);
-          try {
-            router.push({ name: "Main" });
-          } catch (error) {
-            alert("라우팅 에러발생함" + error);
-          }
+          console.log("회원가입 완료", response);
+          // 성공 후 처리, 예를 들어 페이지 이동
+          router.push({ name: "Main" }).catch((error) => {
+            alert("라우팅 에러 발생: " + error);
+          });
         })
-        .catch(() => {
-          console.log("회원가입 실패");
+        .catch((error) => {
+          console.log("회원가입 실패", error);
+          // 실패 처리 로직
         });
-    };
 
+    }
+    // if (fileInputRef.value && fileInputRef.value.files[0]) {
+    //   formData.append("userImg", fileInputRef.value.files[0]);
+    // }
+
+    // Axios, Fetch API 등을 사용하여 서버로 데이터 전송
+
+
+
+    const previewUrl = ref(""); // 이미지 미리보기 URL을 저장할 상태
     // 유저 프로필 사진 업로드
-    // 유저 프로필 사진 업로드
-    const handleFileUpload = () => {
-      const file = fileInputRef.value.files[0];
-      if (file) {
+    const selectedFile = ref(null); // 선택된 파일을 저장할 상태
+
+
+    const handleFileUpload = (fileInputRef) => {
+      const file = fileInputRef.target.files[0];
+      profile.value = file;
+      if (profile) {
         const reader = new FileReader();
-        reader.onload = (event) => {
-          // `event.target.result`에는 base64로 인코딩된 이미지가 포함됩니다.
-          userImg.value = event.target.result;
-          fileUploadError.value = null;
-          // console.log(userImg.value);
+        reader.onload = (e) => {
+          previewUrl.value = e.target.result; // 파일 리더가 읽은 데이터로 미리보기 URL 업데이트
         };
-        // 파일을 데이터 URL로 읽어옵니다 (base64로 인코딩)
-        reader.readAsDataURL(file);
+        reader.readAsDataURL(file); // 파일 내용을 읽어 데이터 URL로 변환
       }
     };
+
+    // 레이블 클릭 시 실제 파일 입력을 트리거하는 함수
+    const clickFileInput = () => {
+      fileInputRef.value.click();
+    };
+
 
     return {
       id,
@@ -851,6 +765,10 @@ export default {
       signupSlidenext,
       signupSlidegoTo,
       userImageDefault,
+      selectedFile,
+      previewUrl,
+      clickFileInput,
+      
     };
   },
 };
@@ -868,6 +786,7 @@ export default {
   background-color: #f8f9fb;
   color: #202020;
 }
+
 .signup-main-body {
   /* border: 2px solid red; */
   display: flex;
@@ -876,6 +795,7 @@ export default {
   height: 85%;
   justify-content: space-between;
 }
+
 .signup-title {
   /* border: 2px solid orange; */
 
@@ -884,6 +804,7 @@ export default {
   font-size: 45px;
   font-weight: 700;
 }
+
 .signup-question-box {
   /* border: 2px solid orange; */
 
@@ -893,6 +814,7 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
 .signup-question-before-btn {
   border: 2px solid #71a5de;
   border-radius: 5px;
@@ -905,6 +827,7 @@ export default {
   font-size: 10px;
   text-align: center;
 }
+
 .signup-question-next-btn {
   border: 2px solid #71a5de;
   border-radius: 5px;
@@ -917,6 +840,7 @@ export default {
   font-size: 10px;
   text-align: center;
 }
+
 .signup-question-slide {
   /* border: 2px solid yellow; */
 
@@ -925,6 +849,7 @@ export default {
   display: flex;
   transition: transform 0.3s ease;
 }
+
 .signup-question-item {
   /* border: 2px solid green; */
 
@@ -958,6 +883,7 @@ export default {
   font-weight: 700;
   color: #71a5de;
 }
+
 .signup-question-context-input {
   border: 2px solid #f8f9fb;
   border-radius: 5px;
@@ -969,6 +895,7 @@ export default {
   padding-inline: 10px;
   padding-block: 5px;
 }
+
 .signup-question-context-check {
   border: 2px solid #aecbeb;
   border-radius: 5px;
@@ -981,12 +908,14 @@ export default {
   margin-left: auto;
   margin-right: 0;
 }
+
 .signup-question-context-item {
   border: 2px solid purple;
 
   width: 100%;
   margin: 0 auto;
 }
+
 .signup-question-context-box {
   /* border: 2px solid blue; */
   width: 80%;
@@ -1000,6 +929,7 @@ export default {
 #customFileInput {
   display: none;
 }
+
 .signup-userImg {
   display: flex;
   width: 100%;
@@ -1008,19 +938,23 @@ export default {
   align-items: center;
   gap: 15px;
 }
+
 .signup-userImg-upload {
   border: 3px solid #71a5de;
   background-color: #fff;
   border-radius: 100%;
   background-image: url("@/assets/camera2.png");
-  background-size: contain; /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
-  background-position: center; /* 이미지 중앙 정렬 */
+  background-size: contain;
+  /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
+  background-position: center;
+  /* 이미지 중앙 정렬 */
   background-repeat: no-repeat;
 
   width: 30%;
   height: 0;
   padding-bottom: 30%;
 }
+
 .signup-userImg-context {
   /* border: 1px solid red; */
 
@@ -1034,6 +968,7 @@ export default {
   width: 80%;
   position: relative;
 }
+
 .signup-question-history {
   /* border: 2px solid orange; */
 
@@ -1043,16 +978,20 @@ export default {
   gap: 15px;
   padding-inline: 30px;
 }
+
 .signup-history-body::before,
 .signup-history-body::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 6%; /* 흐릿한 효과의 너비 */
+  width: 6%;
+  /* 흐릿한 효과의 너비 */
   z-index: 2;
-  pointer-events: none; /* 마우스 이벤트 방지 */
+  pointer-events: none;
+  /* 마우스 이벤트 방지 */
 }
+
 .signup-history-body::before {
   left: 0;
   background: linear-gradient(to right, #f8f9fb, rgba(255, 255, 255, 0));
@@ -1062,19 +1001,23 @@ export default {
   right: 0;
   background: linear-gradient(to left, #f8f9fb, rgba(255, 255, 255, 0));
 }
+
 .signup-question-history::-webkit-scrollbar {
   height: 5px;
   border: 1px solid black;
 }
+
 .signup-question-history::-webkit-scrollbar-thumb {
   background-color: #71a5de;
   background-clip: padding-box;
   /* border: 2px solid transparent; */
 }
+
 .signup-question-history::-webkit-scrollbar-track {
   background-color: rgb(255, 255, 255);
   /* box-shadow: inset 0px 0px 5px white; */
 }
+
 .history-item {
   border: 2px solid #aecbeb;
   border-radius: 20px;
@@ -1116,8 +1059,8 @@ export default {
   bottom: 0px;
   text-align: center;
 }
-.error-item {
-}
+
+.error-item {}
 
 /* 수신 여부 토글 CSS --------------------------------------- */
 .toggle_switch {
@@ -1156,11 +1099,11 @@ export default {
   transition: 0.3s;
 }
 
-.toggle_switch input:checked + label {
+.toggle_switch input:checked+label {
   background-color: #2196f3;
 }
 
-.toggle_switch input:checked + label:after {
+.toggle_switch input:checked+label:after {
   transform: translateX(15px);
 }
 
@@ -1238,18 +1181,23 @@ export default {
   0% {
     transform: translateY(-100%);
   }
+
   50% {
     transform: translateY(8%);
   }
+
   65% {
     transform: translateY(-4%);
   }
+
   80% {
     transform: translateY(4%);
   }
+
   95% {
     transform: translateY(-2%);
   }
+
   100% {
     transform: translateY(0%);
   }
@@ -1259,18 +1207,23 @@ export default {
   0% {
     -webkit-transform: translateY(-100%);
   }
+
   50% {
     -webkit-transform: translateY(8%);
   }
+
   65% {
     -webkit-transform: translateY(-4%);
   }
+
   80% {
     -webkit-transform: translateY(4%);
   }
+
   95% {
     -webkit-transform: translateY(-2%);
   }
+
   100% {
     -webkit-transform: translateY(0%);
   }
@@ -1293,12 +1246,15 @@ export default {
   0% {
     transform: translateY(100%) scale(0.6) scaleY(0.5);
   }
+
   60% {
     transform: translateY(-7%) scaleY(1.12);
   }
+
   75% {
     transform: translateY(3%);
   }
+
   100% {
     transform: translateY(0%) scale(1) scaleY(1);
   }
@@ -1308,12 +1264,15 @@ export default {
   0% {
     -webkit-transform: translateY(100%) scale(0.6) scaleY(0.5);
   }
+
   60% {
     -webkit-transform: translateY(-7%) scaleY(1.12);
   }
+
   75% {
     -webkit-transform: translateY(3%);
   }
+
   100% {
     -webkit-transform: translateY(0%) scale(1) scaleY(1);
   }
