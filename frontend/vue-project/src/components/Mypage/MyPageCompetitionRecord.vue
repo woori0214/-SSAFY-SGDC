@@ -181,6 +181,7 @@ export default {
      transition: transform 0.3s ease;
      margin-left: auto;
      /* 화살표를 헤더의 오른쪽에 위치시키기 위한 스타일 */
+     font-family: sans-serif;
  }
 
  .rotate-icon::before {

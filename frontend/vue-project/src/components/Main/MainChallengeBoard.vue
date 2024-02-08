@@ -29,8 +29,8 @@
               class="category_btn"
               v-for="category in categories"
               :key="category.id"
-              :class="{ completed: category.isActive === 'ture' }"
-              @click="proofSolo(category.id)"
+              :class="{ completed: category.isResult === 'COMPLETE' }"
+              @click="proofSolo(category.id, category.isStatus)"
             >
               {{ category.name }}
             </button>
@@ -164,12 +164,12 @@ const solo_progress = ref(35);
 // donut.data-percent = totalMinwon;
 // donut.style.background = `conic-gradient(#3F8BC9 0% ${totalMinwon}%, #F2F2F2 ${totalMinwon}% 100%)`;
 const categories = ref([
-  { id: 1, name: "기상", isActive: false },
-  { id: 2, name: "알고리즘", isActive: false },
-  { id: 3, name: "운동", isActive: false },
-  { id: 4, name: "식단", isActive: false },
-  { id: 5, name: "스터디", isActive: false },
-  { id: 6, name: "절제", isActive: false },
+  { id: 1, name: "기상", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 2, name: "알고리즘", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 3, name: "운동", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 4, name: "식단", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 5, name: "스터디", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 6, name: "절제", isStatus: null, isResult: "INCOMPLETE" },
 ]);
 
 const items = ref([
@@ -196,9 +196,17 @@ const items = ref([
 ]);
 
 // 솔로모드 인증 바로가기
-const proofSolo = function (categoryId) {
+const proofSolo = function (categoryId, isStatus) {
   selectedCategory.value = categoryId;
   const challenge = { user_id: userId, category_id: categoryId };
+
+  if(isStatus === null){
+    try{
+      soloStore.soloChallenge(challenge);
+    }catch(error){
+      console.log(error);
+    }
+  }
   soloStore.soloChallenge(challenge);
   openTestModal();
 };
@@ -324,6 +332,7 @@ function setFontSize() {
 //   }
 // }
 const solo_percent = ref(0);
+const completed_solo = ref(0);
 
 onMounted(() => {
   fetchCompetitionData();
@@ -333,11 +342,23 @@ onMounted(() => {
     soloStore
       .soloToday(userId.value)
       .then((response) => {
-        todayChallenges.value = response.data["solo_id"].map((challenge) => ({
-          category_id: challenge.category_id,
-          category_name: getCategoryNameById(challenge.category_id),
-          solo_result: challenge.solo_result,
-        }));
+        console.log('솔로 모드 현황 받은 데이터');
+        console.log(response);
+        response.data.solos.forEach((soloItem) => {
+          categories.value.forEach((todayItem) => {
+            if (todayItem.id == soloItem.category_id) {
+                todayItem.isStatus = soloItem.solo_status;
+                todayItem.isResult = soloItem.solo_result;
+
+                if(soloItem.solo_result === 'COMPLETE'){
+                  completed_solo.value++;
+                }
+              }
+          })
+        })
+        
+        console.log('업데이트한 솔로 모드 현황 테이블');
+        console.log(categories.value);
       })
       .catch((error) => {
         console.error("Error fetching solo today data:", error);
@@ -347,24 +368,15 @@ onMounted(() => {
   }
 
   const donut = document.querySelector(".donut");
-  const totalMinwon = ref((4 / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
-  if (donut) {
-    solo_percent.value = 0;
-    const donutAnimation = setInterval(() => {
-      donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
-      solo_percent.value++;
-      if (solo_percent.value >= totalMinwon.value)
-        clearInterval(donutAnimation);
-    }, 30);
-  }
+  const totalMinwon = ref((completed_solo.value / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
+
+  const donut_parent = document.getElementsByClassName("donut_percent")[0];
+  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
 
   setFontSize();
   // adjustDonutFontSize();
   window.addEventListener("resize", setFontSize);
   // window.addEventListener('resize', adjustDonutFontSize);
-
-  const donut_parent = document.getElementsByClassName("donut_percent")[0];
-  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
 
   function adjustChildMargin() {
     const parentHeight = donut_parent.offsetHeight;
@@ -372,7 +384,22 @@ onMounted(() => {
   }
 
   adjustChildMargin(); // 초기 마진 설정
-  window.addEventListener("resize", adjustChildMargin); // 창 크기 조절 시 마진 재조정
+  window.addEventListener("resize", adjustChildMargin); 
+  
+  if (donut) {
+    solo_percent.value = 0;
+    console.log('퍼센트지');
+    console.log(totalMinwon.value);
+    const donutAnimation = setInterval(() => {
+      donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
+      
+      if (solo_percent.value >= totalMinwon.value){
+        solo_percent.value--;
+        clearInterval(donutAnimation);
+      }
+      solo_percent.value++;
+    }, 30);
+  }// 창 크기 조절 시 마진 재조정
 });
 // if (chartRef.value) {
 //   const ctx = chartRef.value.getContext("2d");
@@ -510,7 +537,7 @@ onMounted(() => {
   border-radius: 20px;
   cursor: pointer;
   flex-basis: calc(50% - 10px);
-  font-size: 22px;
+  font-size: 20px;
   /* font-size: 2.0vw;
   font-size: 1.7vh; */
   font-weight: 600;

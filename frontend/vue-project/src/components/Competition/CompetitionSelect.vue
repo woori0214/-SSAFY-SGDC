@@ -30,9 +30,9 @@ User
     <PopUpRequestMessage :showModal="isRandomMatchingMessageVisible || isFriendMatchingMessageVisible
       " :close="closeMessage" :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
       :category_name="selectedCategoryName !== null ? selectedCategoryName : null
-        " :user_id="userId" :friendId="selectedFriendId" />
+        " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname"/>
 
-    <PopUpFriendsList :userId="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList"
+    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList"
       :selectedCategory="selectedCategory !== null ? selectedCategory : null" @friend-selected="handleFriendSelect" />
   </div>
 </template>
@@ -86,6 +86,7 @@ const modalType = ref("");
 const selectedCategory = ref(null);
 const selectedCategoryName = ref(null);
 const selectedFriendId = ref(null);
+const selectedFriendNickname = ref(null);
 
 const userId = userInformation.user_id;
 const disabledCategories = ref([]);
@@ -153,8 +154,11 @@ const openFriendMatchingModal = () => {
 };
 
 // 친구 선택
-const handleFriendSelect = (friendId) => {
-  selectedFriendId.value = friendId;
+const handleFriendSelect = (friend) => {
+  console.log(friend)
+  selectedFriendId.value = friend.userId;
+  selectedFriendNickname.value = friend.userNickname;
+  console.log(selectedFriendNickname.value)
   isFriendMatchingMessageVisible.value = true;
   isFriendMatchingListVisible.value = false;
   closeFriendsList();

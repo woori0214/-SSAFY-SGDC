@@ -61,11 +61,16 @@ export const useSoloStore = defineStore('solo', () => {
     }
 
     //솔로모드 도전
-    const soloChallenge = function (challenge) {
-        const category = { userId: challenge.user_id, category_id: challenge.category_id }
+    const soloChallenge = function (challengeData) {
+        
+        const solo_auth = {
+            "userId": challengeData.user_id,
+            "categoryId": challengeData.category_id,
+        }
+
         return new Promise((resolve, reject) => {
             authorizationAPI
-                .post(`${URL}/${category.category_id}`, category)
+                .post(`${URL}/challenge`, solo_auth)
                 .then((res) => {
                     resolve(res);
                 })

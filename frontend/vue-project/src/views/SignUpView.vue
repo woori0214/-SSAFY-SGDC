@@ -2,10 +2,18 @@
 
 <template>
   <div class="signup-main-body">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
-        ◀
+        <
       </button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
@@ -86,9 +94,16 @@
             </div>
 
             <div class="signup-question-context-box">
-              <label for="password" class="signup-question-context-what">비밀번호</label>
-              <input type="password" v-model="password" placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요."
-                class="signup-question-context-input" />
+              <label for="password" class="signup-question-context-what"
+                >비밀번호</label
+              >
+              <input
+                type="password"
+                v-model="password"
+                placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요."
+                class="signup-question-context-input"
+                :style="password != '' ? 'font-family: sans-serif' : ''"
+              />
             </div>
 
             <div class="signup-question-context-box">
@@ -251,7 +266,7 @@
     </div> -->
       </div>
       <button class="signup-question-next-btn" @click="signupSlidenext">
-        ▶
+        >
       </button>
     </div>
     <!-- 회원가입 제출 -->
@@ -1131,6 +1146,7 @@ export default {
     /* Remove margins */
     box-sizing: border-box;
     /* Include padding in width calculation */
+    font-family: "jua";
   }
 
   .input_error,
