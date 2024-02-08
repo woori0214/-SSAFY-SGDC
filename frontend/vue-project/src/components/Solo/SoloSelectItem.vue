@@ -1,19 +1,12 @@
 <template>
   <div class="solomode_container">
     <div class="category_container">
-      <div
-        v-for="category in today_categories"
-        :key="category.id"
-        class="category_item"
-      >
+      <div v-for="category in today_categories" :key="category.id" class="category_item">
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
         <!-- 완료 미션 -->
         <div class="solo-btn-wrap" v-if="category.soloResult === 'COMPLETE'">
-          <button
-            @click="openModal(category.id, category.soloStatus)"
-            class="solo_btn"
-            style="background-color: #71a5de; pointer-events: none"
-          >
+          <button @click="openModal(category.id, category.soloStatus)" class="solo_btn"
+            style="background-color: #71a5de; pointer-events: none">
             <div class="solo_btn_content">
               <img :src="category.img" alt="category" class="solo_bnt_img" />
               <div class="category_text">{{ category.name }}</div>
@@ -24,11 +17,8 @@
 
         <!-- 미완료 미션 -->
         <div class="solo-btn-wrap" v-else>
-          <button
-            @click="openModal(category.id, category.soloStatus)"
-            class="solo_btn"
-            style="background-color: #aecbeb; pointer-events: auto"
-          >
+          <button @click="openModal(category.id, category.soloStatus)" class="solo_btn"
+            style="background-color: #aecbeb; pointer-events: auto">
             <div class="solo_btn_content">
               <img :src="category.img" alt="category" class="solo_bnt_img" />
               <div class="category_text">{{ category.name }}</div>
@@ -49,13 +39,8 @@
     </div>
 
     <!-- PopUpProofPicture.vue 모달로 추가 -->
-    <PopUpProofPicture
-      :show="isTestModalOpen"
-      @update:show="closeTestModal"
-      @uploadImage="handleImageUpload"
-      :selectedCategory="selectedCategory"
-      :isSoloMode="true"
-    />
+    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @soloAuthImage="handleSoloAuthImage"
+      :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
   
@@ -85,6 +70,8 @@ export default {
     const isTestModalOpen = ref(false);
     const selectedCategory = ref(null);
     const soloTodayData = ref([]);
+    const userId = ref();
+    const categoryId = ref();
 
     // 카테고리
     const today_categories = ref([
@@ -197,7 +184,7 @@ export default {
         solo.soloChallenge(challenge);
         openTestModal();
       }
-      else{
+      else {
         console.log('선택된 카테고리가 없습니다.');
       }
       closeModal();
@@ -227,27 +214,35 @@ export default {
     };
 
     // 이미지 업로드
-    const handleImageUpload = file => {
+    const handleSoloAuthImage = file => {
       // 이미지 업로드 이벤트 핸들러
       console.log('이미지 업로드 완료:', file);
       const challengeRequestJson = ref({
-        userId: user_id,
+        userId: userStorage.getUserInformation().user_id,
         categoryId: selectedCategory.value.id,
         // isSoloMode: true,
         // uploadedImage: uploadedImageSrc,
         soloAuthImg: ''
+        
       });
+      console.log('잘 담아있나?');
+      console.log(userId.value);
+      console.log(categoryId.value);
       const formData = new FormData();
       formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson.value));
       formData.append('soloAuthImage', file);
+      console.log('여기까지는 왔다');
       solo.soloAuth(formData)
         .then((response) => {
-          console.log('이미지 업로드 완료:', response);
+          console.log('이미지 통신 완료:', response);
 
           closeTestModal();
         })
         .catch((error) => {
           console.error('이미지 업로드 실패:', error);
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
 
         });
       console.log(formData);
@@ -264,7 +259,7 @@ export default {
       isTestModalOpen,
       openTestModal,
       closeTestModal,
-      handleImageUpload,
+      handleSoloAuthImage,
       selectedCategory,
     };
   },

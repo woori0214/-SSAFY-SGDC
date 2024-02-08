@@ -85,12 +85,11 @@ function close() {
 const handleFileChange = event => {
     const file = event.target.files[0];
     profile.value = file; // 파일 객체를 profile ref에 저장
-    if (file && file.type.startsWith('image/')) {
+    if (file) {
+        profile.value = file; // 파일 저장
         const reader = new FileReader();
-        reader.onload = e => {
-            currentImageSrc.value = e.target.result;
-        };
-        reader.readAsDataURL(file);
+        reader.onload = e => currentImageSrc.value = e.target.result;
+        reader.readAsDataURL(file); // 파일 읽기 및 미리보기 생성
     } else {
         alert('유효하지 않은 파일 형식입니다. 이미지를 선택하세요.');
     }
