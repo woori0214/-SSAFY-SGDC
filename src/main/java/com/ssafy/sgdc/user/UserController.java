@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +55,7 @@ public class UserController {
         UserSignUpDto userSignUpDto = objectMapper.readValue(userSignUpJson, UserSignUpDto.class);
         System.out.println("회원가입 경로.");
         String ImageUrl=userService.uploadS3(userSignUpDto.getLoginId(),profile, S3ImageFolder.PROFILE_IMAGE);
-        userService.signUp(userSignUpDto,ImageUrl);
+        userService.signUp(userSignUpDto,profile.getOriginalFilename());
 
 
         Map<String, String> result = new HashMap<>();
@@ -244,5 +245,31 @@ public class UserController {
                 .data(response)
                 .build(), HttpStatus.OK);
     }
+    @Operation(summary = "프로필 사진 수정", description="프로필사진을 변경할 수 있습니다                                                              .")
+    @RequestMapping(value = "/user-profile-modify/{userId}", method = RequestMethod.PATCH)
+    public ResponseEntity<GeneralResponse> userInfoModify(
+            @PathVariable int userId,
+            @RequestPart(value = "profileImage") MultipartFile profile
+            ) throws JsonProcessingException {
+        //삭제
+        System.out.println("프로필 사진 삭제하러 userService.delete ");
+        User findUser = userService.getUserById(userId);
+        User user = userService.deleteProfile(findUser);
 
+        String ImageUrl = userService.uploadS3(findUser.getLoginId(), profile, S3ImageFolder.PROFILE_IMAGE);
+
+        userService.updateProfile(user, profile.getOriginalFilename());
+
+        Map<String, String> response = new HashMap<>();
+
+        System.out.println("프로필 사진수정완료");
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("프로필 사진수정")
+                .data(response)
+                .build(), HttpStatus.OK);
+
+    }
 }
+
+

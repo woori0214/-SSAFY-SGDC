@@ -40,5 +40,8 @@ public interface UserRepo extends JpaRepository<User, Integer> {
      * 유저 닉네임 검색
      */
     Page<User> findByUserNicknameContaining(String keyword, Pageable pageable);
+
+    @Query("SELECT u.userImg from User u where u.userId=:userId")
+    String findUserImgByUserId(int userId);
 }
 
