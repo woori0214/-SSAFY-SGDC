@@ -1,15 +1,14 @@
-package com.ssafy.sgdc.badge.repo;
+package com.ssafy.sgdc.badge.repository;
 
-import com.ssafy.sgdc.badge.Badge;
-import com.ssafy.sgdc.badge.UserBadge;
+import com.ssafy.sgdc.badge.domain.Badge;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface BadgeRepo extends JpaRepository<Badge, Integer> {
 //    뱃지 아이디 찾기
-    Badge findByBadgeId(int badgeId);
+    Optional<Badge> findBadgeByBadgeId(int badgeId);
 
 }

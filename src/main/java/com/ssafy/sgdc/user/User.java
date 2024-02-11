@@ -1,10 +1,8 @@
 package com.ssafy.sgdc.user;
 
-import com.ssafy.sgdc.badge.Badge;
-import com.ssafy.sgdc.badge.UserBadge;
+import com.ssafy.sgdc.badge.domain.Badge;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.mapping.Bag;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 

@@ -1,4 +1,4 @@
-package com.ssafy.sgdc.badge;
+package com.ssafy.sgdc.badge.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,6 @@ import java.io.Serializable;
 
 @Entity
 @Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "badge")
