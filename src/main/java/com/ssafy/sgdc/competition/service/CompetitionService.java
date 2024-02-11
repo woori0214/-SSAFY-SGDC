@@ -7,6 +7,7 @@ import com.ssafy.sgdc.category.dto.UserCategoryDto;
 import com.ssafy.sgdc.category.repository.CategoryRepo;
 import com.ssafy.sgdc.category.repository.UserCategoryRepo;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
+import com.ssafy.sgdc.competition.dto.MatchingDtoWithSender;
 import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
 import com.ssafy.sgdc.competition.dto.request.CreateCompetDetailDto;
 import com.ssafy.sgdc.competition.repository.CompetDetailRepo;
@@ -272,8 +273,17 @@ public class CompetitionService {
     }
 
     // 받은 도전장 리스트 반환
-    public List<MatchingDto> getReceiveMatchingList(int userId) {
-        return matchingRepo.findByUserUserIdAndIsSender(userId, IsSender.N).stream().map(MatchingDto::of).toList();
+    public List<MatchingDtoWithSender> getReceiveMatchingList(int userId) {
+        List<MatchingDtoWithSender> matchings = new ArrayList<>();
+        List<Matching> receiveMatchings = matchingRepo.findByUserUserIdAndIsSender(userId, IsSender.N);
+        for (Matching receiveMatching : receiveMatchings) {
+            Matching sendMatching = matchingRepo.findByMatchingId(
+                    receiveMatching.getMatchingId()+1
+            ).orElseThrow(() -> new RuntimeException("getReceiveMatchingList -> 해당 도전장에 상대 도전장이 존재하지 않습니다."));
+
+            matchings.add(MatchingDtoWithSender.of(receiveMatching, sendMatching.getUser().getUserNickname()));
+        }
+        return matchings;
     }
 
     //종료된 경쟁 목록 조회
