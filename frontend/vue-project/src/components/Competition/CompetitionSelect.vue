@@ -114,9 +114,11 @@ const openRandomMatchingModal = () => {
   }
 
   const randomSendData = {
-    category_id: selectedCategory.value,
-    user_id: userId,
+    userId: userId,
+    categoryId: selectedCategory.value,
+
   };
+  console.log(randomSendData);
 
   competSelect
     .randomSend(randomSendData)
@@ -126,6 +128,7 @@ const openRandomMatchingModal = () => {
     })
     .catch((error) => {
       console.error("Error sending random matching request:", error);
+      console.log('잘 안되는데요')
       // 오류 처리 로직을 추가할 수 있습니다.
     });
 
@@ -149,6 +152,7 @@ const openFriendMatchingModal = () => {
   // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
   isFriendMatchingListVisible.value = true;
   console.log(isFriendMatchingListVisible.value);
+  console.log('친구매칭')
   modalType.value = "friendMatching";
   console.log(modalType.value);
 };

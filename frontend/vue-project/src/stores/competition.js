@@ -14,13 +14,16 @@ export const useCompetionStore = defineStore('competition', () => {
     //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {
+            console.log(randomSend);
             authorizationAPI
                 .post(`${URL}/random-send`, randomSend)
                 .then((response) => {
                     resolve(response);
+                    console.log('여긴왔나');
                 })
                 .catch((e) => {
                     console.log(e)
+
                     reject(e);
                 });
         })

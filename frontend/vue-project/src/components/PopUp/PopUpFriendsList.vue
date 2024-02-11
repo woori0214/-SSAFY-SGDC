@@ -47,15 +47,18 @@
 import { ref, onMounted } from 'vue';
 import { useFollowStore } from '@/stores/follow';
 import { useUserStore } from '@/stores/user';
+import { useCompetionStore } from '@/stores/competition';
 
 import userimg from '@/assets/image1.png';
 
 export default {
-    props: ['userId', 'showModal', 'Listclose', 'selectedCategory',],
+    props: ['userId', 'showModal', 'Listclose', 'selectedCategory'],
+
 
     setup(props, { emit }) {
         const followStore = useFollowStore();
         const userStore = useUserStore();
+        const uerCompetStore = useCompetionStore();
 
         const userId = ref(props.userId);
         console.log(userId.value)
@@ -64,6 +67,7 @@ export default {
         const searchPerformed = ref(false); // 검색 수행 여부 확인을 위한 ref
 
         const ssallowings = ref([]);
+
 
         // 검색(new)
         const nickname = ref('');
@@ -107,10 +111,31 @@ export default {
         // };
 
         // 친구 선택 emit
+        // PopUpFriendsList.vue 내부의 sendRequest 함수 수정
         const sendRequest = (friend) => {
             console.log(friend)
-            emit('friend-selected', friend); // 친구 선택 시 이벤트 발송
+            // emit 대신에 여기에서 friendSend 함수 호출
+            const friendSendData = {
+                userId: userId.value, // 현재 사용자의 ID
+                friendId: friend.userId, // 선택된 친구의 ID
+                categoryId: props.selectedCategory, // 선택된 카테고리 ID
+            };
+            console.log("친구에게 도전장 보내기 요청 데이터:", friendSendData);
+
+            // competitionStore의 friendSend 함수 호출
+            uerCompetStore.friendSend(friendSendData)
+                .then(response => {
+                    console.log("친구에게 도전장 보내기 성공:", response);
+                    // 성공적으로 도전장을 보냈다면, 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
+                    // 예: 알림 표시, 모달 닫기 등
+                    closeList(); // 요청 성공 후 친구 목록 모달 닫기
+                })
+                .catch(error => {
+                    console.error("친구에게 도전장 보내기 실패:", error);
+                    // 실패 시 사용자에게 오류 메시지를 표시할 수 있습니다.
+                });
         };
+
 
         const closeList = () => {
             // console.log('닫아줘')

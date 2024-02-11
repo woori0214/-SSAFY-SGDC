@@ -70,8 +70,9 @@ export default {
     const isTestModalOpen = ref(false);
     const selectedCategory = ref(null);
     const soloTodayData = ref([]);
-    const userId = ref();
-    const categoryId = ref();
+    const userId = ref(null);
+    const categoryId = ref(null);
+
 
     // 카테고리
     const today_categories = ref([
@@ -176,7 +177,10 @@ export default {
       if (selectedCategory.value != null) {
         const challenge = {
           user_id: userStorage.getUserInformation().user_id,
-          category_id: selectedCategory.value
+        
+          category_id: selectedCategory.value,
+          
+          
         };
         console.log('솔로 모드 도전');
         console.log(challenge);
@@ -219,14 +223,14 @@ export default {
       console.log('이미지 업로드 완료:', file);
       const challengeRequestJson = ref({
         userId: userStorage.getUserInformation().user_id,
-        categoryId: selectedCategory.value.id,
+        categoryId: selectedCategory.value,
         // isSoloMode: true,
         // uploadedImage: uploadedImageSrc,
         soloAuthImg: ''
         
       });
       console.log('잘 담아있나?');
-      console.log(userId.value);
+      console.log(challengeRequestJson.value);
       console.log(categoryId.value);
       const formData = new FormData();
       formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson.value));
@@ -261,6 +265,9 @@ export default {
       closeTestModal,
       handleSoloAuthImage,
       selectedCategory,
+      categoryId,
+      userId,
+
     };
   },
 };
