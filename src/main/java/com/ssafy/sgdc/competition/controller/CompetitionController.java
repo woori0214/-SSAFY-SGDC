@@ -4,6 +4,7 @@ import com.ssafy.sgdc.category.dto.UserCategoryDto;
 import com.ssafy.sgdc.competition.domain.Matching;
 import com.ssafy.sgdc.competition.dto.CompetitionDto;
 import com.ssafy.sgdc.competition.dto.MatchingDto;
+import com.ssafy.sgdc.competition.dto.MatchingDtoWithSender;
 import com.ssafy.sgdc.competition.dto.request.CompetitionProgressDetailDto;
 import com.ssafy.sgdc.competition.dto.request.FriendSendRequest;
 import com.ssafy.sgdc.competition.dto.request.RandomSendRequest;
@@ -80,8 +81,8 @@ public class CompetitionController {
 
     @GetMapping("/receive-list/{userId}")
     public ResponseEntity<?> getReceiveMatchingList(@PathVariable int userId) {
-        List<MatchingDto> result = competitionService.getReceiveMatchingList(userId);
-        return new ResponseEntity<>(MatchingListResponse
+        List<MatchingDtoWithSender> result = competitionService.getReceiveMatchingList(userId);
+        return new ResponseEntity<>(MatchingListResponseWithSender
                 .builder().status(200).message("받은 도전장 리스트 조회")
                 .matching(result).build()
                 , HttpStatus.OK
