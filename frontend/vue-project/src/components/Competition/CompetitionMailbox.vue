@@ -86,34 +86,50 @@ const removeExpiredChallenges = () => {
 onMounted(() => {
   const userId = userStorage.getUserInformation().user_id;
   competitionStore.competitionMailbox(userId)
-    .then(response => {
+  .then(response => {
       const mailbox = response.data.matching.map(item => ({
-        matchingId: item.matchingId,
-        // category: categoryMapping[item.category_id], // 이전 코드
-        category: mapCategoryIdToName(item.category_id), // 수정된 코드
-        expirationTime: item.competExpriationTime,
-        nickname: item.userNickname,
-        matchkind: item.competKind,
+        matchingId: item.matching_id,
+        category: mapCategoryIdToName(item.category_id),
+        expirationTime: item.compet_expriation_time,
+        nickname: item.user_nickname,
+        matchkind: item.compet_kind,
         kind: 'reciveChallenge',
-        content: `[${item.competKind}]${item.userNickname}님이 당신에게 ${mapCategoryIdToName(item.category_id)}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
+        content: `[${item.compet_kind}]${item.user_nickname}님이 당신에게 ${mapCategoryIdToName(item.category_id)}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
       }));
       mailParameters.value = mailbox;
-      console.log('도전장 잘 갖고왔따');
-      setInterval(removeExpiredChallenges, 60000);
+      console.log('도전장 잘 갖고왔다');
     })
     .catch(error => {
       console.error("도전장을 갖고오지 못했습니다", error);
     });
 });
-const acceptChallenge = (matchingId) => {
-  competitionStore.bothAccept(matchingId)
+const showModal = ref(false);
+const selectedCategory = ref('');
+
+const acceptChallenge = (index) => {
+  const item = mailParameters.value[index];
+  const expirationTime = new Date(item.compet_expiration_time);
+  const currentTime = new Date();
+
+  if (expirationTime <= currentTime) {
+    // 만료 시간이 현재 시간보다 이전인 경우, 알림창 표시
+    alert("유효하지 않은 도전장입니다.");
+
+    // 해당 도전장을 배열에서 제거
+    mailParameters.value.splice(index, 1);
+
+    // 함수 종료
+    return;
+  }
+
+  // 만료되지 않은 도전장에 대한 수락 로직 실행
+  competitionStore.bothAccept(item.matchingId)
     .then(() => {
-      console.log("Challenge accepted:", matchingId);
-      // 도전과제 목록에서 해당 항목 제거
-      const index = mainmailList.value.findIndex(mail_item => mail_item.id === matchingId);
-      if (index !== -1) {
-        mainmailList.value.splice(index, 1);
-      }
+      console.log("Challenge accepted:", item.matchingId);
+      // 도전장 목록에서 해당 항목 제거
+      mailParameters.value.splice(index, 1);
+      selectedCategory = mapCategoryIdToName(item.category_id);
+      showModal = true;
     })
     .catch(error => {
       console.error("Error accepting challenge:", error);

@@ -3,7 +3,7 @@
         <div class="modal_mask" v-if="show" @click="close">
             <div class="modal_wrapper">
                 <div class="modal_container" @click.stop>
-                    <h1>인증</h1>
+                    <h1>경쟁모드 인증</h1>
 
                     <!-- 이미지와 파일 업로드를 위한 input 요소 감싼 레이블 -->
                     <label for="fileInput">
@@ -29,7 +29,7 @@
 import defaultImage from '@/assets/camera.png';
 
 export default {
-    props: ['show', 'selectedCategory', 'isSoloMode',],
+    props: ['show', 'selectedCategory', 'isSoloMode', 'competId', 'userId'], // competId와 userId를 props에 추가
     emits: ['update:show', 'uploadImage'],
     data() {
         return {

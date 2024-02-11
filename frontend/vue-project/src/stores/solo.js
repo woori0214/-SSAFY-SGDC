@@ -65,7 +65,8 @@ export const useSoloStore = defineStore('solo', () => {
         
         const solo_auth = {
             "userId": challengeData.user_id,
-            "categoryId": challengeData.category_id
+            "categoryId": challengeData.category_id,
+            "soloAuthImg": "",
         }
 
         return new Promise((resolve, reject) => {
@@ -77,6 +78,7 @@ export const useSoloStore = defineStore('solo', () => {
                 .catch((err) => {
                     console.log(err);
                     reject(err)
+                    console.log(solo_auth);
                 })
         })
     }
