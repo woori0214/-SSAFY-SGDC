@@ -6,13 +6,16 @@
         <span>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</span>
       </div>
       <div class="mail_box">
-        <div v-for="(item, index) in mailParameters" :key="index">
-          <CompetitionMailboxItem :mail_sender="item.is_sender" :mail_category="mapCategoryIdToName(item.category_id)"
-            :mail_remain_time="item.compet_expiration_time" @acceptChallenge="() => acceptChallenge(index)" />
-        </div>
+        <!-- 여기서 v-for 디렉티브를 사용하여 각 메일 항목을 반복 렌더링합니다. -->
+        <CompetitionMailboxItem v-for="(item, index) in mailParameters" :key="index" :mail-sender="item.nickname"
+          :mail-category="item.category" :mail-remain-time="item.remainingTime" :match-kind="item.matchkind"
+          @acceptChallenge="() => acceptChallenge(index)" />
       </div>
     </div>
+
   </div>
+  <PopUpReceiverCompetitionApprove v-if="showModal" :now-category="selectedCategorytoauth"
+      @close="() => showModal = false" />
 </template>
 
 <script setup>
@@ -21,7 +24,7 @@ import { useCompetionStore } from "@/stores/competition";
 import mailbox from "@/assets/mailbox.png";
 import { useUserStorageStore } from "@/stores/userStorage";
 import CompetitionMailboxItem from "./CompetitionMailboxItem.vue";
-
+import PopUpReceiverCompetitionApprove from "@/components/PopUp/PopUpReceiverCompetitionApprove.vue";
 const competitionStore = useCompetionStore();
 const userStorage = useUserStorageStore();
 const mailParameters = ref([
@@ -63,6 +66,13 @@ const mailParameters = ref([
 ]);
 const userInformation = userStorage.getUserInformation();
 const userId = userInformation.user_id;
+const matchingId = ref(null);
+const category = ref(null);
+const expirationTime = ref(null);
+const nickname = ref(null);
+const matchkind = ref(null);
+const kind = ref(null);
+const content = ref(null);
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {
@@ -76,65 +86,83 @@ const mapCategoryIdToName = (categoryId) => {
 
   return categoryNames[categoryId] || "알 수 없는 카테고리";
 };
-const removeExpiredChallenges = () => {
+const calculateRemainingTime = (expirationTimeString) => {
+  const expirationTime = new Date(expirationTimeString);
   const currentTime = new Date();
-  mailParameters.value = mailParameters.value.filter((item) => {
-    const expirationTime = new Date(item.compet_expiration_time); // compet_expiration_time 형식 확인 필요
-    return expirationTime > currentTime;
-  });
+  const remainingTimeMillis = expirationTime - currentTime;
+
+  // Check if the remaining time is negative or zero
+  if (remainingTimeMillis <= 0) {
+    return "만료"; // Expired
+  }
+
+  const remainingHours = Math.floor(remainingTimeMillis / (1000 * 60 * 60));
+  const remainingMinutes = Math.floor((remainingTimeMillis % (1000 * 60 * 60)) / (1000 * 60));
+  return `${remainingHours}시간 ${remainingMinutes}분`;
 };
+
 onMounted(() => {
   const userId = userStorage.getUserInformation().user_id;
   competitionStore.competitionMailbox(userId)
-  .then(response => {
+    .then(response => {
       const mailbox = response.data.matching.map(item => ({
         matchingId: item.matching_id,
         category: mapCategoryIdToName(item.category_id),
         expirationTime: item.compet_expriation_time,
-        nickname: item.user_nickname,
+        remainingTime: calculateRemainingTime(item.compet_expiration_time),
+        nickname: item.sender_nickname,
         matchkind: item.compet_kind,
         kind: 'reciveChallenge',
         content: `[${item.compet_kind}]${item.user_nickname}님이 당신에게 ${mapCategoryIdToName(item.category_id)}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
       }));
       mailParameters.value = mailbox;
       console.log('도전장 잘 갖고왔다');
+      console.log(matchingId);
     })
     .catch(error => {
       console.error("도전장을 갖고오지 못했습니다", error);
     });
 });
 const showModal = ref(false);
-const selectedCategory = ref('');
+const selectedCategorytoauth = ref('');
 
 const acceptChallenge = (index) => {
-  const item = mailParameters.value[index];
-  const expirationTime = new Date(item.compet_expiration_time);
-  const currentTime = new Date();
 
-  if (expirationTime <= currentTime) {
-    // 만료 시간이 현재 시간보다 이전인 경우, 알림창 표시
-    alert("유효하지 않은 도전장입니다.");
+  return new Promise((resolve, reject) => {
+    const item = mailParameters.value[index];
+    const expirationTime = new Date(item.compet_expiration_time);
+    const currentTime = new Date();
 
-    // 해당 도전장을 배열에서 제거
-    mailParameters.value.splice(index, 1);
+    if (expirationTime <= currentTime) {
+      // 만료된 경우
+      alert("유효시간이 만료되어 수락할 수 없습니다.");
 
-    // 함수 종료
-    return;
-  }
+      reject(new Error("Challenge expired"));
+    } else {
+      // 만료되지 않았을 경우
+      competitionStore.bothAccept(item.matchingId)
+        .then(() => {
+          // alert('경쟁이 시작되었습니다.');
+          console.log("Challenge accepted:", item.matchingId);
 
-  // 만료되지 않은 도전장에 대한 수락 로직 실행
-  competitionStore.bothAccept(item.matchingId)
-    .then(() => {
-      console.log("Challenge accepted:", item.matchingId);
-      // 도전장 목록에서 해당 항목 제거
-      mailParameters.value.splice(index, 1);
-      selectedCategory = mapCategoryIdToName(item.category_id);
-      showModal = true;
-    })
-    .catch(error => {
-      console.error("Error accepting challenge:", error);
-    });
+          selectedCategorytoauth.value = item.category;
+          console.log(selectedCategorytoauth.value);
+          showModal.value = true;
+          console.log(showModal.value);
+          console.log(`showModal is now ${showModal.value}`);
+          resolve();
+        })
+        .catch(error => {
+          console.error("Error accepting challenge:", error);
+          reject(error);
+        });
+    }
+  });
 };
+
+
+
+
 
 // const acceptChallenge = async (index) => {
 //   const item = mailParameters.value[index];

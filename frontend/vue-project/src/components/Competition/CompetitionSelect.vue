@@ -30,7 +30,7 @@ User
     <PopUpRequestMessage :showModal="isRandomMatchingMessageVisible || isFriendMatchingMessageVisible
       " :close="closeMessage" :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
       :category_name="selectedCategoryName !== null ? selectedCategoryName : null
-        " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname"/>
+        " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname" />
 
     <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList"
       :selectedCategory="selectedCategory !== null ? selectedCategory : null" @friend-selected="handleFriendSelect" />
@@ -92,19 +92,24 @@ const userId = userInformation.user_id;
 const disabledCategories = ref([]);
 const userMatchingStatus = () => {
   const userId = userInformation.user_id;
-  competSelect.competitionMailbox(userId)
+  competSelect.competitionAnalysis(userId)
     .then((response) => {
-      const matching = response.data.matching;
-      const playStatusCategories = matching
-        .filter(match => match.match_status === "PLAY_STATUS")
-        .map(match => match.category_id);
-      disabledCategories.value = playStatusCategories;
+      const userCategories = response.data.user_categories;
+      console.log("경기 중인 카테고리 정보:", userCategories);
+
+      // "PLAY_STATUS" 상태인 카테고리의 ID를 disabledCategories 배열에 추가
+      const playStatusCategoryIds = userCategories
+        .filter(category => category.categoryStatus === "PLAY_STATUS")
+        .map(category => category.category_id);
+
+      disabledCategories.value = playStatusCategoryIds;
       console.log("진행 중인 카테고리를 가져왔습니다.");
     })
     .catch((error) => {
       console.error("이미 진행 중인 카테고리를 가져오지 못했습니다.", error);
     });
 };
+
 
 // 랜덤 매칭
 const openRandomMatchingModal = () => {
@@ -176,14 +181,15 @@ onMounted(() => {
 });
 
 const selectCategory = (category) => {
+  // 이미 비활성화된 카테고리를 선택하려고 할 경우 아무런 동작도 하지 않음
   if (disabledCategories.value.includes(category.id)) {
-    // alert("이미 매칭 요청을 한 카테고리입니다.");
+    alert("이미 매칭 요청을 한 카테고리입니다.");
     return;
   }
-  selectedCategory.value =
-    selectedCategory.value === category.id ? null : category.id;
-  selectedCategoryName.value =
-    selectedCategoryName.value === category.name ? null : category.name;
+
+  // 선택된 카테고리를 토글
+  selectedCategory.value = selectedCategory.value === category.id ? null : category.id;
+  selectedCategoryName.value = selectedCategoryName.value === category.name ? null : category.name;
 };
 </script>
 

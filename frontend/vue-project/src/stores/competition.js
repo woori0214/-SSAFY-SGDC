@@ -80,10 +80,12 @@ export const useCompetionStore = defineStore('competition', () => {
                 .post(`${URL}/accept/${matchingId}`, {})
                 .then((response) => {
                     resolve(response);
+                    console.log('수락이 완료됐습니다.')
                 })
                 .catch((e) => {
                     console.log(e)
                     reject(e);
+                    console.log('수락이 실패됐습니다.')
                 });
         })
     };
@@ -93,9 +95,10 @@ export const useCompetionStore = defineStore('competition', () => {
             console.log('axios');
             console.log(userId);
             authorizationAPI
-                .get(`${URL}/list/${userId}`)
+                .get(`${URL}/receive-list/${userId}`)
                 .then((response) => {
                     resolve(response);
+                    console.log('도전장을 잘 갖고왔습니다.');
                 })
                 .catch((e) => {
                     console.log(e)
@@ -105,19 +108,29 @@ export const useCompetionStore = defineStore('competition', () => {
     };
 
     //경쟁인증
-    const competitionImage = function (image) {
+
+    const competitionImage = function (formData) {
+        console.log('axios');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
         return new Promise((resolve, reject) => {
-            authorizationAPI
-                .post(`${URL}/image-auth`, image)
-                .then((response) => {
-                    resolve(response);
+            authorizationAPI.request({
+                method: 'post', 
+                url: `${URL2}/image-auth/upload`, 
+                data: formData, 
+                headers: { 'Content-Type': 'multipart/form-data' } 
+            })
+                .then(res => {
+                    resolve(res);
+                    console.log('업로드 완료');
                 })
-                .catch((e) => {
-                    console.log(e)
-                    reject(e);
+                .catch(err => {
+                    reject(err);
+                    console.log('업로드 실패');
                 });
-        })
-    };
+        });
+    }
 
     //종료 경쟁 목록 조회
     const competitionFinish = function (userId) {
