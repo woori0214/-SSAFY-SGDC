@@ -23,7 +23,7 @@
           <div class="signup-question-context">
             <div class="signup-userImg">
               <!-- 이미지 미리보기 -->
-              <img v-if="previewUrl" :src="previewUrl" alt="Profile preview" class="thumbnail" />
+              <img v-if="previewUrl" :src="previewUrl" alt="Profile preview" class="thumbnail" @click="clickFileInput" />
               <div v-else class="signup-userImg-upload" @click="clickFileInput">
                 <!-- <div class="signup-userImg-context">프로필을<br />업로드 하세요.</div> -->
               </div>
@@ -36,7 +36,7 @@
               </div>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="!fileUploadError && userImg">
+            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="previewUrl">
               다음!
             </button>
           </div>
@@ -703,6 +703,7 @@ export default {
     };
 
 
+
     return {
       id,
       email,
@@ -1095,12 +1096,18 @@ export default {
 }
 
 .thumbnail {
-  max-width: 200px;
-  /* 원하는 크기로 조절하세요 */
-  max-height: 200px;
-  margin-top: 5px;
-  /* 이미지와 다른 입력란 간격 조절 */
+  border: 3px solid #71a5de;
+  background-color: #ffffff;
+  border-radius: 50%;
+  /* 원형으로 만듭니다 */
+  width: 200px;
+  /* 썸네일의 폭을 설정합니다 */
+  height: 200px;
+  /* 썸네일의 높이를 설정합니다, 원형을 유지하려면 폭과 높이가 같아야 합니다 */
+  object-fit: cover;
+  /* 이미지가 썸네일 영역을 넘어가지 않게 조정합니다 */
 }
+
 
 @media only screen and (max-width: 600px) {
   .toggle_switch {
