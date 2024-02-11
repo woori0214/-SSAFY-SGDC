@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.competition.service;
 
+import com.ssafy.sgdc.badge.service.BadgeService;
 import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.category.UserCategory;
 import com.ssafy.sgdc.category.dto.UserCategoryDto;
@@ -51,6 +52,9 @@ public class CompetitionService {
     private final ImageAuthRepo imageAuthRepo;
 
     private final CompetDetailRepo competDetailRepo;
+
+    // TODO: 서비스에서 다른 서비스를 의존하는 것은 좋지 않음(순환참조 문제 가능성)
+    private final BadgeService badgeService;
 
     private final FeedService feedService;
 
@@ -486,6 +490,10 @@ public class CompetitionService {
             // 유저 카테고리 상태 업데이트
             senderUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
             receiverUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
+
+            // 끝난 경기에 뱃지 부여
+            badgeService.branchCategory(sendMatching.getUser().getUserId(), sendMatching.getCategory().getCategoryId());
+            badgeService.branchCategory(receiveMatching.getUser().getUserId(), receiveMatching.getCategory().getCategoryId());
 
             feedService.createFeed(competition);
 

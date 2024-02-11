@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.ssafy.sgdc.badge.service.BadgeService;
 import com.ssafy.sgdc.category.UserCategory;
 import com.ssafy.sgdc.category.repository.UserCategoryRepo;
 import com.ssafy.sgdc.competition.domain.CompetDetail;
@@ -39,6 +40,7 @@ public class ImageAuthService {
     private final CompetitionRepo competitionRepo;
     private final CompetDetailRepo competDetailRepo;
     private final UserCategoryRepo userCategoryRepo;
+    private final BadgeService badgeService;
 
     private String bucketName="sgdc-test-bucket"; // S3 버킷 이름
 
@@ -74,6 +76,7 @@ public class ImageAuthService {
         imageAuthRepo.save(CreateImageAuthDto.from(imageAuthDto));
 
         // 두 사용자 모두 인증했으면 경쟁 상태 업데이트
+        // TODO: 두 명다 인증했을 때도 피드게시판에 올라가야함
         if (imageAuthRepo.countByCompetitionCompetId(competId) == 2) {
             CreateCompetDetailDto competDetailDto = new CreateCompetDetailDto(CompetResult.BOTH_WIN);
 
@@ -100,6 +103,10 @@ public class ImageAuthService {
             receiveUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
 
             competition.updateCompetitionDetail(competDetail);
+
+            // 끝난 경기에 뱃지 부여
+            badgeService.branchCategory(matching.getUser().getUserId(), matching.getCategory().getCategoryId());
+            badgeService.branchCategory(otherMatching.getUser().getUserId(), otherMatching.getCategory().getCategoryId());
         }
         return authImgUrl;
     }
