@@ -9,11 +9,7 @@
     <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
-<<<<<<< HEAD
         <
-=======
-
->>>>>>> 00fb29c3f3ec920a152bf29f4ec1e2e010e308bb
       </button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
