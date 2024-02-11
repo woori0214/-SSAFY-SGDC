@@ -3,7 +3,7 @@
         <div class="modal_mask" v-if="show" @click="close">
             <div class="modal_wrapper">
                 <div class="modal_container" @click.stop>
-                    <h1>인증</h1>
+                    <h1>솔로모드 인증</h1>
 
                     <!-- 이미지와 파일 업로드를 위한 input 요소 감싼 레이블 -->
                     <label for="fileInput">
