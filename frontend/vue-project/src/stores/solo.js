@@ -62,7 +62,7 @@ export const useSoloStore = defineStore('solo', () => {
 
     //솔로모드 도전
     const soloChallenge = function (challengeData) {
-        
+
         const solo_auth = {
             "userId": challengeData.user_id,
             "categoryId": challengeData.category_id,
@@ -84,21 +84,27 @@ export const useSoloStore = defineStore('solo', () => {
     }
 
     //솔로모드 인증
-    const soloAuth = function (challengeData) {
-
-        // const solo_auth = { userId: challengeData.userId, categoryId: challengeData.categoryId, soloAuthImg: challengeData.soloAuthImage }
-        console.log('axios')
+    const soloAuth = function (formData) {
+        console.log('axios');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
         return new Promise((resolve, reject) => {
-            authorizationAPI
-                .patch(`${URL}/challenge-auth`, challengeData)
-                .then((res) => {
+            authorizationAPI.request({
+                method: 'patch', 
+                url: `${URL}/challenge-auth`, 
+                data: formData, 
+                headers: { 'Content-Type': 'multipart/form-data' } 
+            })
+                .then(res => {
                     resolve(res);
-                    console.log('업로드 완료')
+                    console.log('업로드 완료');
                 })
-                .catch((err) => {
-                    reject(err)
-                })
-        })
+                .catch(err => {
+                    reject(err);
+                    console.log('업로드 실패');
+                });
+        });
     }
 
     //솔로모드 내역(전체 리스트)
