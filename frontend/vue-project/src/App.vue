@@ -23,7 +23,7 @@
         <!-- <img src="./assets/FerrisWheel.png" alt="" class="ferris_wheel" /> -->
       </div>
     </div>
-    <div id="main-body">
+    <div id="main-body" :style="web_width < 800 ? 'width: 100vw;' : ''">
       <header>
         <div class="wrapper">
           <div class="headbar">
@@ -154,7 +154,7 @@ body {
   z-index: 1;
 
   max-width: 1000px;
-  min-width: 850px;
+
   height: calc(100vh - 96px);
   margin: auto;
 

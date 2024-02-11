@@ -13,7 +13,7 @@
     <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
-        
+        <
       </button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
