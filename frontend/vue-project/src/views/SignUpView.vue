@@ -9,7 +9,7 @@
     <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
       <button class="signup-question-before-btn" @click="signupSlideprev">
-        <
+
       </button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
@@ -661,6 +661,9 @@ export default {
       signUp.submitNewUser(formData)
         .then((response) => {
           console.log("회원가입 완료", response);
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
           // 성공 후 처리, 예를 들어 페이지 이동
           router.push({ name: "Main" }).catch((error) => {
             alert("라우팅 에러 발생: " + error);
