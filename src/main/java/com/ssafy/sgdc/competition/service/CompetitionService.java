@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.competition.service;
 
+import com.amazonaws.services.s3.AmazonS3;
 import com.ssafy.sgdc.badge.service.BadgeService;
 import com.ssafy.sgdc.category.Category;
 import com.ssafy.sgdc.category.UserCategory;
@@ -60,6 +61,9 @@ public class CompetitionService {
     private final FeedService feedService;
 
     private final UserCategoryRepo userCategoryRepo;
+
+    private final AmazonS3 amazonS3Client; // S3에 업로드를 위한 서비스
+    private String bucketName = "sgdc-test-bucket"; // S3 버킷 이름
 
     @Transactional
     // 랜덤 상대에게 도전장 보내기
@@ -411,12 +415,12 @@ public class CompetitionService {
                         userImageAuth != null ? userImageAuth.getAuthId() : 0, // null이면 0으로 처리함
                         userImageAuth != null ? userImageAuth.getAuthImg() : null,
                         matching.getUser().getUserId(),
-                        matching.getUser().getUserImg(),
+                        getS3ImagePath(matching.getUser().getUserImg()),
                         matching.getUser().getUserNickname(),
                         otherImageAuth != null ? otherImageAuth.getAuthId() : 0, // null이면 0으로 처리함
                         otherImageAuth != null ? otherImageAuth.getAuthImg() : null,
                         otherMatching.getUser().getUserId(),
-                        otherMatching.getUser().getUserImg(),
+                        getS3ImagePath(otherMatching.getUser().getUserImg()),
                         otherMatching.getUser().getUserNickname()
                 );
 
@@ -428,6 +432,10 @@ public class CompetitionService {
 
         return details;
 
+    }
+
+    public String getS3ImagePath(String userImageName){
+        return amazonS3Client.getUrl(bucketName, userImageName).toString(); // 접근가능한 URL 가져오기
     }
 
     // 유저 카테고리 목록 조회
