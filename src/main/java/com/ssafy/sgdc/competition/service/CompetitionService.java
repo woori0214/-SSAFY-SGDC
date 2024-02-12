@@ -254,6 +254,19 @@ public class CompetitionService {
             throw new RuntimeException("도전장끼리 종류(랜덤, 친구)가 다릅니다.");
         }
 
+        // 현재 본인이 해당 카테고리 경기를 진행 중이면 막아주는 로직
+        Optional<UserCategory> optionalUserCategory =
+                userCategoryRepo.findUserCategoryByUserUserIdAndAndCategoryCategoryId(
+                        recieveMatching.getUser().getUserId(), recieveMatching.getCategory().getCategoryId()
+                );
+
+        if (optionalUserCategory.isPresent()) {
+            UserCategory userCategory = optionalUserCategory.get();
+            if (userCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
+                throw new RuntimeException("해당 카테고리는 현재 진행 중입니다.");
+            }
+        }
+
         // 경기 생성
         Competition competition = Competition.of(LocalDateTime.now(),
                 recieveMatching.getCompetExpirationTime().plusMinutes(4));
