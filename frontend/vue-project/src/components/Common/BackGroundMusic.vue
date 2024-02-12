@@ -19,11 +19,11 @@
 
 <script setup>
 import { ref } from "vue";
-import sunny1 from "./bgm/1SunnyWeather.mp3";
-import sunny2 from "./bgm/2SunnyWeather.mp3";
-import sunny5 from "./bgm/5SunnyWeather.mp3";
-import sunny9 from "./bgm/9SunnyWeather.mp3";
-import rainy2 from "./bgm/2RainyWeather.mp3";
+import sunny1 from "../../assets/bgm/1SunnyWeather.mp3";
+import sunny2 from "../../assets/bgm/1SunnyWeather.mp3";
+import sunny5 from "../../assets/bgm/1SunnyWeather.mp3";
+import sunny9 from "../../assets/bgm/1SunnyWeather.mp3";
+import rainy2 from "../../assets/bgm/1SunnyWeather.mp3";
 
 const bgm_lsit = ref([
   { source: sunny1, title: "Sunny Weather 1:00 a.m." },
