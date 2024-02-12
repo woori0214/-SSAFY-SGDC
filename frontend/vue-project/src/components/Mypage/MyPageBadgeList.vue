@@ -38,9 +38,11 @@ export default {
         return nobadgeimg;
       }
 
-      const userBadge = user_badge.value.find(userBadge => userBadge.badgeId === badge.badgeId);
-      // 일치하는 뱃지가 있으면 해당 이미지를 반환, 없으면 기본 이미지 반환
-      return userBadge ? badgeImages[userBadge.badgeId] || nobadgeimg : nobadgeimg;
+      const userBadge = user_badge.value.find(userBadge => userBadge.badge_id === badge.badgeId);
+      if (!userBadge) return nobadgeimg;
+      console.log(userBadge)
+      return badge.badgeImg
+      
     };
     // 페이지 열었을 때 정보 가져오기(유저 뱃지 리스트)
     onMounted(() => {
@@ -48,8 +50,10 @@ export default {
 
       badgeStore.getUserBadgeList(userId.value)
         .then((res) => {
-          // console.log('유저뱃지 가져옴')
-          user_badge.value = res.data.data
+          console.log('유저뱃지 가져옴')
+          console.log(res.data)
+          user_badge.value = res.data.badges
+          console.log(user_badge.value)
         })
         .catch((err) => {
           // console.log('뱃지못가져옴')
