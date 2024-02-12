@@ -136,7 +136,8 @@ public class UserService {
     private SearchNameResponseDto convertToSearchNicknameDto(User user) {
         return new SearchNameResponseDto(
                 user.getUserId(),
-                user.getUserNickname()
+                user.getUserNickname(),
+                user.getUserImg()
         );
     }
 
