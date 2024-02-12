@@ -76,13 +76,6 @@ import { useBadgeStore } from '@/stores/badge';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signup';
 
-import userbadge from '@/assets/badges/wake1.png'
-import wakebadge from '@/assets/badges/wake1.png';
-import algobadge from '@/assets/badges/algo1.png';
-import healthbadge from '@/assets/badges/health1.png';
-import studybadge from '@/assets/badges/study1.png';
-import dietbadge from '@/assets/badges/diet1.png';
-import fightingbadge from '@/assets/badges/fighting1.png';
 import router from '@/router';
 
 const userStore = useUserStore();

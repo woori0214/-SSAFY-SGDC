@@ -5,7 +5,7 @@
       <span :class="{ 'rotate-icon': true, 'rotate': isOpen }"></span>
     </div>
     <transition>
-      <div class="accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
+      <div class="badge-accordion-content" :class="{ 'open': isOpen }" v-show="isOpen">
         <div v-for="badge in badge_list" :key="badge.badgeName" class="badge">
           <img :src="getUserBadgeImage(badge)" alt="뱃지" class="badge_img">
           <h3 class="badge_info">{{ badge.badgeName }}</h3>
@@ -21,12 +21,6 @@ import { ref, onMounted } from 'vue';
 import { useBadgeStore } from '@/stores/badge';
 import nobadgeimg from '@/assets/badges/badge_lock.png';
 
-import wakebadge from '@/assets/badges/wake1.png';
-import algobadge from '@/assets/badges/algo1.png';
-import healthbadge from '@/assets/badges/health1.png';
-import studybadge from '@/assets/badges/study1.png';
-import dietbadge from '@/assets/badges/diet1.png';
-import fightingbadge from '@/assets/badges/wake1.png';
 
 export default {
   props: ['userId',],
@@ -34,19 +28,23 @@ export default {
   setup(props) {
     const userId = ref(props.userId)
     const badgeStore = useBadgeStore();
-    const badge_list = badgeStore.badgeList
+    const badge_list = ref(badgeStore.badgeList)
     const user_badge = ref([]);
 
     // 사용자의 뱃지 이미지를 반환하는 함수
     const getUserBadgeImage = (badge) => {
-      // 사용자의 뱃지 리스트를 순회하면서 뱃지 ID가 일치하는지 확인
+      // user_badge가 정의되지 않았거나 비어 있는 경우를 처리
+      if (!user_badge.value || user_badge.value.length === 0) {
+        return nobadgeimg;
+      }
+
       const userBadge = user_badge.value.find(userBadge => userBadge.badgeId === badge.badgeId);
       // 일치하는 뱃지가 있으면 해당 이미지를 반환, 없으면 기본 이미지 반환
       return userBadge ? badgeImages[userBadge.badgeId] || nobadgeimg : nobadgeimg;
     };
-
     // 페이지 열었을 때 정보 가져오기(유저 뱃지 리스트)
     onMounted(() => {
+      badge_list.value = badgeStore.badgeList
 
       badgeStore.getUserBadgeList(userId.value)
         .then((res) => {
@@ -78,16 +76,16 @@ export default {
 <style scoped>
 .badge {
   text-align: center;
-  box-sizing: border-box;
-  /* 패딩과 테두리를 너비에 포함 */
   padding: 5px;
-  /* 뱃지 간격을 위한 패딩 추가 */
+  margin: 5px; /* 뱃지 간 간격 조정 */
+  width: 120px; /* 뱃지의 너비, 필요에 따라 조정 */
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 0;
 }
 
 .badge_img {
   width: 100px;
-  margin-left: 20px;
-  margin-right: 20px;
   margin-bottom: 0;
 }
 
@@ -125,28 +123,28 @@ export default {
 }
 
 /* 아코디언 내용 스타일링 */
-.accordion-content {
+.badge-accordion-content {
   padding: 10px;
   border-top: none;
-  overflow: hidden;
-  max-height: 0;
-  transition: max-height 0.3s ease;
+  overflow-x: hidden; /* 가로 스크롤바 비활성화, 필요에 따라 조정 */
+  overflow-y: auto; /* 세로 스크롤바 자동 활성화 */
+  max-height: 1000px; /* 내용에 따라 조절 가능 */
   display: flex;
-  flex-direction: row;
-
+  flex-direction: row; /* 내용을 가로 방향으로 정렬 */
+  flex-wrap: wrap; /* 내용이 넘칠 경우 다음 줄로 넘김 */
 }
 
-.accordion-content::-webkit-scrollbar {
+.badge-accordion-content::-webkit-scrollbar {
   height: 5px;
 }
 
-.accordion-content::-webkit-scrollbar-thumb {
+.badge-accordion-content::-webkit-scrollbar-thumb {
   background-color: #71a5de;
   border-radius: 10px;
 }
 
 /* 내용이 펼쳐진 경우에만 보여지도록 스타일 지정 */
-.accordion-content.open {
+.badge-accordion-content.open {
   max-height: 1000px;
   /* 충분한 크기로 조절하거나, 실제 내용의 높이에 따라 조절해주세요. */
   transition: max-height 0.3s ease;

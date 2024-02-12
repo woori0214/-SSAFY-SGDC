@@ -57,7 +57,7 @@ export default {
     setup(props, { emit }) {
         const followStore = useFollowStore();
         const userStore = useUserStore();
-        const uerCompetStore = useCompetionStore();
+        const userCompetStore = useCompetionStore();
 
         const userId = ref(props.userId);
         // console.log(userId.value)
@@ -115,7 +115,7 @@ export default {
             console.log("친구에게 도전장 보내기 요청 데이터:", friendSendData);
 
             // competitionStore의 friendSend 함수 호출
-            uerCompetStore.friendSend(friendSendData)
+            userCompetStore.friendSend(friendSendData)
                 .then(response => {
                     console.log("친구에게 도전장 보내기 성공:", response);
                     // 성공적으로 도전장을 보냈다면, 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
