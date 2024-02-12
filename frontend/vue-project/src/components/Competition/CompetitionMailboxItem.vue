@@ -4,7 +4,7 @@
       <span>[{{matchKind}}] {{ mailSender }}님이 {{ mailCategory }}을/를 신청하였습니다.</span>
       
     </div>
-    <span>남은 시간: {{ mailRemainTime }}</span>
+    <span>유효 시간: {{ mailRemainTime }}</span>
     <button 
       class="accept_button" 
       

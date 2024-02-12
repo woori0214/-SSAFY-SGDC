@@ -239,7 +239,7 @@ onMounted(() => {
             nickname.value = res.data.data.user_nickname;
             badgeId.value = res.data.data.badge_id;
             phoneNumber.value = res.data.data.user_phone;
-            profileImageUrl.value = res.data.data.user_img;
+            profileImageUrl.value = res.data.data.userImg;
         }).catch(error => {
             console.error('Error fetching user data:', error);
         });

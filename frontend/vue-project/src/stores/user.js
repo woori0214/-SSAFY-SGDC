@@ -43,17 +43,25 @@ export const useUserStore = defineStore('user', () => {
         });
     }
 
-    const userProfileUpdate = function(userId, formData) {
+    const userProfileUpdate = function (userId, formData) {
+        console.log('axios');
+        for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+        }
         return new Promise((resolve, reject) => {
-            authorizationAPI
-                .patch(`${URL}/user-profile-modify/${userId}`, formData)
-                .then((res) => {
-                    console.log(res);
+            authorizationAPI.request({
+                method: 'patch', 
+                url: `${URL}/user-profile-modify/${userId}`, 
+                data: formData, 
+                headers: { 'Content-Type': 'multipart/form-data' } 
+            })
+                .then(res => {
                     resolve(res);
+                    console.log('업로드 완료');
                 })
-                .catch((err) => {
-                    console.log(err);
+                .catch(err => {
                     reject(err);
+                    console.log('업로드 실패');
                 });
         });
     }

@@ -15,7 +15,7 @@
 
   </div>
   <PopUpReceiverCompetitionApprove v-if="showModal" :now-category="selectedCategorytoauth"
-      @close="() => showModal = false" />
+    @close="() => showModal = false" />
 </template>
 
 <script setup>
@@ -71,6 +71,7 @@ const category = ref(null);
 const expirationTime = ref(null);
 const nickname = ref(null);
 const matchkind = ref(null);
+const categorynum = ref(null);
 const kind = ref(null);
 const content = ref(null);
 
@@ -108,6 +109,7 @@ onMounted(() => {
       const mailbox = response.data.matching.map(item => ({
         matchingId: item.matching_id,
         category: mapCategoryIdToName(item.category_id),
+        categorynum: item.category_id,
         expirationTime: item.compet_expriation_time,
         remainingTime: calculateRemainingTime(item.compet_expiration_time),
         nickname: item.sender_nickname,
@@ -127,38 +129,51 @@ const showModal = ref(false);
 const selectedCategorytoauth = ref('');
 
 const acceptChallenge = (index) => {
-
   return new Promise((resolve, reject) => {
     const item = mailParameters.value[index];
     const expirationTime = new Date(item.compet_expiration_time);
     const currentTime = new Date();
 
+    // 도전장의 만료 시간을 체크하여 만료된 경우 경고창을 표시하고 수락 버튼을 비활성화
     if (expirationTime <= currentTime) {
-      // 만료된 경우
       alert("유효시간이 만료되어 수락할 수 없습니다.");
-
       reject(new Error("Challenge expired"));
-    } else {
-      // 만료되지 않았을 경우
-      competitionStore.bothAccept(item.matchingId)
-        .then(() => {
-          // alert('경쟁이 시작되었습니다.');
-          console.log("Challenge accepted:", item.matchingId);
-
-          selectedCategorytoauth.value = item.category;
-          console.log(selectedCategorytoauth.value);
-          showModal.value = true;
-          console.log(showModal.value);
-          console.log(`showModal is now ${showModal.value}`);
-          resolve();
-        })
-        .catch(error => {
-          console.error("Error accepting challenge:", error);
-          reject(error);
-        });
+      return;
     }
+    let categoryStatus;
+    // 도전장의 카테고리 번호와 사용자 ID를 이용하여 경기 상태를 분석
+    competitionStore.competitionAnalysisCategory(userId, item.categorynum)
+      .then(response => {
+        categoryStatus = response.data.user_category.categoryStatus;
+        console.log(categoryStatus);
+        if (categoryStatus === "PLAY_STATUS") {
+          // 경기가 이미 진행 중인 경우
+          alert("이미 진행 중인 경기입니다. 도전장을 수락할 수 없습니다.");
+          reject(new Error("Challenge already in progress"));
+        } else {
+          // 경기가 진행 중이 아닌 경우, 도전장을 수락하고 팝업을 표시
+          competitionStore.bothAccept(item.matchingId)
+            .then(() => {
+              selectedCategorytoauth.value = item.category;
+              showModal.value = true;
+              console.log(`showModal is now ${showModal.value}`);
+              resolve();
+            })
+            .catch(error => {
+              console.error("Error accepting challenge:", error);
+              alert('유효하지 않은 도전장입니다.')
+              reject(error);
+            });
+        }
+      })
+      .catch(error => {
+        console.error("Error analyzing competition status:", error);
+        alert('유효하지 않은 도전장입니다.')
+        reject(error);
+      });
   });
 };
+
 
 
 
