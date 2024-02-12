@@ -299,9 +299,12 @@ const handleCompetAuthImage = file => {
       console.log('잘 담아있나?');
 
       const formData = new FormData();
+      console.log(userId);
+      console.log(competId);
+      console.log(file);
       formData.append('userId', userId);
       formData.append('competId', competId); // file 직접 사용
-      formData.append('authImg', file);
+      formData.append('authImg', profile.value);
       console.log('여기까지는 왔다');
       competitionStore.competitionImage(formData)
         .then((response) => {
@@ -323,8 +326,8 @@ function getCategoryNameById(id) {
     1: "기상",
     2: "알고리즘",
     3: "운동",
-    4: "식단",
-    5: "스터디",
+    4: "스터디",
+    5: "식단",
     6: "절제",
   };
   return categoryMap[id] || "알 수 없는 카테고리";

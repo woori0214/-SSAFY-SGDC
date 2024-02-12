@@ -129,9 +129,9 @@ const userNickname = ref("");
 
 const web_width = ref(window.innerWidth);
 
-onMounted(() => {
-  window.addEventListener("resize", handleWidth);
-});
+// onMounted(() => {
+//   window.addEventListener("resize", handleWidth);
+// });
 
 const popUpMailBox = () => {
   showMailBox.value = true;
@@ -183,7 +183,7 @@ onMounted(() => {
       console.log(err);
     });
 
-  window.addEventListener("resize", handleWidth);
+  // window.addEventListener("resize", handleWidth);
 });
 </script>
 
