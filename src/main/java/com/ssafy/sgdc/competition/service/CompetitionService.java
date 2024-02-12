@@ -245,6 +245,15 @@ public class CompetitionService {
             throw new RuntimeException("이미 수락한 도전장입니다.");
         }
 
+        // 같은 카테고리의 도전장인지 확인
+        if (recieveMatching.getCategory().getCategoryId() != sendMatching.getCategory().getCategoryId()) {
+            throw new RuntimeException("도전장끼리 카테고리가 다릅니다.");
+        }
+
+        if (recieveMatching.getCompetKind() != sendMatching.getCompetKind()) {
+            throw new RuntimeException("도전장끼리 종류(랜덤, 친구)가 다릅니다.");
+        }
+
         // 경기 생성
         Competition competition = Competition.of(LocalDateTime.now(),
                 recieveMatching.getCompetExpirationTime().plusMinutes(4));
@@ -310,6 +319,7 @@ public class CompetitionService {
                 CompetitionDto competitionDto = CompetitionDto.of(
                         matching.getCompetition(),
                         matching.getMatchingId(),
+                        matching.getCategory().getCategoryId(),
                         matching.getIsSender(),
                         otherMatching.getUser().getUserId(),
                         otherMatching.getUser().getUserNickname(),
@@ -347,6 +357,7 @@ public class CompetitionService {
         return CompetitionDto.of(
                 matching.getCompetition(),
                 matching.getMatchingId(),
+                matching.getCategory().getCategoryId(),
                 matching.getIsSender(),
                 otherMatching.getUser().getUserId(),
                 otherMatching.getUser().getUserNickname(),
