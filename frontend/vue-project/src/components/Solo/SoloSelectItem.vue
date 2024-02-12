@@ -72,6 +72,7 @@ export default {
     const soloTodayData = ref([]);
     const userId = ref(null);
     const categoryId = ref(null);
+    const profile = ref(null);
 
 
     // 카테고리
@@ -177,10 +178,10 @@ export default {
       if (selectedCategory.value != null) {
         const challenge = {
           user_id: userStorage.getUserInformation().user_id,
-        
+
           category_id: selectedCategory.value,
-          
-          
+
+
         };
         console.log('솔로 모드 도전');
         console.log(challenge);
@@ -219,22 +220,20 @@ export default {
 
     // 이미지 업로드
     const handleSoloAuthImage = file => {
+      const userId = userStorage.getUserInformation().user_id;
+      profile.value = file; // 반응형 참조에 파일 할당
       // 이미지 업로드 이벤트 핸들러
-      console.log('이미지 업로드 완료:', file);
-      const challengeRequestJson = ref({
-        userId: userStorage.getUserInformation().user_id,
+      console.log('이미지 업로드 완료:', profile);
+      const challengeRequestJson = {
+        userId: userId,
         categoryId: selectedCategory.value,
-        // isSoloMode: true,
-        // uploadedImage: uploadedImageSrc,
         soloAuthImg: ''
-        
-      });
+      };
       console.log('잘 담아있나?');
-      console.log(challengeRequestJson.value);
-      console.log(categoryId.value);
+
       const formData = new FormData();
-      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson.value));
-      formData.append('soloAuthImage', file);
+      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
+      formData.append('soloAuthImage', file); // file 직접 사용
       console.log('여기까지는 왔다');
       solo.soloAuth(formData)
         .then((response) => {
@@ -249,7 +248,6 @@ export default {
           }
 
         });
-      console.log(formData);
 
     };
 

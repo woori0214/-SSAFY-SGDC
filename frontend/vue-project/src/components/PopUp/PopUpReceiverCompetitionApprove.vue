@@ -1,41 +1,44 @@
 <template>
-  <div v-if="showModal" class="reciveChallengeBox-wrap">
+  <div class="reciveChallengeBox-wrap">
     <div class="reciveChallengeBox-body">
       <div class="reciveChallengeBox-title">도전장 수락 페이지 - {{ now_category }}</div>
 
       <!-- 카테고리별 문구 표시 -->
       <div class="reciveChallengeBox-content">
-        <template v-if="now_category === '기상'">ssafy입실시간을 찍어 인증해주세요!</template>
-        <template v-else-if="now_category === '알고리즘'">알고리즘 문제를 하나 해결해 보세요!</template>
-        <template v-else-if="now_category === '운동'">운동한 사진을 인증해보세요!</template>
-        <template v-else-if="now_category === '스터디'">오늘 하루 공부한 시간을 인증해주세요!</template>
-        <template v-else-if="now_category === '식단'">샐러드 빈그릇을 인증해주세요!</template>
-        <template v-else-if="now_category === '절제'">오늘 무엇을 절제했는지 인증해주세요!</template>
+        <template v-if="nowCategory === '기상'">ssafy입실시간을 찍어 인증해주세요!</template>
+        <template v-else-if="nowCategory === '알고리즘'">알고리즘 문제를 하나 해결해 보세요!</template>
+        <template v-else-if="nowCategory === '운동'">운동한 사진을 인증해보세요!</template>
+        <template v-else-if="nowCategory === '스터디'">오늘 하루 공부한 시간을 인증해주세요!</template>
+        <template v-else-if="nowCategory === '식단'">샐러드 빈그릇을 인증해주세요!</template>
+        <template v-else-if="nowCategory === '절제'">오늘 무엇을 절제했는지 인증해주세요!</template>
         <template v-else>선택하신 도전에 최선을 다하세요!</template>
       </div>
 
       <div class="reciveChallengeBox-closeBtn">
-        <button @click="close_reciveChallengeBox">닫기</button>
+        <button @click="closeModal">닫기</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref } from "vue";
+import { defineProps, defineEmits } from "vue";
 
 const props = defineProps({
-  showModal: Boolean,
-  now_category: String,
-  close: Function,
+  // showModal: Boolean,
+  nowCategory: String,
 });
 
-const close_reciveChallengeBox = () => {
-  props.close();
-};
+const emit = defineEmits(['close']);
 
-const now_category = ref('알고리즘');
+const closeModal = () => {
+  emit('close');
+};
 </script>
+
+<style>
+/* 스타일 */
+</style>
 
 <style>
 .reciveChallengeBox-wrap {

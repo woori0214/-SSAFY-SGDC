@@ -67,7 +67,7 @@
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span v-for="(item, index) in items" :key="index" :class="{ active: index === currentIndex }"
+              <span v-for="(item, index) in competData" :key="index" :class="{ active: index === currentIndex }"
                 @click="goTo(index)"></span>
             </div>
           </div>
@@ -75,8 +75,8 @@
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <PopUpProofPictureCompet v-if="showModal" :show="showModal" @uploadImage="handleUpload"
-      @update:show="showModal = $event" />
+    <PopUpProofPictureCompet :show="isTestModalOpencompet" :userId="userIdtoauth" :competId="competIdtoauth"
+      @competAuthImage="handleCompetAuthImage"  @update:show="closeTestModalcompet"  />
     <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleUpload"
       :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
@@ -91,20 +91,26 @@ import { useSoloStore } from "@/stores/solo";
 import { useLoginStore } from "@/stores/login";
 import PopUpProofPicture from "../PopUp/PopUpProofPicture.vue";
 import PopUpProofPictureCompet from "../PopUp/PopUpProofPictureCompet.vue";
+// selectedCompetItem 정의 추가
+// selectedCompetItem의 초기값 설정
+const selectedCompetItem = ref({ userId: null, competId: null });
+
 
 const userStorage = useUserStorageStore();
 const competitionStore = useCompetionStore();
 const soloStore = useSoloStore();
 const loginStore = useLoginStore();
-
+const userIdtoauth = ref(null);
+const competIdtoauth = ref(null);
 const todayChallenges = ref([]);
 const userId = ref(null);
-
+const profile = ref(null);
 const competData = ref([]);
 const currentIndex = ref(0);
 const router = useRouter();
 const chartRef = ref(null);
 const isTestModalOpen = ref(false);
+const isTestModalOpencompet = ref(false);
 const showModal = ref(false);
 const selectedCategory = ref(null);
 
@@ -164,8 +170,15 @@ const proofSolo = function (categoryId, isStatus) {
 const openTestModal = () => {
   isTestModalOpen.value = true;
 };
+const openTestModalcompet = () => {
+  isTestModalOpencompet.value = true;
+};
 const closeTestModal = () => {
   isTestModalOpen.value = false;
+};
+
+const closeTestModalcompet = () => {
+  isTestModalOpencompet.value = false;
 };
 
 // // 인증 상태를 확인하는 함수
@@ -179,23 +192,48 @@ const closeTestModal = () => {
 // };
 
 // 인증하기 버튼의 클릭 이벤트 핸들러
+// const authenticate = (item) => {
+//   showModal.value = true;
+//   // selectedCompetItem에 현재 아이템의 정보 저장
+//   selectedCompetItem.value = { userId: item.userId, competId: item.competId };
+
+//   userIdtoauth = selectedCompetItem.value.userId;
+//   competIdtoauth = selectedCompetItem.value.competId // 현재 선택된 아이템의 competId 로깅
+// };
 const authenticate = (item) => {
-  showModal.value = true;
-  selectedCompetItem.value = { ...item, competId: item.competId, userId: item.userId };
+  if (item.userId && item.competId) {
+    selectedCompetItem.value = { userId: item.userId, competId: item.competId };
+    showModal.value = true;
+    console.log('여긴 잘 담아오나')
+    console.log(selectedCompetItem.value.userId);
+    console.log(selectedCompetItem.value.competId);
+    userIdtoauth.value = selectedCompetItem.value.userId;
+    competIdtoauth.value = selectedCompetItem.value.competId;
+    console.log("to" + userIdtoauth);
+    console.log(competIdtoauth);
+    openTestModalcompet();
+  } else {
+    console.error("Missing userId or competId in the item");
+  }
 };
 const fetchCompetitionData = () => {
-  competitionStore.competitionProgressDetail(userId.value)
+
+  competitionStore.competitionProgressDetail(userStorage.getUserInformation().user_id)
     .then(response => {
+
       if (response.status === 200 && response.data.competitions) {
         competData.value = response.data.competitions.map((comp) => ({
           ...comp,
           category: getCategoryNameById(comp.category_id), // 카테고리 이름 변환
           user_authenticated: comp.user_auth_image !== null && comp.user_auth_image !== "",
           other_user_authenticated: comp.other_auth_image !== null && comp.other_auth_image !== "",
-          competId : comp.compet_id,
-          userId : comp.user_id,
+          competId: comp.compet_id,
+          userId: comp.user_id,
         }));
+
       }
+      console.log('경쟁데이터 잘 갖고옴')
+      console.log(competData.value);
     })
     .catch(error => {
       console.error("Error fetching competition data:", error);
@@ -218,12 +256,12 @@ onMounted(() => {
 // };
 
 const prev = () => {
-  currentIndex.value =
-    (currentIndex.value - 1 + items.value.length) % items.value.length;
+  currentIndex.value = (currentIndex.value - 1 + competData.value.length) % competData.value.length;
 };
 
+
 const next = () => {
-  currentIndex.value = (currentIndex.value + 1) % items.value.length;
+  currentIndex.value = (currentIndex.value + 1) % competData.value.length;
 };
 
 const goTo = (index) => {
@@ -251,7 +289,35 @@ const handleUpload = (imageSrc) => {
       console.error("이미지 업로드 실패:", error);
     });
 };
+const handleCompetAuthImage = file => {
+      const userId = userStorage.getUserInformation().user_id;
+      profile.value = file; // 반응형 참조에 파일 할당
+      // 이미지 업로드 이벤트 핸들러
+      const competId = selectedCompetItem.value.competId;
+      console.log('이미지 업로드 완료:', profile);
 
+      console.log('잘 담아있나?');
+
+      const formData = new FormData();
+      formData.append('userId', userId);
+      formData.append('competId', competId); // file 직접 사용
+      formData.append('authImg', file);
+      console.log('여기까지는 왔다');
+      competitionStore.competitionImage(formData)
+        .then((response) => {
+          console.log('이미지 통신 완료:', response);
+
+          closeTestModalcompet();
+        })
+        .catch((error) => {
+          console.error('이미지 업로드 실패:', error);
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
+
+        });
+
+    };
 function getCategoryNameById(id) {
   const categoryMap = {
     1: "기상",
@@ -710,5 +776,4 @@ onMounted(() => {
 * {
   font-family: "jua";
 }
-
 </style>

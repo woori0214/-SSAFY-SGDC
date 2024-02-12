@@ -1,78 +1,70 @@
 <template>
   <div class="competition-mailbox-item">
     <div class="mail-item-content">
-      <p>{{ mail_sender }}님이 {{ mail_category }}를 신청하였습니다.</p>
-      <p>만료시간: {{ mail_remain_time }}</p>
+      <span>[{{matchKind}}] {{ mailSender }}님이 {{ mailCategory }}을/를 신청하였습니다.</span>
+      
     </div>
-    <button class="accept-button" @click="emitAcceptChallenge">수락</button>
+    <span>남은 시간: {{ mailRemainTime }}</span>
+    <button 
+      class="accept_button" 
+      
+      @click="emitAcceptChallenge">
+      수락
+    </button>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'CompetitionMailboxItem',
-  props: {
-    mail_sender: {
-      type: String,
-      required: true
-    },
-    mail_category: {
-      type: String,
-      required: true
-    },
-    mail_remain_time: {
-      type: String,
-      required: true
-    },
-  },
-  methods: {
-    emitAcceptChallenge() {
-      this.$emit('acceptChallenge');
-    }
-  }
+<script setup>
+import { computed } from 'vue';
+const props = defineProps({
+  mailSender: String,
+  mailCategory: String,
+  mailRemainTime: String,
+  
+  matchKind: String,
+});
+
+const emit = defineEmits(['acceptChallenge']);
+
+
+
+const emitAcceptChallenge = () => {
+
+    emit('acceptChallenge');
+  
 };
 </script>
 
 <style>
-.mail {
+.competition-mailbox-item {
   display: flex;
+  align-items: center; /* 세로 중앙 정렬을 위해 추가 */
   margin: 10px;
-  gap: 10px;
+  gap: 20px; /* 내부 요소 간의 간격 조정 */
   padding: 15px;
   background-color: #ffffff;
   border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
-.mail_content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
+.mail-item-content {
+  flex-grow: 1; /* 내용이 더 많은 공간을 차지하도록 설정 */
 }
 
-.mail_content_text {
-  font-size: 16px;
-}
-
-.accept_btn {
+.accept_button { /* 클래스 명이 .accept_btn에서 .accept_button으로 변경 */
   background-color: #e1ecf7;
-  /* 기본 배경색 변경 */
   color: #000000;
-  /* 기본 텍스트 색 변경 */
   border: none;
-  padding: 10px;
+  padding: 10px 20px; /* 버튼 내부 패딩 조정 */
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
-  /* 부드러운 색상 전환 추가 */
+
 }
 
-.accept_btn:hover {
+.accept_button:hover { /* 클래스 명이 .accept_btn에서 .accept_button으로 변경 */
   background-color: #83b0e1;
-  /* 호버 시 배경색 변경 */
   color: #ffffff;
-  /* 호버 시 텍스트 색 변경 */
 }
+
 </style>
