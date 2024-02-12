@@ -18,6 +18,7 @@ public class CompetitionDto {
     private int compet_result_id;
     private CompetResult compet_result;
     private int matching_id;
+    private int category_id;
     private IsSender is_sender;
     private int other_id;
     private String other_nickname;
@@ -25,14 +26,15 @@ public class CompetitionDto {
     private String other_image_auth;
     private LocalDateTime done_at;
 
-    public static CompetitionDto of(Competition competition, int matching_id, IsSender is_sender,
-                                    int other_id, String other_nickname, String user_image_auth,
+    public static CompetitionDto of(Competition competition, int matching_id, int category_id,
+                                    IsSender is_sender, int other_id, String other_nickname, String user_image_auth,
                                     String other_image_auth, LocalDateTime done_at) {
         return  new CompetitionDto(
                 competition.getCompetId(),
                 competition.getCompetDetail().getCompetResultId(),
                 competition.getCompetDetail().getCompetResult(),
                 matching_id,
+                category_id,
                 is_sender,
                 other_id,
                 other_nickname,
