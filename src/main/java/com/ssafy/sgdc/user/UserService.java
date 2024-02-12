@@ -2,7 +2,10 @@ package com.ssafy.sgdc.user;
 
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.ssafy.sgdc.badge.domain.Badge;
+import com.ssafy.sgdc.badge.domain.UserBadge;
 import com.ssafy.sgdc.badge.repository.BadgeRepo;
+import com.ssafy.sgdc.badge.repository.UserBadgeRepo;
+import com.ssafy.sgdc.badge.service.BadgeService;
 import com.ssafy.sgdc.user.dto.*;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -16,6 +19,7 @@ import com.ssafy.sgdc.user.dto.UserSignUpDto;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +40,13 @@ public class UserService {
 
     private final BadgeRepo badgeRepo;
 
+    private final UserBadgeRepo userBadgeRepo;
+
     private final AmazonS3 amazonS3Client; // S3에 업로드를 위한 서비스
     private String bucketName = "sgdc-test-bucket"; // S3 버킷 이름
+
+    @Autowired
+    BadgeService badgeService;
 
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
@@ -144,16 +155,24 @@ public class UserService {
     // 회원수정
     @Transactional
     public User modifyUser(UserInfoModifyDto userInfoModifyDto) {
-        // TODO: 뱃지가 아니라 해당 유저가 가지고 있는 뱃지에서 찾도록 해야됨
         Badge badge = badgeRepo.findBadgeByBadgeId(userInfoModifyDto.getBadgeId())
                 .orElseThrow(() -> new RuntimeException("modifyUser -> 해당 뱃지를 찾을 수 없습니다."));
         User user = userRepo.findByUserId(userInfoModifyDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 
-        user.setUserNickname(userInfoModifyDto.getUserNickname());
-        user.setUserPhone(userInfoModifyDto.getUserPhone());
-        user.setBadgeId(badge);
-        return user;
+        if(userBadgeRepo.existsUserBadgeByUserIdAndBadgeId(user.getUserId(),badge.getBadgeId())){
+            if(userInfoModifyDto.getUserNickname()!=null){
+                user.setUserNickname(userInfoModifyDto.getUserNickname());
+            }
+            if(userInfoModifyDto.getUserPhone()!=null){
+                user.setUserPhone(userInfoModifyDto.getUserPhone());
+            }
+            user.setBadgeId(badge);
+            return user;
+        }
+        else{
+            throw new RuntimeException("modifyUser -> 유저가 해당 뱃지를 보유하고 있지 않습니다.");
+        }
     }
 
     /**
