@@ -74,6 +74,7 @@ export default {
             const trimmedNickname = nickname.value.trim();
             if (trimmedNickname === '') {
                 searchResults.value = null;
+                searchPerformed.value = false;
                 return;
             }
             try {
