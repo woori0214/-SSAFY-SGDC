@@ -5,7 +5,6 @@
                 <h2>선택한 카테고리 : {{ selectedCategory }}</h2>
             </div>
             <div class="find_friends">
-                <input type="text" v-model="searchQuery" placeholder="닉네임을 검색하세요 :)" class="find_friends_input">
                 <input type="text" v-model="nickname" placeholder="친구 닉네임을 검색하세요 :)" @input="searchFriends"
                     class="find_friends_input">
                 <button @click="searchFriends" class="find_friends_btn">검색</button>
@@ -23,8 +22,8 @@
                 </div>
             </div>
             <div v-else>
-                <div v-if="searchResults.length">
-                    <div v-for="friend in enhancedSearchResults" :key="friend.userId" class="popup_ssallowing">
+                <div v-if="searchResults.length > 0">
+                    <div v-for="friend in searchResults" :key="friend.userId" class="popup_ssallowing">
                         <div class="popup_ssallowing_info">
                             <div class="popup_ssallowing_name">
                                 <img :src="friend.userImg" alt="" class="popup_ssallowing_img">
@@ -61,7 +60,7 @@ export default {
         const uerCompetStore = useCompetionStore();
 
         const userId = ref(props.userId);
-        console.log(userId.value)
+        // console.log(userId.value)
         const searchQuery = ref(''); // 검색어 바인딩을 위한 ref
         const searchResults = ref(null); // 검색 결과를 저장할 ref
         const searchPerformed = ref(false); // 검색 수행 여부 확인을 위한 ref
@@ -75,41 +74,34 @@ export default {
             const trimmedNickname = nickname.value.trim();
             if (trimmedNickname === '') {
                 searchResults.value = null;
+                searchPerformed.value = false;
                 return;
             }
             try {
                 const response = await userStore.findAllfriends(trimmedNickname);
                 if (Array.isArray(response.data.data.content)) {
+                    searchPerformed.value = true;
                     searchResults.value = response.data.data.content.map((user) => {
                         return {
                             userId: user.userId,
-                            userNickname: user.userNickname
+                            userNickname: user.userNickname,
+                            userImg: user.userImg
                         };
                     });
+                    // console.log(searchResults.value)
                 } else {
+                    searchPerformed.value = false;
                     console.error('올바르지 않은 API 응답 형식:', response);
                     searchResults.value = [];
                 }
             } catch (error) {
+                searchPerformed.value = false;
                 console.error('검색 중 오류 발생:', error);
                 searchResults.value = [];
             }
         };
 
-        // 검색 수행 함수
-        // const searchFriends = () => {
-        //     if (searchQuery.value.trim()) {
-        //         searchPerformed.value = true; // 검색 수행 표시
-        //         userStore.findMyfriends(userId, { user_nickname: searchQuery.value }).then((res) => {
-        //             searchResults.value = res.data.length ? res.data : [];
-        //         }).catch(() => {
-        //             searchResults.value = [];
-        //         });
-        //     } else {
-        //         searchPerformed.value = false; // 검색어가 비어있으면 검색하지 않음
-        //     }
-        // };
-
+    
         // 친구 선택 emit
         // PopUpFriendsList.vue 내부의 sendRequest 함수 수정
         const sendRequest = (friend) => {
@@ -139,6 +131,7 @@ export default {
 
         const closeList = () => {
             // console.log('닫아줘')
+            searchPerformed.value = false;
             props.Listclose();
         }
 
@@ -161,6 +154,7 @@ export default {
             searchQuery,
             searchResults,
             searchPerformed,
+            nickname,
             searchFriends,
             sendRequest,
             closeList,
