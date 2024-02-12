@@ -17,9 +17,7 @@
 
 <script setup>
 import { onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import router from "@/router";
 
 const solo = () => {
   router.push({ name: "Solo" });

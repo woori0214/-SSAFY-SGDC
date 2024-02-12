@@ -324,15 +324,13 @@
   
 <script>
 import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
+import router from "@/router";
 
 import { useSignupStore } from "@/stores/signup";
 import { useLoginStore } from "@/stores/login";
 
 export default {
   setup() {
-    const router = useRouter();
-
     const id = ref("");
     const userImg = ref("");
     const fileInputRef = ref(null);

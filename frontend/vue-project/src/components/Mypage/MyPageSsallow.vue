@@ -39,15 +39,13 @@
 <script>
 import { RouterLink } from "vue-router";
 import { ref, onMounted, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import router from "@/router";
 import { useFollowStore } from "@/stores/follow";
 
 export default {
     props: ['userId', 'loginUser'],
 
     setup(props) {
-        const route = useRoute();
-        const router = useRouter();
         const followStore = useFollowStore();
 
         const mypageUser = ref(props.userId);

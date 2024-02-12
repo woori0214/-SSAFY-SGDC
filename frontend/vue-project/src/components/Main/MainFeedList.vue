@@ -50,14 +50,13 @@
   
 <script setup>
 import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import router from "@/router";
 import { useFeedStore } from "@/stores/feed";
 import alarmmachine from "@/assets/alarmmachine.png";
 import { useUserStorageStore } from "@/stores/userStorage";
 
 const useUserStorage = useUserStorageStore();
 const userStored_id = ref(null);
-const router = useRouter();
 const feedInfo = useFeedStore();
 const feedlist = ref([
   {

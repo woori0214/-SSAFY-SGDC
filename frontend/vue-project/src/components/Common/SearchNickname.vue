@@ -18,7 +18,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watchEffect } from "vue";
-import { useRouter } from 'vue-router';
+import router from "@/router";
 
 import { useUserStore } from "@/stores/user";
 import { useFollowStore } from "@/stores/follow";
@@ -30,7 +30,6 @@ const useUserStorage = useUserStorageStore();
 const userInformation = useUserStorage.getUserInformation();
 const nickname = ref('');
 const searchResults = ref(null);
-const router = useRouter();
 const isFollowingMap = ref(new Map());
 
 const searchFriends = async () => {

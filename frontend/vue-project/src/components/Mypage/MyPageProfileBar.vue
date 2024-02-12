@@ -87,7 +87,7 @@
 
 <script>
 import { ref, computed, onMounted, } from "vue";
-import { useRoute, useRouter, } from "vue-router";
+import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { useBadgeStore } from "@/stores/badge";
 import { useCompetionStore } from "@/stores/competition";
@@ -151,8 +151,6 @@ export default {
       },
     ]);
 
-    const route = useRoute();
-    const router = useRouter();
     const userStore = useUserStore();
     const badgeStore = useBadgeStore();
     const competStore = useCompetionStore();
