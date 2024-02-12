@@ -299,6 +299,9 @@ const handleCompetAuthImage = file => {
       console.log('잘 담아있나?');
 
       const formData = new FormData();
+      console.log(userId);
+      console.log(competId);
+      console.log(file);
       formData.append('userId', userId);
       formData.append('competId', competId); // file 직접 사용
       formData.append('authImg', file);

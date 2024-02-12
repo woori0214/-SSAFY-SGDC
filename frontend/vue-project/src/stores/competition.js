@@ -111,13 +111,14 @@ export const useCompetionStore = defineStore('competition', () => {
 
     const competitionImage = function (formData) {
         console.log('axios');
+        console.log(`Request URL: ${URL2}image-auth/upload`);
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
         return new Promise((resolve, reject) => {
             authorizationAPI.request({
                 method: 'post', 
-                url: `${URL2}/image-auth/upload`, 
+                url: `${URL2}image-auth/upload`, 
                 data: formData, 
                 headers: { 'Content-Type': 'multipart/form-data' } 
             })
