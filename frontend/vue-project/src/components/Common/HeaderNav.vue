@@ -15,8 +15,8 @@
       rel="stylesheet"
     />
 
-    <div class="header-wrapper-top">
-      <div class="header-music-box" v-show="!closeLogo">
+    <div class="header-wrapper-top" :style="web_width < 800 ? 'flex-direction: column; align-items: center;' : ''">
+      <div class="header-music-box" v-show="!closeLogo && web_width >= 800">
         <BackGroundMusic class="header-music"></BackGroundMusic>
       </div>
 
@@ -61,19 +61,12 @@
       </div>
 
       <div class="header-links" v-if="!closeLogo">
-        <button
-          @click="popUpMailBox"
-          class="notify-icon"
-          v-if="isLogined_ref"
-        >
+        <button @click="popUpMailBox" class="notify-icon" v-if="isLogined_ref">
           <span class="material-symbols-outlined"> notifications </span>
         </button>
         <div class="profile-tmp">
           <!-- 로그아웃 상태 -->
-          <div
-            v-if="!isLogined_ref"
-            class="login-signup-links"
-          >
+          <div v-if="!isLogined_ref" class="login-signup-links">
             <RouterLink to="/login" class="nav-link">로그인</RouterLink>
             <RouterLink to="/signup" class="nav-link">회원가입</RouterLink>
           </div>
@@ -132,8 +125,13 @@ const closeLogo = ref(false);
 
 const isLogined_ref = ref(false);
 
-const userNickname = ref('');
+const userNickname = ref("");
 
+const web_width = ref(window.innerWidth);
+
+onMounted(() => {
+  window.addEventListener("resize", handleWidth);
+});
 
 const popUpMailBox = () => {
   showMailBox.value = true;
@@ -153,7 +151,7 @@ const handleNavigation = (to) => {
   const user_id = userStorage.getUserInformation().user_id;
   if (user_id != null) {
     if (to == "/MyPage") {
-      router.push({ name: 'MyPage', params: { userId: user_id } }); //나중에 user_id로 바꾸기
+      router.push({ name: "MyPage", params: { userId: user_id } }); //나중에 user_id로 바꾸기
     } else {
       router.push(to);
     }
@@ -162,10 +160,11 @@ const handleNavigation = (to) => {
   }
 };
 
-setInterval(function () {//야매 로그인 확인 방법
+setInterval(function () {
+  //야매 로그인 확인 방법
   // 반복 실행할 코드
-  if(isLogined_ref.value === false){
-    if(userStorage.getUserInformation().user_id != null){
+  if (isLogined_ref.value === false) {
+    if (userStorage.getUserInformation().user_id != null) {
       isLogined_ref.value = true;
     }
   }
@@ -174,14 +173,17 @@ setInterval(function () {//야매 로그인 확인 방법
 onMounted(() => {
   userLoginStore.isLogined();
 
-  const userId = ref(userStorage.getUserInformation().user_id)
-  userStore.userData(userId.value)
+  const userId = ref(userStorage.getUserInformation().user_id);
+  userStore
+    .userData(userId.value)
     .then((res) => {
       userNickname.value = res.data.data.user_nickname;
     })
     .catch((err) => {
-      console.log(err)
-    })
+      console.log(err);
+    });
+
+  window.addEventListener("resize", handleWidth);
 });
 </script>
 
