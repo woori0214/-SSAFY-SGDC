@@ -48,6 +48,10 @@ public class FeedService {
         validateMatchings(senderMatching, receiverMatching);
         CompetResult result = competition.getCompetDetail().getCompetResult();
 
+        if (result.equals(CompetResult.BOTH_FAIL)) {
+            throw new RuntimeException("공동 패배하여 피드에 게시물이 올라가지 않습니다.");
+        }
+
         String feedTitle = createFeedTitle(result, senderMatching, receiverMatching); // 타이틀 설정
         String feedImage = findFeedImage(result,senderMatching,receiverMatching); // 이미지 url 설정
         Feed feed = Feed.of(feedTitle, "", 0, 0, false, LocalDateTime.now(), null, feedImage, compet);
@@ -177,8 +181,7 @@ public class FeedService {
 
 
     private String createFeedTitle(CompetResult result, Matching sender, Matching receiver) {
-//      String category = sender.getCategory().getCategoryName().toString();
-        String category = "test";
+        String category = sender.getCategory().getCategoryName().toString();
         return switch (result) {
             case SEND_WIN -> String.format("[%s] %s님이 %s님과의 경쟁에서 이겼습니다!",
                     category, sender.getUser().getUserNickname(),
@@ -189,9 +192,6 @@ public class FeedService {
             case BOTH_WIN -> String.format("%s님과 %s님이 공동승리 하였습니다!",
                     sender.getUser().getUserNickname(),
                     receiver.getUser().getUserNickname());
-            case BOTH_FAIL -> String.format("%s님과 %s님이 공동배패 하였습니다.",
-                    sender.getUser().getUserNickname(),
-                    receiver.getUser().getUserNickname());
             default -> throw new RuntimeException("CompetResult이 정의되지 않았습니다.");
         };
     }
@@ -200,6 +200,7 @@ public class FeedService {
         return switch (result) {
             case SEND_WIN -> findImageAuthByMatching(senderMatching);
             case RECEIVE_WIN -> findImageAuthByMatching(receiverMatching);
+            case BOTH_WIN -> findImageAuthByMatching(senderMatching); //// 일단 발신자 사진으로 feed 저장
             default -> "";
         };
     }
