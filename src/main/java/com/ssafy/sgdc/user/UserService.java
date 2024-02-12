@@ -2,7 +2,6 @@ package com.ssafy.sgdc.user;
 
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.ssafy.sgdc.badge.domain.Badge;
-import com.ssafy.sgdc.badge.domain.UserBadge;
 import com.ssafy.sgdc.badge.repository.BadgeRepo;
 import com.ssafy.sgdc.badge.repository.UserBadgeRepo;
 import com.ssafy.sgdc.badge.service.BadgeService;
@@ -202,8 +201,12 @@ public class UserService {
         }
         return imagePath;
     }
-
-
+    
+    // 유저내에 저장 된 유저img기반으로 S3 path 반환
+    public String getS3ImagePath(User user){
+        return amazonS3Client.getUrl(bucketName, user.getUserImg()).toString(); // 접근가능한 URL 가져오기
+    }
+    
     // 프로필 사진 DB수정
     public User updateProfile(User user, String imgName) {
 
