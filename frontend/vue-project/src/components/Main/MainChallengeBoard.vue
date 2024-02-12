@@ -140,7 +140,7 @@ const loginStore = useLoginStore();
 const userIdtoauth = ref(null);
 const competIdtoauth = ref(null);
 const todayChallenges = ref([]);
-const userId = ref(null);
+const userId = ref(userStorage.getUserInformation().user_id);
 const profile = ref(null);
 const competData = ref([]);
 const currentIndex = ref(0);
@@ -160,8 +160,8 @@ const categories = ref([
   { id: 1, name: "기상", isStatus: null, isResult: "INCOMPLETE" },
   { id: 2, name: "알고리즘", isStatus: null, isResult: "INCOMPLETE" },
   { id: 3, name: "운동", isStatus: null, isResult: "INCOMPLETE" },
-  { id: 4, name: "식단", isStatus: null, isResult: "INCOMPLETE" },
-  { id: 5, name: "스터디", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 4, name: "스터디", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 5, name: "식단", isStatus: null, isResult: "INCOMPLETE" },
   { id: 6, name: "절제", isStatus: null, isResult: "INCOMPLETE" },
 ]);
 
@@ -191,7 +191,10 @@ const categories = ref([
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId, isStatus) {
   selectedCategory.value = categoryId;
-  const challenge = { user_id: userId, category_id: categoryId };
+  const challenge = { user_id: userStorage.getUserInformation().user_id, category_id: selectedCategory.value };
+
+  console.log('선택한 솔로 도전의 상태는');
+  console.log(isStatus);
 
   if (isStatus === null) {
     try {
@@ -200,7 +203,7 @@ const proofSolo = function (categoryId, isStatus) {
       console.log(error);
     }
   }
-  soloStore.soloChallenge(challenge);
+  
   openTestModal();
 };
 // 인증 모달창
