@@ -29,6 +29,7 @@
                                 <h3>{{ userNickname }}</h3>
                             </div>
                             <div class="result_category">
+                                <p>{{ getCategoryName(selectedMatchingData.category_id) }}</p>
                                 <span>{{ selectedMatchingData.category_id }}</span>
                                 <h2>vs</h2>
                             </div>
@@ -52,7 +53,7 @@
   
 <script>
 import { ref, onMounted, watch } from 'vue';
-import { useRoute } from 'vue-router'; 
+import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 import { useCompetionStore } from '@/stores/competition';
 
@@ -83,9 +84,12 @@ export default {
         // 팝업창
         const openPopup = (competdata) => {
             // console.log(competdata)
+            // console.log(userId.value)
+            // console.log(competdata.compet_id)
             competStore.competitionFinishDetail(userId.value, competdata.compet_id)
                 .then((res) => {
                     selectedMatchingData.value = res.data.competition;
+                    console.log(selectedMatchingData)
                     showPopup.value = true;
                 })
                 .catch((err) => {
