@@ -204,7 +204,7 @@ public class UserController {
         response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
         response.put("user_nickname", user.getUserNickname());
         response.put("user_img", userService.getS3ImagePath(user));
-        response.put("badge_id", String.valueOf(user.getBadgeId()));
+        response.put("badge_id", String.valueOf(user.getBadgeId().getBadgeId()));
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
         response.put("user_phone", String.valueOf(user.getUserPhone()));
         response.put("complain_cnt", String.valueOf(user.getComplainCnt()));

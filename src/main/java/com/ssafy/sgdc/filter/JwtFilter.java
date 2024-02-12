@@ -3,6 +3,7 @@ package com.ssafy.sgdc.filter;
 import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import com.ssafy.sgdc.util.JwtUtil;
+import com.ssafy.sgdc.util.response.Code;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -39,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         if(jwt == null){
             logger.debug("토큰이 없습니다.");
+            request.setAttribute("errorCode",Code.NULL_JWT_TOKEN);
         }
         else { //토큰 유효
 
@@ -61,9 +63,14 @@ public class JwtFilter extends OncePerRequestFilter {
                 //토큰 X
                 else {
                     logger.debug("유효한 JWT토큰이 없습니다. uri: {}", requestURI);
+                    request.setAttribute("errorCode", Code.INVALID_TOKEN);
                 }
             }
             catch (ExpiredJwtException e){
+                request.setAttribute("errorCode", Code.EXPIRED_TOKEN);
+            }
+            catch (Exception e){
+                request.setAttribute("errorCode", Code.INVALID_TOKEN);
             }
         }
 
