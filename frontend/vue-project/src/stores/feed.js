@@ -62,7 +62,7 @@ export const useFeedStore = defineStore('feed', () => {
     };
 
     //게시물 리스트(페이지 당 10개씩)
-    const getFeedListPage = function (last_feed_id) {
+    const getFeedListPage = function (last_feed_id, list_size) {
         console.log('getFeedListPage 실행...');
         console.log('인증 토큰 확인 ::');
         console.log(authorizationAPI.defaults.headers['Authorization']);
@@ -70,7 +70,7 @@ export const useFeedStore = defineStore('feed', () => {
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list/pages`, {
-                    params: { userId: userStorage.getUserInformation().user_id, feedId: last_feed_id, page: 0, size: 10 }
+                    params: { userId: userStorage.getUserInformation().user_id, feedId: last_feed_id, page: 0, size: list_size }
                 })
                 .then((response) => {
                     console.log('get List : ');

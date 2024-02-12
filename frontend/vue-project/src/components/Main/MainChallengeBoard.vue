@@ -24,8 +24,14 @@
             </div>
           </div>
           <div class="categories">
-            <button ref="categori_btn_component" class="category_btn" v-for="category in categories" :key="category.id"
-              :class="{ completed: category.isResult === 'COMPLETE' }" @click="proofSolo(category.id, category.isStatus)">
+            <button
+              ref="categori_btn_component"
+              class="category_btn"
+              v-for="category in categories"
+              :key="category.id"
+              :class="{ completed: category.isResult === 'COMPLETE' }"
+              @click="proofSolo(category.id, category.isStatus)"
+            >
               {{ category.name }}
             </button>
           </div>
@@ -40,12 +46,25 @@
           <div class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템, v-for로 competData를 반복 -->
-              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
+              <div
+                class="carousel_item"
+                v-for="(item, index) in competData"
+                :key="index"
+              >
                 <!-- 로그인한 유저 부분 -->
                 <div class="player1">
-                  <img :src="item.user_img || '@/assets/defaultFace.png'" alt="user image" class="player_img" />
+                  <img
+                    :src="item.user_img || '@/assets/defaultFace.png'"
+                    alt="user image"
+                    class="player_img"
+                  />
                   <p>{{ item.user_nickname }}</p>
-                  <button v-if="!item.user_authenticated" @click="authenticate(item, true)">인증하기</button>
+                  <button
+                    v-if="!item.user_authenticated"
+                    @click="authenticate(item, true)"
+                  >
+                    인증하기
+                  </button>
                   <div v-else>인증 완료</div>
                 </div>
                 <div class="item_category_vs">
@@ -55,10 +74,15 @@
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img :src="item.other_user_img || '@/assets/defaultFace.png'" alt="other user image"
-                    class="player_img" />
+                  <img
+                    :src="item.other_user_img || '@/assets/defaultFace.png'"
+                    alt="other user image"
+                    class="player_img"
+                  />
                   <p>{{ item.other_user_nickname }}</p>
-                  <div>{{ item.other_user_authenticated ? '인증 완료' : '진행중' }}</div>
+                  <div>
+                    {{ item.other_user_authenticated ? "인증 완료" : "진행중" }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,18 +91,32 @@
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span v-for="(item, index) in competData" :key="index" :class="{ active: index === currentIndex }"
-                @click="goTo(index)"></span>
+              <span
+                v-for="(item, index) in competData"
+                :key="index"
+                :class="{ active: index === currentIndex }"
+                @click="goTo(index)"
+              ></span>
             </div>
           </div>
         </div>
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <PopUpProofPictureCompet :show="isTestModalOpencompet" :userId="userIdtoauth" :competId="competIdtoauth"
-      @competAuthImage="handleCompetAuthImage"  @update:show="closeTestModalcompet"  />
-    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleUpload"
-      :selectedCategory="selectedCategory" :isSoloMode="true" />
+    <PopUpProofPictureCompet
+      :show="isTestModalOpencompet"
+      :userId="userIdtoauth"
+      :competId="competIdtoauth"
+      @competAuthImage="handleCompetAuthImage"
+      @update:show="closeTestModalcompet"
+    />
+    <PopUpProofPicture
+      :show="isTestModalOpen"
+      @update:show="closeTestModal"
+      @uploadImage="handleUpload"
+      :selectedCategory="selectedCategory"
+      :isSoloMode="true"
+    />
   </div>
 </template>
   
@@ -94,7 +132,6 @@ import PopUpProofPictureCompet from "../PopUp/PopUpProofPictureCompet.vue";
 // selectedCompetItem 정의 추가
 // selectedCompetItem의 초기값 설정
 const selectedCompetItem = ref({ userId: null, competId: null });
-
 
 const userStorage = useUserStorageStore();
 const competitionStore = useCompetionStore();
@@ -204,7 +241,7 @@ const authenticate = (item) => {
   if (item.userId && item.competId) {
     selectedCompetItem.value = { userId: item.userId, competId: item.competId };
     showModal.value = true;
-    console.log('여긴 잘 담아오나')
+    console.log("여긴 잘 담아오나");
     console.log(selectedCompetItem.value.userId);
     console.log(selectedCompetItem.value.competId);
     userIdtoauth.value = selectedCompetItem.value.userId;
@@ -217,25 +254,25 @@ const authenticate = (item) => {
   }
 };
 const fetchCompetitionData = () => {
-
-  competitionStore.competitionProgressDetail(userStorage.getUserInformation().user_id)
-    .then(response => {
-
+  competitionStore
+    .competitionProgressDetail(userStorage.getUserInformation().user_id)
+    .then((response) => {
       if (response.status === 200 && response.data.competitions) {
         competData.value = response.data.competitions.map((comp) => ({
           ...comp,
           category: getCategoryNameById(comp.category_id), // 카테고리 이름 변환
-          user_authenticated: comp.user_auth_image !== null && comp.user_auth_image !== "",
-          other_user_authenticated: comp.other_auth_image !== null && comp.other_auth_image !== "",
+          user_authenticated:
+            comp.user_auth_image !== null && comp.user_auth_image !== "",
+          other_user_authenticated:
+            comp.other_auth_image !== null && comp.other_auth_image !== "",
           competId: comp.compet_id,
           userId: comp.user_id,
         }));
-
       }
-      console.log('경쟁데이터 잘 갖고옴')
+      console.log("경쟁데이터 잘 갖고옴");
       console.log(competData.value);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Error fetching competition data:", error);
     });
 };
@@ -244,7 +281,6 @@ onMounted(() => {
   fetchCompetitionData();
   // 기타 onMounted 로직
 });
-
 
 // const navigateToPage = (category) => {
 //     if (category.isActive == false) {
@@ -256,9 +292,10 @@ onMounted(() => {
 // };
 
 const prev = () => {
-  currentIndex.value = (currentIndex.value - 1 + competData.value.length) % competData.value.length;
+  currentIndex.value =
+    (currentIndex.value - 1 + competData.value.length) %
+    competData.value.length;
 };
-
 
 const next = () => {
   currentIndex.value = (currentIndex.value + 1) % competData.value.length;
@@ -289,38 +326,37 @@ const handleUpload = (imageSrc) => {
       console.error("이미지 업로드 실패:", error);
     });
 };
-const handleCompetAuthImage = file => {
-      const userId = userStorage.getUserInformation().user_id;
-      profile.value = file; // 반응형 참조에 파일 할당
-      // 이미지 업로드 이벤트 핸들러
-      const competId = selectedCompetItem.value.competId;
-      console.log('이미지 업로드 완료:', profile);
+const handleCompetAuthImage = (file) => {
+  const userId = userStorage.getUserInformation().user_id;
+  profile.value = file; // 반응형 참조에 파일 할당
+  // 이미지 업로드 이벤트 핸들러
+  const competId = selectedCompetItem.value.competId;
+  console.log("이미지 업로드 완료:", profile);
 
-      console.log('잘 담아있나?');
+  console.log("잘 담아있나?");
 
-      const formData = new FormData();
-      console.log(userId);
-      console.log(competId);
-      console.log(file);
-      formData.append('userId', userId);
-      formData.append('competId', competId); // file 직접 사용
-      formData.append('authImg', profile.value);
-      console.log('여기까지는 왔다');
-      competitionStore.competitionImage(formData)
-        .then((response) => {
-          console.log('이미지 통신 완료:', response);
+  const formData = new FormData();
+  console.log(userId);
+  console.log(competId);
+  console.log(file);
+  formData.append("userId", userId);
+  formData.append("competId", competId); // file 직접 사용
+  formData.append("authImg", profile.value);
+  console.log("여기까지는 왔다");
+  competitionStore
+    .competitionImage(formData)
+    .then((response) => {
+      console.log("이미지 통신 완료:", response);
 
-          closeTestModalcompet();
-        })
-        .catch((error) => {
-          console.error('이미지 업로드 실패:', error);
-          for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-          }
-
-        });
-
-    };
+      closeTestModalcompet();
+    })
+    .catch((error) => {
+      console.error("이미지 업로드 실패:", error);
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+    });
+};
 function getCategoryNameById(id) {
   const categoryMap = {
     1: "기상",
@@ -364,28 +400,56 @@ const completed_solo = ref(0);
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
+  
+  const donut = document.querySelector(".donut");
+  const totalMinwon = ref(0); //현재 진행도 값 << ref와 동기화 시켜줘야함
+
+  const donut_parent = document.getElementsByClassName("donut_percent")[0];
+  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
+  
   userId.value = userInformation.user_id;
+
+
   if (userId.value) {
     soloStore
       .soloToday(userId.value)
       .then((response) => {
-        console.log('솔로 모드 현황 받은 데이터');
+        console.log("솔로 모드 현황 받은 데이터");
         console.log(response);
         response.data.solos.forEach((soloItem) => {
+          console.log(soloItem);
+
           categories.value.forEach((todayItem) => {
             if (todayItem.id == soloItem.category_id) {
               todayItem.isStatus = soloItem.solo_status;
               todayItem.isResult = soloItem.solo_result;
 
-              if (soloItem.solo_result === 'COMPLETE') {
+              if (soloItem.solo_result == "COMPLETE") {
                 completed_solo.value++;
               }
             }
-          })
-        })
+          });
+        });
 
-        console.log('업데이트한 솔로 모드 현황 테이블');
+        console.log("업데이트한 솔로 모드 현황 테이블");
         console.log(categories.value);
+
+        totalMinwon.value = ((completed_solo.value / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
+
+        if (donut) {
+          solo_percent.value = 0;
+          console.log("퍼센트지");
+          console.log(totalMinwon.value);
+          const donutAnimation = setInterval(() => {
+            donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
+
+            if (solo_percent.value >= totalMinwon.value) {
+              solo_percent.value--;
+              clearInterval(donutAnimation);
+            }
+            solo_percent.value++;
+          }, 30);
+        } // 창 크기 조절 시 마진 재조정
       })
       .catch((error) => {
         console.error("Error fetching solo today data:", error);
@@ -393,12 +457,6 @@ onMounted(() => {
   } else {
     console.error("User ID not found");
   }
-
-  const donut = document.querySelector(".donut");
-  const totalMinwon = ref((completed_solo.value / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
-
-  const donut_parent = document.getElementsByClassName("donut_percent")[0];
-  const donut_child = document.getElementsByClassName("donut_percent_text")[0];
 
   setFontSize();
   // adjustDonutFontSize();
@@ -412,21 +470,6 @@ onMounted(() => {
 
   adjustChildMargin(); // 초기 마진 설정
   window.addEventListener("resize", adjustChildMargin);
-
-  if (donut) {
-    solo_percent.value = 0;
-    console.log('퍼센트지');
-    console.log(totalMinwon.value);
-    const donutAnimation = setInterval(() => {
-      donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
-
-      if (solo_percent.value >= totalMinwon.value) {
-        solo_percent.value--;
-        clearInterval(donutAnimation);
-      }
-      solo_percent.value++;
-    }, 30);
-  }// 창 크기 조절 시 마진 재조정
 });
 // if (chartRef.value) {
 //   const ctx = chartRef.value.getContext("2d");
@@ -655,7 +698,7 @@ onMounted(() => {
 }
 
 .category_btn.completed {
-  background-color: #4caf50;
+  background-color: #3f8bc9;
   /* 도전 완료된 카테고리의 배경색 */
   color: white;
   /* 텍스트 색상 */

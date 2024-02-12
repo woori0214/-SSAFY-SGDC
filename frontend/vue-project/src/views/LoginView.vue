@@ -84,6 +84,7 @@ export default {
           router.push("/");
         })
         .catch((e) => {
+          alert("아이디 혹은 비밀번호를 잘못 입력하셨습니다.")
           console.log("로그인 실패");
           console.log(e);
         })

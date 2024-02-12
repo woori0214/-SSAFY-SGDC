@@ -41,7 +41,7 @@
         :key="feed_item.feed_id"
         class="feed_item"
       >
-        <div class="feed_item_context">{{ feed_item.feed_content }}</div>
+        <div class="feed_item_context">{{ feed_item.feedTitle }}</div>
       </div>
       <!-- <div class="feed_item_foot"></div> -->
     </div>
@@ -61,39 +61,47 @@ const feedInfo = useFeedStore();
 const feedlist = ref([
   {
     feed_id: 0,
-    feed_content: "오화석0 님이 기상챌린지를 성공하셨습니다.",
+    feedTitle: "오화석0 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 1,
-    feed_content: "오화석1 님이 기상챌린지를 성공하셨습니다.",
+    feedTitle: "오화석1 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 2,
-    feed_content: "오화석2 님이 기상챌린지를 성공하셨습니다.",
+    feedTitle: "오화석2 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 3,
-    feed_content: "오화석3 님이 기상챌린지를 성공하셨습니다.",
+    feedTitle: "오화석3 님이 기상챌린지를 성공하셨습니다.",
   },
   {
     feed_id: 4,
-    feed_content: "오화석4 님이 기상챌린지를 성공하셨습니다.",
+    feedTitle: "오화석4 님이 기상챌린지를 성공하셨습니다.",
   },
 ]);
 const feedlist_ = ref([]);
 
+const more_feed = () => {
+  router.push({ name: "Feed" });
+};
+
+const resetMainFeedList = () => {
+  feedInfo
+    .getFeedListPage(0, 5)
+    .then((res) => {
+      feedlist.value = [...res.data.data.content];
+
+      console.log("feed 데이터가 초기화 되었습니다.");
+      console.log(feedlist.value);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 onMounted(async () => {
-  try {
-    const response = await feedInfo.getFeedListPage(0);
-    if (response.message === "success") {
-      // const sortedFeed = response.feed.sort((a, b) => new Date(b.update_at) - new Date(a.update_at));
-      // feedlist.value = sortedFeed.slice(0, 10);
-    } else {
-      console.error("피드 목록을 가져오지 못했습니다:", response.message);
-    }
-  } catch (error) {
-    console.error("피드 목록을 가져오는 중 오류가 발생했습니다:", error);
-  }
+  resetMainFeedList();
 
   try {
     userStored_id.value = useUserStorage.getUserInformation().user_id;
@@ -101,10 +109,6 @@ onMounted(async () => {
     console.error("유저 정보를 가져오는 중 오류가 발생했습니다:", error);
   }
 });
-
-const more_feed = () => {
-  router.push({ name: "Feed" });
-};
 </script>
   
 <style>
