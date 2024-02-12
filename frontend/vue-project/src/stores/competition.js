@@ -117,10 +117,10 @@ export const useCompetionStore = defineStore('competition', () => {
         }
         return new Promise((resolve, reject) => {
             authorizationAPI.request({
-                method: 'post', 
-                url: `${URL2}image-auth/upload`, 
-                data: formData, 
-                headers: { 'Content-Type': 'multipart/form-data' } 
+                method: 'post',
+                url: `${URL2}image-auth/upload`,
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data' }
             })
                 .then(res => {
                     resolve(res);
@@ -129,6 +129,9 @@ export const useCompetionStore = defineStore('competition', () => {
                 .catch(err => {
                     reject(err);
                     console.log('업로드 실패');
+                    for (let [key, value] of formData.entries()) {
+                        console.log(`${key}: ${value}`);
+                    }
                 });
         });
     }
