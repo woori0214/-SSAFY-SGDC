@@ -1,7 +1,7 @@
 <template>
   <div class="reciveChallengeBox-wrap">
     <div class="reciveChallengeBox-body">
-      <div class="reciveChallengeBox-title">도전장 수락 페이지 - {{ now_category }}</div>
+      <div class="reciveChallengeBox-title">도전장 수락 페이지 - {{ nowCategory }}</div>
 
       <!-- 카테고리별 문구 표시 -->
       <div class="reciveChallengeBox-content">

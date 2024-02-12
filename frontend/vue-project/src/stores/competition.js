@@ -217,6 +217,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .get(`${URL}/analysis/${userId}/${userCategory}`)
                 .then((response) => {
                     resolve(response);
+                    console.log('카테고리별유저상태잘 받아옴');
                 })
                 .catch((e) => {
                     console.log(e)
