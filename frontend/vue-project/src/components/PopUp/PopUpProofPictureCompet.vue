@@ -4,6 +4,7 @@
             <div class="modal_wrapper">
                 <div class="modal_container" @click.stop>
                     <h1>경쟁모드 인증</h1>
+                    <h3>수정은 불가합니다</h3>
 
                     <!-- 이미지와 파일 업로드를 위한 input 요소 감싼 레이블 -->
                     <label for="fileInput">
