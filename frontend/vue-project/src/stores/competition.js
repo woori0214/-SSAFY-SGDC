@@ -143,6 +143,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .get(`${URL}/finish-compet-list/${userId}`)
                 .then((res) => {
                     resolve(res);
+                    console.log('통신잘되나');
                 })
                 .catch((err) => {
                     console.log(err)

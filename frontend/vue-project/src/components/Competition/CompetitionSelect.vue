@@ -1,6 +1,6 @@
 User
 <template>
-  <div id="main_box">
+  <div class="main_box">
 
     <div class="select_category">
       <p class="select_category_title">STEP1. 카테고리를 선택해주세요</p>
@@ -309,6 +309,16 @@ const selectCategory = (category) => {
   /* 마우스를 갖다댔을 때 텍스트 색상 */
 }
 
+.main_box {
+    width:calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #83b0e1;
+    border-radius: 25px;
+    margin: 30px 10px;
+    background-color: #e1ecf7;
+    padding: 0px;
+}
 .category-button.disabled {
   background-color: #ff5c5c;
   color: white;

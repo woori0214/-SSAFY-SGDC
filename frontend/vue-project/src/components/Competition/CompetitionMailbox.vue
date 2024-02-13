@@ -273,6 +273,7 @@ const acceptChallenge = (index) => {
   margin: 0;
   display: flex;
 }
+
 </style>
 
 <!-- display: flex; /* Flex 컨테이너 설정 */
