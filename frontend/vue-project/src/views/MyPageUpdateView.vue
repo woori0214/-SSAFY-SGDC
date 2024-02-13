@@ -8,14 +8,17 @@
         <div class="profile-field">
             <label for="editNickname">수정 닉네임:</label>
             <input id="editNickname" type="text" v-model="editNickname" @input="validateNickname">
+
+            <p v-if="isNicknameFormatValid && nicknameCheck && !nicknameValid" style="color: red;">중복된 닉네임이 있습니다.</p>
+            <p v-if="isNicknameFormatValid && nicknameCheck && nicknameValid" style="color: blue;">사용가능한 닉네임입니다.</p>
+            <p v-if="!isNicknameFormatValid" style="color: red;">닉네임은 2~10자 한글이어야 합니다.</p>
+
             <div class="nickname_btn">
                 <button @click="checkNickname" class="updatebtn">중복 확인</button>
                 <button @click="updateNickname" :disabled="!nicknameValid || !isNicknameFormatValid"
                     class="updatebtn">저장하기</button>
             </div>
         </div>
-        <p v-if="nicknameCheck && !nicknameValid" style="color: red;">중복된 닉네임이 있습니다.</p>
-        <p v-if="!isNicknameFormatValid" style="color: red;">닉네임은 2~10자 한글이어야 합니다.</p>
 
         <div class="profile-field">
             <label for="badge">현재 대표뱃지:</label>
@@ -65,23 +68,27 @@
             <button @click="updateProfileImage" class="updatebtn">저장하기</button>
         </div>
 
+        <div class="backbutton1">
+            <button @click="goback" class="backbutton">뒤로</button>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, watchEffect } from 'vue';
 import { useUserStore } from '@/stores/user';
 import { useUserStorageStore } from '@/stores/userStorage';
 import { useBadgeStore } from '@/stores/badge';
 import axios from 'axios';
 import { useSignupStore } from '@/stores/signup';
 
-import router from '@/router';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const useUserStorage = useUserStorageStore();
 const userBadgeStore = useBadgeStore();
 const userSignupStore = useSignupStore();
+const router = useRouter();
 
 // 현재 사용자 정보
 const userId = ref('');
@@ -101,6 +108,9 @@ const profileImageFile = ref(null);
 const isNicknameFormatValid = ref(true);
 const updatedUser = ref(null);
 
+const goback = () => {
+    router.go(-1)
+}
 
 // 뱃지리스트
 const badgeList = ref([])
@@ -124,10 +134,10 @@ const checkNickname = () => {
         alert('닉네임을 입력해주세요.');
         return;
     }
-    console.log(editNickname)
+
     userSignupStore.isnickname(editNickname.value)
         .then(response => {
-            if (response.data.status === 200) {
+            if (response.data.data.result === 'true') {
                 nicknameValid.value = true;
             } else {
                 nicknameValid.value = false;
@@ -171,7 +181,8 @@ const selectedBadgeImage = computed(() => selectedBadge.value ? selectedBadge.va
 // 리스트 받아오기
 const loadBadgeList = () => {
     userBadgeStore.getUserBadgeList(userId.value).then(res => {
-        badgeList.value = res.data.badge_List.map(badge => ({
+        console.log(res)
+        badgeList.value = res.data.badges.map(badge => ({
             badge_id: badge.badge_id,
             badge_name: badge.badge_name,
             badge_detail: badge.badge_detail,
@@ -186,8 +197,9 @@ const loadBadgeList = () => {
 const updateBadge = () => {
     const dataToUpdate = updateData(); // 업데이트할 데이터 가져오기
     // 서버에 업데이트 요청 보내기
+    console.log(dataToUpdate)
     userStore.userUpdate(userId.value, dataToUpdate).then(() => {
-        router.go(0)
+        // router.go(0)
     }).catch((error) => {
         console.log(error)
     });
@@ -235,23 +247,26 @@ onMounted(() => {
     userId.value = userInformation.user_id;
     userStore.userData(userId.value)
         .then(res => {
-            console.log(res)
             nickname.value = res.data.data.user_nickname;
             badgeId.value = res.data.data.badge_id;
             phoneNumber.value = res.data.data.user_phone;
-            profileImageUrl.value = res.data.data.userImg;
+            profileImageUrl.value = res.data.data.user_img;
+
+            loadBadgeList();
         }).catch(error => {
             console.error('Error fetching user data:', error);
         });
 
-    loadBadgeList();
-
-    const currentBadge = badgeList.value.find(badge => badge.badge_id === badgeId.value);
-    if (currentBadge) {
-        userBadgeImg.value = currentBadge.badge_img; // ref를 사용한 경우 .value로 접근
-    } else {
-        // userBadgeImg.value = 'badge_lock.png'; // 일치하는 뱃지가 없는 경우 기본 이미지 설정
-    }
+    watchEffect(() => {
+        if (badgeId.value !== null) {
+            const currentBadge = badgeList.value.find(badge => badge.badge_id === badgeId.value);
+            if (currentBadge) {
+                userBadgeImg.value = currentBadge.badge_img; // ref를 사용한 경우 .value로 접근
+            } else {
+                // userBadgeImg.value = 'badge_lock.png'; // 일치하는 뱃지가 없는 경우 기본 이미지 설정
+            }
+        }
+    });
 });
 </script>
 
@@ -362,5 +377,23 @@ p {
     display: flex;
     /* justify-content: center; */
     align-items: center;
+}
+
+.backbutton1 {
+    display: flex;
+    justify-content: center;
+}
+
+.backbutton {
+    margin: 10px;
+    background: #e1ecf7;
+    border: none;
+    border-radius: 30px;
+    color: black;
+
+    width: 100px;
+    height: 50px;
+    font-size: 20px;
+    font-weight: bold;
 }
 </style>
