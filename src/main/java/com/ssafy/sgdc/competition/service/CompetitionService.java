@@ -33,6 +33,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +77,23 @@ public class CompetitionService {
             UserCategory userCategory = optionalUserCategory.get();
             if (userCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
                 throw new RuntimeException("해당 카테고리는 현재 진행 중입니다.");
+            }
+        }
+
+        // 해당 카테고리 경기를 오늘 진행했으면 막아주는 로직
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay().plusHours(2);
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().plusHours(2);
+
+        Optional<Matching> optionalSenderMatching =
+                matchingRepo.findMatchingByUserUserIdAndCategoryCategoryIdAndMatchStatusAndAndCompetExpirationTimeBetween(
+                        userId, categoryId, MatchStatus.ACCEPT, startOfDay, endOfDay
+                );
+
+        if (optionalSenderMatching.isPresent()) {
+            Matching senderMatching = optionalSenderMatching.get();
+            if (senderMatching.getCompetition().getCreateAt().toLocalDate().equals(today)) {
+                throw new RuntimeException("유저가 해당 카테고리의 경쟁을 오늘 진행했습니다.");
             }
         }
 
@@ -125,6 +143,7 @@ public class CompetitionService {
 
         User randomUser;
         boolean isPlayingCategory;
+        boolean isTodayPlayedCategory = false;
         do {
             int randomId = minId + (int) (random.nextDouble() * (maxId - minId));
             randomUser = userRepo.findByUserId(randomId)
@@ -136,7 +155,22 @@ public class CompetitionService {
                             randomId, categoryId, CategoryStatus.PLAY_STATUS
                     ).isPresent();
 
-        } while (randomUser == null || randomUser.getUserId() == userId || isPlayingCategory);
+            // 해당 카테고리 경기를 오늘 진행했으면 막아주는 로직
+            LocalDate today = LocalDate.now();
+            LocalDateTime startOfDay = today.atStartOfDay().plusHours(2);
+            LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().plusHours(2);
+
+            Optional<Matching> optionalRandomMatching =
+                    matchingRepo.findMatchingByUserUserIdAndCategoryCategoryIdAndMatchStatusAndAndCompetExpirationTimeBetween(
+                            randomId, categoryId, MatchStatus.ACCEPT, startOfDay, endOfDay
+                    );
+
+            if (optionalRandomMatching.isPresent()) {
+                Matching senderMatching = optionalRandomMatching.get();
+                isTodayPlayedCategory = senderMatching.getCompetition().getCreateAt().toLocalDate().equals(today);
+            }
+
+        } while (randomUser == null || randomUser.getUserId() == userId || isPlayingCategory || !isTodayPlayedCategory);
         //유저가 없거나 보낸 사람 아이디가 값으면 다시 뽑음
 
         return randomUser;
@@ -166,6 +200,35 @@ public class CompetitionService {
             UserCategory friendCategory = optionalFriendCategory.get();
             if (friendCategory.getCategoryStatus() == CategoryStatus.PLAY_STATUS) {
                 throw new RuntimeException("상대방이 해당 카테고리를 현재 진행 중입니다.");
+            }
+        }
+
+        // 해당 카테고리 경기를 오늘 진행했으면 막아주는 로직
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay().plusHours(2);
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay().plusHours(2);
+
+        Optional<Matching> optionalSenderMatching =
+                matchingRepo.findMatchingByUserUserIdAndCategoryCategoryIdAndMatchStatusAndAndCompetExpirationTimeBetween(
+                        userId, categoryId, MatchStatus.ACCEPT, startOfDay, endOfDay
+                );
+
+        if (optionalSenderMatching.isPresent()) {
+            Matching senderMatching = optionalSenderMatching.get();
+            if (senderMatching.getCompetition().getCreateAt().toLocalDate().equals(today)) {
+                throw new RuntimeException("유저가 해당 카테고리의 경쟁을 오늘 진행했습니다.");
+            }
+        }
+
+        Optional<Matching> optionalReceiverMatching =
+                matchingRepo.findMatchingByUserUserIdAndCategoryCategoryIdAndMatchStatusAndAndCompetExpirationTimeBetween(
+                        friendId, categoryId, MatchStatus.ACCEPT, startOfDay, endOfDay
+                );
+
+        if (optionalSenderMatching.isPresent()) {
+            Matching receiverMatching = optionalReceiverMatching.get();
+            if (receiverMatching.getCompetition().getCreateAt().toLocalDate().equals(today)) {
+                throw new RuntimeException("친구가 해당 카테고리의 경쟁을 오늘 진행했습니다.");
             }
         }
 
