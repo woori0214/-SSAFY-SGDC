@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
 
     // 마이페이지 회원 수정
     const userUpdate = function (userId, updateData) {
-
+        console.log(updateData)
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .patch(`${URL}/user-info-modify/${userId}`, updateData)
