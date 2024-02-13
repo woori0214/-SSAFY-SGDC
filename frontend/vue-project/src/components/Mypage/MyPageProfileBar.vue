@@ -219,7 +219,7 @@ export default {
       if (userData.value.badge_id === null) {
         return 0;
       }
-
+      console.log(userData.value)
       const badge = badgeStore.badgeList.find(badge => badge.badge_id === userData.value.badge_id);
       // 일치하는 뱃지가 있으면 이미지 반환, 없으면 0 반환
       return badge ? badge.badge_img : 0;
