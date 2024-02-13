@@ -97,14 +97,16 @@ watchEffect(() => {
 });
 
 const checkFollowingStatus = async (userId) => {
+  console.log(userId)
   const useridMe = useUserStorage.getUserInformation().user_id;
   const checkusers = {
-    user_id: userId,
-    following_id: useridMe
+    user_id: useridMe,
+    following_id: userId
   };
 
   try {
     const response = await userFollowStore.checkSsallowing(checkusers);
+    console.log(response)
     return response.data.success;
   } catch (error) {
     console.error('팔로잉 상태 확인 중 오류 발생:', error);

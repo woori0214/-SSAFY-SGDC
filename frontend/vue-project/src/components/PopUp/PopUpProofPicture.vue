@@ -70,9 +70,15 @@ export default {
 <script setup>
 import { ref } from 'vue';
 import defaultImage from '@/assets/camera.png';
+import { useSoloStore } from '@/stores/solo';
+
+const soloStore = useSoloStore();
 
 const props = defineProps(['show', 'selectedCategory', 'isSoloMode']);
-const emit = defineEmits(['update:show', 'soloAuthImage']);
+const emit = defineEmits(['update:show', 'soloAuthImage']); 
+
+// const userId = ref(props.userId);
+// const categoryId = ref(props.categoryId);
 
 const currentImageSrc = ref(defaultImage);
 const profile = ref(null); // 파일 객체를 저장할 ref

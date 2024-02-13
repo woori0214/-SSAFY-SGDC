@@ -179,7 +179,7 @@ export default {
         .then((res) => {
           // console.log(res)
           userData.value = res.data.data;
-          // console.log(userData.value)
+          console.log(userData.value)
         })
         .catch((err) => {
           console.log(err);
@@ -199,13 +199,14 @@ export default {
 
       // 팔로우 했는지 안했는지 확인
       const checkusers = {
-        user_id: mypageUserId.value,
-        following_id: loginUserId.value,
+        user_id: loginUserId.value,
+        following_id: mypageUserId.value,
       };
+
       followStore
         .checkSsallowing(checkusers)
         .then((res) => {
-          // console.log(res)
+          console.log(res)
           isFollowing.value = res.data.success;
         })
         .catch((err) => {
@@ -219,10 +220,11 @@ export default {
       if (userData.value.badge_id === null) {
         return 0;
       }
-
-      const badge = badgeStore.badgeList.find(badge => badge.badge_id === userData.value.badge_id);
+      // console.log(userData.value)
+      const badge = badgeStore.badgeList.find(badge => badge.badgeId == userData.value.badge_id);
+      // console.log(badge)
       // 일치하는 뱃지가 있으면 이미지 반환, 없으면 0 반환
-      return badge ? badge.badge_img : 0;
+      return badge ? badge.badgeImg : 0;
     });
 
     // 도전장함
@@ -365,7 +367,7 @@ export default {
 
 .user_img {
   background: #f8f9fb;
-  border: #aecbeb 2px solid;
+  border: #aecbeb 8px solid;
   border-radius: 500px;
   width: 130px;
   height: 130px;
@@ -381,6 +383,9 @@ export default {
   width: 70px;
   /* 뱃지 크기 */
   height: 70px;
+  border-radius: 100%;
+  /* border: #d9bcff 3px solid; */
+  background-color: #d9bcff;
 }
 
 .middle {

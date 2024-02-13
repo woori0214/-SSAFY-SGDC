@@ -44,6 +44,7 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
   display: flex;
   justify-content: center;
   margin: auto; 
+  margin-top: 20px;
 }
 
 .competmode_div {

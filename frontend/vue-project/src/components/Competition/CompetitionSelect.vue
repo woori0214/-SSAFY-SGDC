@@ -9,7 +9,7 @@ User
         <button v-for="category in Categories" :key="category.id"
           :class="{ 'active': selectedCategory === category.id, 'disabled': disabledCategories.includes(category.id) }"
           @click="selectCategory(category)" class="category-button">
-          <span>{{ category.name }}</span>
+          <span class="category_list_box_font">{{ category.name }}</span>
         </button>
       </div>
     </div>
@@ -18,11 +18,11 @@ User
       <p class="matching_title">STEP2. 매칭모드를 선택해주세요</p>
       <div class="buttons_container">
         <button class="matching_btn" @click="openRandomMatchingModal">
-          <span>랜덤 매치</span>
+          <span class="matching_btn-item">랜덤 매치</span>
         </button>
 
         <button class="matching_btn" @click="openFriendMatchingModal">
-          <span>친구와 매치</span>
+          <span class="matching_btn-item">친구와 매치</span>
         </button>
       </div>
     </div>
@@ -32,7 +32,7 @@ User
       :category_name="selectedCategoryName !== null ? selectedCategoryName : null
         " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname" />
 
-    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList"
+    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList" :selectedCategoryName="selectedCategoryName"
       :selectedCategory="selectedCategory !== null ? selectedCategory : null" @friend-selected="handleFriendSelect" />
   </div>
 </template>
@@ -247,6 +247,10 @@ const selectCategory = (category) => {
   color: white;
 }
 
+.category_list_box_font{
+  font-size: 1.4rem;
+}
+
 .matching_btn_list {
   display: flex;
   flex-direction: column;
@@ -274,25 +278,30 @@ const selectCategory = (category) => {
 .buttons_container {
   display: flex;
   justify-content: space-between;
-  gap: 5%;
+  gap: 10%;
   /* 버튼들을 균등하게 분배 */
   width: calc(100% - 40px);
   /* 컨테이너 너비를 전체로 설정 */
-  padding: 20px;
+  padding-block: 20px;
 }
 
 .matching_btn {
-  width: 100px;
+  width: 60%;
   /* 원하는 너비로 조절 */
   height: 50px;
   border-radius: 25px;
   flex: 1;
   background-color: #e1ecf7;
   border-color: #e1ecf7;
-  margin-left: 50px;
-  margin-right: 50px;
+  /* margin-left: 50px;
+  margin-right: 50px; */
   border: none;
 }
+
+.matching_btn-item{
+  font-size: 2rem;
+}
+
 .matching_btn:hover {
   background-color: #83b0e1;
   /* 마우스를 갖다댔을 때 배경색상 */
@@ -318,5 +327,14 @@ const selectCategory = (category) => {
 
 span {
   font-family: "jua";
+}
+
+@media (max-width: 500px){
+  .category_list_box{
+    flex-direction: column;
+  }
+  .matching_btn-item{
+    font-size: 1.6rem;
+  }
 }
 </style>
