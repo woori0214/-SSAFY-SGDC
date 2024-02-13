@@ -96,6 +96,11 @@ public class UserService {
         return userPhoneDuplicate;
     }
 
+    @Transactional
+    public boolean checkSsafyEmail(String userEmail) {
+        return userRepo.existsByUserEmail(userEmail);
+    }
+
     // TODO : 아이디를 찾지 못하면 orElseThrow로 런타임 에러 띄우고 else를 하는 게 아닌 로직 진행
     public User login(UserLoginDto userLoginDto) {
         User userLoginId = userRepo.findByLoginId(userLoginDto.getLoginId())

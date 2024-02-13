@@ -54,10 +54,8 @@ public class UserController {
     ) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
         UserSignUpDto userSignUpDto = objectMapper.readValue(userSignUpJson, UserSignUpDto.class);
-        System.out.println("회원가입 경로.");
         String ImageUrl=userService.uploadS3(userSignUpDto.getLoginId(),profile, S3ImageFolder.PROFILE_IMAGE);
         userService.signUp(userSignUpDto,ImageUrl);
-
 
         Map<String, String> result = new HashMap<>();
         result.put("result", "true");
@@ -142,6 +140,22 @@ public class UserController {
                 .build(), HttpStatus.OK);
     }
 
+    @Operation(summary = "싸피 이메일 중복검사")
+    @RequestMapping(value = "/signup/check-student-email/{userSsafyEmail}", method = RequestMethod.GET)
+    public ResponseEntity<GeneralResponse> checkSsafyEmail(@PathVariable String userSsafyEmail) {
+        Map<String, String> response = new HashMap<>();
+        boolean result = userService.checkSsafyEmail(userSsafyEmail);   // 중복시 true, 중복X false
+        response.put("result", String.valueOf(!result));
+
+        // 이메일 사용가능 result : true
+        // 이메일 사용불가 result : false
+        return new ResponseEntity<>(GeneralResponse.builder()
+                .status(200)
+                .message("이메일 중복체크")
+                .data(response)
+                .build(), HttpStatus.OK);
+    }
+
     @Operation(summary = "로그인")
     @RequestMapping(value = "/login/", method = RequestMethod.POST)
     public ResponseEntity<GeneralResponse> login(@RequestBody UserLoginDto userLoginDto) throws JsonProcessingException {
@@ -204,7 +218,7 @@ public class UserController {
         response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
         response.put("user_nickname", user.getUserNickname());
         response.put("user_img", user.getUserImg());
-        response.put("badge_id", String.valueOf(user.getBadgeId().getBadgeId()));
+        response.put("badge_id", String.valueOf(user.getBadgeId().getBadgeId()==0?0:1));
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
         response.put("user_phone", String.valueOf(user.getUserPhone()));
         response.put("complain_cnt", String.valueOf(user.getComplainCnt()));
