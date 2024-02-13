@@ -2,6 +2,7 @@ package com.ssafy.sgdc.user;
 
 import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.ssafy.sgdc.badge.domain.Badge;
+import com.ssafy.sgdc.badge.domain.UserBadge;
 import com.ssafy.sgdc.badge.repository.BadgeRepo;
 import com.ssafy.sgdc.badge.repository.UserBadgeRepo;
 import com.ssafy.sgdc.badge.service.BadgeService;
@@ -28,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-
+import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -156,7 +157,9 @@ public class UserService {
         User user = userRepo.findByUserId(userInfoModifyDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 
-        if(userBadgeRepo.existsUserBadgeByUserIdAndBadgeId(user.getUserId(),badge.getBadgeId())){
+        Optional<UserBadge> userBadge = userBadgeRepo.findUserBadgeByUserUserIdAndBadgeBadgeId(user.getUserId(), badge.getBadgeId());
+
+        if(userBadge.isPresent()){
             if(userInfoModifyDto.getUserNickname()!=null){
                 user.setUserNickname(userInfoModifyDto.getUserNickname());
             }
@@ -167,6 +170,7 @@ public class UserService {
             return user;
         }
         else{
+
             throw new RuntimeException("modifyUser -> 유저가 해당 뱃지를 보유하고 있지 않습니다.");
         }
     }

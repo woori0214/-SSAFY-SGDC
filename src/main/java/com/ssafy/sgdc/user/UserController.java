@@ -246,14 +246,13 @@ public class UserController {
                 .data(response)
                 .build(), HttpStatus.OK);
     }
-    @Operation(summary = "프로필 사진 수정", description="프로필사진을 변경할 수 있습니다                                                              .")
+    @Operation(summary = "프로필 사진 수정", description="프로필사진을 변경할 수 있습니다.")
     @RequestMapping(value = "/user-profile-modify/{userId}", method = RequestMethod.PATCH)
     public ResponseEntity<GeneralResponse> userInfoModify(
             @PathVariable int userId,
             @RequestPart(value = "profileImage") MultipartFile profile
             ) throws JsonProcessingException {
-        //삭제
-        System.out.println("프로필 사진 삭제하러 userService.delete ");
+
         User findUser = userService.getUserById(userId);
         User user = userService.deleteProfile(findUser);
 
