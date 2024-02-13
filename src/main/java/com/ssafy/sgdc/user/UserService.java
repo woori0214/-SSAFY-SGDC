@@ -123,10 +123,11 @@ public class UserService {
         }
     }
 
-    public User userInfo(UserInfoDto userInfoDto) {
-        User userInfo = userRepo.findByUserId(userInfoDto.getUserId())
+    public User userInfo(User user) {
+        userRepo.findByUserId(user.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
-        return userInfo;
+
+        return user;
     }
 
     // TODO : 일단 없으면 null로 로직 수정 필요
@@ -157,25 +158,32 @@ public class UserService {
     // 회원수정
     @Transactional
     public User modifyUser(UserInfoModifyDto userInfoModifyDto) {
-        Badge badge = badgeRepo.findBadgeByBadgeId(userInfoModifyDto.getBadgeId())
-                .orElseThrow(() -> new RuntimeException("modifyUser -> 해당 뱃지를 찾을 수 없습니다."));
+        boolean isBadgePresent = true;
+
         User user = userRepo.findByUserId(userInfoModifyDto.getUserId())
                 .orElseThrow(() -> new RuntimeException("해당 유저를 찾을 수 없습니다."));
 
-        Optional<UserBadge> userBadge = userBadgeRepo.findUserBadgeByUserUserIdAndBadgeBadgeId(user.getUserId(), badge.getBadgeId());
+        Badge badge = user.getBadgeId();
 
-        if(userBadge.isPresent()){
+        if(userInfoModifyDto.getBadgeId()!=0){
+            badge = badgeRepo.findBadgeByBadgeId(userInfoModifyDto.getBadgeId())
+                .orElseThrow(() -> new RuntimeException("modifyUser -> 해당 뱃지를 찾을 수 없습니다."));
+        }
+        if(badge != null){
+            Optional<UserBadge> userBadge = userBadgeRepo.findUserBadgeByUserUserIdAndBadgeBadgeId(user.getUserId(), badge.getBadgeId());
+            isBadgePresent = userBadge.isPresent();
+        }
+
+        if(isBadgePresent){
             if(userInfoModifyDto.getUserNickname()!=null){
-                user.setUserNickname(userInfoModifyDto.getUserNickname());
-            }
+                user.setUserNickname(userInfoModifyDto.getUserNickname());}
             if(userInfoModifyDto.getUserPhone()!=null){
-                user.setUserPhone(userInfoModifyDto.getUserPhone());
-            }
+                user.setUserPhone(userInfoModifyDto.getUserPhone());}
             user.setBadgeId(badge);
             return user;
         }
-        else{
 
+        else{
             throw new RuntimeException("modifyUser -> 유저가 해당 뱃지를 보유하고 있지 않습니다.");
         }
     }

@@ -210,10 +210,10 @@ public class UserController {
 
     @Operation(summary = "마이페이지 정보 확인", description="마이페이지 정보를 표시합니다.")
     @RequestMapping(value = "/user-info/{userId}", method = RequestMethod.GET)
-    public ResponseEntity<GeneralResponse> userInfo(UserInfoDto userInfoDto) {
+    public ResponseEntity<GeneralResponse> userInfo(@PathVariable User userId) {
         Map<String, String> response = new HashMap<>();
 
-        User user = userService.userInfo(userInfoDto);
+        User user = userService.userInfo(userId);
         response.put("user_id", String.valueOf(user.getUserId()));
         response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
         response.put("user_nickname", user.getUserNickname());
@@ -252,8 +252,12 @@ public class UserController {
         User user = userService.modifyUser(userInfoModifyDto);
          response.put("user_nickName", userInfoModifyDto.getUserNickname());
          response.put("user_phone", userInfoModifyDto.getUserPhone());
-         response.put("badge_id", String.valueOf(userInfoModifyDto.getBadgeId()));
-
+         if(user.getBadgeId()==null){
+             response.put("badge_id", null);
+         }
+         else {
+             response.put("badge_id", String.valueOf(userInfoModifyDto.getBadgeId()));
+         }
         return new ResponseEntity<>(GeneralResponse.builder()
                 .status(200)
                 .message("마이페이지 수정")

@@ -1,5 +1,6 @@
 package com.ssafy.sgdc.user.dto;
 
+import com.ssafy.sgdc.badge.domain.Badge;
 import lombok.*;
 
 @Getter
