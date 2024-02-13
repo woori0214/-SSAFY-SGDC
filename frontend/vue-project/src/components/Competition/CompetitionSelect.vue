@@ -1,14 +1,25 @@
 User
 <template>
   <div class="main_box">
-
+    <div class="hasChallengeCount-warp">
+      <div class="hasChallengeCount-box">
+        남은 도전장 개수 : {{ hasChallengeCnt }}
+      </div>
+    </div>
     <div class="select_category">
       <p class="select_category_title">STEP1. 카테고리를 선택해주세요</p>
 
       <div class="category_list_box">
-        <button v-for="category in Categories" :key="category.id"
-          :class="{ 'active': selectedCategory === category.id, 'disabled': disabledCategories.includes(category.id) }"
-          @click="selectCategory(category)" class="category-button">
+        <button
+          v-for="category in Categories"
+          :key="category.id"
+          :class="{
+            active: selectedCategory === category.id,
+            disabled: disabledCategories.includes(category.id),
+          }"
+          @click="selectCategory(category)"
+          class="category-button"
+        >
           <span class="category_list_box_font">{{ category.name }}</span>
         </button>
       </div>
@@ -27,13 +38,29 @@ User
       </div>
     </div>
 
-    <PopUpRequestMessage :showModal="isRandomMatchingMessageVisible || isFriendMatchingMessageVisible
-      " :close="closeMessage" :modalType="modalType" :category_id="selectedCategory !== null ? selectedCategory : null"
-      :category_name="selectedCategoryName !== null ? selectedCategoryName : null
-        " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname" />
+    <PopUpRequestMessage
+      :showModal="
+        isRandomMatchingMessageVisible || isFriendMatchingMessageVisible
+      "
+      :close="closeMessage"
+      :modalType="modalType"
+      :category_id="selectedCategory !== null ? selectedCategory : null"
+      :category_name="
+        selectedCategoryName !== null ? selectedCategoryName : null
+      "
+      :user-id="userId"
+      :friend-id="selectedFriendId"
+      :friend-nickname="selectedFriendNickname"
+    />
 
-    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList" :selectedCategoryName="selectedCategoryName"
-      :selectedCategory="selectedCategory !== null ? selectedCategory : null" @friend-selected="handleFriendSelect" />
+    <PopUpFriendsList
+      :user-id="userId"
+      :showModal="isFriendMatchingListVisible"
+      :Listclose="closeFriendsList"
+      :selectedCategoryName="selectedCategoryName"
+      :selectedCategory="selectedCategory !== null ? selectedCategory : null"
+      @friend-selected="handleFriendSelect"
+    />
   </div>
 </template>
 
@@ -42,6 +69,7 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useCompetionStore } from "@/stores/competition";
 import { useUserStorageStore } from "@/stores/userStorage";
+import { useUserStore } from "@/stores/user";
 
 import PopUpRequestMessage from "@/components/PopUp/PopUpRequestMessage.vue";
 import PopUpFriendsList from "@/components/PopUp/PopUpFriendsList.vue";
@@ -77,6 +105,7 @@ const router = useRouter();
 const competSelect = useCompetionStore();
 const userStorage = useUserStorageStore();
 const userInformation = userStorage.getUserInformation();
+const userInfoObj = useUserStore();
 
 const isRandomMatchingMessageVisible = ref(false);
 const isFriendMatchingMessageVisible = ref(false);
@@ -87,20 +116,22 @@ const selectedCategory = ref(null);
 const selectedCategoryName = ref(null);
 const selectedFriendId = ref(null);
 const selectedFriendNickname = ref(null);
+const hasChallengeCnt = ref(-1);
 
 const userId = userInformation.user_id;
 const disabledCategories = ref([]);
 const userMatchingStatus = () => {
   const userId = userInformation.user_id;
-  competSelect.competitionAnalysis(userId)
+  competSelect
+    .competitionAnalysis(userId)
     .then((response) => {
       const userCategories = response.data.user_categories;
       console.log("경기 중인 카테고리 정보:", userCategories);
 
       // "PLAY_STATUS" 상태인 카테고리의 ID를 disabledCategories 배열에 추가
       const playStatusCategoryIds = userCategories
-        .filter(category => category.categoryStatus === "PLAY_STATUS")
-        .map(category => category.category_id);
+        .filter((category) => category.categoryStatus === "PLAY_STATUS")
+        .map((category) => category.category_id);
 
       disabledCategories.value = playStatusCategoryIds;
       console.log("진행 중인 카테고리를 가져왔습니다.");
@@ -110,9 +141,24 @@ const userMatchingStatus = () => {
     });
 };
 
+//현재 도전장 개수 최신화 함수
+function resetHasChallengeCount() {
+  userInfoObj
+    .userData(userStorage.getUserInformation().user_id)
+    .then((res) => {
+      hasChallengeCnt.value = res.data.data.challeng_cnt;
+    })
+    .catch((error) => {
+      console.error("도전장 최신화 오류", error);
+    });
+}
 
 // 랜덤 매칭
 const openRandomMatchingModal = () => {
+  if (hasChallengeCnt.value == '0' || hasChallengeCnt.value == 0) {
+    alert("남은 도전장이 없습니다.");
+    return; // 함수 실행 중지
+  }
   if (selectedCategory.value === null) {
     alert("카테고리를 선택해주세요.");
     return;
@@ -121,7 +167,6 @@ const openRandomMatchingModal = () => {
   const randomSendData = {
     userId: userId,
     categoryId: selectedCategory.value,
-
   };
   console.log(randomSendData);
 
@@ -133,12 +178,13 @@ const openRandomMatchingModal = () => {
     })
     .catch((error) => {
       console.error("Error sending random matching request:", error);
-      console.log('잘 안되는데요')
+      console.log("잘 안되는데요");
       // 오류 처리 로직을 추가할 수 있습니다.
     });
 
   isRandomMatchingMessageVisible.value = true;
   modalType.value = "randomMatching";
+  resetHasChallengeCount();
 };
 
 const closeMessage = () => {
@@ -149,6 +195,10 @@ const closeMessage = () => {
 
 // 친구 매칭
 const openFriendMatchingModal = () => {
+  if (hasChallengeCnt.value == '0' || hasChallengeCnt.value == 0) {
+    alert("남은 도전장이 없습니다.");
+    return; // 함수 실행 중지
+  }
   if (selectedCategory.value === null) {
     // 카테고리가 선택되지 않았을 경우 경고 메시지 표시
     alert("카테고리를 선택해주세요.");
@@ -157,17 +207,18 @@ const openFriendMatchingModal = () => {
   // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
   isFriendMatchingListVisible.value = true;
   console.log(isFriendMatchingListVisible.value);
-  console.log('친구매칭')
+  console.log("친구매칭");
   modalType.value = "friendMatching";
   console.log(modalType.value);
+  resetHasChallengeCount();
 };
 
 // 친구 선택
 const handleFriendSelect = (friend) => {
-  console.log(friend)
+  console.log(friend);
   selectedFriendId.value = friend.userId;
   selectedFriendNickname.value = friend.userNickname;
-  console.log(selectedFriendNickname.value)
+  console.log(selectedFriendNickname.value);
   isFriendMatchingMessageVisible.value = true;
   isFriendMatchingListVisible.value = false;
   closeFriendsList();
@@ -176,8 +227,10 @@ const handleFriendSelect = (friend) => {
 const closeFriendsList = () => {
   isFriendMatchingListVisible.value = false;
 };
+
 onMounted(() => {
   userMatchingStatus();
+  resetHasChallengeCount();
 });
 
 const selectCategory = (category) => {
@@ -188,8 +241,10 @@ const selectCategory = (category) => {
   }
 
   // 선택된 카테고리를 토글
-  selectedCategory.value = selectedCategory.value === category.id ? null : category.id;
-  selectedCategoryName.value = selectedCategoryName.value === category.name ? null : category.name;
+  selectedCategory.value =
+    selectedCategory.value === category.id ? null : category.id;
+  selectedCategoryName.value =
+    selectedCategoryName.value === category.name ? null : category.name;
 };
 </script>
 
@@ -203,10 +258,20 @@ const selectCategory = (category) => {
   margin: 30px 10px;
   background-color: #e1ecf7;
   padding: 0px;
-
-
 }
 
+.hasChallengeCount-warp {
+  display: flex;
+  justify-content: end;
+  padding-right: 25px;
+}
+.hasChallengeCount-box {
+  font-size: 1.6rem;
+  margin-block: 5px;
+  background-color: #a7c3df;
+  padding: 10px;
+  border-radius: 15px;
+}
 .select_category {
   background-color: #f8f9fb;
   /* border: 2px solid #ffffff; 테두리 색상을 흰색(#ffffff)으로 변경 */
@@ -216,7 +281,7 @@ const selectCategory = (category) => {
   border-radius: 25px;
   margin-bottom: 5%;
   padding: 30px;
-  margin-top: 3%;
+  /* margin-top: 3%; */
 }
 
 .select_category_title {
@@ -239,7 +304,6 @@ const selectCategory = (category) => {
   cursor: pointer;
   background-color: #e1ecf7;
   color: black;
-
 }
 
 .category-button.active {
@@ -247,7 +311,7 @@ const selectCategory = (category) => {
   color: white;
 }
 
-.category_list_box_font{
+.category_list_box_font {
   font-size: 1.4rem;
 }
 
@@ -264,7 +328,7 @@ const selectCategory = (category) => {
   /* margin: 20px 0; */
   margin-bottom: 5%;
 
-  margin-right: 2%;
+  /* margin-right: 2%; */
   width: calc(100% - 4px);
 }
 
@@ -298,7 +362,7 @@ const selectCategory = (category) => {
   border: none;
 }
 
-.matching_btn-item{
+.matching_btn-item {
   font-size: 2rem;
 }
 
@@ -310,14 +374,14 @@ const selectCategory = (category) => {
 }
 
 .main_box {
-    width:calc(100% - 30px);
-    display: flex;
-    flex-direction: column;
-    border: 2px solid #83b0e1;
-    border-radius: 25px;
-    margin: 30px 10px;
-    background-color: #e1ecf7;
-    padding: 0px;
+  width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #83b0e1;
+  border-radius: 25px;
+  margin: 30px 10px;
+  background-color: #e1ecf7;
+  padding: 0px;
 }
 .category-button.disabled {
   background-color: #ff5c5c;
@@ -329,11 +393,11 @@ span {
   font-family: "jua";
 }
 
-@media (max-width: 500px){
-  .category_list_box{
+@media (max-width: 500px) {
+  .category_list_box {
     flex-direction: column;
   }
-  .matching_btn-item{
+  .matching_btn-item {
     font-size: 1.6rem;
   }
 }

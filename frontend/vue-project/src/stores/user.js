@@ -17,9 +17,12 @@ export const useUserStore = defineStore('user', () => {
             authorizationAPI
                 .get(`${URL}/user-info/${userId}`)
                 .then((res) => {
+                    console.log('남은 도전장 개수 확인해봅시다.')
+                    console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
+                    console.log('남은 도전장 개수 확인해봅시다. 에러')
                     console.log(err);
                     reject(err);
                 });
