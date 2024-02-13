@@ -2,7 +2,7 @@
     <div v-if="showModal" class="friendList">
         <div class="friendList_content">
             <div>
-                <h2>선택한 카테고리 : {{ selectedCategory }}</h2>
+                <h2>선택한 카테고리 : {{ selectedCategoryName }}</h2>
             </div>
             <div class="find_friends">
                 <input type="text" v-model="nickname" placeholder="친구 닉네임을 검색하세요 :)" @input="searchFriends"
@@ -48,10 +48,10 @@ import { useFollowStore } from '@/stores/follow';
 import { useUserStore } from '@/stores/user';
 import { useCompetionStore } from '@/stores/competition';
 
-import userimg from '@/assets/image1.png';
+import userimg from '@/assets/image1.png'; 
 
 export default {
-    props: ['userId', 'showModal', 'Listclose', 'selectedCategory'],
+    props: ['userId', 'showModal', 'Listclose', 'selectedCategory', 'selectedCategoryName'],
 
 
     setup(props, { emit }) {
