@@ -73,14 +73,14 @@
     </div>
   </div>
 
-  <div v-if="showWinModal" class="modal">
+  <div v-if="showWinModal" class="modal2">
     <p>{{ modalData.other_nickname }}님과의 경쟁에서 이겼습니다!</p>
     <img :src="winnerImage" alt="Winning Image" style="width: 100%; max-width: 300px;" />
     <button @click="closeModal">닫기</button>
   </div>
 
   <!-- '졌습니다' 모달 -->
-  <div v-if="showLoseModal" class="modal">
+  <div v-if="showLoseModal" class="modal2">
     <p>{{ modalData.other_nickname }}님과의 경쟁에서 졌습니다.</p>
     <img :src="loserImage" alt="losing Image" style="width: 100%; max-width: 300px;" />
     <button @click="closeModal">닫기</button>
@@ -303,7 +303,7 @@ onMounted(() => {
   justify-content: end;
 }
 
-.modal {
+.modal2 {
   position: fixed;
   top: 50%;
   left: 50%;
