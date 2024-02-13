@@ -32,7 +32,7 @@ User
       :category_name="selectedCategoryName !== null ? selectedCategoryName : null
         " :user-id="userId" :friend-id="selectedFriendId" :friend-nickname="selectedFriendNickname" />
 
-    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList"
+    <PopUpFriendsList :user-id="userId" :showModal="isFriendMatchingListVisible" :Listclose="closeFriendsList" :selectedCategoryName="selectedCategoryName"
       :selectedCategory="selectedCategory !== null ? selectedCategory : null" @friend-selected="handleFriendSelect" />
   </div>
 </template>
