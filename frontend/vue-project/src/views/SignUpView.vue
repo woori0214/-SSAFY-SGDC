@@ -121,7 +121,7 @@
               id="signup-clear-btn"
               class="expandUp"
               @click="signupSlidenext"
-              v-if="!idError && !idExists && idAvailable"
+              v-if="!idError && !idExists && idAvailable && (password !='')"
             >
               다음!
             </button>
@@ -395,7 +395,7 @@
         <div
           class="history-item"
           :style="
-            !idError && !idExists && idAvailable
+            !idError && !idExists && idAvailable && (password !='')
               ? ''
               : 'background-color: #f8f9fb'
           "
@@ -403,7 +403,7 @@
           <div
             class="history-item-isclear"
             :style="
-              !idError && !idExists && idAvailable
+              !idError && !idExists && idAvailable && (password !='')
                 ? 'background-color: #2196f3'
                 : ''
             "
