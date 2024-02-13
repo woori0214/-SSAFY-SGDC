@@ -56,7 +56,7 @@ public class UserController {
         UserSignUpDto userSignUpDto = objectMapper.readValue(userSignUpJson, UserSignUpDto.class);
         System.out.println("회원가입 경로.");
         String ImageUrl=userService.uploadS3(userSignUpDto.getLoginId(),profile, S3ImageFolder.PROFILE_IMAGE);
-        userService.signUp(userSignUpDto,profile.getOriginalFilename());
+        userService.signUp(userSignUpDto,ImageUrl);
 
 
         Map<String, String> result = new HashMap<>();
@@ -203,7 +203,7 @@ public class UserController {
         response.put("user_id", String.valueOf(user.getUserId()));
         response.put("user_ssafy_id", String.valueOf(user.getUserSsafyId()));
         response.put("user_nickname", user.getUserNickname());
-        response.put("user_img", userService.getS3ImagePath(user));
+        response.put("user_img", user.getUserImg());
         response.put("badge_id", String.valueOf(user.getBadgeId().getBadgeId()));
         response.put("challeng_cnt", String.valueOf(user.getChallengeCnt()));
         response.put("user_phone", String.valueOf(user.getUserPhone()));
@@ -259,7 +259,7 @@ public class UserController {
 
         String ImageUrl = userService.uploadS3(findUser.getLoginId(), profile, S3ImageFolder.PROFILE_IMAGE);
 
-        userService.updateProfile(user, profile.getOriginalFilename());
+        userService.updateProfile(user, ImageUrl);
 
         Map<String, String> response = new HashMap<>();
 

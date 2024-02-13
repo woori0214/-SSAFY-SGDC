@@ -28,8 +28,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,7 +48,6 @@ public class UserService {
     private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public User signUp(UserSignUpDto userSignDto, String profileImageUrl) {
-        String imageName = StringUtils.deleteWhitespace(S3ImageFolder.PROFILE_IMAGE + "/" + userSignDto.getLoginId() + "_" + profileImageUrl); // 파일 이름
 
         User user = User.builder()
                 .userId(0)
@@ -61,7 +58,7 @@ public class UserService {
                 .userName(userSignDto.getUserName())
                 .userPhone(userSignDto.getUserPhone())
                 .userPassword(passwordEncoder.encode(userSignDto.getUserPassword()))
-                .userImg(imageName)
+                .userImg(profileImageUrl)
                 .createAt(LocalDateTime.now())
                 .updateAt(LocalDateTime.now())
                 .signOut(false)
@@ -202,40 +199,29 @@ public class UserService {
         return imagePath;
     }
     
-    // 유저내에 저장 된 유저img기반으로 S3 path 반환
-    public String getS3ImagePath(User user){
-        return amazonS3Client.getUrl(bucketName, user.getUserImg()).toString(); // 접근가능한 URL 가져오기
-    }
-    
     // 프로필 사진 DB수정
-    public User updateProfile(User user, String imgName) {
-
-        String updateImgName = StringUtils.deleteWhitespace(S3ImageFolder.PROFILE_IMAGE + "/" + user.getLoginId() + "_" + imgName); // 파일 이름
-
-        user.setUserImg(updateImgName);
-        return userRepo.save(user);
-
+    public void updateProfile(User user, String imgName) {
+        user.setUserImg(imgName);
+        userRepo.save(user);
     }
 
     // 프로필 사진 수정(1.삭제, 2.업로드)
     public User deleteProfile(User user) {
-
         // 사진 삭제
         String curUserImg = user.getUserImg();
-        String userImgPath = StringUtils.deleteWhitespace(curUserImg); // 파일 이름
 
-        if (userImgPath != null && !userImgPath.isEmpty()) {
+        if (curUserImg != null && !curUserImg.isEmpty()) {
+            // 이미지 파일 경로 추출
+            String userImgPath = curUserImg.substring(StringUtils.ordinalIndexOf(curUserImg, "/", 3)+1);
+
             // S3에서 이미지 파일 삭제
             amazonS3Client.deleteObject(new DeleteObjectRequest(bucketName, userImgPath));
             updateProfile(user, null);
-        }
-        else {
+        } else {
             // 이미지 파일 경로가 없거나 이미 삭제된 경우 처리
             System.out.println("삭제할 프로필 이미지가 없습니다.");
-
         }
         return user;
-
     }
 
 }
