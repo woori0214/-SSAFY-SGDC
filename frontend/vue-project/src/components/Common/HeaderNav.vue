@@ -167,8 +167,10 @@ setInterval(function () {
     if (userStorage.getUserInformation().user_id != null) {
       isLogined_ref.value = true;
     }
+  }else if(userNickname.value != userStorage.getUserInformation().user_id){
+    userNickname.value == userStorage.getUserInformation().user_id;
   }
-}, 1000);
+}, 100);
 
 onMounted(() => {
   userLoginStore.isLogined();
