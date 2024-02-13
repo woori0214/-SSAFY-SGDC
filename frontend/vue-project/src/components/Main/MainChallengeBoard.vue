@@ -13,7 +13,7 @@
       <div class="solo">
         <div class="solo_head">
           <div class="solo_head_item">솔로 모드 현황</div>
-        </div>
+        </div> 
         <div class="solo_board">
           <div class="success_graph">
             <!-- <div class="donut" data-percent="85.4"> -->
@@ -111,20 +111,10 @@
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <PopUpProofPictureCompet
-      :show="isTestModalOpencompet"
-      :userId="userIdtoauth"
-      :competId="competIdtoauth"
-      @competAuthImage="handleCompetAuthImage"
-      @update:show="closeTestModalcompet"
-    />
-    <PopUpProofPicture
-      :show="isTestModalOpen"
-      @update:show="closeTestModal"
-      @uploadImage="handleUpload"
-      :selectedCategory="selectedCategory"
-      :isSoloMode="true"
-    />
+    <PopUpProofPictureCompet :show="isTestModalOpencompet" :userId="userIdtoauth" :competId="competIdtoauth"
+      @competAuthImage="handleCompetAuthImage" @update:show="closeTestModalcompet" />
+    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @soloAuthImage="handleSoloAuthImage"
+      :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
   
@@ -189,6 +179,40 @@ const proofSolo = function (categoryId, isStatus) {
 
   openTestModal();
 };
+
+// 솔로모드 인증
+const handleSoloAuthImage = file => {
+      const userId = userStorage.getUserInformation().user_id;
+      profile.value = file; // 반응형 참조에 파일 할당
+      // 이미지 업로드 이벤트 핸들러
+      console.log('이미지 업로드 완료:', profile);
+      const challengeRequestJson = {
+        userId: userId,
+        categoryId: selectedCategory.value,
+        soloAuthImg: ''
+      };
+      console.log('잘 담아있나?');
+
+      const formData = new FormData();
+      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
+      formData.append('soloAuthImage', file); // file 직접 사용
+      console.log('여기까지는 왔다');
+      soloStore.soloAuth(formData)
+        .then((response) => {
+          console.log('이미지 통신 완료:', response);
+
+          closeTestModal();
+        })
+        .catch((error) => {
+          console.error('이미지 업로드 실패:', error);
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
+
+        });
+
+    };
+
 // 인증 모달창
 const openTestModal = () => {
   isTestModalOpen.value = true;
