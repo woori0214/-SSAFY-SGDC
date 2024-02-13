@@ -64,6 +64,7 @@ const followUser = async (userId) => {
     isFollowingMap.value.set(userId, true);
     console.log('팔로우 성공')
     console.log(isFollowingMap.value.get(userId));
+    
   } catch (error) {
     console.error('팔로우 실패:', error);
     console.log(userId);
@@ -123,12 +124,25 @@ const unfollowUser = async (userId) => {
     isFollowingMap.value.set(userId, false);
 
     console.log('언팔로우 성공');
+    
     // console.log(isFollowingMap.get(userId));
   } catch (error) {
     console.error('언팔로우 실패:', error);
   }
 };
+const closeSearchResults = (event) => {
+  if (!event.target.closest('.search-results')) {
+    searchResults.value = null;
+  }
+};
 
+// onMounted(() => {
+//   document.addEventListener('click', closeSearchResults);
+// });
+
+// onUnmounted(() => {
+//   document.removeEventListener('click', closeSearchResults);
+// });
 const enhancedSearchResults = computed(() => {
   // isFollowingMap의 반응성을 활성화하기 위해, 맵 전체 또는 특정 키에 접근
   // 여기서는 users 배열을 기반으로 각 userId에 대한 isFollowing 값을 참조

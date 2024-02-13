@@ -24,14 +24,8 @@
             </div>
           </div>
           <div class="categories">
-            <button
-              ref="categori_btn_component"
-              class="category_btn"
-              v-for="category in categories"
-              :key="category.id"
-              :class="{ completed: category.isResult === 'COMPLETE' }"
-              @click="proofSolo(category.id, category.isStatus)"
-            >
+            <button ref="categori_btn_component" class="category_btn" v-for="category in categories" :key="category.id"
+              :class="{ completed: category.isResult === 'COMPLETE' }" @click="proofSolo(category.id, category.isStatus)">
               {{ category.name }}
             </button>
           </div>
@@ -43,26 +37,15 @@
         </div>
         <!-- 경쟁모드 아이템 -->
         <div class="compet_board">
-          <div class="carousel_container">
+          <div v-if="competData.length > 0" class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템, v-for로 competData를 반복 -->
-              <div
-                class="carousel_item"
-                v-for="(item, index) in competData"
-                :key="index"
-              >
+              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
                 <!-- 로그인한 유저 부분 -->
                 <div class="player1">
-                  <img
-                    :src="item.user_img || '@/assets/defaultFace.png'"
-                    alt="user image"
-                    class="player_img"
-                  />
+                  <img :src="item.user_img || '@/assets/defaultFace.png'" alt="user image" class="player_img" />
                   <p>{{ item.user_nickname }}</p>
-                  <button
-                    v-if="!item.user_authenticated"
-                    @click="authenticate(item, true)"
-                  >
+                  <button v-if="!item.user_authenticated" @click="authenticate(item, true)">
                     인증하기
                   </button>
                   <div v-else>인증 완료</div>
@@ -74,11 +57,8 @@
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img
-                    :src="item.other_user_img || '@/assets/defaultFace.png'"
-                    alt="other user image"
-                    class="player_img"
-                  />
+                  <img :src="item.other_user_img || '@/assets/defaultFace.png'" alt="other user image"
+                    class="player_img" />
                   <p>{{ item.other_user_nickname }}</p>
                   <div>
                     {{ item.other_user_authenticated ? "인증 완료" : "진행중" }}
@@ -91,32 +71,21 @@
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span
-                v-for="(item, index) in competData"
-                :key="index"
-                :class="{ active: index === currentIndex }"
-                @click="goTo(index)"
-              ></span>
+              <span v-for="(item, index) in competData" :key="index" :class="{ active: index === currentIndex }"
+                @click="goTo(index)"></span>
             </div>
+          </div>
+          <div v-else class="default_image_container">
+            <img src="@/assets/tung.png" alt="No competition data" class="default_image" />
           </div>
         </div>
         <!-- 경쟁모드 아이템 end -->
       </div>
     </div>
-    <PopUpProofPictureCompet
-      :show="isTestModalOpencompet"
-      :userId="userIdtoauth"
-      :competId="competIdtoauth"
-      @competAuthImage="handleCompetAuthImage"
-      @update:show="closeTestModalcompet"
-    />
-    <PopUpProofPicture
-      :show="isTestModalOpen"
-      @update:show="closeTestModal"
-      @uploadImage="handleUpload"
-      :selectedCategory="selectedCategory"
-      :isSoloMode="true"
-    />
+    <PopUpProofPictureCompet :show="isTestModalOpencompet" :userId="userIdtoauth" :competId="competIdtoauth"
+      @competAuthImage="handleCompetAuthImage" @update:show="closeTestModalcompet" />
+    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @uploadImage="handleUpload"
+      :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
   
@@ -203,7 +172,7 @@ const proofSolo = function (categoryId, isStatus) {
       console.log(error);
     }
   }
-  
+
   openTestModal();
 };
 // 인증 모달창
@@ -403,13 +372,13 @@ const completed_solo = ref(0);
 onMounted(() => {
   fetchCompetitionData();
   const userInformation = userStorage.getUserInformation();
-  
+
   const donut = document.querySelector(".donut");
   const totalMinwon = ref(0); //현재 진행도 값 << ref와 동기화 시켜줘야함
 
   const donut_parent = document.getElementsByClassName("donut_percent")[0];
   const donut_child = document.getElementsByClassName("donut_percent_text")[0];
-  
+
   userId.value = userInformation.user_id;
 
 
@@ -824,5 +793,17 @@ onMounted(() => {
 
 * {
   font-family: "jua";
+}
+.default_image_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* 필요에 따라 조정 */
+}
+
+.default_image {
+  margin: 7%;
+  max-width: 100%;
+  height: auto; /* 이미지 비율 유지 */
 }
 </style>
