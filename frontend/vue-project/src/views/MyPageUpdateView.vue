@@ -259,7 +259,8 @@ onMounted(() => {
 
     watchEffect(() => {
         if (badgeId.value !== null) {
-            const currentBadge = badgeList.value.find(badge => badge.badge_id === badgeId.value);
+            const currentBadge = badgeList.value.find((badge) => (badge.badge_id == badgeId.value));
+            console.log(currentBadge)
             if (currentBadge) {
                 userBadgeImg.value = currentBadge.badge_img; // ref를 사용한 경우 .value로 접근
             } else {
