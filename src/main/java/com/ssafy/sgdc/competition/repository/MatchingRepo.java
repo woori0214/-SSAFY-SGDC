@@ -2,10 +2,12 @@ package com.ssafy.sgdc.competition.repository;
 
 import com.ssafy.sgdc.competition.domain.Matching;
 import com.ssafy.sgdc.enums.IsSender;
+import com.ssafy.sgdc.enums.MatchStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,5 +36,9 @@ public interface MatchingRepo extends JpaRepository<Matching, Integer> {
     Optional<Matching> findOtherMatching(int competId, int matchingId);
 
     Optional<Matching> findByCompetitionCompetIdAndIsSender(int competId, IsSender isSender);
+
+    Optional<Matching> findMatchingByUserUserIdAndCategoryCategoryIdAndMatchStatusAndAndCompetExpirationTimeBetween(
+            int userId, int categoryId, MatchStatus matchStatus, LocalDateTime startOfDay, LocalDateTime endOfDay
+    );
 
 }
