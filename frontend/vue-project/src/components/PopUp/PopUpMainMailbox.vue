@@ -113,12 +113,6 @@ const close_mainMailBox = () => {
 
 //받은 도전장 함수 불러오기
 
-
-// onMounted(() => {
-
-
-
-// });
 const categoryMapping = {
   1: '기상',
   2: '알고리즘',
@@ -208,8 +202,6 @@ onMounted(() => {
     fetchMailbox();
   }
 });
-
-]);
 </script>
 
 <style>
