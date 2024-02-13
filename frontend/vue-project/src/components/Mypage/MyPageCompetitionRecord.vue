@@ -29,8 +29,8 @@
                                 <h3>{{ userNickname }}</h3>
                             </div>
                             <div class="result_category">
-                                <p>{{ getCategoryName(selectedMatchingData.category_id) }}</p>
-                                <span>{{ selectedMatchingData.category_id }}</span>
+                                <h3>{{ getCategoryName(selectedMatchingData.category_id) }}</h3>
+                                <!-- <span>{{ selectedMatchingData.category_id }}</span> -->
                                 <h2>vs</h2>
                             </div>
                             <div class="receiver">

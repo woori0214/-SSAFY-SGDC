@@ -39,7 +39,8 @@
     </div>
 
     <!-- PopUpProofPicture.vue 모달로 추가 -->
-    <PopUpProofPicture :show="isTestModalOpen" @update:show="closeTestModal" @soloAuthImage="handleSoloAuthImage"
+    <PopUpProofPicture :show="isTestModalOpen"
+    @update:show="closeTestModal" @soloAuthImage="handleSoloAuthImage"
       :selectedCategory="selectedCategory" :isSoloMode="true" />
   </div>
 </template>
