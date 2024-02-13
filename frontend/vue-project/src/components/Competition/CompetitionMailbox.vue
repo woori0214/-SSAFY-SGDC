@@ -238,9 +238,9 @@ const acceptChallenge = (index) => {
   max-height: 100%;
   overflow: auto;
   /* border-radius: 25px; */
-  border-top-left-radius: 25px;
+  border-top-left-radius: 8px;
   border-top-right-radius: 8px;
-  border-bottom-left-radius: 25px;
+  border-bottom-left-radius: 8px;
   border-bottom-right-radius: 8px;
 
   padding: 10px;
@@ -268,8 +268,14 @@ const acceptChallenge = (index) => {
 }
 
 .mail_box_body {
-  height: 380px;
+  height: auto;
   margin: 0;
   display: flex;
 }
 </style>
+
+<!-- display: flex; /* Flex 컨테이너 설정 */
+flex-direction: column; /* 자식 요소들을 세로 방향으로 정렬 */
+align-items: stretch; /* 자식 요소들이 부모 요소의 크기에 맞게 늘어나도록 설정 */
+margin: 0;
+height: auto; -->
