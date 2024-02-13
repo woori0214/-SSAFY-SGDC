@@ -446,7 +446,7 @@ public class CompetitionService {
 
     // 일정 시간마다 경쟁결과 확인
     @Transactional
-    @Scheduled(fixedDelay = 6000000) // 100 분 주기
+    @Scheduled(fixedDelay = 60000) // 100 분 주기
     public void updateCompetition() {
 
         // 시간이 다 됐는데 결과가 나오지 않은 경쟁 리스트 조회(사진 안 보낸 경우)

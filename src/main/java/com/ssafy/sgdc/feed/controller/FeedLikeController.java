@@ -3,7 +3,9 @@ package com.ssafy.sgdc.feed.controller;
 import com.ssafy.sgdc.base.constant.Code;
 import com.ssafy.sgdc.base.dto.DataResponseDto;
 import com.ssafy.sgdc.base.dto.ResponseDto;
+import com.ssafy.sgdc.feed.dto.FeedLikeListResponseDto;
 import com.ssafy.sgdc.feed.service.FeedLikeService;
+import com.ssafy.sgdc.follow.dto.FollowerListResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -15,6 +17,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Objects;
 
 @ApiResponses({
@@ -44,5 +47,20 @@ public class FeedLikeController {
     public ResponseDto toggleLike(@PathVariable int userId, @PathVariable int feedId) {
         return ResponseDto.of(true, Code.OK, feedLikeService.toggleLike(userId, feedId));
     }
+
+
+    /**
+     * 피드별 좋아요 리스트 조회
+     */
+    @Operation(summary = "피드별 좋아요 리스트", description="피드별 좋아요 리스트를 확인합니다.")
+    @Parameter(name = "feedId", schema = @Schema(implementation = int.class), description = "특정 피드 PK", in = ParameterIn.PATH)
+    @GetMapping("/like-list/{feedId}")
+    public DataResponseDto<?> feedLikeList(@PathVariable int feedId) {
+        List<FeedLikeListResponseDto> feedLikeListResponseDtoList = feedLikeService.feedLikeList(feedId);
+        return DataResponseDto.of(feedLikeListResponseDtoList, "피드 좋아요 멤버 리스트 조회");
+    }
+
+
+
 
 }

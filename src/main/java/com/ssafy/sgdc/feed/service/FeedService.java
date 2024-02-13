@@ -1,6 +1,11 @@
 package com.ssafy.sgdc.feed.service;
 
 
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.ssafy.sgdc.competition.domain.Competition;
 import com.ssafy.sgdc.competition.domain.ImageAuth;
 import com.ssafy.sgdc.competition.domain.Matching;
@@ -8,19 +13,30 @@ import com.ssafy.sgdc.competition.repository.CompetDetailRepo;
 import com.ssafy.sgdc.competition.repository.CompetitionRepo;
 import com.ssafy.sgdc.competition.repository.ImageAuthRepo;
 import com.ssafy.sgdc.competition.repository.MatchingRepo;
+import com.ssafy.sgdc.competition.service.ImageAuthService;
 import com.ssafy.sgdc.enums.CompetResult;
 import com.ssafy.sgdc.enums.IsSender;
+import com.ssafy.sgdc.enums.S3ImageFolder;
 import com.ssafy.sgdc.feed.repository.FeedLikeRepo;
 import com.ssafy.sgdc.feed.repository.FeedRepo;
 import com.ssafy.sgdc.feed.dto.FeedOneDto;
 import com.ssafy.sgdc.feed.entity.Feed;
 import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -33,6 +49,7 @@ public class FeedService {
     private final MatchingRepo matchingRepo;
     private final ImageAuthRepo imageAuthRepo;
     private final FeedLikeRepo feedLikeRepo;
+    private final ImageAuthService imageAuthService;
 
     /**
      * 피드 생성
@@ -206,6 +223,67 @@ public class FeedService {
     }
 
 
+    /**
+     * 이미지 합치는 메소드
+     */
+
+    public void resultImage() throws IOException {
+        uploadToS3(mergeImages(),"sgdc-test-bucket","testtestestestestestestestsetset");
+    }
+
+
+    public BufferedImage mergeImages() throws IOException {
+        String mergeImageUrl="https://sgdc-test-bucket.s3.ap-northeast-2.amazonaws.com/COMMON/winner_merge_image.png";
+        String imageOne="https://sgdc-test-bucket.s3.ap-northeast-2.amazonaws.com/PROFILE_IMAGE/usertest_1.PNG";
+        String imageTwo="https://sgdc-test-bucket.s3.ap-northeast-2.amazonaws.com/PROFILE_IMAGE/ssafy123_%EC%A7%80%EC%9D%80.png";
+        BufferedImage image1=loadImage(mergeImageUrl);
+        BufferedImage image2=loadImage(imageOne);
+        BufferedImage image3=loadImage(imageTwo);
+
+
+        // 이미지 1의 크기를 기준으로 새 이미지 생성
+        BufferedImage combined = new BufferedImage(image1.getWidth(), image1.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        Graphics g = combined.getGraphics();
+
+        // 이미지 겹치기
+        g.drawImage(image1, 100, 0, null);
+        g.drawImage(image2, 0, 300, null);
+        g.drawImage(image3, 0, 0, null);
+
+        g.dispose();
+
+        return combined;
+    }
+
+    public void uploadToS3(BufferedImage image, String bucketName, String key) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ImageIO.write(image, "png", outputStream); // 이미지를 PNG 포맷으로 변환하여 ByteArrayOutputStream에 쓰기
+
+        byte[] imageBytes = outputStream.toByteArray();
+        ByteArrayInputStream inputStream = new ByteArrayInputStream(imageBytes); // ByteArrayOutputStream으로부터 ByteArrayInputStream 생성
+
+        AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
+
+        ObjectMetadata metadata = new ObjectMetadata();
+        metadata.setContentLength(imageBytes.length);
+        metadata.setContentType("image/png"); // 이미지의 MIME 타입 설정
+
+        // S3에 업로드
+        PutObjectRequest request = new PutObjectRequest(bucketName, key, inputStream, metadata);
+        s3Client.putObject(request);
+
+
+        // 사용한 스트림 닫기
+        outputStream.close();
+        inputStream.close();
+    }
+
+
+    // BufferedImage로 변환
+    public static BufferedImage loadImage(String url) throws IOException {
+        URL imageUrl = new URL(url);
+        return ImageIO.read(imageUrl);
+    }
 
 
 
