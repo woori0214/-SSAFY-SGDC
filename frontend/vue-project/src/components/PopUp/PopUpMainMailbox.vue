@@ -162,52 +162,6 @@ const acceptChallenge = (matchingId) => {
 
 };
 const mainmailList = ref([
-  // {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // }, {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // }, {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // },
 ]);
 </script>
 

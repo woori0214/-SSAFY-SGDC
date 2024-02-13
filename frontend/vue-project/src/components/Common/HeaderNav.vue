@@ -84,6 +84,8 @@
           </div>
         </div>
       </div>
+
+      
       <PopUpMainMailbox :showModal="showMailBox" :close="closeMailBox" />
     </div>
     <div class="nav-wrapper">
