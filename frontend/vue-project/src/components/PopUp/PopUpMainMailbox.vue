@@ -39,28 +39,21 @@
             </button>
           </div>
 
-          <!-- 매칭이 완료되어 매칭 내용을 확인하는 알림 -->
-          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'getChallenge'">
-            <div class="mainMailBox-list-item-content">
-              {{ mail_item.content }}
-            </div>
-            <button class="mainMailBox-list-item-subBtn">미션확인</button>
 
-            <button class="mainMailBox-list-item-clear">
-              <span class="material-symbols-outlined"> close </span>
-            </button>
-          </div>
+
 
           <!-- 매칭 종료 알림 -->
-          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'completeChallenge'">
+          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'closeChallenge'">
             <div class="mainMailBox-list-item-content">
-              {{ mail_item.content }}
+              {{ mail_item.other_nickname }}님과의 경쟁 결과가 나왔습니다.
             </div>
-            <button class="mainMailBox-list-item-subBtn">결과확인</button>
+            <button class="mainMailBox-list-item-subBtn" @click="showResultModal(mail_item)">결과확인</button>
             <button class="mainMailBox-list-item-clear">
               <span class="material-symbols-outlined"> close </span>
             </button>
           </div>
+
+
 
           <!-- 보낸 도전장 확인 알림
         <div
@@ -79,6 +72,19 @@
       </div>
     </div>
   </div>
+
+  <div v-if="showWinModal" class="modal">
+    <p>{{ modalData.other_nickname }}님과의 경쟁에서 이겼습니다!</p>
+    <img :src="winnerImage" alt="Winning Image" style="width: 100%; max-width: 300px;" />
+    <button @click="closeModal">닫기</button>
+  </div>
+
+  <!-- '졌습니다' 모달 -->
+  <div v-if="showLoseModal" class="modal">
+    <p>{{ modalData.other_nickname }}님과의 경쟁에서 졌습니다.</p>
+    <img :src="loserImage" alt="losing Image" style="width: 100%; max-width: 300px;" />
+    <button @click="closeModal">닫기</button>
+  </div>
 </template>
 
 <script setup>
@@ -86,11 +92,15 @@ import { defineProps, ref, onMounted, watch, onUnmounted } from "vue";
 import { useCompetionStore } from "@/stores/competition";
 import { useUserStorageStore } from "@/stores/userStorage";
 import { useLoginStore } from "@/stores/login"; // 로그인 스토어 사용
-
+import winnerImage from '@/assets/winner.gif';
+import loserImage from '@/assets/loser.gif';
 const userStorage = useUserStorageStore();
 const max_mail_cnt = ref(20);
 const userLogin = useLoginStore();
 const userCompet = useCompetionStore();
+const showWinModal = ref(false);
+const showLoseModal = ref(false);
+const modalData = ref({});
 
 const props = defineProps({
   showModal: Boolean,
@@ -100,16 +110,12 @@ const props = defineProps({
 const close_mainMailBox = () => {
   props.close();
 };
-watch(() => userLogin.loginUser, (newUserId) => {
-  if (newUserId) {
-    fetchMailbox();
-  }
-}, { immediate: true }); // 컴포넌트 마운트 시 즉시 실행
+
 //받은 도전장 함수 불러오기
 
 
 // onMounted(() => {
-  
+
 
 
 // });
@@ -162,53 +168,47 @@ const acceptChallenge = (matchingId) => {
 
 };
 const mainmailList = ref([
-  // {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // }, {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // }, {
-  //   kind: "follow",
-  //   content: "나나양(이)가 당신을 팔로우 했습니다",
-  // },
-  // {
-  //   kind: "reciveChallenge",
-  //   content: "고차비(이)가 당신에게 [알고리즘]을 신청했습니다.",
-  // },
-  // {
-  //   kind: "getChallenge",
-  //   content: "김뚜띠(이)가 도전장을 수락했습니다.",
-  // },
-  // {
-  //   kind: "completeChallenge",
-  //   content: "램램(이)과의 [스터디] 경쟁이 끝났습니다.",
-  // },
+
 ]);
+
+const showResultModal = (mailItem) => {
+  modalData.value = mailItem;
+  if (mailItem.compet_result === 'SEND_WIN' && mailItem.is_sender === 'Y' || mailItem.compet_result === 'RECEIVE_WIN' && mailItem.is_sender === 'Y'|| mailItem.compet_result === 'BOTH_WIN') {
+    showWinModal.value = true;
+  } else {
+    showLoseModal.value = true;
+  }
+};
+
+const closeModal = () => {
+  showWinModal.value = false;
+  showLoseModal.value = false;
+};
+
+const fetchMailbox = () => {
+  if (userStorage.getUserInformation().user_id) {
+    userCompet.competitionFinish(userStorage.getUserInformation().user_id)
+      .then(response => {
+
+        mainmailList.value = response.data.competitions.map(item => ({
+          ...item,
+          kind: 'closeChallenge'
+        })); // 예시에서는 competitions 배열을 직접 할당합니다.
+        console.log('잘 갖고왔습니다');
+        console.log(mainmailList.value);
+      })
+      .catch(err => {
+        console.error("Failed to fetch competition finish list:", err);
+      });
+  }
+};
+onMounted(() => {
+  // 로그인 상태 확인 후 데이터 로드
+  if (userStorage.getUserInformation().user_id) {
+    fetchMailbox();
+  }
+});
+
 </script>
 
 <style>
@@ -308,5 +308,21 @@ const mainmailList = ref([
 .mainMailBox-closeBtn {
   display: flex;
   justify-content: end;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 15px;
+  z-index: 100;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  border: 2px solid #007BFF;
 }
 </style>

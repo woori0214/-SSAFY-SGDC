@@ -29,8 +29,10 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 .mail_box_body {
-  height: 380px; /* Set your desired fixed height */
+  max-height: 380px; /* 최대 높이를 380px로 설정 */
+  height: auto; /* 높이를 내용물에 따라 자동으로 조절 */
   margin: 0;
+  margin-bottom: 5%;
 }
 
 .compet_title {
@@ -55,6 +57,15 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 }
 
 
-
+.main_box[data-v-c4d545a8] {
+    width:calc(100% - 30px);
+    display: flex;
+    flex-direction: column;
+    border: 2px solid #83b0e1;
+    border-radius: 25px;
+    margin: 30px 10px;
+    background-color: #e1ecf7;
+    padding: 0px;
+}
 
 </style>
