@@ -1,12 +1,19 @@
 <template>
   <div class="solomode_container">
     <div class="category_container">
-      <div v-for="category in today_categories" :key="category.id" class="category_item">
+      <div
+        v-for="category in today_categories"
+        :key="category.id"
+        class="category_item"
+      >
         <!-- 버튼을 클릭하면 모달창으로 재확인-->
         <!-- 완료 미션 -->
         <div class="solo-btn-wrap" v-if="category.soloResult === 'COMPLETE'">
-          <button @click="openModal(category.id, category.soloStatus)" class="solo_btn"
-            style="background-color: #71a5de; pointer-events: none">
+          <button
+            @click="openModal(category.id, category.soloStatus)"
+            class="solo_btn"
+            style="background-color: #71a5de; pointer-events: none"
+          >
             <div class="solo_btn_content">
               <img :src="category.img" alt="category" class="solo_bnt_img" />
               <div class="category_text">{{ category.name }}</div>
@@ -17,8 +24,11 @@
 
         <!-- 미완료 미션 -->
         <div class="solo-btn-wrap" v-else>
-          <button @click="openModal(category.id, category.soloStatus)" class="solo_btn"
-            style="background-color: #aecbeb; pointer-events: auto">
+          <button
+            @click="openModal(category.id, category.soloStatus)"
+            class="solo_btn"
+            style="background-color: #aecbeb; pointer-events: auto"
+          >
             <div class="solo_btn_content">
               <img :src="category.img" alt="category" class="solo_bnt_img" />
               <div class="category_text">{{ category.name }}</div>
@@ -39,9 +49,13 @@
     </div>
 
     <!-- PopUpProofPicture.vue 모달로 추가 -->
-    <PopUpProofPicture :show="isTestModalOpen"
-    @update:show="closeTestModal" @soloAuthImage="handleSoloAuthImage"
-      :selectedCategory="selectedCategory" :isSoloMode="true" />
+    <PopUpProofPicture
+      :show="isTestModalOpen"
+      @update:show="closeTestModal"
+      @soloAuthImage="handleSoloAuthImage"
+      :selectedCategory="selectedCategory"
+      :isSoloMode="true"
+    />
   </div>
 </template>
   
@@ -74,7 +88,6 @@ export default {
     const userId = ref(null);
     const categoryId = ref(null);
     const profile = ref(null);
-
 
     // 카테고리
     const today_categories = ref([
@@ -133,7 +146,7 @@ export default {
       solo
         .soloToday(userStorage.getUserInformation().user_id)
         .then((res) => {
-          console.log('오늘의 진행중 리스트는?');
+          console.log("오늘의 진행중 리스트는?");
           console.log(res);
           soloTodayData.value = res.data.solos;
 
@@ -181,17 +194,14 @@ export default {
           user_id: userStorage.getUserInformation().user_id,
 
           category_id: selectedCategory.value,
-
-
         };
-        console.log('솔로 모드 도전');
+        console.log("솔로 모드 도전");
         console.log(challenge);
 
         solo.soloChallenge(challenge);
         openTestModal();
-      }
-      else {
-        console.log('선택된 카테고리가 없습니다.');
+      } else {
+        console.log("선택된 카테고리가 없습니다.");
       }
       closeModal();
     };
@@ -220,36 +230,58 @@ export default {
     };
 
     // 이미지 업로드
-    const handleSoloAuthImage = file => {
+    const handleSoloAuthImage = (file) => {
       const userId = userStorage.getUserInformation().user_id;
       profile.value = file; // 반응형 참조에 파일 할당
       // 이미지 업로드 이벤트 핸들러
-      console.log('이미지 업로드 완료:', profile);
+      console.log("이미지 업로드 완료:", profile);
       const challengeRequestJson = {
         userId: userId,
         categoryId: selectedCategory.value,
-        soloAuthImg: ''
+        soloAuthImg: "",
       };
-      console.log('잘 담아있나?');
+      console.log("잘 담아있나?");
 
       const formData = new FormData();
-      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
-      formData.append('soloAuthImage', file); // file 직접 사용
-      console.log('여기까지는 왔다');
-      solo.soloAuth(formData)
+      formData.append(
+        "challengeRequestJson",
+        JSON.stringify(challengeRequestJson)
+      );
+      formData.append("soloAuthImage", file); // file 직접 사용
+      console.log("여기까지는 왔다");
+      solo
+        .soloAuth(formData)
         .then((response) => {
-          console.log('이미지 통신 완료:', response);
+          console.log("이미지 통신 완료:", response);
 
           closeTestModal();
         })
         .catch((error) => {
-          console.error('이미지 업로드 실패:', error);
+          console.error("이미지 업로드 실패:", error);
           for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
           }
-
         });
 
+      solo
+        .soloToday(userStorage.getUserInformation().user_id)
+        .then((res) => {
+          console.log("오늘의 진행중 리스트는?");
+          console.log(res);
+          soloTodayData.value = res.data.solos;
+
+          soloTodayData.value.forEach((soloItem) => {
+            today_categories.value.forEach((todayItem) => {
+              if (todayItem.id == soloItem.category_id) {
+                todayItem.soloStatus = soloItem.solo_status;
+                todayItem.soloResult = soloItem.solo_result;
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching soloTodayData:", error);
+        });
     };
 
     return {
@@ -266,7 +298,6 @@ export default {
       selectedCategory,
       categoryId,
       userId,
-
     };
   },
 };

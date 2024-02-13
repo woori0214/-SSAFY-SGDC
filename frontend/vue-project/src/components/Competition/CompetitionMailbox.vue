@@ -224,6 +224,7 @@ const acceptChallenge = (index) => {
 .mailbox_title {
   display: flex;
   align-items: center;
+  font-size: 1.4rem;
 }
 
 .mailbox_icon {

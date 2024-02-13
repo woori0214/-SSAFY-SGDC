@@ -24,8 +24,15 @@
             </div>
           </div>
           <div class="categories">
-            <button ref="categori_btn_component" class="category_btn" v-for="category in categories" :key="category.id"
-              :class="{ completed: category.isResult === 'COMPLETE' }" @click="proofSolo(category.id, category.isStatus)">
+            <button
+              ref="categori_btn_component"
+              class="category_btn"
+              v-for="category in categories"
+              :key="category.id"
+              :class="{ completed: category.isResult === 'COMPLETE' }"
+              :disabled="category.isResult === 'COMPLETE'"
+              @click="proofSolo(category.id, category.isStatus)"
+            >
               {{ category.name }}
             </button>
           </div>
@@ -40,12 +47,23 @@
           <div v-if="competData.length > 0" class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템, v-for로 competData를 반복 -->
-              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
+              <div
+                class="carousel_item"
+                v-for="(item, index) in competData"
+                :key="index"
+              >
                 <!-- 로그인한 유저 부분 -->
                 <div class="player1">
-                  <img :src="item.user_img || '@/assets/defaultFace.png'" alt="user image" class="player_img" />
+                  <img
+                    :src="item.user_img || '@/assets/defaultFace.png'"
+                    alt="user image"
+                    class="player_img"
+                  />
                   <p>{{ item.user_nickname }}</p>
-                  <button v-if="!item.user_authenticated" @click="authenticate(item, true)">
+                  <button
+                    v-if="!item.user_authenticated"
+                    @click="authenticate(item, true)"
+                  >
                     인증하기
                   </button>
                   <div v-else>인증 완료</div>
@@ -57,8 +75,11 @@
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img :src="item.other_user_img || '@/assets/defaultFace.png'" alt="other user image"
-                    class="player_img" />
+                  <img
+                    :src="item.other_user_img || '@/assets/defaultFace.png'"
+                    alt="other user image"
+                    class="player_img"
+                  />
                   <p>{{ item.other_user_nickname }}</p>
                   <div>
                     {{ item.other_user_authenticated ? "인증 완료" : "진행중" }}
@@ -71,12 +92,20 @@
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span v-for="(item, index) in competData" :key="index" :class="{ active: index === currentIndex }"
-                @click="goTo(index)"></span>
+              <span
+                v-for="(item, index) in competData"
+                :key="index"
+                :class="{ active: index === currentIndex }"
+                @click="goTo(index)"
+              ></span>
             </div>
           </div>
           <div v-else class="default_image_container">
-            <img src="@/assets/tung.png" alt="No competition data" class="default_image" />
+            <img
+              src="@/assets/tung.png"
+              alt="No competition data"
+              class="default_image"
+            />
           </div>
         </div>
         <!-- 경쟁모드 아이템 end -->
@@ -120,11 +149,6 @@ const isTestModalOpencompet = ref(false);
 const showModal = ref(false);
 const selectedCategory = ref(null);
 
-const solo_progress = ref(35);
-
-// const donut = document.querySelector(".donut");
-// donut.data-percent = totalMinwon;
-// donut.style.background = `conic-gradient(#3F8BC9 0% ${totalMinwon}%, #F2F2F2 ${totalMinwon}% 100%)`;
 const categories = ref([
   { id: 1, name: "기상", isStatus: null, isResult: "INCOMPLETE" },
   { id: 2, name: "알고리즘", isStatus: null, isResult: "INCOMPLETE" },
@@ -134,35 +158,15 @@ const categories = ref([
   { id: 6, name: "절제", isStatus: null, isResult: "INCOMPLETE" },
 ]);
 
-// const items = ref([
-//   {
-//     index: 1,
-//     category: "기상",
-//     name1: "화석",
-//     imageUrl1: "./src/assets/image1.png",
-//     challenge_status1: "진행중",
-//     name2: "지은",
-//     imageUrl2: "./src/assets/image2.png",
-//     challenge_status2: "인증 완료",
-//   },
-//   {
-//     index: 2,
-//     category: "알고리즘",
-//     name1: "화석",
-//     imageUrl1: "./src/assets/image1.png",
-//     challenge_status1: "진행중",
-//     name2: "태범",
-//     imageUrl2: "./src/assets/image2.png",
-//     challenge_status2: "진행중",
-//   },
-// ]);
-
 // 솔로모드 인증 바로가기
 const proofSolo = function (categoryId, isStatus) {
   selectedCategory.value = categoryId;
-  const challenge = { user_id: userStorage.getUserInformation().user_id, category_id: selectedCategory.value };
+  const challenge = {
+    user_id: userStorage.getUserInformation().user_id,
+    category_id: selectedCategory.value,
+  };
 
-  console.log('선택한 솔로 도전의 상태는');
+  console.log("선택한 솔로 도전의 상태는");
   console.log(isStatus);
 
   if (isStatus === null) {
@@ -283,10 +287,10 @@ const fetchCompetitionData = () => {
     });
 };
 
-onMounted(() => {
-  fetchCompetitionData();
-  // 기타 onMounted 로직
-});
+// onMounted(() => {
+//   fetchCompetitionData();
+//   // 기타 onMounted 로직
+// });
 
 // const navigateToPage = (category) => {
 //     if (category.isActive == false) {
@@ -415,7 +419,6 @@ onMounted(() => {
 
   userId.value = userInformation.user_id;
 
-
   if (userId.value) {
     soloStore
       .soloToday(userId.value)
@@ -440,7 +443,7 @@ onMounted(() => {
         console.log("업데이트한 솔로 모드 현황 테이블");
         console.log(categories.value);
 
-        totalMinwon.value = ((completed_solo.value / 6) * 100); //현재 진행도 값 << ref와 동기화 시켜줘야함
+        totalMinwon.value = (completed_solo.value / 6) * 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
 
         if (donut) {
           solo_percent.value = 0;

@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import sunny1 from "../../assets/bgm/1SunnyWeather.mp3";
 import sunny2 from "../../assets/bgm/1SunnyWeather.mp3";
 import sunny5 from "../../assets/bgm/1SunnyWeather.mp3";
@@ -33,30 +33,33 @@ const bgm_lsit = ref([
   { source: rainy2, title: "Rainy Weather 2:00 a.m." },
 ]);
 
-
 const audio = new Audio(sunny1);
-audio.loop = true;
-audio.autoplay = true;
 
 const audioStatus = ref(true);
 
 // 오디오가 재생될 때 호출되는 함수
-audio.addEventListener('play', () => {
+audio.addEventListener("play", () => {
   audioStatus.value = true;
 });
 
 // 오디오가 일시 중지될 때 호출되는 함수
-audio.addEventListener('pause', () => {
+audio.addEventListener("pause", () => {
   audioStatus.value = false;
 });
 
 const OnOffAudio = () => {
-  if(!audioStatus.value){
+  if (!audioStatus.value) {
     audio.play();
-  }else{
+  } else {
     audio.pause();
   }
 };
+
+onMounted(() => {
+  audio.src = sunny1;
+  audio.loop = true;
+  audio.autoplay = true;
+});
 </script>
 
 <style>
@@ -70,7 +73,7 @@ const OnOffAudio = () => {
   text-align: center;
   transition: background-color 0.3s ease;
 }
-.audio-btn:hover{
+.audio-btn:hover {
   background-color: #aecbeb;
 }
 </style>

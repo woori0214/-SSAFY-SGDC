@@ -12,6 +12,34 @@ export const useSignupStore = defineStore('signup', () => {
     const URL = serverURL + v1_URL + 'user/signup';
     // 사용자 프로젝트 싸피 인증
 
+    //싸피 이메일 중복 체크
+    const isssafyEmail = function (ssafy) {
+        console.log('isssafyEmail 되고있나');
+
+        return new Promise((resolve, reject) => {
+            axios
+                .get(`${URL}/check-student-email/${ssafy.usernameOrEmail}`)
+                .then((response) => {
+                    console.log('싸피 이메일 중복 체크');
+                    console.log(response);
+                    console.log(response.data.data.result);
+
+                    if(response.data.data.result == 'true'){
+                        resolve(response);
+                    }else{
+                        alert('중복된 이메일 입니다.');
+                        reject('중복된 이메일 입니다.');
+                    }
+                })
+                .catch((e) => {
+                    console.log(e);
+                    reject(e);
+                });
+        }
+
+        );
+    }
+
     const isssafy = function (ssafy) {
         console.log('isssafy 되고있나');
 
@@ -19,13 +47,21 @@ export const useSignupStore = defineStore('signup', () => {
             axios
                 .post(ssafyurl, ssafy)
                 .then((response) => {
-
+                    console.log('싸피 인증 통과 메세지');
+                    console.log(response);
+                    console.log(response.response.data.message);
                     resolve(response);
                 })
                 .catch((e) => {
-                    console.log(e)
-                    reject(e);
-
+                    console.log('싸피 인증 오류 메세지');
+                    console.log(e);
+                    console.log(e.response.data.message);
+                    // reject(e);
+                    if(e.response.data.message == '아이디가 존재하지 않습니다.'){
+                        reject(e.response.data.message);
+                    }else{
+                        resolve(e.response.data.message);
+                    }
                 });
         }
 
@@ -139,6 +175,7 @@ export const useSignupStore = defineStore('signup', () => {
         isstudentnum,
         authphone,
         submitNewUser,
+        isssafyEmail,
     }
 })
 

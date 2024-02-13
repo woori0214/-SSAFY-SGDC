@@ -15,7 +15,12 @@
       rel="stylesheet"
     />
 
-    <div class="header-wrapper-top" :style="web_width < 800 ? 'flex-direction: column; align-items: center;' : ''">
+    <div
+      class="header-wrapper-top"
+      :style="
+        web_width < 800 ? 'flex-direction: column; align-items: center;' : ''
+      "
+    >
       <div class="header-music-box" v-show="!closeLogo && web_width >= 800">
         <BackGroundMusic class="header-music"></BackGroundMusic>
       </div>
@@ -96,9 +101,10 @@
         <div class="LEDtrack">
           <div class="LEDcontent">
             &nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서 피어난다
+            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
+            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
+            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
+            피어난다&nbsp;&nbsp;&nbsp;&nbsp;
           </div>
         </div>
       </div>
@@ -160,6 +166,14 @@ const handleNavigation = (to) => {
   }
 };
 
+onMounted(() => {
+  userLoginStore.isLogined();
+
+  userNickname.value = userStorage.getUserInformation().user_nickname;
+
+  window.addEventListener("resize", handleWidth);
+});
+
 setInterval(function () {
   //야매 로그인 확인 방법
   // 반복 실행할 코드
@@ -167,26 +181,12 @@ setInterval(function () {
     if (userStorage.getUserInformation().user_id != null) {
       isLogined_ref.value = true;
     }
-  }else if(userNickname.value != userStorage.getUserInformation().user_id){
-    userNickname.value == userStorage.getUserInformation().user_id;
+  } else if (
+    userNickname.value != userStorage.getUserInformation().user_nickname
+  ) {
+    userNickname.value = userStorage.getUserInformation().user_nickname;
   }
 }, 100);
-
-onMounted(() => {
-  userLoginStore.isLogined();
-
-  const userId = ref(userStorage.getUserInformation().user_id);
-  userStore
-    .userData(userId.value)
-    .then((res) => {
-      userNickname.value = res.data.data.user_nickname;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-  window.addEventListener("resize", handleWidth);
-});
 </script>
 
 <style>

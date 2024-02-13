@@ -2,15 +2,20 @@
 
 <template>
   <div class="signup-main-body">
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <link rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    />
     <div class="signup-title slideDown">회원가입</div>
     <div class="signup-question-box">
-      <button class="signup-question-before-btn" @click="signupSlideprev">
-
-      </button>
+      <button
+        class="signup-question-before-btn"
+        @click="signupSlideprev"
+      ></button>
       <div class="signup-question-slide" :style="signupSlideStyle">
         <!-- 프로필 사진 -->
         <!-- <div class="signup-question-item">
@@ -23,20 +28,37 @@
           <div class="signup-question-context">
             <div class="signup-userImg">
               <!-- 이미지 미리보기 -->
-              <img v-if="previewUrl" :src="previewUrl" alt="Profile preview" class="thumbnail" @click="clickFileInput" />
+              <img
+                v-if="previewUrl"
+                :src="previewUrl"
+                alt="Profile preview"
+                class="thumbnail"
+                @click="clickFileInput"
+              />
               <div v-else class="signup-userImg-upload" @click="clickFileInput">
                 <!-- <div class="signup-userImg-context">프로필을<br />업로드 하세요.</div> -->
               </div>
 
               <!-- 실제 파일 입력 -->
-              <input type="file" accept="image/*" id="customFileInput" ref="fileInputRef" @change="handleFileUpload" />
+              <input
+                type="file"
+                accept="image/*"
+                id="customFileInput"
+                ref="fileInputRef"
+                @change="handleFileUpload"
+              />
 
               <div class="signup-userImg-context">
                 프로필을<br />업로드 하세요.
               </div>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="previewUrl">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="previewUrl"
+            >
               다음!
             </button>
           </div>
@@ -46,18 +68,41 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="id" class="signup-question-context-what">아이디</label>
+              <label for="id" class="signup-question-context-what"
+                >아이디</label
+              >
             </div>
 
             <div class="signup-question-context-box">
-              <input type="text" v-model="id" @input="idCheck" placeholder="아이디를 입력하세요"
-                class="signup-question-context-input" />
+              <input
+                type="text"
+                v-model="id"
+                @input="idCheck"
+                placeholder="아이디를 입력하세요"
+                class="signup-question-context-input"
+              />
             </div>
 
             <div class="signup-question-context-box">
-              <button @click="checkIdAvailability" class="signup-question-context-check">
+              <button
+                @click="checkIdAvailability"
+                class="signup-question-context-check"
+              >
                 중복확인
               </button>
+            </div>
+
+            <div class="signup-question-context-box">
+              <label for="password" class="signup-question-context-what"
+                >비밀번호</label
+              >
+              <input
+                type="password"
+                v-model="password"
+                placeholder="비밀번호를 입력하세요."
+                class="signup-question-context-input"
+                :style="password != '' ? 'font-family: sans-serif' : ''"
+              />
             </div>
 
             <div class="error-box">
@@ -72,8 +117,12 @@
                 사용 가능한 아이디입니다.
               </p>
             </div>
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
-              v-if="!idError && !idExists && idAvailable">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!idError && !idExists && idAvailable && (password !='')"
+            >
               다음!
             </button>
           </div>
@@ -83,20 +132,27 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="email" class="signup-question-context-what">이메일</label>
+              <label for="email" class="signup-question-context-what"
+                >이메일</label
+              >
 
-              <input type="email" v-model="email" placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
-                class="signup-question-context-input" />
+              <input
+                type="email"
+                :disabled="isVerificationSuccess"
+                v-model="email"
+                placeholder="싸피프로젝트 사이트 이메일을 입력하세요."
+                class="signup-question-context-input"
+              />
             </div>
 
-            <div class="signup-question-context-box">
+            <!-- <div class="signup-question-context-box">
               <label for="password" class="signup-question-context-what">비밀번호</label>
               <input type="password" v-model="password" placeholder="싸피프로젝트 사이트 비밀번호를 입력하세요."
                 class="signup-question-context-input" :style="password != '' ? 'font-family: sans-serif' : ''" />
-            </div>
+            </div> -->
 
             <div class="signup-question-context-box">
-              <button @click="submitForm" class="signup-question-context-check">
+              <button @click="submitForm" :disabled="isVerificationSuccess" class="signup-question-context-check">
                 본인확인
               </button>
             </div>
@@ -110,7 +166,12 @@
               </div>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="isVerificationSuccess">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="isVerificationSuccess"
+            >
               다음!
             </button>
           </div>
@@ -120,15 +181,25 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="ssafyid" class="signup-question-context-what">ssafy학번</label>
+              <label for="ssafyid" class="signup-question-context-what"
+                >ssafy학번</label
+              >
             </div>
 
             <div class="signup-question-context-box">
-              <input type="text" v-model="ssafyid" placeholder="ssafy학번을 입력하세요" class="signup-question-context-input" />
+              <input
+                type="text"
+                v-model="ssafyid"
+                placeholder="ssafy학번을 입력하세요"
+                class="signup-question-context-input"
+              />
             </div>
 
             <div class="signup-question-context-box">
-              <button @click="checkStudentnumAvailability" class="signup-question-context-check">
+              <button
+                @click="checkStudentnumAvailability"
+                class="signup-question-context-check"
+              >
                 중복확인
               </button>
             </div>
@@ -142,8 +213,12 @@
               </p>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
-              v-if="!ssafyidExists && ssafyidAvailable">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!ssafyidExists && ssafyidAvailable"
+            >
               다음!
             </button>
           </div>
@@ -153,12 +228,19 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="name" class="signup-question-context-what">이름</label>
+              <label for="name" class="signup-question-context-what"
+                >이름</label
+              >
             </div>
 
             <div class="signup-question-context-box">
-              <input type="text" v-model="name" @input="nameCheck" placeholder="이름을 입력하세요"
-                class="signup-question-context-input" />
+              <input
+                type="text"
+                v-model="name"
+                @input="nameCheck"
+                placeholder="이름을 입력하세요"
+                class="signup-question-context-input"
+              />
             </div>
 
             <div class="error-box">
@@ -167,7 +249,12 @@
               </p>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext" v-if="!nameError && name != ''">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!nameError && name != ''"
+            >
               다음!
             </button>
           </div>
@@ -177,16 +264,26 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="nickname" class="signup-question-context-what">닉네임</label>
+              <label for="nickname" class="signup-question-context-what"
+                >닉네임</label
+              >
             </div>
 
             <div class="signup-question-context-box">
-              <input type="text" v-model="nickname" @input="nicknameCheck" placeholder="닉네임을 입력하세요"
-                class="signup-question-context-input" />
+              <input
+                type="text"
+                v-model="nickname"
+                @input="nicknameCheck"
+                placeholder="닉네임을 입력하세요"
+                class="signup-question-context-input"
+              />
             </div>
 
             <div class="signup-question-context-box">
-              <button @click="checkNickAvailability" class="signup-question-context-check">
+              <button
+                @click="checkNickAvailability"
+                class="signup-question-context-check"
+              >
                 중복확인
               </button>
             </div>
@@ -203,8 +300,12 @@
               </p>
             </div>
 
-            <button id="signup-clear-btn" class="expandUp" @click="signupSlidenext"
-              v-if="!nicknameError && !nicknameExists && nicknameAvailable">
+            <button
+              id="signup-clear-btn"
+              class="expandUp"
+              @click="signupSlidenext"
+              v-if="!nicknameError && !nicknameExists && nicknameAvailable"
+            >
               다음!
             </button>
           </div>
@@ -214,16 +315,26 @@
         <div class="signup-question-item">
           <div class="signup-question-context">
             <div class="signup-question-context-box">
-              <label for="phonenumber" class="signup-question-context-what">전화번호</label>
+              <label for="phonenumber" class="signup-question-context-what"
+                >전화번호</label
+              >
             </div>
 
             <div class="signup-question-context-box">
-              <input type="text" v-model="phonenumber" @input="phonenumberCheck" placeholder="-를 제외하고 입력해주세요."
-                class="signup-question-context-input" />
+              <input
+                type="text"
+                v-model="phonenumber"
+                @input="phonenumberCheck"
+                placeholder="-를 제외하고 입력해주세요."
+                class="signup-question-context-input"
+              />
             </div>
 
             <div class="signup-question-context-box">
-              <button @click="checkPhoneNumAvailability" class="signup-question-context-check">
+              <button
+                @click="checkPhoneNumAvailability"
+                class="signup-question-context-check"
+              >
                 중복확인
               </button>
             </div>
@@ -232,10 +343,16 @@
               <p v-if="phonenumberError" class="input_error">
                 유효한 전화번호를 입력하세요.
               </p>
-              <p v-show="phonenumberExists && !phonenumberAvailable" class="input_error">
+              <p
+                v-show="phonenumberExists && !phonenumberAvailable"
+                class="input_error"
+              >
                 중복된 전화번호가 있습니다.
               </p>
-              <p v-show="!phonenumberExists && phonenumberAvailable" class="success_message">
+              <p
+                v-show="!phonenumberExists && phonenumberAvailable"
+                class="success_message"
+              >
                 사용 가능한 번호입니다.
               </p>
             </div>
@@ -265,56 +382,106 @@
 
     <div class="signup-history-body">
       <div class="signup-question-history">
-        <div class="history-item" :style="{ backgroundColor: previewUrl ? '#aecbeb' : '#f8f9fb' }">
-          <div class="history-item-isclear" :style="previewUrl ? 'background-color: #2196f3' : ''"></div>
+        <div
+          class="history-item"
+          :style="{ backgroundColor: previewUrl ? '#aecbeb' : '#f8f9fb' }"
+        >
+          <div
+            class="history-item-isclear"
+            :style="previewUrl ? 'background-color: #2196f3' : ''"
+          ></div>
           프로필 사진
         </div>
-        <div class="history-item" :style="!idError && !idExists && idAvailable
-          ? ''
-          : 'background-color: #f8f9fb'
-          ">
-          <div class="history-item-isclear" :style="!idError && !idExists && idAvailable
-            ? 'background-color: #2196f3'
-            : ''
-            "></div>
+        <div
+          class="history-item"
+          :style="
+            !idError && !idExists && idAvailable && (password !='')
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !idError && !idExists && idAvailable && (password !='')
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
           아이디 설정
         </div>
-        <div class="history-item" :style="isVerificationSuccess ? '' : 'background-color: #f8f9fb'">
-          <div class="history-item-isclear" :style="isVerificationSuccess ? 'background-color: #2196f3' : ''"></div>
+        <div
+          class="history-item"
+          :style="isVerificationSuccess ? '' : 'background-color: #f8f9fb'"
+        >
+          <div
+            class="history-item-isclear"
+            :style="isVerificationSuccess ? 'background-color: #2196f3' : ''"
+          ></div>
           싸피 프로젝트 본인 인증
         </div>
-        <div class="history-item" :style="!ssafyidExists && ssafyidAvailable
-          ? ''
-          : 'background-color: #f8f9fb'
-          ">
-          <div class="history-item-isclear" :style="!ssafyidExists && ssafyidAvailable
-            ? 'background-color: #2196f3'
-            : ''
-            "></div>
+        <div
+          class="history-item"
+          :style="
+            !ssafyidExists && ssafyidAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !ssafyidExists && ssafyidAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
           싸피 학번 입력
         </div>
-        <div class="history-item" :style="!nameError && name != '' ? '' : 'background-color: #f8f9fb'">
-          <div class="history-item-isclear" :style="!nameError && name != '' ? 'background-color: #2196f3' : ''"></div>
+        <div
+          class="history-item"
+          :style="!nameError && name != '' ? '' : 'background-color: #f8f9fb'"
+        >
+          <div
+            class="history-item-isclear"
+            :style="!nameError && name != '' ? 'background-color: #2196f3' : ''"
+          ></div>
           이름 입력
         </div>
-        <div class="history-item" :style="!nicknameError && !nicknameExists && nicknameAvailable
-          ? ''
-          : 'background-color: #f8f9fb'
-          ">
-          <div class="history-item-isclear" :style="!nicknameError && !nicknameExists && nicknameAvailable
-            ? 'background-color: #2196f3'
-            : ''
-            "></div>
+        <div
+          class="history-item"
+          :style="
+            !nicknameError && !nicknameExists && nicknameAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !nicknameError && !nicknameExists && nicknameAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
           닉네임 설정
         </div>
-        <div class="history-item" :style="!phonenumberError && !phonenumberExists && phonenumberAvailable
-          ? ''
-          : 'background-color: #f8f9fb'
-          ">
-          <div class="history-item-isclear" :style="!phonenumberError && !phonenumberExists && phonenumberAvailable
-            ? 'background-color: #2196f3'
-            : ''
-            "></div>
+        <div
+          class="history-item"
+          :style="
+            !phonenumberError && !phonenumberExists && phonenumberAvailable
+              ? ''
+              : 'background-color: #f8f9fb'
+          "
+        >
+          <div
+            class="history-item-isclear"
+            :style="
+              !phonenumberError && !phonenumberExists && phonenumberAvailable
+                ? 'background-color: #2196f3'
+                : ''
+            "
+          ></div>
           전화번호 입력
         </div>
       </div>
@@ -430,18 +597,26 @@ export default {
 
     // 프로젝트 싸피 회원 인증하는 함수
     const submitForm = () => {
-      const ssafy = { usernameOrEmail: email.value, password: password.value };
-
+      const ssafy = { usernameOrEmail: email.value, password: "1234" };
       signUp
-        .isssafy(ssafy)
+        .isssafyEmail(ssafy)
         .then(() => {
-          console.log("인증 완료");
-          submitted.value = true;
-          isVerificationSuccess.value = true;
+          signUp
+            .isssafy(ssafy)
+            .then(() => {
+              console.log("인증 완료");
+              submitted.value = true;
+              isVerificationSuccess.value = true;
+            })
+            .catch(() => {
+              console.log("싸피생이 아닙니다");
+
+              submitted.value = true;
+              isVerificationSuccess.value = false;
+            });
         })
         .catch(() => {
           console.log("싸피생이 아닙니다");
-
           submitted.value = true;
           isVerificationSuccess.value = false;
         });
@@ -630,9 +805,9 @@ export default {
         userNickname: nickname.value,
         userName: name.value,
         userPassword: password.value,
-        userImg: '',
+        userImg: "",
         userPhone: phonenumber.value,
-        kakaoPush: true // 이 부분은 실제 사용하는 변수에 따라 조정하세요.
+        kakaoPush: true, // 이 부분은 실제 사용하는 변수에 따라 조정하세요.
       });
       // function onFileChange(fileInputRef) {
       //   profile.value = fileInputRef.target.files[0];
@@ -654,9 +829,10 @@ export default {
       //     console.log("회원가입 실패", error);
       //   });
       const formData = new FormData();
-      formData.append('userSignUpJson', JSON.stringify(userSignUp.value));
-      formData.append('profileImage', profile.value);
-      signUp.submitNewUser(formData)
+      formData.append("userSignUpJson", JSON.stringify(userSignUp.value));
+      formData.append("profileImage", profile.value);
+      signUp
+        .submitNewUser(formData)
         .then((response) => {
           console.log("회원가입 완료", response);
           for (let [key, value] of formData.entries()) {
@@ -671,8 +847,7 @@ export default {
           console.log("회원가입 실패", error);
           // 실패 처리 로직
         });
-
-    }
+    };
     // if (fileInputRef.value && fileInputRef.value.files[0]) {
     //   formData.append("userImg", fileInputRef.value.files[0]);
     // }
@@ -680,12 +855,9 @@ export default {
     // Axios, Fetch API 등을 사용하여 서버로 데이터 전송
     //수정
 
-
-
     const previewUrl = ref(""); // 이미지 미리보기 URL을 저장할 상태
     // 유저 프로필 사진 업로드
     const selectedFile = ref(null); // 선택된 파일을 저장할 상태
-
 
     const handleFileUpload = (fileInputRef) => {
       const file = fileInputRef.target.files[0];
@@ -703,8 +875,6 @@ export default {
     const clickFileInput = () => {
       fileInputRef.value.click();
     };
-
-
 
     return {
       id,
@@ -758,7 +928,6 @@ export default {
       selectedFile,
       previewUrl,
       clickFileInput,
-
     };
   },
 };
@@ -1050,7 +1219,8 @@ export default {
   text-align: center;
 }
 
-.error-item {}
+.error-item {
+}
 
 /* 수신 여부 토글 CSS --------------------------------------- */
 .toggle_switch {
@@ -1089,11 +1259,11 @@ export default {
   transition: 0.3s;
 }
 
-.toggle_switch input:checked+label {
+.toggle_switch input:checked + label {
   background-color: #2196f3;
 }
 
-.toggle_switch input:checked+label:after {
+.toggle_switch input:checked + label:after {
   transform: translateX(15px);
 }
 
@@ -1109,7 +1279,6 @@ export default {
   object-fit: cover;
   /* 이미지가 썸네일 영역을 넘어가지 않게 조정합니다 */
 }
-
 
 @media only screen and (max-width: 600px) {
   .toggle_switch {
