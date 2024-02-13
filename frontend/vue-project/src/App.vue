@@ -191,7 +191,7 @@ body {
   height: 100vh;
 
   background-color: #f8f9fb;
-  background-image: url("./assets/pixil_background_winter2.png");
+  background-image: url("./assets/groundv2.png");
   background-size: 220px;
   background-repeat: repeat-x;
   background-position: bottom;
