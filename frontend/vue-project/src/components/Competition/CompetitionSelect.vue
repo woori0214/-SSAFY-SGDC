@@ -184,13 +184,13 @@ const openRandomMatchingModal = () => {
 
   isRandomMatchingMessageVisible.value = true;
   modalType.value = "randomMatching";
-  resetHasChallengeCount();
 };
 
 const closeMessage = () => {
   isRandomMatchingMessageVisible.value = false;
   isFriendMatchingMessageVisible.value = false;
   modalType.value = "";
+  resetHasChallengeCount();
 };
 
 // 친구 매칭
@@ -210,7 +210,6 @@ const openFriendMatchingModal = () => {
   console.log("친구매칭");
   modalType.value = "friendMatching";
   console.log(modalType.value);
-  resetHasChallengeCount();
 };
 
 // 친구 선택
@@ -226,6 +225,7 @@ const handleFriendSelect = (friend) => {
 
 const closeFriendsList = () => {
   isFriendMatchingListVisible.value = false;
+  resetHasChallengeCount();
 };
 
 onMounted(() => {
