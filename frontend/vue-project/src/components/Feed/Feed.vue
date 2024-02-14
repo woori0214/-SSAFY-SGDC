@@ -25,7 +25,7 @@
       </div>
       <div class="feed_content">{{ feedTitle }}</div>
     </div>
-    <div class="feed_image_frame" @click="routeDetailFeed()">
+    <div class="feed_image_frame">
       <img :src="feedImg" class="feed_image" />
     </div>
     <div class="feed_footbar">
