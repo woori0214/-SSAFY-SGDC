@@ -99,6 +99,15 @@ public class CompetitionController {
         );
     }
 
+    @GetMapping("/today-finish-compet-list/{userId}")
+    public ResponseEntity<?> getTodayFinishCompetList(@PathVariable int userId) {
+        List<CompetitionDto> result = competitionService.getTodayCompleteCompetitionList(userId);
+        return new ResponseEntity<>(CompetitionListResponse.builder()
+                .status(200).message("오늘 종료된 경쟁 리스트 조회 완료").competitions(result)
+                .build(), HttpStatus.OK
+        );
+    }
+
     @GetMapping("/finish-compet-detail/{userId}/{competId}")
     public ResponseEntity<?> getFinishCompetition(@PathVariable int userId, @PathVariable int competId) {
         CompetitionDto result = competitionService.getCompleteCompetition(userId, competId);
