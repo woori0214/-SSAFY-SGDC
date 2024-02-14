@@ -10,7 +10,7 @@
     />
     <div class="feed_frame2">
       <div class="feed_profile">
-        <div class="user_profile">
+        <div class="user_profile" @click="moveProfile(userId)">
           <img :src="userImg" class="feed_profile_image" />
           <img v-if="userBadgeImg !== 'null'" :src="userBadgeImg" class="feed_profile_badge" />
           <div class="feed_user_name">{{ userNickname }}</div>
@@ -50,6 +50,7 @@
 import { useFeedStore } from "@/stores/feed";
 import { useUserStorageStore } from "@/stores/userStorage";
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
 import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
@@ -130,6 +131,7 @@ export default {
   setup(props) {
     const feedjs = useFeedStore();
     const userStorage = useUserStorageStore();
+    const router = useRouter();
     const showComplaintBox = ref(false);
 
     const refIsLiked = ref(props.isLiked);
@@ -178,6 +180,10 @@ export default {
       showComplaintBox.value = false;
     };
 
+    // 프로필페이지 이동
+    const moveProfile = (userId) => {
+      router.push({ name: 'MyPage', params: { userId: userId } });
+    }
     return {
       pushFeedLike,
       handleDeclareClick,
@@ -185,6 +191,7 @@ export default {
       closeComplaintBox,
       refIsLiked,
       refFeedLikedNum,
+      moveProfile,
     };
   },
 };
