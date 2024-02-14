@@ -298,8 +298,6 @@ export default {
 }
 
 .category_container {
-  /* height: 80%; */
-  /* overflow: auto; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
