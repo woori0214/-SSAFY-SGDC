@@ -59,26 +59,7 @@ const useUserStorage = useUserStorageStore();
 const userStored_id = ref(null);
 const feedInfo = useFeedStore();
 const feedlist = ref([
-  {
-    feed_id: 0,
-    feedTitle: "오화석0 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 1,
-    feedTitle: "오화석1 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 2,
-    feedTitle: "오화석2 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 3,
-    feedTitle: "오화석3 님이 기상챌린지를 성공하셨습니다.",
-  },
-  {
-    feed_id: 4,
-    feedTitle: "오화석4 님이 기상챌린지를 성공하셨습니다.",
-  },
+  
 ]);
 const feedlist_ = ref([]);
 
