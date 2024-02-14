@@ -3,14 +3,14 @@
     <input type="text" v-model="nickname" class="searchuser_input" placeholder="친구 닉네임 검색..." @input="searchFriends">
     <div v-if="searchResults && searchResults.length > 0" class="search-results">
       <ul>
-        <p v-for="result in enhancedSearchResults" :key="result.userId">
-          {{ result.userNickname }}
+        <div v-for="result in enhancedSearchResults" :key="result.userId" class="search-results-item">
+          <div class="searchedUserName">{{ result.userNickname }}</div>
           <button @click="() => result.isFollowing ? unfollowUser(result.userId) : followUser(result.userId)"
             class="follow-button">
             {{ result.isFollowing ? '언팔로우' : '팔로우' }}
           </button>
           <button @click="viewProfile(result.userId)" class="profile-button">프로필</button>
-        </p>
+        </div>
       </ul>
     </div>
   </div>
@@ -202,20 +202,36 @@ const enhancedSearchResults = computed(() => {
 .search-results {
   position: absolute;
   top: 100%; /* 입력 필드 바로 아래에 위치 */
-  left: 0;
-  width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
+  right: 0;
+  width: 150%;
   background-color: white;
   border: 1px solid #ccc;
+  padding: 5px;
   /* 기타 스타일 */
 }
 
 .search-results ul {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .search-results li {
   margin: 5px 0;
+}
+
+.search-results-item{
+  display: flex;
+  border-bottom: 2px solid #83b0e1;
+  padding-bottom: 3px;
+}
+
+.searchedUserName{
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
 }
 
 .follow-button,
@@ -224,6 +240,7 @@ const enhancedSearchResults = computed(() => {
   margin-left: 10px;
   padding: 5px 10px;
   border: 1px solid #ccc;
+  border-radius: 3px;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
