@@ -36,11 +36,14 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     @Query("UPDATE User u SET u.challengeCnt = 3")
     void updateAllUsersChallengeCount();
 
-    /**
-     * 유저 닉네임 검색
-     */
+    // 유저 닉네임 검색
     Page<User> findByUserNicknameContaining(String keyword, Pageable pageable);
 
+    // 이메일 중복 검사
     boolean existsByUserEmail(String userEmail);
+
+    // 신고시 닉네임 조회
+    Optional<User> findByUserNickname(String userNickname);
+
 }
 
