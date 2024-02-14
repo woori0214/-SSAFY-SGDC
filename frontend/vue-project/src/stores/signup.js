@@ -14,15 +14,15 @@ export const useSignupStore = defineStore('signup', () => {
 
     //싸피 이메일 중복 체크
     const isssafyEmail = function (ssafy) {
-        console.log('isssafyEmail 되고있나');
+        // console.log('isssafyEmail 되고있나');
 
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/check-student-email/${ssafy.usernameOrEmail}`)
                 .then((response) => {
-                    console.log('싸피 이메일 중복 체크');
-                    console.log(response);
-                    console.log(response.data.data.result);
+                    // console.log('싸피 이메일 중복 체크');
+                    // console.log(response);
+                    // console.log(response.data.data.result);
 
                     if(response.data.data.result == 'true'){
                         resolve(response);
@@ -41,19 +41,18 @@ export const useSignupStore = defineStore('signup', () => {
     }
 
     const isssafy = function (ssafy) {
-        console.log('isssafy 되고있나');
+        // console.log('isssafy 되고있나');
 
         return new Promise((resolve, reject) => {
             axios
                 .post(ssafyurl, ssafy)
                 .then((response) => {
-                    console.log('싸피 인증 통과 메세지');
-                    console.log(response);
-                    console.log(response.response.data.message);
+                    // console.log('싸피 인증 통과 메세지');
+                    // console.log(response);
+                    // console.log(response.response.data.message);
                     resolve(response);
                 })
                 .catch((e) => {
-                    console.log('싸피 인증 오류 메세지');
                     console.log(e);
                     console.log(e.response.data.message);
                     // reject(e);
@@ -70,17 +69,17 @@ export const useSignupStore = defineStore('signup', () => {
 
     // 아이디 중복 확인
     const isid = function (loginId) {
-        console.log('isid 되고있나')
+        // console.log('isid 되고있나')
 
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/check-id/${loginId}`)
                 .then((response) => {
-                    console.log('아이디 중복 확인');
+                    // console.log('아이디 중복 확인');
                     resolve(response);
                 })
                 .catch((e) => {
-                    console.log('아이디 중복 에러');
+                    // console.log('아이디 중복 에러');
                     console.log(e)
                     reject(e);
 
@@ -113,7 +112,7 @@ export const useSignupStore = defineStore('signup', () => {
 
     // 싸피 학번 중복 확인
     const isstudentnum = function (StudentnumData) {
-        console.log('isstudentnum 되고있나')
+        // console.log('isstudentnum 되고있나')
 
         return new Promise((resolve, reject) => {
             axios
@@ -133,8 +132,8 @@ export const useSignupStore = defineStore('signup', () => {
     }
 
     const submitNewUser = function (newUser) {
-        console.log('submitNewUser 되고있나');
-        console.log(newUser);
+        // console.log('submitNewUser 되고있나');
+        // console.log(newUser);
 
         return new Promise((resolve, reject) => {
             axios
@@ -152,17 +151,17 @@ export const useSignupStore = defineStore('signup', () => {
 
     // 전화번호 인증(방법 미정) << 임시로 중복확인만
     const authphone = function (userPhone) {
-        console.log('authphone 되고있나' + userPhone);
+        // console.log('authphone 되고있나' + userPhone);
 
         return new Promise((resolve, reject) => {
             axios
                 .get(`${URL}/check-phoneNum/${userPhone}`)
                 .then(response => {
-                    console.log(response);
+                    // console.log(response);
                     resolve(response);
                 })
                 .catch((e) => {
-                    console.log(response);
+                    console.log(e);
                     reject(e);
                 });
         })

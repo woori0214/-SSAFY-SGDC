@@ -35,7 +35,7 @@ export const useFeedStore = defineStore('feed', () => {
                 .patch(`${URL}/feed-views/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
-                    console.log('조회수 +1')
+                    // console.log('조회수 +1')
                 })
                 .catch((err) => {
                     reject(err)
@@ -45,9 +45,9 @@ export const useFeedStore = defineStore('feed', () => {
 
     //게시물 리스트 조회
     const getFeedList = function () {
-        console.log('Start Get Feed List ::');
-        console.log(authorizationAPI.defaults.headers['Authorization']);
-        console.log('----------------------------------------------');
+        // console.log('Start Get Feed List ::');
+        // console.log(authorizationAPI.defaults.headers['Authorization']);
+        // console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list`)
@@ -63,18 +63,18 @@ export const useFeedStore = defineStore('feed', () => {
 
     //게시물 리스트(페이지 당 10개씩)
     const getFeedListPage = function (last_feed_id, list_size) {
-        console.log('getFeedListPage 실행...');
-        console.log('인증 토큰 확인 ::');
-        console.log(authorizationAPI.defaults.headers['Authorization']);
-        console.log('----------------------------------------------');
+        // console.log('getFeedListPage 실행...');
+        // console.log('인증 토큰 확인 ::');
+        // console.log(authorizationAPI.defaults.headers['Authorization']);
+        // console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .get(`${URL}/feed-list/pages`, {
                     params: { userId: userStorage.getUserInformation().user_id, feedId: last_feed_id, page: 0, size: list_size }
                 })
                 .then((response) => {
-                    console.log('get List : ');
-                    console.log(response);
+                    // console.log('get List : ');
+                    // console.log(response);
                     resolve(response);
                 })
                 .catch((e) => {
@@ -93,7 +93,7 @@ export const useFeedStore = defineStore('feed', () => {
                 .patch(`${URL}/feed-like/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
-                    console.log('좋아요 +1')
+                    // console.log('좋아요 +1')
                 })
                 .catch((err) => {
                     reject(err)

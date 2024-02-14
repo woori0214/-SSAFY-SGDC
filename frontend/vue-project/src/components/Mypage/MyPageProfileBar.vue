@@ -179,7 +179,7 @@ export default {
         .then((res) => {
           // console.log(res)
           userData.value = res.data.data;
-          console.log(userData.value)
+          // console.log(userData.value)
         })
         .catch((err) => {
           console.log(err);
@@ -252,7 +252,7 @@ export default {
         }
         competStore.friendSend(friendSendmsg)
           .then((res) => {
-            console.log('도전장 보내기 성공')
+            // console.log('도전장 보내기 성공')
             isopenSendMsg.value = false;
             showResponseModal.value = true;
           })
@@ -281,11 +281,11 @@ export default {
 
     const goSsallowing = function () {
       const ssallowingData = { to_user_id: mypageUserId.value, from_user_id: loginUserId.value };
-      console.log(ssallowingData)
+      // console.log(ssallowingData)
       followStore.plusSsallowing(ssallowingData)
         .then((res) => {
-          console.log('쌀로잉')
-          console.log(res);
+          // console.log('쌀로잉')
+          // console.log(res);
         })
         .catch((err) => {
           console.log(err);
@@ -296,8 +296,8 @@ export default {
       const UnssallowingData = { to_user_id: mypageUserId.value, from_user_id: loginUserId.value };
       followStore.deleteSsallowing(UnssallowingData)
         .then((res) => {
-          console.log('언쌀로잉')
-          console.log(res);
+          // console.log('언쌀로잉')
+          // console.log(res);
         })
         .catch((err) => {
           console.log(err)

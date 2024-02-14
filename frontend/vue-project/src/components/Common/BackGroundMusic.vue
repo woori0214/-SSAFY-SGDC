@@ -28,9 +28,9 @@ myAudio.loop = true;
 // myAudio.autoplay = true;
 
 const OnOffAudio = () => {
-  console.log("오디오 버튼 함수");
-  console.log(audioStatus);
-  console.log(myAudio);
+  // console.log("오디오 버튼 함수");
+  // console.log(audioStatus);
+  // console.log(myAudio);
   try {
     if (!audioStatus.value) {
       myAudio.play();
@@ -38,26 +38,23 @@ const OnOffAudio = () => {
       myAudio.pause();
     }
   } catch (error) {
-    console.log("오디오 버튼 오류");
+    // console.log("오디오 버튼 오류");
     console.log(error);
   }
 };
 
-console.log("오디오 객체 :");
-console.log(myAudio);
-
 onMounted(() => {
-  console.log("온 마운트 오디오 객체 :");
-  console.log(myAudio);
+  // console.log("온 마운트 오디오 객체 :");
+  // console.log(myAudio);
   // 오디오가 재생될 때 호출되는 함수
   myAudio.addEventListener("play", () => {
-    console.log("오디오 재생");
+    // console.log("오디오 재생");
     audioStatus.value = true;
   });
 
   // 오디오가 일시 중지될 때 호출되는 함수
   myAudio.addEventListener("pause", () => {
-    console.log("오디오 중지");
+    // console.log("오디오 중지");
     audioStatus.value = false;
   });
 });

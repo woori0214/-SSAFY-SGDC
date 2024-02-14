@@ -49,9 +49,6 @@
             <button class="mainMailBox-list-item-subBtn" @click="checkChallenge(mail_item.id)">
               미션확인
             </button>
-            <button class="mainMailBox-list-item-clear">
-              <span class="material-symbols-outlined"> close </span>
-            </button>
           </div>
 
 
@@ -63,9 +60,6 @@
               [{{ categoryMapping[mail_item.category_id] }}] {{ mail_item.other_nickname }}님과의 경쟁 결과가 나왔습니다.
             </div>
             <button class="mainMailBox-list-item-subBtn" @click="showResultModal(mail_item)">결과확인</button>
-            <button class="mainMailBox-list-item-clear">
-              <span class="material-symbols-outlined"> close </span>
-            </button>
           </div>
 
 

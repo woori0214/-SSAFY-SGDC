@@ -71,8 +71,8 @@ export default {
       feedjs
         .updateFeedView(props.feed_id)
         .then((res) => {
-          console.log("feed 조회수를 추가하였습니다.");
-          console.log(res.data);
+          // console.log("feed 조회수를 추가하였습니다.");
+          // console.log(res.data);
         })
         .catch((err) => {
           console.log(err);
@@ -90,8 +90,8 @@ export default {
           heartCnt_d = res.data.feed_like_num;
           viewCnt_d = res.data.views;
 
-          console.log("feed 정보를 받았습니다.");
-          console.log(feedData.value);
+          // console.log("feed 정보를 받았습니다.");
+          // console.log(feedData.value);
         })
         .catch((err) => {
           console.log(err);
@@ -105,14 +105,14 @@ export default {
       feedjs
         .updateFeedLike(props.feed_id)
         .then((res) => {
-          console.log("feed 좋아요 누름");
+          // console.log("feed 좋아요 누름");
 
           const userData = userStorage.getUserInformation();
 
           feedjs
             .addfeedLikeUser(props.feed_id, userData.user_id)
             .then((res) => {
-              console.log("feed 좋아요 유저 추가");
+              // console.log("feed 좋아요 유저 추가");
             })
             .catch((err) => {
               console.log(err);
@@ -126,7 +126,7 @@ export default {
     };
 
     onMounted(() => {
-      console.log("FeedDetail onMounte 실행");
+      // console.log("FeedDetail onMounte 실행");
       patchViewCnt();
       getFeedDetail();
     });

@@ -25,11 +25,11 @@ export const updateAuthToken = (updateToken) => {
         }
     });
 
-    console.log('인증 토큰 업데이트');
-    console.log(userAuthToken.value);
-    console.log('=================================');
-    console.log(authorizationAPI.defaults.headers['Authorization']);
-    console.log('=================================');
+    // console.log('인증 토큰 업데이트');
+    // console.log(userAuthToken.value);
+    // console.log('=================================');
+    // console.log(authorizationAPI.defaults.headers['Authorization']);
+    // console.log('=================================');
 };
 
 
@@ -44,13 +44,13 @@ authorizationAPI.interceptors.response.use(response => response, function (error
 });
 
 const reciveRefreshToken = function () {
-    console.log('reciveRefreshToken 실행 중');
+    // console.log('reciveRefreshToken 실행 중');
 
     return new Promise((resolve, reject) => {
         authorizationAPI
             .post(`${URL}`, {})
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 useUserStorageStore().setStorage("token", response.data.data.accessToken); // response.data.data를 response.data로 수정, 구조에 따라 다를 수 있음
                 updateAuthToken(response.data.data.accessToken);
 

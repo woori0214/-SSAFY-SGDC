@@ -18,7 +18,7 @@ export const useLoginStore = defineStore('login', () => {
 
     // 로그인 함수
     const isLogin = function (loginData) {
-        console.log('isLogin 되고있나');
+        // console.log('isLogin 되고있나');
 
         return new Promise((resolve, reject) => {
             axios
@@ -27,9 +27,9 @@ export const useLoginStore = defineStore('login', () => {
                     // 스토리지 로그인 정보 등록
                     //        로그인 정보를 등록하기 전에 전에 남아있는 정보가 있나 확인 해야되나..?
                     // console.log('isLogin response :');
-                    console.log('Login test');
-                    console.log(response);
-                    console.log('Login response');
+                    // console.log('Login test');
+                    // console.log(response);
+                    // console.log('Login response');
                     userStorage.setUserInformation({
                         user_id: response.data.data.user_id,
                         user_name: response.data.data.user_name,
@@ -59,7 +59,7 @@ export const useLoginStore = defineStore('login', () => {
 
     //로그아웃 함수
     const isLogout = function () {
-        console.log('isLogout 되고있나');
+        // console.log('isLogout 되고있나');
         userStorage.deleteAllStorage();
         userNickname.value = null;
         // router.push({ name: "Main" });
@@ -84,7 +84,7 @@ export const useLoginStore = defineStore('login', () => {
 
 
     const isLogined = function () {
-        console.log('isLogined 되고있나');
+        // console.log('isLogined 되고있나');
 
         if(userStorage.getUserInformation().user_id != null){
             userNickname.value = userStorage.getUserInformation().user_nickname;

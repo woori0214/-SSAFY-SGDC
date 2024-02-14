@@ -67,7 +67,7 @@ export default {
     const login = () => {
       if (userId.value == "" || password.value == "") {
         alert("아이디 혹은 비밀번호를 입력하세요.");
-        console.log("아이디 혹은 비밀번호를 입력하세요.");
+        // console.log("아이디 혹은 비밀번호를 입력하세요.");
         return;
       }
       isSubmitButtonDisabled.value = true;
@@ -80,18 +80,18 @@ export default {
       loginUser
         .isLogin(User.value)
         .then(() => {
-          console.log("로그인 성공,vue");
+          // console.log("로그인 성공,vue");
           router.push("/");
         })
         .catch((e) => {
           alert("아이디 혹은 비밀번호를 잘못 입력하셨습니다.")
-          console.log("로그인 실패");
+          // console.log("로그인 실패");
           console.log(e);
         })
         .finally(() => {
           isSubmitButtonDisabled.value = false;
-          console.log(userId.value);
-          console.log(password.value);
+          // console.log(userId.value);
+          // console.log(password.value);
         });
     };
 

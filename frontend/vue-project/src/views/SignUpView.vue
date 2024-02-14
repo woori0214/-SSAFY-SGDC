@@ -604,19 +604,19 @@ export default {
           signUp
             .isssafy(ssafy)
             .then(() => {
-              console.log("인증 완료");
+              // console.log("인증 완료");
               submitted.value = true;
               isVerificationSuccess.value = true;
             })
-            .catch(() => {
-              console.log("싸피생이 아닙니다");
+            .catch((error) => {
+              console.log(error);
 
               submitted.value = true;
               isVerificationSuccess.value = false;
             });
         })
-        .catch(() => {
-          console.log("싸피생이 아닙니다");
+        .catch((error) => {
+          console.log(error);
           submitted.value = true;
           isVerificationSuccess.value = false;
         });
@@ -624,11 +624,11 @@ export default {
 
     //아이디 중복 확인
     const checkIdAvailability = () => {
-      console.log("아이디 중복 확인 함수 실행" + id.value);
+      // console.log("아이디 중복 확인 함수 실행" + id.value);
       signUp
         .isid(id.value)
         .then((response) => {
-          console.log(response);
+          // console.log(response);
           if (!(response.data.data.result == "true")) {
             idExists.value = true;
             idAvailable.value = false;
@@ -637,8 +637,8 @@ export default {
             idAvailable.value = true;
           }
         })
-        .catch(() => {
-          console.log("error");
+        .catch((error) => {
+          console.log(error);
         });
     };
 
@@ -655,8 +655,8 @@ export default {
             nicknameAvailable.value = true;
           }
         })
-        .catch(() => {
-          console.log("error");
+        .catch((error) => {
+          console.log(error);
         });
     };
 
@@ -673,14 +673,14 @@ export default {
             ssafyidAvailable.value = true;
           }
         })
-        .catch(() => {
-          console.log("error");
+        .catch((error) => {
+          console.log(error);
         });
     };
 
     // 전화번호 중복 확인
     const checkPhoneNumAvailability = () => {
-      console.log("전화번호 인증: " + phonenumber.value);
+      // console.log("전화번호 인증: " + phonenumber.value);
       signUp
         .authphone(phonenumber.value)
         .then((response) => {
@@ -692,8 +692,8 @@ export default {
             phonenumberAvailable.value = true;
           }
         })
-        .catch(() => {
-          console.log("error~~");
+        .catch((error) => {
+          console.log(error);
         });
     };
 
@@ -750,27 +750,26 @@ export default {
         .then(() => {
           // userStorage.setUserInformation(User);
 
-          console.log("로그인 성공");
+          // console.log("로그인 성공");
           try {
             router.push({ name: "Main" });
           } catch (error) {
             alert("라우팅 에러발생함" + error);
           }
         })
-        .catch(() => {
-          console.log("로그인 실패");
+        .catch((error) => {
+          console.log(error);
         })
         .finally(() => {
-          console.log("Hello");
           isSubmitButtonDisabled.value = false;
         });
     };
     const profile = ref(null);
     // 회원가입 최종 제출 검사 및 회원가입
     const submitForm2 = () => {
-      console.log(hasAnyError.value);
-      console.log(hasAnyError);
-      console.log(ssafyidExists.value);
+      // console.log(hasAnyError.value);
+      // console.log(hasAnyError);
+      // console.log(ssafyidExists.value);
       if (!hasAnyError.value && ssafyidExists.value) {
         alert("양식을 올바르게 입력해주세요.");
         return;
@@ -834,17 +833,17 @@ export default {
       signUp
         .submitNewUser(formData)
         .then((response) => {
-          console.log("회원가입 완료", response);
-          for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-          }
+          // console.log("회원가입 완료", response);
+          // for (let [key, value] of formData.entries()) {
+          //   console.log(`${key}: ${value}`);
+          // }
           // 성공 후 처리, 예를 들어 페이지 이동
           router.push({ name: "Main" }).catch((error) => {
             alert("라우팅 에러 발생: " + error);
           });
         })
         .catch((error) => {
-          console.log("회원가입 실패", error);
+          console.log(error);
           // 실패 처리 로직
         });
     };

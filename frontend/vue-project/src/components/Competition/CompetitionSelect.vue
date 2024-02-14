@@ -259,21 +259,11 @@ const selectCategory = (category) => {
 </script>
 
 <style scoped>
-#main_box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 2px solid #83b0e1;
-  border-radius: 25px;
-  margin: 30px 10px;
-  background-color: #e1ecf7;
-  padding: 0px;
-}
-
 .hasChallengeCount-warp {
   display: flex;
   justify-content: end;
   padding-right: 25px;
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 .hasChallengeCount-box {
   font-size: 1.6rem;
@@ -289,9 +279,10 @@ const selectCategory = (category) => {
   display: flex;
   flex-direction: column;
   border-radius: 25px;
-  margin-bottom: 5%;
+  margin-bottom: 20px;
   padding: 30px;
   /* margin-top: 3%; */
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
 .select_category_title {
@@ -336,10 +327,11 @@ const selectCategory = (category) => {
   border-radius: 25px;
   /* padding: 20px; */
   /* margin: 20px 0; */
-  margin-bottom: 5%;
+  /* margin-bottom: 5%; */
 
   /* margin-right: 2%; */
   width: calc(100% - 4px);
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
 .matching_title {
@@ -387,7 +379,7 @@ const selectCategory = (category) => {
   width: calc(100% - 30px);
   display: flex;
   flex-direction: column;
-  border: 2px solid #83b0e1;
+  border: none;
   border-radius: 25px;
   margin: 30px 10px;
   background-color: #e1ecf7;
