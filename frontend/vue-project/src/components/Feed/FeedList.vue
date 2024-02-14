@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div>피드 리스트</div> -->
+    <!-- <div>피드 리스트</div> --> 
     <div class="feed_container" ref="feedContainer">
       <Feed
         class="feed"
@@ -18,6 +18,7 @@
         :userId="item.userId"
         :userNickname="item.userNickname"
         :userImg="item.userImg"
+        :userBadgeImg="item.userBadgeImg"
         :isLiked="item.liked"
       ></Feed>
     </div>

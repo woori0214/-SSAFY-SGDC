@@ -12,8 +12,8 @@
       <div class="feed_profile">
         <div class="user_profile">
           <img :src="userImg" class="feed_profile_image" />
-          <img :src="userImg" class="feed_profile_badge" />
-          <div class="feed_user_name">{{ userName }}</div>
+          <img v-if="userBadgeImg !== 'null'" :src="userBadgeImg" class="feed_profile_badge" />
+          <div class="feed_user_name">{{ userNickname }}</div>
         </div>
         <button @click="handleDeclareClick" class="declare_button">
           <img
@@ -53,7 +53,7 @@ import { ref, watch } from "vue";
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
 import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
-
+ 
 export default {
   name: "feed_item",
   props: {
@@ -104,6 +104,10 @@ export default {
     userImg: {
       type: String,
       default: "/src/components/Feed/FeedImage/no_image_logo.png",
+    },
+    userBadgeImg: {
+      type: String,
+      default: null
     },
     isLiked: {
       type: Boolean,
