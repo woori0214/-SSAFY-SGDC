@@ -223,7 +223,7 @@ const fetchMailbox = () => {
               kind: 'matchChallenge'
             }));
             console.log('잘 갖고왔습니다.');
-            mainmailList.value = [...finishCompetitions, ...progressCompetitions];
+            mainmailList.value = [...finishCompetitions, ...progressCompetitions].reverse();
           })
           .catch(error => {
             console.error("Failed to fetch competition progress list:", error);
