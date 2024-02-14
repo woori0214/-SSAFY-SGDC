@@ -4,8 +4,8 @@
       <span>[{{matchKind}}] {{ mailSender }}님이 {{ mailCategory }}을(를) 신청하였습니다.</span>
       
     </div>
-    <span>유효 시간: {{ mailRemainTime }}</span>
-    <button 
+    <span class="mail-item-content-time" :style="(mailRemainTime == '만료' ? 'color: red' : '')">유효 시간: {{ mailRemainTime }}</span>
+    <button v-if="mailRemainTime != '만료'"
       class="accept_button" 
       
       @click="emitAcceptChallenge">
@@ -49,6 +49,11 @@ const emitAcceptChallenge = () => {
 
 .mail-item-content {
   flex-grow: 1; /* 내용이 더 많은 공간을 차지하도록 설정 */
+  font-size: 1.3rem;
+}
+
+.mail-item-content-time{
+  font-size: 1.3rem;
 }
 
 .accept_button { /* 클래스 명이 .accept_btn에서 .accept_button으로 변경 */

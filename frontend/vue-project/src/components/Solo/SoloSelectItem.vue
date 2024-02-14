@@ -141,8 +141,7 @@ export default {
       },
     ]);
 
-    // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
-    onMounted(() => {
+    function todayList_reset() {
       solo
         .soloToday(userStorage.getUserInformation().user_id)
         .then((res) => {
@@ -162,6 +161,10 @@ export default {
         .catch((error) => {
           console.error("Error fetching soloTodayData:", error);
         });
+    }
+    // 페이지클릭 시 솔로 모드 내역(오늘) 함수 실행
+    onMounted(() => {
+      todayList_reset();
     });
 
     // 확인 모달창
@@ -198,7 +201,10 @@ export default {
         console.log("솔로 모드 도전");
         console.log(challenge);
 
-        solo.soloChallenge(challenge);
+        solo.soloChallenge(challenge).finally(() => {
+          todayList_reset();
+        });
+
         openTestModal();
       } else {
         console.log("선택된 카테고리가 없습니다.");
@@ -261,26 +267,9 @@ export default {
           for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
           }
-        });
-
-      solo
-        .soloToday(userStorage.getUserInformation().user_id)
-        .then((res) => {
-          console.log("오늘의 진행중 리스트는?");
-          console.log(res);
-          soloTodayData.value = res.data.solos;
-
-          soloTodayData.value.forEach((soloItem) => {
-            today_categories.value.forEach((todayItem) => {
-              if (todayItem.id == soloItem.category_id) {
-                todayItem.soloStatus = soloItem.solo_status;
-                todayItem.soloResult = soloItem.solo_result;
-              }
-            });
-          });
         })
-        .catch((error) => {
-          console.error("Error fetching soloTodayData:", error);
+        .finally(() => {
+          todayList_reset();
         });
     };
 
@@ -365,7 +354,7 @@ export default {
 }
 
 .extra_text {
-  font-size: 15px;
+  font-size: 18px;
   margin-top: 5px;
   color: black;
 }
