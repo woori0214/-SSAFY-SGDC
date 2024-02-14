@@ -62,14 +62,14 @@ const followUser = async (userId) => {
   try {
     await userFollowStore.plusSsallowing2(userId, useridMe);
     isFollowingMap.value.set(userId, true);
-    console.log('팔로우 성공')
-    console.log(isFollowingMap.value.get(userId));
+    // console.log('팔로우 성공')
+    // console.log(isFollowingMap.value.get(userId));
     
   } catch (error) {
     console.error('팔로우 실패:', error);
-    console.log(userId);
-    console.log(useridMe);
-    console.log(isFollowingMap.value.get(userId));
+    // console.log(userId);
+    // console.log(useridMe);
+    // console.log(isFollowingMap.value.get(userId));
 
   }
 };
@@ -97,7 +97,7 @@ watchEffect(() => {
 });
 
 const checkFollowingStatus = async (userId) => {
-  console.log(userId)
+  // console.log(userId)
   const useridMe = useUserStorage.getUserInformation().user_id;
   const checkusers = {
     user_id: useridMe,
@@ -106,7 +106,7 @@ const checkFollowingStatus = async (userId) => {
 
   try {
     const response = await userFollowStore.checkSsallowing(checkusers);
-    console.log(response)
+    // console.log(response)
     return response.data.success;
   } catch (error) {
     console.error('팔로잉 상태 확인 중 오류 발생:', error);
@@ -125,7 +125,7 @@ const unfollowUser = async (userId) => {
     await userFollowStore.deleteSsallowing(unSsallowingData);
     isFollowingMap.value.set(userId, false);
 
-    console.log('언팔로우 성공');
+    // console.log('언팔로우 성공');
     
     // console.log(isFollowingMap.get(userId));
   } catch (error) {

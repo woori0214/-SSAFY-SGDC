@@ -124,19 +124,19 @@ export default {
         // 친구 선택 emit
         // PopUpFriendsList.vue 내부의 sendRequest 함수 수정
         const sendRequest = (friend) => {
-            console.log(friend)
+            // console.log(friend)
             // emit 대신에 여기에서 friendSend 함수 호출
             const friendSendData = {
                 userId: userId.value, // 현재 사용자의 ID
                 friendId: friend.userId, // 선택된 친구의 ID
                 categoryId: props.selectedCategory, // 선택된 카테고리 ID
             };
-            console.log("친구에게 도전장 보내기 요청 데이터:", friendSendData);
+            // console.log("친구에게 도전장 보내기 요청 데이터:", friendSendData);
 
             // competitionStore의 friendSend 함수 호출
             userCompetStore.friendSend(friendSendData)
                 .then(response => {
-                    console.log("친구에게 도전장 보내기 성공:", response);
+                    // console.log("친구에게 도전장 보내기 성공:", response);
                     // 성공적으로 도전장을 보냈다면, 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
                     // 예: 알림 표시, 모달 닫기 등
 

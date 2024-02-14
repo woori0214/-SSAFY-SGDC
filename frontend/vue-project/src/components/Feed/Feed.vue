@@ -152,16 +152,16 @@ export default {
       feedjs
         .addfeedLikeUser(props.feedId, userData.user_id)
         .then((res) => {
-          console.log(refIsLiked.value);
+          // console.log(refIsLiked.value);
           refIsLiked.value = !refIsLiked.value;
 
           if (refIsLiked.value) {
-            console.log("feed 좋아요 유저 추가");
+            // console.log("feed 좋아요 유저 추가");
           } else {
-            console.log("feed 좋아요 취소");
+            // console.log("feed 좋아요 취소");
           }
 
-          console.log(refIsLiked.value);
+          // console.log(refIsLiked.value);
 
           feedjs
             .getFeed(props.feedId, userData.user_id)

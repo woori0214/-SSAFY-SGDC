@@ -144,7 +144,7 @@ const userMatchingStatus = () => {
 
       // 비활성화할 카테고리 설정
       disabledCategories.value = uniqueCategoryIds;
-      console.log("비활성화할 카테고리:", uniqueCategoryIds);
+      // console.log("비활성화할 카테고리:", uniqueCategoryIds);
     })
     .catch((error) => {
       console.error("카테고리 상태 가져오기 실패:", error);
@@ -178,17 +178,17 @@ const openRandomMatchingModal = () => {
     userId: userId,
     categoryId: selectedCategory.value,
   };
-  console.log(randomSendData);
+  // console.log(randomSendData);
 
   competSelect
     .randomSend(randomSendData)
     .then((response) => {
-      console.log("Random matching request sent successfully:", response);
+      // console.log("Random matching request sent successfully:", response);
       // 여기에 매칭 성공 시 수행할 로직을 추가할 수 있습니다.
     })
     .catch((error) => {
-      console.error("Error sending random matching request:", error);
-      console.log("잘 안되는데요");
+      console.error(error);
+      // console.log("잘 안되는데요");
       // 오류 처리 로직을 추가할 수 있습니다.
     });
 
@@ -216,18 +216,18 @@ const openFriendMatchingModal = () => {
   }
   // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
   isFriendMatchingListVisible.value = true;
-  console.log(isFriendMatchingListVisible.value);
-  console.log("친구매칭");
+  // console.log(isFriendMatchingListVisible.value);
+  // console.log("친구매칭");
   modalType.value = "friendMatching";
-  console.log(modalType.value);
+  // console.log(modalType.value);
 };
 
 // 친구 선택
 const handleFriendSelect = (friend) => {
-  console.log(friend);
+  // console.log(friend);
   selectedFriendId.value = friend.userId;
   selectedFriendNickname.value = friend.userNickname;
-  console.log(selectedFriendNickname.value);
+  // console.log(selectedFriendNickname.value);
   isFriendMatchingMessageVisible.value = true;
   isFriendMatchingListVisible.value = false;
   closeFriendsList();

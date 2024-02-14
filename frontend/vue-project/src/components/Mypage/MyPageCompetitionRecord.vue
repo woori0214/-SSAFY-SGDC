@@ -89,7 +89,7 @@ export default {
             competStore.competitionFinishDetail(userId.value, competdata.compet_id)
                 .then((res) => {
                     selectedMatchingData.value = res.data.competition;
-                    console.log(selectedMatchingData)
+                    // console.log(selectedMatchingData)
                     showPopup.value = true;
                 })
                 .catch((err) => {
