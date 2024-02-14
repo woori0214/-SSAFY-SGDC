@@ -19,7 +19,7 @@ public interface MatchingRepo extends JpaRepository<Matching, Integer> {
     @Query("SELECT m FROM Matching m WHERE m.user.userId = :userId")
     List<Matching> findMatchingListByUserId(int userId);
 
-    List<Matching> findByUserUserIdAndIsSender(int userId, IsSender isSender);
+    List<Matching> findByUserUserIdAndIsSenderAndMatchStatusAndCompetExpirationTimeAfter(int userId, IsSender isSender, MatchStatus matchStatus, LocalDateTime now);
 
     Optional<Matching> findByCompetitionCompetIdAndUserUserId(int competId, int userId);
 

@@ -361,7 +361,9 @@ public class CompetitionService {
     // 받은 도전장 리스트 반환
     public List<MatchingDtoWithSender> getReceiveMatchingList(int userId) {
         List<MatchingDtoWithSender> matchings = new ArrayList<>();
-        List<Matching> receiveMatchings = matchingRepo.findByUserUserIdAndIsSender(userId, IsSender.N);
+        List<Matching> receiveMatchings = matchingRepo.findByUserUserIdAndIsSenderAndMatchStatusAndCompetExpirationTimeAfter(
+                userId, IsSender.N, MatchStatus.WAIT, LocalDateTime.now()
+        );
         for (Matching receiveMatching : receiveMatchings) {
             Matching sendMatching = matchingRepo.findByMatchingId(
                     receiveMatching.getMatchingId()+1
