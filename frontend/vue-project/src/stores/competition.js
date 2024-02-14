@@ -14,12 +14,12 @@ export const useCompetionStore = defineStore('competition', () => {
     //랜덤도전장보내기
     const randomSend = function (randomSend) {
         return new Promise((resolve, reject) => {
-            console.log(randomSend);
+            // console.log(randomSend);
             authorizationAPI
                 .post(`${URL}/random-send`, randomSend)
                 .then((response) => {
                     resolve(response);
-                    console.log('여긴왔나');
+                    // console.log('여긴왔나');
                 })
                 .catch((e) => {
                     console.log(e)
@@ -46,7 +46,7 @@ export const useCompetionStore = defineStore('competition', () => {
     // };
     //친구에게 도전장 보내기
     const friendSend = function (friendSend) {
-        console.log(friendSend)
+        // console.log(friendSend)
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .post(`${URL}/friend-send`, friendSend)
@@ -80,7 +80,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .post(`${URL}/accept/${matchingId}`, {})
                 .then((response) => {
                     resolve(response);
-                    console.log('수락이 완료됐습니다.')
+                    // console.log('수락이 완료됐습니다.')
                 })
                 .catch((e) => {
                     console.log(e)
@@ -92,13 +92,13 @@ export const useCompetionStore = defineStore('competition', () => {
     //도전장함
     const competitionMailbox = function (userId) {
         return new Promise((resolve, reject) => {
-            console.log('axios');
-            console.log(userId);
+            // console.log('axios');
+            // console.log(userId);
             authorizationAPI
                 .get(`${URL}/receive-list/${userId}`)
                 .then((response) => {
                     resolve(response);
-                    console.log('도전장을 잘 갖고왔습니다.');
+                    // console.log('도전장을 잘 갖고왔습니다.');
                 })
                 .catch((e) => {
                     console.log(e)
@@ -110,8 +110,8 @@ export const useCompetionStore = defineStore('competition', () => {
     //경쟁인증
 
     const competitionImage = function (formData) {
-        console.log('axios');
-        console.log(`Request URL: ${URL2}image-auth/upload`);
+        // console.log('axios');
+        // console.log(`Request URL: ${URL2}image-auth/upload`);
         for (let [key, value] of formData.entries()) {
             console.log(`${key}: ${value}`);
         }
@@ -143,7 +143,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .get(`${URL}/finish-compet-list/${userId}`)
                 .then((res) => {
                     resolve(res);
-                    console.log('통신잘되나');
+                    // console.log('통신잘되나');
                 })
                 .catch((err) => {
                     console.log(err)
@@ -218,7 +218,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .get(`${URL}/analysis/${userId}/${userCategory}`)
                 .then((response) => {
                     resolve(response);
-                    console.log('카테고리별유저상태잘 받아옴');
+                    // console.log('카테고리별유저상태잘 받아옴');
                 })
                 .catch((e) => {
                     console.log(e)

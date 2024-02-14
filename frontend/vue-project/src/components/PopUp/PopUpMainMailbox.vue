@@ -42,11 +42,11 @@
 
 
           <!-- 경쟁시작 알림 -->
-          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'matchChallenge'">
+          <div class="mainMailBox-list-item" style="background-color: #d2ffd4;" v-if="mail_item.kind == 'matchChallenge'">
             <div class="mainMailBox-list-item-content">
               [{{ categoryMapping[mail_item.category_id] }}] {{ mail_item.other_user_nickname }}님과의 경쟁이 시작되었습니다.
             </div>
-            <button class="mainMailBox-list-item-accept" @click="checkChallenge(mail_item.id)">
+            <button class="mainMailBox-list-item-subBtn" @click="checkChallenge(mail_item.id)">
               미션확인
             </button>
             <button class="mainMailBox-list-item-clear">
@@ -83,7 +83,7 @@
       </div>
 
       <div class="mainMailBox-closeBtn">
-        <button @click="close_mainMailBox">닫기</button>
+        <button @click="close_mainMailBox" style="font-size: 1.3rem;">닫기</button>
       </div>
     </div>
   </div>
@@ -262,8 +262,8 @@ onMounted(() => {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 40%;
-  max-height: 40%;
+  width: 60%;
+  max-height: 60%;
   background: #fff;
   border-radius: 10px;
   padding-inline: 20px;
@@ -286,11 +286,11 @@ onMounted(() => {
   border-radius: 5px;
   background-color: #e1ecf7;
   display: flex;
-  padding-inline: 5px;
-  padding-block: 5px;
+  padding-inline: 12px;
+  padding-block: 12px;
   flex-direction: column;
   overflow: auto;
-  gap: 5px;
+  gap: 10px;
 }
 
 .mainMailBox-list::-webkit-scrollbar {
@@ -312,11 +312,13 @@ onMounted(() => {
   /* border: 2px solid yellow; */
   background-color: #aecbeb;
   border-radius: 5px;
-  padding-block: 3px;
+  padding-block: 5px;
   padding-inline: 5px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 10px;
+  font-size: 1.6rem;
 }
 
 .mainMailBox-list-item-content {
@@ -327,6 +329,7 @@ onMounted(() => {
 
 .mainMailBox-list-item-subBtn {
   /* border: 2px solid blue; */
+  font-size: 1.3rem;
 }
 
 .mainMailBox-list-item-clear {
@@ -334,8 +337,8 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 24px;
-  height: 24px;
+  width: 1.7rem;
+  height: 1.7rem;
 }
 
 .mainMailBox-closeBtn {
