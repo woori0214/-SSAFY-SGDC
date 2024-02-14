@@ -354,7 +354,7 @@ export default {
 }
 
 .extra_text {
-  font-size: 15px;
+  font-size: 18px;
   margin-top: 5px;
   color: black;
 }
