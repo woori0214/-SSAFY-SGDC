@@ -50,16 +50,6 @@ const responseMessage = ref("");
 
 // console.log(props.friendNickname)
 onMounted(() => {
-
-    competion
-        .competitionFriendList(props.userId)
-        .then((response) => {
-            friendList.value = response.data;
-        })
-        .catch((error) => {
-            console.error('Error fetching friend list:', error);
-        });
-
     competion
         .competitionAnalysis(props.userId)
         .then((response) => {

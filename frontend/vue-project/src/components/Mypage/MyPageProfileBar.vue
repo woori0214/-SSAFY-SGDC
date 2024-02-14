@@ -206,7 +206,7 @@ export default {
       followStore
         .checkSsallowing(checkusers)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           isFollowing.value = res.data.success;
         })
         .catch((err) => {
