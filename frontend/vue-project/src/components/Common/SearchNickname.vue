@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="search-container">
     <input type="text" v-model="nickname" class="searchuser_input" placeholder="친구 닉네임 검색..." @input="searchFriends">
     <div v-if="searchResults && searchResults.length > 0" class="search-results">
       <ul>
@@ -138,13 +138,13 @@ const closeSearchResults = (event) => {
   }
 };
 
-// onMounted(() => {
-//   document.addEventListener('click', closeSearchResults);
-// });
+onMounted(() => {
+  document.addEventListener('click', closeSearchResults);
+});
 
-// onUnmounted(() => {
-//   document.removeEventListener('click', closeSearchResults);
-// });
+onUnmounted(() => {
+  document.removeEventListener('click', closeSearchResults);
+});
 const enhancedSearchResults = computed(() => {
   // isFollowingMap의 반응성을 활성화하기 위해, 맵 전체 또는 특정 키에 접근
   // 여기서는 users 배열을 기반으로 각 userId에 대한 isFollowing 값을 참조
@@ -161,6 +161,9 @@ const enhancedSearchResults = computed(() => {
 </script>
 
 <style scoped>
+.search-container {
+  position: relative;
+}
 .searchuser_input{
   height: 30px;
   font-size: large;
@@ -195,13 +198,15 @@ const enhancedSearchResults = computed(() => {
   color: #83b0e1;
 }
 
+
 .search-results {
   position: absolute;
-  z-index: 1000;
+  top: 100%; /* 입력 필드 바로 아래에 위치 */
+  left: 0;
+  width: 100%; /* 부모 컨테이너의 너비에 맞춤 */
   background-color: white;
   border: 1px solid #ccc;
-  padding: 5px;
-  list-style: none;
+  /* 기타 스타일 */
 }
 
 .search-results ul {
