@@ -48,7 +48,7 @@ const friendRecord = ref([]);
 const showResponseModal = ref(false);
 const responseMessage = ref("");
 
-console.log(props.friendNickname)
+// console.log(props.friendNickname)
 onMounted(() => {
 
     competion
@@ -86,7 +86,7 @@ const submitSendToFriend = async (friendId, categoryId) => {
         await competion.friendSend(sendFriendData);
 
         // 요청이 성공하면 콘솔에 성공 메시지를 표시합니다.
-        console.log('Friend send request sent successfully');
+        // console.log('Friend send request sent successfully');
         const response = await competion.friendSend(sendFriendData);
         responseMessage.value = `${response.data.matching.userNickname} 님에게 도전장을 보냈습니다`;
         showResponseModal.value = true;  // 새 모달 창을 표시합니다.

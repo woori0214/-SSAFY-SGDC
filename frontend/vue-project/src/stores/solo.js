@@ -85,10 +85,10 @@ export const useSoloStore = defineStore('solo', () => {
 
     //솔로모드 인증
     const soloAuth = function (formData) {
-        console.log('axios');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
+        // console.log('axios');
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
         return new Promise((resolve, reject) => {
             authorizationAPI.request({
                 method: 'patch', 
@@ -98,11 +98,11 @@ export const useSoloStore = defineStore('solo', () => {
             })
                 .then(res => {
                     resolve(res);
-                    console.log('업로드 완료');
+                    // console.log('업로드 완료');
                 })
                 .catch(err => {
+                    console.log(err);
                     reject(err);
-                    console.log('업로드 실패');
                 });
         });
     }

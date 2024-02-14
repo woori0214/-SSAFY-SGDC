@@ -145,8 +145,8 @@ export default {
       solo
         .soloToday(userStorage.getUserInformation().user_id)
         .then((res) => {
-          console.log("오늘의 진행중 리스트는?");
-          console.log(res);
+          // console.log("오늘의 진행중 리스트는?");
+          // console.log(res);
           soloTodayData.value = res.data.solos;
 
           soloTodayData.value.forEach((soloItem) => {
@@ -198,8 +198,8 @@ export default {
 
           category_id: selectedCategory.value,
         };
-        console.log("솔로 모드 도전");
-        console.log(challenge);
+        // console.log("솔로 모드 도전");
+        // console.log(challenge);
 
         solo.soloChallenge(challenge).finally(() => {
           todayList_reset();
@@ -207,7 +207,7 @@ export default {
 
         openTestModal();
       } else {
-        console.log("선택된 카테고리가 없습니다.");
+        // console.log("선택된 카테고리가 없습니다.");
       }
       closeModal();
     };
@@ -216,7 +216,7 @@ export default {
     const openModal = (category_id, solo_stauts) => {
       // console.log(category)
       selectedCategory.value = category_id;
-      console.log(selectedCategory);
+      // console.log(selectedCategory);
 
       if (solo_stauts === null) {
         isModalOpen.value = true;
@@ -240,13 +240,13 @@ export default {
       const userId = userStorage.getUserInformation().user_id;
       profile.value = file; // 반응형 참조에 파일 할당
       // 이미지 업로드 이벤트 핸들러
-      console.log("이미지 업로드 완료:", profile);
+      // console.log("이미지 업로드 완료:", profile);
       const challengeRequestJson = {
         userId: userId,
         categoryId: selectedCategory.value,
         soloAuthImg: "",
       };
-      console.log("잘 담아있나?");
+      // console.log("잘 담아있나?");
 
       const formData = new FormData();
       formData.append(
@@ -254,18 +254,18 @@ export default {
         JSON.stringify(challengeRequestJson)
       );
       formData.append("soloAuthImage", file); // file 직접 사용
-      console.log("여기까지는 왔다");
+      // console.log("여기까지는 왔다");
       solo
         .soloAuth(formData)
         .then((response) => {
-          console.log("이미지 통신 완료:", response);
+          // console.log("이미지 통신 완료:", response);
 
           closeTestModal();
         })
         .catch((error) => {
           console.error("이미지 업로드 실패:", error);
           for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
+            // console.log(`${key}: ${value}`);
           }
         })
         .finally(() => {
@@ -298,8 +298,6 @@ export default {
 }
 
 .category_container {
-  /* height: 80%; */
-  /* overflow: auto; */
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;

@@ -151,7 +151,7 @@ const checkNickname = () => {
 const updateNickname = () => {
     if (isNicknameFormatValid.value && nicknameValid.value) {
         const update_data = updateData()
-        console.log(update_data)
+        // console.log(update_data)
         userStore.userUpdate(userId.value, update_data).then(() => {
             router.go(0)
         }).catch((error) => {
@@ -170,7 +170,7 @@ const toggleDropdown = () => {
 
 const selectBadge = (badge) => {
     selectedBadge.value = badge;
-    console.log(selectedBadge.value)
+    // console.log(selectedBadge.value)
     showDropdown.value = false;
 };
 
@@ -181,7 +181,7 @@ const selectedBadgeImage = computed(() => selectedBadge.value ? selectedBadge.va
 // 리스트 받아오기
 const loadBadgeList = () => {
     userBadgeStore.getUserBadgeList(userId.value).then(res => {
-        console.log(res)
+        // console.log(res)
         badgeList.value = res.data.badges.map(badge => ({
             badge_id: badge.badge_id,
             badge_name: badge.badge_name,
@@ -197,7 +197,7 @@ const loadBadgeList = () => {
 const updateBadge = () => {
     const dataToUpdate = updateData(); // 업데이트할 데이터 가져오기
     // 서버에 업데이트 요청 보내기
-    console.log(dataToUpdate)
+    // console.log(dataToUpdate)
     userStore.userUpdate(userId.value, dataToUpdate).then(() => {
         router.go(0)
     }).catch((error) => {
@@ -208,7 +208,7 @@ const updateBadge = () => {
 // 전화번호 업데이트
 const updatePhoneNumber = () => {
     const update_data = updateData()
-    console.log(update_data)
+    // console.log(update_data)
     userStore.userUpdate(userId.value, update_data).then(() => {
         router.go(0)
     }).catch((error) => {
@@ -260,7 +260,7 @@ onMounted(() => {
     watchEffect(() => {
         if (badgeId.value !== null) {
             const currentBadge = badgeList.value.find((badge) => (badge.badge_id == badgeId.value));
-            console.log(currentBadge)
+            // console.log(currentBadge)
             if (currentBadge) {
                 userBadgeImg.value = currentBadge.badge_img; // ref를 사용한 경우 .value로 접근
             } else {

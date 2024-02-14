@@ -63,16 +63,16 @@ const resetFeedList = () => {
         feedjs
           .updateFeedView(element.feedId)
           .then((res) => {
-            console.log("feed 조회수가 증가하였습니다.");
-            console.log(res);
+            // console.log("feed 조회수가 증가하였습니다.");
+            // console.log(res);
           })
           .catch((err) => {
             console.log(err);
           });
       });
 
-      console.log("feed 데이터가 초기화 되었습니다.");
-      console.log(feeds.value);
+      // console.log("feed 데이터가 초기화 되었습니다.");
+      // console.log(feeds.value);
     })
     .catch((err) => {
       console.log(err);
@@ -81,8 +81,8 @@ const resetFeedList = () => {
 
 // 피드 추가 요청할 함수
 const moreFeedList = () => {
-  console.log("마지막 피드 아이디 : ");
-  console.log(feeds.value[feeds.value.length - 1].feedId);
+  // console.log("마지막 피드 아이디 : ");
+  // console.log(feeds.value[feeds.value.length - 1].feedId);
   feedjs
     .getFeedListPage(feeds.value[feeds.value.length - 1].feedId)
     .then((res) => {
@@ -92,16 +92,16 @@ const moreFeedList = () => {
         feedjs
           .updateFeedView(element.feedId)
           .then((res) => {
-            console.log("feed 조회수가 증가하였습니다.");
-            console.log(res);
+            // console.log("feed 조회수가 증가하였습니다.");
+            // console.log(res);
           })
           .catch((err) => {
             console.log(err);
           });
       });
 
-      console.log("feed 데이터가 추가되었습니다.");
-      console.log(feeds.value);
+      // console.log("feed 데이터가 추가되었습니다.");
+      // console.log(feeds.value);
     })
     .catch((err) => {
       console.log(err);
@@ -110,8 +110,8 @@ const moreFeedList = () => {
 
 // 현재 피드 리스트에 저장된 양이 넘칠 경우 FIFO할 함수
 const deleteFeedItem = () => {
-  console.log("피드 삭제");
-  console.log(feeds.value.length);
+  // console.log("피드 삭제");
+  // console.log(feeds.value.length);
   if (feeds.value.length > 10) {
     feeds.value.splice(0, 10);
   } else {
@@ -124,20 +124,20 @@ const handleScroll = () => {
   const { scrollTop, scrollHeight, clientHeight } = feedContainer.value;
   if (scrollTop + clientHeight >= scrollHeight) {
     // 스크롤이 맨 아래에 도달했을 때
-    console.log("스크롤 맨 아래에 도착");
+    // console.log("스크롤 맨 아래에 도착");
     plusFeedItem();
   }
 };
 
 const plusFeedItem = () => {
   // init_feeds.value = [...init_feeds.value, ...plus_feeds.value];
-  console.log("피드 추가 테스트");
+  // console.log("피드 추가 테스트");
   moreFeedList();
 
   if (feeds.value.length > 30) {
     // init_feeds.value.splice(0, 10);
     deleteFeedItem();
-    console.log("피드 넘쳐서 삭제함");
+    // console.log("피드 넘쳐서 삭제함");
   }
 };
 //

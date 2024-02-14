@@ -63,11 +63,11 @@ export default {
 
         // 언쌀로우 버튼 클릭 시 상태 변경 및 처리
         const goUnssallow = function (followingId) {
-            console.log(followingId)
+            // console.log(followingId)
             const unssallow_info = { to_user_id: followingId, from_user_id: mypageUser.value };
             followStore.deleteSsallowing(unssallow_info)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -79,7 +79,7 @@ export default {
             const ssallowing_info = { to_user_id: followId, from_user_id: mypageUser.value }
             followStore.plusSsallowing(ssallowing_info)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -115,7 +115,7 @@ export default {
 
             // ssallower의 팔로우 상태 확인 요청을 병렬로 처리
             Promise.all(ssallowerPromises).then(() => {
-                console.log("All ssallower follow statuses updated");
+                // console.log("All ssallower follow statuses updated");
             }).catch(error => {
                 console.error("Error updating ssallower follow statuses:", error);
             });

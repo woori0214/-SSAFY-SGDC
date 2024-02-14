@@ -63,7 +63,7 @@ export default {
     let mostFrequentId = null;
 
     const compet_analysis = ref([]);
-    console.log(compet_analysis.value)
+    // console.log(compet_analysis.value)
     const soloListData = ref([]);
 
     const all_wincount = computed(() => {

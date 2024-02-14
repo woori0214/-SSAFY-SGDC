@@ -17,12 +17,12 @@ export const useUserStore = defineStore('user', () => {
             authorizationAPI
                 .get(`${URL}/user-info/${userId}`)
                 .then((res) => {
-                    console.log('남은 도전장 개수 확인해봅시다.')
-                    console.log(res);
+                    // console.log('남은 도전장 개수 확인해봅시다.')
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
-                    console.log('남은 도전장 개수 확인해봅시다. 에러')
+                    // console.log('남은 도전장 개수 확인해봅시다. 에러')
                     console.log(err);
                     reject(err);
                 });
@@ -31,12 +31,12 @@ export const useUserStore = defineStore('user', () => {
 
     // 마이페이지 회원 수정
     const userUpdate = function (userId, updateData) {
-        console.log(updateData)
+        // console.log(updateData)
         return new Promise((resolve, reject) => {
             authorizationAPI
                 .patch(`${URL}/user-info-modify/${userId}`, updateData)
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -47,24 +47,24 @@ export const useUserStore = defineStore('user', () => {
     }
 
     const userProfileUpdate = function (userId, formData) {
-        console.log('axios');
-        for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
-        }
+        // console.log('axios');
+        // for (let [key, value] of formData.entries()) {
+        //     console.log(`${key}: ${value}`);
+        // }
         return new Promise((resolve, reject) => {
             authorizationAPI.request({
-                method: 'patch', 
-                url: `${URL}/user-profile-modify/${userId}`, 
-                data: formData, 
-                headers: { 'Content-Type': 'multipart/form-data' } 
+                method: 'patch',
+                url: `${URL}/user-profile-modify/${userId}`,
+                data: formData,
+                headers: { 'Content-Type': 'multipart/form-data' }
             })
                 .then(res => {
                     resolve(res);
-                    console.log('업로드 완료');
+                    // console.log('업로드 완료');
                 })
                 .catch(err => {
+                    console.log(err);
                     reject(err);
-                    console.log('업로드 실패');
                 });
         });
     }
@@ -75,7 +75,7 @@ export const useUserStore = defineStore('user', () => {
             authorizationAPI
                 .patch(`${URL}/${userId}/${badgeId}`, {})
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -95,7 +95,7 @@ export const useUserStore = defineStore('user', () => {
                     }
                 })
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {
@@ -111,7 +111,7 @@ export const useUserStore = defineStore('user', () => {
             authorizationAPI
                 .get(`${URL}/friends/${userId.value}`, { params: { user_nickname } })
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {

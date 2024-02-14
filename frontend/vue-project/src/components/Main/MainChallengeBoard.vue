@@ -181,8 +181,8 @@ const proofSolo = function (categoryId, isStatus) {
     category_id: selectedCategory.value,
   };
 
-  console.log("선택한 솔로 도전의 상태는");
-  console.log(isStatus);
+  // console.log("선택한 솔로 도전의 상태는");
+  // console.log(isStatus);
 
   if (isStatus === null) {
     try {
@@ -200,21 +200,21 @@ const handleSoloAuthImage = file => {
       const userId = userStorage.getUserInformation().user_id;
       profile.value = file; // 반응형 참조에 파일 할당
       // 이미지 업로드 이벤트 핸들러
-      console.log('이미지 업로드 완료:', profile);
+      // console.log('이미지 업로드 완료:', profile);
       const challengeRequestJson = {
         userId: userId,
         categoryId: selectedCategory.value,
         soloAuthImg: ''
       };
-      console.log('잘 담아있나?');
+      // console.log('잘 담아있나?');
 
       const formData = new FormData();
       formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
       formData.append('soloAuthImage', file); // file 직접 사용
-      console.log('여기까지는 왔다');
+      // console.log('여기까지는 왔다');
       soloStore.soloAuth(formData)
         .then((response) => {
-          console.log('이미지 통신 완료:', response);
+          // console.log('이미지 통신 완료:', response);
 
           closeTestModal();
           isVisible.value = true;
@@ -268,13 +268,13 @@ const authenticate = (item) => {
   if (item.userId && item.competId) {
     selectedCompetItem.value = { userId: item.userId, competId: item.competId };
     showModal.value = true;
-    console.log("여긴 잘 담아오나");
-    console.log(selectedCompetItem.value.userId);
-    console.log(selectedCompetItem.value.competId);
+    // console.log("여긴 잘 담아오나");
+    // console.log(selectedCompetItem.value.userId);
+    // console.log(selectedCompetItem.value.competId);
     userIdtoauth.value = selectedCompetItem.value.userId;
     competIdtoauth.value = selectedCompetItem.value.competId;
-    console.log("to" + userIdtoauth);
-    console.log(competIdtoauth);
+    // console.log("to" + userIdtoauth);
+    // console.log(competIdtoauth);
     openTestModalcompet();
   } else {
     console.error("Missing userId or competId in the item");
@@ -296,8 +296,8 @@ const fetchCompetitionData = () => {
           userId: comp.user_id,
         }));
       }
-      console.log("경쟁데이터 잘 갖고옴");
-      console.log(competData.value);
+      // console.log("경쟁데이터 잘 갖고옴");
+      // console.log(competData.value);
     })
     .catch((error) => {
       console.error("Error fetching competition data:", error);
@@ -347,7 +347,7 @@ const handleUpload = (imageSrc) => {
   competitionStore
     .competitionImage(data)
     .then((response) => {
-      console.log("이미지 업로드 성공:", response);
+      // console.log("이미지 업로드 성공:", response);
     })
     .catch((error) => {
       console.error("이미지 업로드 실패:", error);
@@ -358,22 +358,22 @@ const handleCompetAuthImage = (file) => {
   profile.value = file; // 반응형 참조에 파일 할당
   // 이미지 업로드 이벤트 핸들러
   const competId = selectedCompetItem.value.competId;
-  console.log("이미지 업로드 완료:", profile);
+  // console.log("이미지 업로드 완료:", profile);
 
-  console.log("잘 담아있나?");
+  // console.log("잘 담아있나?");
 
   const formData = new FormData();
-  console.log(userId);
-  console.log(competId);
-  console.log(file);
+  // console.log(userId);
+  // console.log(competId);
+  // console.log(file);
   formData.append("userId", userId);
   formData.append("competId", competId); // file 직접 사용
   formData.append("authImg", profile.value);
-  console.log("여기까지는 왔다");
+  // console.log("여기까지는 왔다");
   competitionStore
     .competitionImage(formData)
     .then((response) => {
-      console.log("이미지 통신 완료:", response);
+      // console.log("이미지 통신 완료:", response);
 
       closeTestModalcompet();
       isVisible.value = true;
@@ -444,10 +444,10 @@ onMounted(() => {
     soloStore
       .soloToday(userId.value)
       .then((response) => {
-        console.log("솔로 모드 현황 받은 데이터");
-        console.log(response);
+        // console.log("솔로 모드 현황 받은 데이터");
+        // console.log(response);
         response.data.solos.forEach((soloItem) => {
-          console.log(soloItem);
+          // console.log(soloItem);
 
           categories.value.forEach((todayItem) => {
             if (todayItem.id == soloItem.category_id) {
@@ -461,15 +461,15 @@ onMounted(() => {
           });
         });
 
-        console.log("업데이트한 솔로 모드 현황 테이블");
-        console.log(categories.value);
+        // console.log("업데이트한 솔로 모드 현황 테이블");
+        // console.log(categories.value);
 
         totalMinwon.value = (completed_solo.value / 6) * 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
 
         if (donut) {
           solo_percent.value = 0;
-          console.log("퍼센트지");
-          console.log(totalMinwon.value);
+          // console.log("퍼센트지");
+          // console.log(totalMinwon.value);
           const donutAnimation = setInterval(() => {
             donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
 

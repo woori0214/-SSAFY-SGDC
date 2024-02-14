@@ -144,7 +144,7 @@ const userMatchingStatus = () => {
 
       // 비활성화할 카테고리 설정
       disabledCategories.value = uniqueCategoryIds;
-      console.log("비활성화할 카테고리:", uniqueCategoryIds);
+      // console.log("비활성화할 카테고리:", uniqueCategoryIds);
     })
     .catch((error) => {
       console.error("카테고리 상태 가져오기 실패:", error);
@@ -178,17 +178,17 @@ const openRandomMatchingModal = () => {
     userId: userId,
     categoryId: selectedCategory.value,
   };
-  console.log(randomSendData);
+  // console.log(randomSendData);
 
   competSelect
     .randomSend(randomSendData)
     .then((response) => {
-      console.log("Random matching request sent successfully:", response);
+      // console.log("Random matching request sent successfully:", response);
       // 여기에 매칭 성공 시 수행할 로직을 추가할 수 있습니다.
     })
     .catch((error) => {
-      console.error("Error sending random matching request:", error);
-      console.log("잘 안되는데요");
+      console.error(error);
+      // console.log("잘 안되는데요");
       // 오류 처리 로직을 추가할 수 있습니다.
     });
 
@@ -216,18 +216,18 @@ const openFriendMatchingModal = () => {
   }
   // 카테고리가 선택되었을 경우 친구와 매치 모달을 표시
   isFriendMatchingListVisible.value = true;
-  console.log(isFriendMatchingListVisible.value);
-  console.log("친구매칭");
+  // console.log(isFriendMatchingListVisible.value);
+  // console.log("친구매칭");
   modalType.value = "friendMatching";
-  console.log(modalType.value);
+  // console.log(modalType.value);
 };
 
 // 친구 선택
 const handleFriendSelect = (friend) => {
-  console.log(friend);
+  // console.log(friend);
   selectedFriendId.value = friend.userId;
   selectedFriendNickname.value = friend.userNickname;
-  console.log(selectedFriendNickname.value);
+  // console.log(selectedFriendNickname.value);
   isFriendMatchingMessageVisible.value = true;
   isFriendMatchingListVisible.value = false;
   closeFriendsList();
@@ -259,21 +259,11 @@ const selectCategory = (category) => {
 </script>
 
 <style scoped>
-#main_box {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 2px solid #83b0e1;
-  border-radius: 25px;
-  margin: 30px 10px;
-  background-color: #e1ecf7;
-  padding: 0px;
-}
-
 .hasChallengeCount-warp {
   display: flex;
   justify-content: end;
   padding-right: 25px;
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 .hasChallengeCount-box {
   font-size: 1.6rem;
@@ -289,9 +279,10 @@ const selectCategory = (category) => {
   display: flex;
   flex-direction: column;
   border-radius: 25px;
-  margin-bottom: 5%;
+  margin-bottom: 20px;
   padding: 30px;
   /* margin-top: 3%; */
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
 .select_category_title {
@@ -336,10 +327,11 @@ const selectCategory = (category) => {
   border-radius: 25px;
   /* padding: 20px; */
   /* margin: 20px 0; */
-  margin-bottom: 5%;
+  /* margin-bottom: 5%; */
 
   /* margin-right: 2%; */
   width: calc(100% - 4px);
+  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
 }
 
 .matching_title {
@@ -387,7 +379,7 @@ const selectCategory = (category) => {
   width: calc(100% - 30px);
   display: flex;
   flex-direction: column;
-  border: 2px solid #83b0e1;
+  border: none;
   border-radius: 25px;
   margin: 30px 10px;
   background-color: #e1ecf7;

@@ -89,15 +89,15 @@ export const useFollowStore = defineStore('follow', () => {
     }
 
     const plusSsallowing2 = function (toUserId, fromUserId) {
-        console.log('통신연결');
-        console.log(toUserId);
-        console.log(fromUserId);
+        // console.log('통신연결');
+        // console.log(toUserId);
+        // console.log(fromUserId);
         
         return new Promise((resolve, reject) => {
             axios
                 .post(`${URL}/${toUserId}/${fromUserId}`, {})
                 .then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     resolve(res);
                 })
                 .catch((err) => {

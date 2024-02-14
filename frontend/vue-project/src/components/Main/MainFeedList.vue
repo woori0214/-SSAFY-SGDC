@@ -73,8 +73,8 @@ const resetMainFeedList = () => {
     .then((res) => {
       feedlist.value = [...res.data.data.content];
 
-      console.log("feed 데이터가 초기화 되었습니다.");
-      console.log(feedlist.value);
+      // console.log("feed 데이터가 초기화 되었습니다.");
+      // console.log(feedlist.value);
     })
     .catch((err) => {
       console.log(err);

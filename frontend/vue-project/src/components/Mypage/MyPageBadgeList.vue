@@ -40,7 +40,7 @@ export default {
 
       const userBadge = user_badge.value.find(userBadge => userBadge.badge_id === badge.badgeId);
       if (!userBadge) return nobadgeimg;
-      console.log(userBadge)
+      // console.log(userBadge)
       return badge.badgeImg
       
     };
@@ -50,10 +50,10 @@ export default {
 
       badgeStore.getUserBadgeList(userId.value)
         .then((res) => {
-          console.log('유저뱃지 가져옴')
-          console.log(res.data)
+          // console.log('유저뱃지 가져옴')
+          // console.log(res.data)
           user_badge.value = res.data.badges
-          console.log(user_badge.value)
+          // console.log(user_badge.value)
         })
         .catch((err) => {
           // console.log('뱃지못가져옴')

@@ -49,9 +49,6 @@
             <button class="mainMailBox-list-item-subBtn" @click="checkChallenge(mail_item.id)">
               미션확인
             </button>
-            <button class="mainMailBox-list-item-clear">
-              <span class="material-symbols-outlined"> close </span>
-            </button>
           </div>
 
 
@@ -63,9 +60,6 @@
               [{{ categoryMapping[mail_item.category_id] }}] {{ mail_item.other_nickname }}님과의 경쟁 결과가 나왔습니다.
             </div>
             <button class="mainMailBox-list-item-subBtn" @click="showResultModal(mail_item)">결과확인</button>
-            <button class="mainMailBox-list-item-clear">
-              <span class="material-symbols-outlined"> close </span>
-            </button>
           </div>
 
 
@@ -215,14 +209,14 @@ const fetchMailbox = () => {
           ...item,
           kind: 'closeChallenge'
         })); // 예시에서는 competitions 배열을 직접 할당합니다.
-        console.log('잘 갖고왔습니다');
+        // console.log('잘 갖고왔습니다');
         userCompet.competitionProgressDetail(userStorage.getUserInformation().user_id)
           .then(response => {
             const progressCompetitions = response.data.competitions.map(item2 => ({
               ...item2,
               kind: 'matchChallenge'
             }));
-            console.log('잘 갖고왔습니다.');
+            // console.log('잘 갖고왔습니다.');
             mainmailList.value = [...finishCompetitions, ...progressCompetitions].reverse();
           })
           .catch(error => {

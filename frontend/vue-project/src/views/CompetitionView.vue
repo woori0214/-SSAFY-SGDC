@@ -1,8 +1,10 @@
 <template>
   <div class="competmode_div">
-    <h1 class="compet_title">경쟁모드</h1>
-    <div class="select_body">
-      <CompetitionSelect></CompetitionSelect>
+    <div class="compet_select">
+      <h1 class="compet_title">경쟁모드</h1>
+      <div class="select_body">
+        <CompetitionSelect></CompetitionSelect>
+      </div>
     </div>
     <div class="mail_box_body">
       <CompetitionMailbox></CompetitionMailbox>
@@ -23,9 +25,9 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
   flex: 1;
 }
 
-.select_body[data-v-ccb05c14] {
-    display: flex;
-    justify-content: center;
+.select_body {
+  display: flex;
+  justify-content: center;
 }
 
 .mail_box_body {
@@ -43,30 +45,34 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
   padding: 10px;
   display: flex;
   justify-content: center;
-  margin: auto; 
+  margin: auto;
   margin-top: 20px;
 }
 
 .competmode_div {
-    display: flex;
-    flex-direction: column;
-    /* justify-content: center;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* justify-content: center;
     align-items: center; */
-    background-color: #e1ecf7;
-    border-radius: 30px;
-    text-align: center;
+  /* background-color: #e1ecf7;
+  border-radius: 30px; */
+  text-align: center;
 }
 
-
-.main_box[data-v-c4d545a8] {
-    width:calc(100% - 30px);
-    display: flex;
-    flex-direction: column;
-    border: 2px solid #83b0e1;
-    border-radius: 25px;
-    margin: 30px 10px;
-    background-color: #e1ecf7;
-    padding: 0px;
+.compet_select{
+  background-color: #e1ecf7;
+  border-radius: 30px;
 }
 
+.main_box {
+  width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 25px;
+  margin: 30px 10px;
+  background-color: #e1ecf7;
+  padding: 0px;
+}
 </style>

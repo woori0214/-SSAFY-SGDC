@@ -34,7 +34,7 @@ export default {
     onMounted(() => {
       soloStore.soloList(userId.value)
         .then((res) => {
-          console.log(res)
+          // console.log(res)
           soloListData.value = res.data.solos
         })
         .catch((error) => {

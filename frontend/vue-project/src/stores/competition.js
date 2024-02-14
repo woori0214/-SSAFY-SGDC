@@ -113,7 +113,7 @@ export const useCompetionStore = defineStore('competition', () => {
         // console.log('axios');
         // console.log(`Request URL: ${URL2}image-auth/upload`);
         for (let [key, value] of formData.entries()) {
-            console.log(`${key}: ${value}`);
+            // console.log(`${key}: ${value}`);
         }
         return new Promise((resolve, reject) => {
             authorizationAPI.request({
@@ -124,11 +124,11 @@ export const useCompetionStore = defineStore('competition', () => {
             })
                 .then(res => {
                     resolve(res);
-                    console.log('업로드 완료');
+                    // console.log('업로드 완료');
                 })
                 .catch(err => {
                     reject(err);
-                    console.log('업로드 실패');
+                    console.log(err);
                     for (let [key, value] of formData.entries()) {
                         console.log(`${key}: ${value}`);
                     }
@@ -158,7 +158,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 .get(`${URL}/today-finish-compet-list/${userId}`)
                 .then((res) => {
                     resolve(res);
-                    console.log('오늘 경쟁종료한 카테고리 리스트 갖고오기');
+                    // console.log('오늘 경쟁종료한 카테고리 리스트 갖고오기');
                 })
                 .catch((err) => {
                     console.log(err)

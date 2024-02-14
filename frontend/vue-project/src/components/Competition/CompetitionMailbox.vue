@@ -199,7 +199,7 @@ const acceptChallenge = (index) => {
 <style scoped>
 .main_box {
   background-color: #e1ecf7;
-  border: 2px solid #83b0e1;
+  border: none;
   width: calc(100% - 44px);
   display: flex;
   flex-direction: column;
@@ -208,7 +208,6 @@ const acceptChallenge = (index) => {
   padding: 20px;
   border-radius: 25px;
   box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.1);
-  margin: 0 10px;
 }
 
 .mailbox_title {
@@ -225,7 +224,7 @@ const acceptChallenge = (index) => {
 
 .mail_box {
   background-color: #e1ecf7;
-  border: 2px solid #aecbeb;
+  border: none;
   max-height: 100%;
   overflow: auto;
   /* border-radius: 25px; */
