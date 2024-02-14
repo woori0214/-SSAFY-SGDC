@@ -34,9 +34,9 @@ public class FeedReportController {
     @Operation(summary = "피드 신고하기 기능", description="특정 피드 신고")
     @Parameters({
             @Parameter(name = "userId",  schema=@Schema(implementation = int.class), description = "신고하는 사용자 PK"),
-            @Parameter(name = "reportUserId",  schema=@Schema(implementation = int.class), description = "신고당한 사용자 닉네임"),
+            @Parameter(name = "reportUserId",  schema=@Schema(implementation = String.class), description = "신고당한 사용자 닉네임"),
             @Parameter(name = "feedId", schema=@Schema(implementation = int.class), description = "신고하는 하는 피드 PK"),
-            @Parameter(name = "reportDetail", schema=@Schema(implementation = int.class), description = "신고 사유"),
+            @Parameter(name = "reportDetail", schema=@Schema(implementation = String.class), description = "신고 사유"),
     })
     @PostMapping("/")
     public DataResponseDto<FeedReport> reportFeed(
