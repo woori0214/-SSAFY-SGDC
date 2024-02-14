@@ -19,6 +19,7 @@ import com.ssafy.sgdc.competition.repository.MatchingRepo;
 import com.ssafy.sgdc.enums.CategoryStatus;
 import com.ssafy.sgdc.enums.CompetResult;
 import com.ssafy.sgdc.enums.S3ImageFolder;
+import com.ssafy.sgdc.feed.service.FeedService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ public class ImageAuthService {
     private final CompetDetailRepo competDetailRepo;
     private final UserCategoryRepo userCategoryRepo;
     private final BadgeService badgeService;
+    private final FeedService feedService;
 
     private String bucketName="sgdc-test-bucket"; // S3 버킷 이름
 
@@ -107,6 +109,7 @@ public class ImageAuthService {
             // 끝난 경기에 뱃지 부여
             badgeService.branchCategory(matching.getUser().getUserId(), matching.getCategory().getCategoryId());
             badgeService.branchCategory(otherMatching.getUser().getUserId(), otherMatching.getCategory().getCategoryId());
+            feedService.createFeed(competition);
         }
         return authImgUrl;
     }

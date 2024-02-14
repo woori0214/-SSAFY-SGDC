@@ -1,6 +1,7 @@
 package com.ssafy.sgdc.feed.service;
 
 
+import com.ssafy.sgdc.badge.domain.Badge;
 import com.ssafy.sgdc.competition.domain.Competition;
 import com.ssafy.sgdc.competition.domain.ImageAuth;
 import com.ssafy.sgdc.competition.domain.Matching;
@@ -14,6 +15,7 @@ import com.ssafy.sgdc.feed.repository.FeedLikeRepo;
 import com.ssafy.sgdc.feed.repository.FeedRepo;
 import com.ssafy.sgdc.feed.dto.FeedOneDto;
 import com.ssafy.sgdc.feed.entity.Feed;
+import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -46,6 +48,9 @@ public class FeedService {
         Matching receiverMatching = findMatchingByIsSender(matches, IsSender.N); // 수신자 도전장
 
         validateMatchings(senderMatching, receiverMatching);
+        if(competition.getCompetDetail().getCompetResult()==null) {
+            throw new RuntimeException("경쟁 결과가 존재하지 않습니다.");
+        }
         CompetResult result = competition.getCompetDetail().getCompetResult();
 
         if (result.equals(CompetResult.BOTH_FAIL)) {
@@ -64,12 +69,35 @@ public class FeedService {
      */
 
     public FeedOneDto getFeedOne(int feedId, int userId) {
+        // 피드 검색
         Feed feed = feedRepo.findByFeedId(feedId)
                 .orElseThrow(() -> new RuntimeException("해당 피드를 찾을 수 없습니다."));
 
+        // 매치 검색
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
-        Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
+        Matching senderMatching = findSenderMatching(matches);
+
+        // 좋아요 여부 확인
         boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feedId);
+
+        // DTO 생성
+        return buildFeedOneDto(feed, senderMatching, isLiked);
+    }
+
+    private Matching findSenderMatching(List<Matching> matches) {
+        for (Matching match : matches) {
+            if (match.getIsSender() == IsSender.Y) {
+                return match;
+            }
+        }
+        throw new RuntimeException("송신자 매치를 찾을 수 없습니다.");
+    }
+
+    private FeedOneDto buildFeedOneDto(Feed feed, Matching senderMatching, boolean isLiked) {
+        User sender = senderMatching.getUser();
+        Badge badge = sender.getBadgeId();
+
+        String badgeImg = (badge == null) ? "null" : badge.getBadgeImg();
 
         return new FeedOneDto(
                 feed.getFeedId(),
@@ -81,9 +109,10 @@ public class FeedService {
                 feed.getCreateAt(),
                 feed.getUpdateAt(),
                 feed.getFeedImg(),
-                senderMatching.getUser().getUserId(),
-                senderMatching.getUser().getUserNickname(),
-                senderMatching.getUser().getUserImg(),
+                sender.getUserId(),
+                sender.getUserNickname(),
+                sender.getUserImg(),
+                badgeImg,
                 isLiked
         );
     }
@@ -126,6 +155,10 @@ public class FeedService {
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
         boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feed.getFeedId());
+        Badge badge = senderMatching.getUser().getBadgeId();
+        String badgeImg = (badge == null) ? "null" : badge.getBadgeImg();
+
+
 
         // Feed 엔티티의 데이터를 사용하여 FeedOneDto 객체를 생성합니다.
         return new FeedOneDto(
@@ -142,6 +175,7 @@ public class FeedService {
                 senderMatching.getUser().getUserId(),
                 senderMatching.getUser().getUserNickname(),
                 senderMatching.getUser().getUserImg(),
+                badgeImg,
                 isLiked
         );
     }

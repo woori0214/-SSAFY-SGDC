@@ -18,8 +18,9 @@ public class FeedOneDto {
     private int userId;
     private String userNickname;
     private String userImg;
+    private String userBadgeImg;
     private boolean isLiked;
-    public FeedOneDto(int feedId, String feedTitle, String feedContent, int feedLikeNum, int views, boolean privacy, LocalDateTime createAt, LocalDateTime updateAt, String feedImg, int userId, String userNickname, String userImg, boolean isLiked) {
+    public FeedOneDto(int feedId, String feedTitle, String feedContent, int feedLikeNum, int views, boolean privacy, LocalDateTime createAt, LocalDateTime updateAt, String feedImg, int userId, String userNickname, String userImg, String userBadgeImg, boolean isLiked) {
         this.feedId = feedId;
         this.feedTitle = feedTitle;
         this.feedContent = feedContent;
@@ -32,6 +33,7 @@ public class FeedOneDto {
         this.userId = userId;
         this.userNickname = userNickname;
         this.userImg = userImg;
+        this.userBadgeImg = userBadgeImg;
         this.isLiked = isLiked;
     }
 }
