@@ -201,9 +201,10 @@ export default {
         console.log("솔로 모드 도전");
         console.log(challenge);
 
-        solo.soloChallenge(challenge);
+        solo.soloChallenge(challenge).finally(() => {
+          todayList_reset();
+        });
 
-        todayList_reset();
         openTestModal();
       } else {
         console.log("선택된 카테고리가 없습니다.");
