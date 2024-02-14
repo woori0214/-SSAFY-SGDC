@@ -414,6 +414,53 @@ public class CompetitionService {
         return competitionDtoList;
     }
 
+    //오늘 종료된 경쟁 목록 조회
+    public List<CompetitionDto> getTodayCompleteCompetitionList(int userId) {
+
+        List<CompetitionDto> competitionDtoList = new ArrayList<>();
+
+        List<Matching> matchings = matchingRepo.findAcceptMatchingListByUserId(userId);
+
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.plusDays(1).atStartOfDay();
+
+        for (Matching matching : matchings) {
+
+            // 경쟁 결과가 나온 경쟁인지 확인
+            if (matching.getCompetition().getCompetDetail() != null
+            && !matching.getCompetition().getDoneAt().isBefore(startOfDay)
+                    && matching.getCompetition().getDoneAt().isBefore(endOfDay)
+            ) {
+
+                Matching otherMatching = matchingRepo.findOtherMatching(matching.getCompetition().getCompetId(),
+                                matching.getMatchingId())
+                        .orElseThrow(() -> new RuntimeException("상대방 도전장 없음"));
+
+                ImageAuth userImageAuth =
+                        imageAuthRepo.findByMatcingMatchingId(matching.getMatchingId()).orElse(null);
+                ImageAuth otherImageAuth =
+                        imageAuthRepo.findByMatcingMatchingId(otherMatching.getMatchingId()).orElse(null);
+
+                CompetitionDto competitionDto = CompetitionDto.of(
+                        matching.getCompetition(),
+                        matching.getMatchingId(),
+                        matching.getCategory().getCategoryId(),
+                        matching.getIsSender(),
+                        otherMatching.getUser().getUserId(),
+                        otherMatching.getUser().getUserNickname(),
+                        userImageAuth != null ? userImageAuth.getAuthImg() : null,
+                        otherImageAuth != null ? otherImageAuth.getAuthImg() : null,
+                        matching.getCompetition().getDoneAt()
+                );
+
+                competitionDtoList.add(competitionDto);
+            }
+        }
+
+        return competitionDtoList;
+    }
+
     // 종료된 경쟁 조회
     public CompetitionDto getCompleteCompetition(int userId, int competId) {
         Matching matching = matchingRepo.findAcceptMatchingByUserIdAndCompetId(userId, competId)
