@@ -97,9 +97,9 @@
               </div>
             </div>
             <!-- Carousel 컨트롤 -->
-            <button @click="prev">＜</button>
-            <span>{{ currentIndex + 1 }}/{{ competData.length }}</span>
-            <button @click="next">＞</button>
+            <button @click="prev" class="indicators-moveBtn"><</button>
+            <span>&nbsp;&nbsp;{{ currentIndex + 1 }}&nbsp;/&nbsp;{{ competData.length }}&nbsp;&nbsp;</span>
+            <button @click="next" class="indicators-moveBtn">></button>
             <!-- 인디케이터 -->
             <div class="indicators">
               <span
@@ -656,6 +656,9 @@ onMounted(() => {
   /* margin: 5px; */
 
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 4px);
 }
 
 .compet_head {
@@ -688,6 +691,19 @@ onMounted(() => {
   height: 100px;
 }
 
+.indicators-moveBtn{
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 100%;
+  background-color: #fff;
+  transition: background-color 0.3s ease;
+}
+.indicators-moveBtn:hover{
+  background-color: #3f8bc9;
+  color: #fff;
+}
+
 .carousel_item {
   display: flex;
   flex-direction: row;
@@ -703,6 +719,8 @@ onMounted(() => {
   background-color: #aecbeb;
   border-radius: 20px;
   /* height: 80%; */
+  flex-grow: 1;
+  display: flex;
 }
 
 .carousel_container {
