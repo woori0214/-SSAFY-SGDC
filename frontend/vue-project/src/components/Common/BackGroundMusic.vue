@@ -19,46 +19,47 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import sunny1 from "../../assets/bgm/1SunnyWeather.mp3";
-import sunny2 from "../../assets/bgm/1SunnyWeather.mp3";
-import sunny5 from "../../assets/bgm/1SunnyWeather.mp3";
-import sunny9 from "../../assets/bgm/1SunnyWeather.mp3";
-import rainy2 from "../../assets/bgm/1SunnyWeather.mp3";
+import sunny1 from "../../assets/1SunnyWeather.mp3";
 
-const bgm_lsit = ref([
-  { source: sunny1, title: "Sunny Weather 1:00 a.m." },
-  { source: sunny2, title: "Sunny Weather 2:00 a.m." },
-  { source: sunny5, title: "Sunny Weather 5:00 a.m." },
-  { source: sunny9, title: "Sunny Weather 9:00 a.m." },
-  { source: rainy2, title: "Rainy Weather 2:00 a.m." },
-]);
+const audioStatus = ref(false);
+const myAudio = new Audio(sunny1);
 
-const audio = new Audio(sunny1);
-
-const audioStatus = ref(true);
-
-// 오디오가 재생될 때 호출되는 함수
-audio.addEventListener("play", () => {
-  audioStatus.value = true;
-});
-
-// 오디오가 일시 중지될 때 호출되는 함수
-audio.addEventListener("pause", () => {
-  audioStatus.value = false;
-});
+myAudio.loop = true;
+// myAudio.autoplay = true;
 
 const OnOffAudio = () => {
-  if (!audioStatus.value) {
-    audio.play();
-  } else {
-    audio.pause();
+  console.log("오디오 버튼 함수");
+  console.log(audioStatus);
+  console.log(myAudio);
+  try {
+    if (!audioStatus.value) {
+      myAudio.play();
+    } else {
+      myAudio.pause();
+    }
+  } catch (error) {
+    console.log("오디오 버튼 오류");
+    console.log(error);
   }
 };
 
+console.log("오디오 객체 :");
+console.log(myAudio);
+
 onMounted(() => {
-  audio.src = sunny1;
-  audio.loop = true;
-  audio.autoplay = true;
+  console.log("온 마운트 오디오 객체 :");
+  console.log(myAudio);
+  // 오디오가 재생될 때 호출되는 함수
+  myAudio.addEventListener("play", () => {
+    console.log("오디오 재생");
+    audioStatus.value = true;
+  });
+
+  // 오디오가 일시 중지될 때 호출되는 함수
+  myAudio.addEventListener("pause", () => {
+    console.log("오디오 중지");
+    audioStatus.value = false;
+  });
 });
 </script>
 

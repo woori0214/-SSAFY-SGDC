@@ -12,15 +12,19 @@
       <div class="feed_profile">
         <div class="user_profile">
           <img :src="userImg" class="feed_profile_image" />
-          <img v-if="userBadgeImg !== 'null'" :src="userBadgeImg" class="feed_profile_badge" />
+          <img
+            v-if="userBadgeImg !== 'null'"
+            :src="userBadgeImg"
+            class="feed_profile_badge"
+          />
           <div class="feed_user_name">{{ userNickname }}</div>
         </div>
         <button @click="handleDeclareClick" class="declare_button">
-          <img
+          <!-- <img
             src="@/assets/siren.png"
             alt="Declare Icon"
             class="declare_icon"
-          />
+          /> -->
         </button>
       </div>
       <div class="feed_content">{{ feedTitle }}</div>
@@ -38,7 +42,9 @@
           />
           <img src="@/assets/heart_check.svg" class="heart_icon_done" v-else />
         </button>
-        {{ refFeedLikedNum }}
+        <div>
+          {{ refFeedLikedNum }}
+        </div>
       </div>
       <div class="feed_view_cnt">조회수 {{ views }}</div>
     </div>
@@ -53,7 +59,7 @@ import { ref, watch } from "vue";
 import fullHeart from "@/assets/fullHeart.png";
 import emptyHeart from "@/assets/emptyHeart.png";
 import PopUpComplaint from "../PopUp/PopUpComplaint.vue";
- 
+
 export default {
   name: "feed_item",
   props: {
@@ -107,7 +113,7 @@ export default {
     },
     userBadgeImg: {
       type: String,
-      default: null
+      default: null,
     },
     isLiked: {
       type: Boolean,
@@ -228,12 +234,22 @@ export default {
   /* border: 2px solid purple; */
 }
 .heart_button {
+  width: 40px;
+  height: 40px;
   margin-left: 10px;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .feed_image_frame {
   border: 2px solid white;
   border-radius: 30px;
   background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: center;
   margin: 10px;
@@ -246,8 +262,25 @@ export default {
   max-height: 500px;
 }
 .declare_button {
-  border-radius: 15px;
+  border: 2px solid whitesmoke;
+  border-radius: 10px;
   background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('@/assets/siren.png');
+  background-size: contain;
+  /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
+  background-position: center;
+  /* 이미지 중앙 정렬 */
+  background-repeat: no-repeat;
+  transition: border 0.3s ease;
+}
+.declare_button:hover{
+  border: 2px solid #ff5c5c;
 }
 
 .feed_footbar {
@@ -258,6 +291,9 @@ export default {
 
 .feed_heart_cnt {
   /* border: 2px solid blue; */
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .feed_view_cnt {
@@ -265,9 +301,9 @@ export default {
 }
 
 .declare_icon {
-  width: 40px;
+  width: 25px;
   /* Adjust the width of the image */
-  height: 40px;
+  height: 25px;
   /* Adjust the height of the image */
 }
 .feed_frame2 {
