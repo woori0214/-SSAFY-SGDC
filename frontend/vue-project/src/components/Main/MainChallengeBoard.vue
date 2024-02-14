@@ -1,4 +1,13 @@
 <template>
+  
+  <div v-if="isVisible" class="modal-upload-complete">
+    <div class="modal-content-complete">
+      <p>인증이 완료되었습니다!</p>
+      <button @click="closeModal">확인</button>
+    </div>
+  </div>
+
+
   <div class="challenge_board">
     <div class="challenge_board_head">현황게시판</div>
 
@@ -13,7 +22,7 @@
       <div class="solo">
         <div class="solo_head">
           <div class="solo_head_item">솔로 모드 현황</div>
-        </div>
+        </div> 
         <div class="solo_board">
           <div class="success_graph">
             <!-- <div class="donut" data-percent="85.4"> -->
@@ -24,9 +33,15 @@
             </div>
           </div>
           <div class="categories">
-            <button ref="categori_btn_component" class="category_btn" v-for="category in categories" :key="category.id"
-              :class="{ completed: category.isResult === 'COMPLETE' }" :disabled="category.isAuthenticated"
-              @click="proofSolo(category.id, category.isStatus)">
+            <button
+              ref="categori_btn_component"
+              class="category_btn"
+              v-for="category in categories"
+              :key="category.id"
+              :class="{ completed: category.isResult === 'COMPLETE' }"
+              :disabled="category.isResult === 'COMPLETE'"
+              @click="proofSolo(category.id, category.isStatus)"
+            >
               {{ category.name }}
             </button>
           </div>
@@ -41,15 +56,26 @@
           <div v-if="competData.length > 0" class="carousel_container">
             <div class="carousel_slide" :style="slideStyle">
               <!-- Carousel 아이템, v-for로 competData를 반복 -->
-              <div class="carousel_item" v-for="(item, index) in competData" :key="index">
+              <div
+                class="carousel_item"
+                v-for="(item, index) in competData"
+                :key="index"
+              >
                 <!-- 로그인한 유저 부분 -->
                 <div class="player1">
-                  <img :src="item.user_img || '@/assets/defaultFace.png'" alt="user image" class="player_img" />
+                  <img
+                    :src="item.user_img || '@/assets/defaultFace.png'"
+                    alt="user image"
+                    class="player_img"
+                  />
                   <p>{{ item.user_nickname }}</p>
-                  <button v-if="!isAuthenticated" @click="authenticate(item, true)">
+                  <button
+                    v-if="!item.user_authenticated"
+                    @click="authenticate(item, true)"
+                  >
                     인증하기
                   </button>
-                  <button v-else>인증 완료</button>
+                  <div v-else>인증 완료</div>
                 </div>
                 <div class="item_category_vs">
                   <h1 class="item_category">{{ item.category }}</h1>
@@ -58,8 +84,11 @@
                 </div>
                 <!--receiver부분-->
                 <div class="player2">
-                  <img :src="item.other_user_img || '@/assets/defaultFace.png'" alt="other user image"
-                    class="player_img" />
+                  <img
+                    :src="item.other_user_img || '@/assets/defaultFace.png'"
+                    alt="other user image"
+                    class="player_img"
+                  />
                   <p>{{ item.other_user_nickname }}</p>
                   <div>
                     {{ item.other_user_authenticated ? "인증 완료" : "진행중" }}
@@ -69,15 +98,24 @@
             </div>
             <!-- Carousel 컨트롤 -->
             <button @click="prev">＜</button>
+            <span>{{ currentIndex + 1 }}/{{ competData.length }}</span>
             <button @click="next">＞</button>
             <!-- 인디케이터 -->
             <div class="indicators">
-              <span v-for="(item, index) in competData" :key="index" :class="{ active: index === currentIndex }"
-                @click="goTo(index)"></span>
+              <span
+                v-for="(item, index) in competData"
+                :key="index"
+                :class="{ active: index === currentIndex }"
+                @click="goTo(index)"
+              ></span>
             </div>
           </div>
           <div v-else class="default_image_container">
-            <img src="@/assets/tung.png" alt="No competition data" class="default_image" />
+            <img
+              src="@/assets/tung.png"
+              alt="No competition data"
+              class="default_image"
+            />
           </div>
         </div>
         <!-- 경쟁모드 아이템 end -->
@@ -102,7 +140,12 @@ import PopUpProofPictureCompet from "../PopUp/PopUpProofPictureCompet.vue";
 // selectedCompetItem 정의 추가
 // selectedCompetItem의 초기값 설정
 const selectedCompetItem = ref({ userId: null, competId: null });
+const isVisible = ref(false);
 
+function closeModal() {
+  isVisible.value = false; // 모달창 숨김
+  window.location.reload(); // 페이지 새로고침
+}
 const userStorage = useUserStorageStore();
 const competitionStore = useCompetionStore();
 const soloStore = useSoloStore();
@@ -120,15 +163,14 @@ const isTestModalOpen = ref(false);
 const isTestModalOpencompet = ref(false);
 const showModal = ref(false);
 const selectedCategory = ref(null);
-const isAuthenticated = ref(false);
 
 const categories = ref([
-  { id: 1, name: "기상", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
-  { id: 2, name: "알고리즘", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
-  { id: 3, name: "운동", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
-  { id: 4, name: "스터디", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
-  { id: 5, name: "식단", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
-  { id: 6, name: "절제", isStatus: null, isResult: "INCOMPLETE", isAuthenticated: false },
+  { id: 1, name: "기상", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 2, name: "알고리즘", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 3, name: "운동", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 4, name: "스터디", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 5, name: "식단", isStatus: null, isResult: "INCOMPLETE" },
+  { id: 6, name: "절제", isStatus: null, isResult: "INCOMPLETE" },
 ]);
 
 // 솔로모드 인증 바로가기
@@ -155,38 +197,38 @@ const proofSolo = function (categoryId, isStatus) {
 
 // 솔로모드 인증
 const handleSoloAuthImage = file => {
-  const userId = userStorage.getUserInformation().user_id;
-  profile.value = file; // 반응형 참조에 파일 할당
-  // 이미지 업로드 이벤트 핸들러
-  console.log('이미지 업로드 완료:', profile);
-  const challengeRequestJson = {
-    userId: userId,
-    categoryId: selectedCategory.value,
-    soloAuthImg: ''
-  };
-  console.log('잘 담아있나?');
+      const userId = userStorage.getUserInformation().user_id;
+      profile.value = file; // 반응형 참조에 파일 할당
+      // 이미지 업로드 이벤트 핸들러
+      console.log('이미지 업로드 완료:', profile);
+      const challengeRequestJson = {
+        userId: userId,
+        categoryId: selectedCategory.value,
+        soloAuthImg: ''
+      };
+      console.log('잘 담아있나?');
 
-  const formData = new FormData();
-  formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
-  formData.append('soloAuthImage', file); // file 직접 사용
-  console.log('여기까지는 왔다');
-  soloStore.soloAuth(formData)
-    .then((response) => {
-      console.log('이미지 통신 완료:', response);
+      const formData = new FormData();
+      formData.append('challengeRequestJson', JSON.stringify(challengeRequestJson));
+      formData.append('soloAuthImage', file); // file 직접 사용
+      console.log('여기까지는 왔다');
+      soloStore.soloAuth(formData)
+        .then((response) => {
+          console.log('이미지 통신 완료:', response);
 
-      closeTestModal();
-      //쓸까말까?
-      window.location.reload();
-    })
-    .catch((error) => {
-      console.error('이미지 업로드 실패:', error);
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
+          closeTestModal();
+          isVisible.value = true;
+          
+        })
+        .catch((error) => {
+          console.error('이미지 업로드 실패:', error);
+          for (let [key, value] of formData.entries()) {
+            console.log(`${key}: ${value}`);
+          }
 
-    });
+        });
 
-};
+    };
 
 // 인증 모달창
 const openTestModal = () => {
@@ -311,15 +353,6 @@ const handleUpload = (imageSrc) => {
       console.error("이미지 업로드 실패:", error);
     });
 };
-// const updateAuthenticationStatus = (userId, competId) => {
-//   competData.value = competData.value.map(item => {
-//     if (item.userId === userId && item.competId === competId) {
-//       // 객체 내의 user_authenticated 속성을 업데이트
-//       return { ...item, user_authenticated: true };
-//     }
-//     return item;
-//   });
-// };
 const handleCompetAuthImage = (file) => {
   const userId = userStorage.getUserInformation().user_id;
   profile.value = file; // 반응형 참조에 파일 할당
@@ -343,7 +376,10 @@ const handleCompetAuthImage = (file) => {
       console.log("이미지 통신 완료:", response);
 
       closeTestModalcompet();
-      isAuthenticated.value = true;
+      isVisible.value = true;
+      
+     
+      
     })
     .catch((error) => {
       console.error("이미지 업로드 실패:", error);
@@ -352,7 +388,6 @@ const handleCompetAuthImage = (file) => {
       }
     });
 };
-
 function getCategoryNameById(id) {
   const categoryMap = {
     1: "기상",
@@ -406,79 +441,46 @@ onMounted(() => {
   userId.value = userInformation.user_id;
 
   if (userId.value) {
-    // soloStore
-    //   .soloToday(userId.value)
-    //   .then((response) => {
-    //     console.log("솔로 모드 현황 받은 데이터");
-    //     console.log(response);
-    //     response.data.solos.forEach((soloItem) => {
-    //       console.log(soloItem);
+    soloStore
+      .soloToday(userId.value)
+      .then((response) => {
+        console.log("솔로 모드 현황 받은 데이터");
+        console.log(response);
+        response.data.solos.forEach((soloItem) => {
+          console.log(soloItem);
 
-    //       categories.value.forEach((todayItem) => {
-    //         if (todayItem.id == soloItem.category_id) {
-    //           todayItem.isStatus = soloItem.solo_status;
-    //           todayItem.isResult = soloItem.solo_result;
-    //           console.log(todayItem.isStatus);
-    //           console.log(todayItem.isResult);
+          categories.value.forEach((todayItem) => {
+            if (todayItem.id == soloItem.category_id) {
+              todayItem.isStatus = soloItem.solo_status;
+              todayItem.isResult = soloItem.solo_result;
 
-    //           if (soloItem.solo_result == "COMPLETE") {
-    //             completed_solo.value++;
-    //             todayItem.isAuthenticated = true;
-    //             console.log(todayItem.isAuthenticated);
-    //           }
-    //         }
-    //       }
-    //       );
-    //       // const found = soloData.find(solo => solo.category_id === category.id);
-    //       // if (found && found.solo_result === "COMPLETE") {
-    //       //   category.isAuthenticated = true; // 인증 완료 상태로 설정
-    //       // }
-    //     });
-    soloStore.soloToday(userId.value).then((response) => {
-      console.log("솔로 모드 현황 받은 데이터", response);
+              if (soloItem.solo_result == "COMPLETE") {
+                completed_solo.value++;
+              }
+            }
+          });
+        });
 
-      response.data.solos.forEach((soloItem) => {
-        const categoryIndex = categories.value.findIndex(category => category.id === soloItem.category_id);
+        console.log("업데이트한 솔로 모드 현황 테이블");
+        console.log(categories.value);
 
-        if (categoryIndex !== -1) {
-          // 카테고리 상태와 결과 업데이트
-          const updatedCategory = {
-            ...categories.value[categoryIndex],
-            isStatus: soloItem.solo_status,
-            isResult: soloItem.solo_result,
-            isAuthenticated: soloItem.solo_result === "COMPLETE"
-          };
+        totalMinwon.value = (completed_solo.value / 6) * 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
 
-          // Vue가 변경을 감지할 수 있도록 categories 배열 내의 항목을 새 객체로 교체
-          categories.value[categoryIndex] = updatedCategory;
+        if (donut) {
+          solo_percent.value = 0;
+          console.log("퍼센트지");
+          console.log(totalMinwon.value);
+          const donutAnimation = setInterval(() => {
+            donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
 
-          // solo_result가 "COMPLETE"인 경우 completed_solo.value 증가
-          if (soloItem.solo_result === "COMPLETE") {
-            completed_solo.value++;
-          }
-        }
-      });
-
-      console.log("업데이트한 솔로 모드 현황 테이블");
-      console.log(categories.value);
-
-      totalMinwon.value = (completed_solo.value / 6) * 100; //현재 진행도 값 << ref와 동기화 시켜줘야함
-
-      if (donut) {
-        solo_percent.value = 0;
-        console.log("퍼센트지");
-        console.log(totalMinwon.value);
-        const donutAnimation = setInterval(() => {
-          donut.style.background = `conic-gradient(#3f8bc9 0 ${solo_percent.value}%, #f8f9fb ${solo_percent.value}% 100% )`;
-
-          if (solo_percent.value >= totalMinwon.value) {
-            solo_percent.value--;
-            clearInterval(donutAnimation);
-          }
-          solo_percent.value++;
-        }, 30);
-      } // 창 크기 조절 시 마진 재조정
-    })
+            if (solo_percent.value >= totalMinwon.value) {
+              solo_percent.value--;
+              clearInterval(donutAnimation);
+            }
+            solo_percent.value++;
+          }, 30);
+        } // 창 크기 조절 시 마진 재조정
+      })
       .catch((error) => {
         console.error("Error fetching solo today data:", error);
       });
@@ -850,19 +852,59 @@ onMounted(() => {
 * {
   font-family: "jua";
 }
-
 .default_image_container {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  /* 필요에 따라 조정 */
+  height: 100%; /* 필요에 따라 조정 */
 }
 
 .default_image {
   margin: 7%;
   max-width: 100%;
-  height: auto;
-  /* 이미지 비율 유지 */
+  height: auto; /* 이미지 비율 유지 */
+}
+
+.modal-upload-complete {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.6); /* 반투명 검은색 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100; /* 다른 요소 위에 표시 */
+}
+
+.modal-content-complete {
+  width: 90%;
+  max-width: 400px; /* 모달 최대 너비 */
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px; /* 라운드된 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+  text-align: center;
+  position: relative;
+  z-index: 101;
+  transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.modal-content-complete p {
+  font-size: 18px; /* 텍스트 크기 */
+  color: #333; /* 텍스트 색상 */
+  margin-bottom: 20px; /* 단락 간격 */
+}
+
+.modal-content-complete button {
+  background-color: #83b0e1; /* 버튼 색상 */
+  color: white; /* 버튼 텍스트 색상 */
+  border: none; /* 테두리 제거 */
+  padding: 10px 20px; /* 패딩 */
+  border-radius: 5px; /* 라운드된 모서리 */
+  cursor: pointer; /* 커서 모양 */
+  font-size: 16px; /* 텍스트 크기 */
+  transition: background-color 0
 }
 </style>

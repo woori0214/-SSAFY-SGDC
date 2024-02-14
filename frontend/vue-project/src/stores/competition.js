@@ -152,6 +152,20 @@ export const useCompetionStore = defineStore('competition', () => {
         })
     };
 
+    const competitionFinishToday = function (userId) {
+        return new Promise((resolve, reject) => {
+            authorizationAPI
+                .get(`${URL}/today-finish-compet-list/${userId}`)
+                .then((res) => {
+                    resolve(res);
+                    console.log('오늘 경쟁종료한 카테고리 리스트 갖고오기');
+                })
+                .catch((err) => {
+                    console.log(err)
+                    reject(err);
+                });
+        })
+    };
     //종료 경쟁 정보 상세 조회(개별)
     const competitionFinishDetail = function (userId, cometId) {
         return new Promise((resolve, reject) => {
@@ -181,6 +195,7 @@ export const useCompetionStore = defineStore('competition', () => {
                 });
         })
     };
+    
 
 
     //친구 리스트 조회
@@ -240,5 +255,6 @@ export const useCompetionStore = defineStore('competition', () => {
         competitionFriendList,
         competitionAnalysis,
         competitionAnalysisCategory,
+        competitionFinishToday,
     };
 })

@@ -122,22 +122,32 @@ const userId = userInformation.user_id;
 const disabledCategories = ref([]);
 const userMatchingStatus = () => {
   const userId = userInformation.user_id;
-  competSelect
-    .competitionAnalysis(userId)
+
+  // 경기 중인 카테고리 정보 가져오기
+  competSelect.competitionAnalysis(userId)
     .then((response) => {
       const userCategories = response.data.user_categories;
-      console.log("경기 중인 카테고리 정보:", userCategories);
-
-      // "PLAY_STATUS" 상태인 카테고리의 ID를 disabledCategories 배열에 추가
       const playStatusCategoryIds = userCategories
         .filter((category) => category.categoryStatus === "PLAY_STATUS")
         .map((category) => category.category_id);
 
-      disabledCategories.value = playStatusCategoryIds;
-      console.log("진행 중인 카테고리를 가져왔습니다.");
+      // 오늘 경쟁 종료한 카테고리 리스트 가져오기
+      return competSelect.competitionFinishToday(userId)
+        .then((finishTodayResponse) => {
+          const finishTodayCategoryIds = finishTodayResponse.data.competitions.map((comp) => comp.category_id);
+          return [...playStatusCategoryIds, ...finishTodayCategoryIds];
+        });
+    })
+    .then((combinedCategoryIds) => {
+      // 중복 제거
+      const uniqueCategoryIds = Array.from(new Set(combinedCategoryIds));
+
+      // 비활성화할 카테고리 설정
+      disabledCategories.value = uniqueCategoryIds;
+      console.log("비활성화할 카테고리:", uniqueCategoryIds);
     })
     .catch((error) => {
-      console.error("이미 진행 중인 카테고리를 가져오지 못했습니다.", error);
+      console.error("카테고리 상태 가져오기 실패:", error);
     });
 };
 
