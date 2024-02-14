@@ -32,6 +32,8 @@ const nickname = ref('');
 const searchResults = ref(null);
 const isFollowingMap = ref(new Map());
 
+const userNickname = ref(userInformation.user_nickname)
+
 const searchFriends = async () => {
   const trimmedNickname = nickname.value.trim();
   if (trimmedNickname === '') {
@@ -41,7 +43,9 @@ const searchFriends = async () => {
   try {
     const response = await userStore.findAllfriends(trimmedNickname);
     if (Array.isArray(response.data.data.content)) {
-      searchResults.value = response.data.data.content.map((user) => {
+      // 현재 사용자의 닉네임과 다른 사용자만 필터링
+      const filteredResults = response.data.data.content.filter(user => user.userNickname !== userInformation.user_nickname);
+      searchResults.value = filteredResults.map((user) => {
         return {
           userId: user.userId,
           userNickname: user.userNickname
