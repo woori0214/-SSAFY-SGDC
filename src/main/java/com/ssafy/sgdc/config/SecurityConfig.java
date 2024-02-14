@@ -48,6 +48,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api-docs/**").permitAll()
                                 .requestMatchers("/api/authenticate").permitAll()
                                 ///////////////////
+                                .requestMatchers("/api/v1/feed/**").permitAll()
                                 .requestMatchers("/api/v1/user/signup/**").permitAll()
                                 .requestMatchers("/api/v1/user/login/**").permitAll()
                                 .requestMatchers("/api/v1/user/re-auth/**").permitAll()
