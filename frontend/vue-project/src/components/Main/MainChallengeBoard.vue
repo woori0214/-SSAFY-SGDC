@@ -875,6 +875,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   height: 100%; /* 필요에 따라 조정 */
+  margin: 0 auto;
 }
 
 .default_image {
