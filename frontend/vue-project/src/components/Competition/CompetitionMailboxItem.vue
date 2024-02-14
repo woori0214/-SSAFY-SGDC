@@ -1,7 +1,7 @@
 <template>
   <div class="competition-mailbox-item">
     <div class="mail-item-content">
-      <span>[{{matchKind}}] {{ mailSender }}님이 {{ mailCategory }}을/를 신청하였습니다.</span>
+      <span>[{{matchKind}}] {{ mailSender }}님이 {{ mailCategory }}을(를) 신청하였습니다.</span>
       
     </div>
     <span>유효 시간: {{ mailRemainTime }}</span>

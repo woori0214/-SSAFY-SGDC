@@ -1,4 +1,19 @@
 <template>
+  <div v-if="showCategoryModal" class="mission-category-modal">
+    <h2>{{ nowCategory }}</h2>
+    
+    <!-- 카테고리별 문구 표시 -->
+    <div v-if="nowCategory">
+      <template v-if="nowCategory === '기상'">ssafy입실시간을 찍어 인증해주세요!</template>
+      <template v-else-if="nowCategory === '알고리즘'">알고리즘 문제를 하나 해결해 보세요!</template>
+      <template v-else-if="nowCategory === '운동'">운동한 사진을 인증해보세요!</template>
+      <template v-else-if="nowCategory === '스터디'">오늘 하루 공부한 시간을 인증해주세요!</template>
+      <template v-else-if="nowCategory === '식단'">샐러드 빈그릇을 인증해주세요!</template>
+      <template v-else-if="nowCategory === '절제'">오늘 무엇을 절제했는지 인증해주세요!</template>
+      <template v-else>선택하신 도전에 최선을 다하세요!</template>
+    </div>
+    <button @click="closeCategoryModal">Close</button>
+  </div>
   <!-- 메인 페이지 총 알림함 -->
   <div v-if="showModal" class="mainMailBox-body">
     <link rel="stylesheet"
@@ -26,13 +41,13 @@
           </div>
 
 
-          <!-- 도전장 도착 알림 -->
-          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'reciveChallenge'">
+          <!-- 경쟁시작 알림 -->
+          <div class="mainMailBox-list-item" v-if="mail_item.kind == 'matchChallenge'">
             <div class="mainMailBox-list-item-content">
-              {{ mail_item.content }}
+              [{{ categoryMapping[mail_item.category_id] }}] {{ mail_item.other_user_nickname }}님과의 경쟁이 시작되었습니다.
             </div>
-            <button class="mainMailBox-list-item-accept" @click="acceptChallenge(mail_item.id)">
-              수락
+            <button class="mainMailBox-list-item-accept" @click="checkChallenge(mail_item.id)">
+              미션확인
             </button>
             <button class="mainMailBox-list-item-clear">
               <span class="material-symbols-outlined"> close </span>
@@ -45,7 +60,7 @@
           <!-- 매칭 종료 알림 -->
           <div class="mainMailBox-list-item" v-if="mail_item.kind == 'closeChallenge'">
             <div class="mainMailBox-list-item-content">
-              {{ mail_item.other_nickname }}님과의 경쟁 결과가 나왔습니다.
+              [{{ categoryMapping[mail_item.category_id] }}] {{ mail_item.other_nickname }}님과의 경쟁 결과가 나왔습니다.
             </div>
             <button class="mainMailBox-list-item-subBtn" @click="showResultModal(mail_item)">결과확인</button>
             <button class="mainMailBox-list-item-clear">
@@ -101,7 +116,8 @@ const userCompet = useCompetionStore();
 const showWinModal = ref(false);
 const showLoseModal = ref(false);
 const modalData = ref({});
-
+const showCategoryModal = ref(false);
+const nowCategory = ref("");
 const props = defineProps({
   showModal: Boolean,
   close: Function,
@@ -112,7 +128,18 @@ const close_mainMailBox = () => {
 };
 
 //받은 도전장 함수 불러오기
-
+const checkChallenge = (mailItemId) => {
+  const selectedItem = mainmailList.value.find(item => item.id === mailItemId);
+  if (selectedItem) {
+    nowCategory.value = categoryMapping[selectedItem.category_id];
+    showCategoryModal.value = true;
+  } else {
+    console.error("Selected mail item not found.");
+  }
+};
+const closeCategoryModal = () => {
+  showCategoryModal.value = false;
+};
 const categoryMapping = {
   1: '기상',
   2: '알고리즘',
@@ -123,51 +150,51 @@ const categoryMapping = {
 };
 
 //받은 도전장 수락하기
-const acceptChallenge = (matchingId) => {
-  const selectedItem = mainmailList.value.find(item => item.matchingId === matchingId);
-  if (!selectedItem) {
-    console.error("선택된 도전장이 목록에 없습니다.");
-    return;
-  }
-  userCompet.competitionAnalysisCategory(userId, selectedItem.category)
-    .then(analysis => {
-      const categoryStatus = analysis.data.user_category.categoryStauts;
-      if (categoryStatus === "NONE_STATUS" || categoryStatus === "MATCH_STATUS") {
-        return userCompet.bothAccept(matchingId);
-      } else if (categoryStatus === "PLAY_STATUS") {
-        throw new Error("유효하지 않은 도전장입니다.");
-      }
-    })
-    .then(() => {
-      console.log("Challenge accepted:", matchingId);
-      // 도전과제 목록에서 해당 항목 제거
-      const index = mainmailList.value.findIndex(mail_item => mail_item.id === matchingId);
-      if (index !== -1) {
-        mainmailList.value.splice(index, 1);
-      }
-    })
-    .catch(error => {
-      if (error.message === "유효하지 않은 도전장입니다.") {
-        alert(error.message);
-        // 해당 리스트 항목 제거
-        const index = mainmailList.value.findIndex(item => item.matchingId === matchingId);
-        if (index !== -1) {
-          mainmailList.value.splice(index, 1);
-        }
-      } else {
-        console.error("Error processing challenge:", error);
-      }
-    });
+// const acceptChallenge = (matchingId) => {
+//   const selectedItem = mainmailList.value.find(item => item.matchingId === matchingId);
+//   if (!selectedItem) {
+//     console.error("선택된 도전장이 목록에 없습니다.");
+//     return;
+//   }
+//   userCompet.competitionAnalysisCategory(userId, selectedItem.category)
+//     .then(analysis => {
+//       const categoryStatus = analysis.data.user_category.categoryStauts;
+//       if (categoryStatus === "NONE_STATUS" || categoryStatus === "MATCH_STATUS") {
+//         return userCompet.bothAccept(matchingId);
+//       } else if (categoryStatus === "PLAY_STATUS") {
+//         throw new Error("유효하지 않은 도전장입니다.");
+//       }
+//     })
+//     .then(() => {
+//       console.log("Challenge accepted:", matchingId);
+//       // 도전과제 목록에서 해당 항목 제거
+//       const index = mainmailList.value.findIndex(mail_item => mail_item.id === matchingId);
+//       if (index !== -1) {
+//         mainmailList.value.splice(index, 1);
+//       }
+//     })
+//     .catch(error => {
+//       if (error.message === "유효하지 않은 도전장입니다.") {
+//         alert(error.message);
+//         // 해당 리스트 항목 제거
+//         const index = mainmailList.value.findIndex(item => item.matchingId === matchingId);
+//         if (index !== -1) {
+//           mainmailList.value.splice(index, 1);
+//         }
+//       } else {
+//         console.error("Error processing challenge:", error);
+//       }
+//     });
 
 
-};
+// };
 const mainmailList = ref([
 
 ]);
 
 const showResultModal = (mailItem) => {
   modalData.value = mailItem;
-  if (mailItem.compet_result === 'SEND_WIN' && mailItem.is_sender === 'Y' || mailItem.compet_result === 'RECEIVE_WIN' && mailItem.is_sender === 'Y'|| mailItem.compet_result === 'BOTH_WIN') {
+  if (mailItem.compet_result === 'SEND_WIN' && mailItem.is_sender === 'Y' || mailItem.compet_result === 'RECEIVE_WIN' && mailItem.is_sender === 'Y' || mailItem.compet_result === 'BOTH_WIN') {
     showWinModal.value = true;
   } else {
     showLoseModal.value = true;
@@ -184,16 +211,29 @@ const fetchMailbox = () => {
     userCompet.competitionFinish(userStorage.getUserInformation().user_id)
       .then(response => {
 
-        mainmailList.value = response.data.competitions.map(item => ({
+        const finishCompetitions = response.data.competitions.map(item => ({
           ...item,
           kind: 'closeChallenge'
         })); // 예시에서는 competitions 배열을 직접 할당합니다.
         console.log('잘 갖고왔습니다');
-        console.log(mainmailList.value);
+        userCompet.competitionProgressDetail(userStorage.getUserInformation().user_id)
+          .then(response => {
+            const progressCompetitions = response.data.competitions.map(item2 => ({
+              ...item2,
+              kind: 'matchChallenge'
+            }));
+            console.log('잘 갖고왔습니다.');
+            mainmailList.value = [...finishCompetitions, ...progressCompetitions];
+          })
+          .catch(error => {
+            console.error("Failed to fetch competition progress list:", error);
+          });
       })
       .catch(err => {
         console.error("Failed to fetch competition finish list:", err);
       });
+
+
   }
 };
 onMounted(() => {
@@ -317,5 +357,49 @@ onMounted(() => {
   max-width: 400px;
   text-align: center;
   border: 2px solid #007BFF;
+}
+
+.mission-category-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: auto;
+  max-width: 600px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 100;
+}
+
+.mission-category-modal h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 24px;
+  text-align: center;
+}
+
+.mission-category-modal p {
+  margin: 20px 0;
+  font-size: 18px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.mission-category-modal button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.mission-category-modal button:hover {
+  background-color: #0056b3;
 }
 </style>

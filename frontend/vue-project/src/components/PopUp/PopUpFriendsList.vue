@@ -1,4 +1,20 @@
 <template>
+    <div v-if="showSuccessModal" class="modal-tofriend">
+        <div class="modal-tofriend-content">
+            <h3>도전장 전송 성공!</h3>
+            <p>{{ modalMessage }}</p>
+            <button @click="closeSuccessModal">확인</button>
+        </div>
+    </div>
+
+    <!-- 도전장 전송 실패 모달 -->
+    <div v-if="showFailModal" class="modal-tofriend">
+        <div class="modal-tofriend-content">
+            <h3>도전장 전송 실패</h3>
+            <p>{{ modalMessage }}</p>
+            <button @click="closeFailModal">닫기</button>
+        </div>
+    </div>
     <div v-if="showModal" class="friendList">
         <div class="friendList_content">
             <div>
@@ -48,7 +64,7 @@ import { useFollowStore } from '@/stores/follow';
 import { useUserStore } from '@/stores/user';
 import { useCompetionStore } from '@/stores/competition';
 
-import userimg from '@/assets/image1.png'; 
+import userimg from '@/assets/image1.png';
 
 export default {
     props: ['userId', 'showModal', 'Listclose', 'selectedCategory', 'selectedCategoryName'],
@@ -67,6 +83,9 @@ export default {
 
         const ssallowings = ref([]);
 
+        const showSuccessModal = ref(false);
+        const showFailModal = ref(false);
+        const modalMessage = ref('');
 
         // 검색(new)
         const nickname = ref('');
@@ -101,7 +120,7 @@ export default {
             }
         };
 
-    
+
         // 친구 선택 emit
         // PopUpFriendsList.vue 내부의 sendRequest 함수 수정
         const sendRequest = (friend) => {
@@ -120,15 +139,26 @@ export default {
                     console.log("친구에게 도전장 보내기 성공:", response);
                     // 성공적으로 도전장을 보냈다면, 사용자에게 알림을 표시하거나 다른 조치를 취할 수 있습니다.
                     // 예: 알림 표시, 모달 닫기 등
+
                     closeList(); // 요청 성공 후 친구 목록 모달 닫기
+                    showSuccessModal.value = true;
+                    modalMessage.value = `${friend.userNickname}님에게 도전장을 성공적으로 보냈습니다.`;
                 })
                 .catch(error => {
                     console.error("친구에게 도전장 보내기 실패:", error);
                     // 실패 시 사용자에게 오류 메시지를 표시할 수 있습니다.
+                    showFailModal.value = true;
+                    modalMessage.value = `도전장을 보내는 데 실패했습니다. 다시 시도해주세요.`;
                 });
         };
 
+        const closeSuccessModal = () => {
+            showSuccessModal.value = false;
+        };
 
+        const closeFailModal = () => {
+            showFailModal.value = false;
+        };
         const closeList = () => {
             // console.log('닫아줘')
             searchPerformed.value = false;
@@ -158,6 +188,11 @@ export default {
             searchFriends,
             sendRequest,
             closeList,
+            closeFailModal,
+            closeSuccessModal,
+            showSuccessModal,
+            showFailModal,
+            modalMessage,
         }
     }
 }
@@ -321,6 +356,46 @@ export default {
     color: white;
 }
 
+.modal-tofriend {
+    position: fixed;
+    z-index: 100;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-tofriend-content {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.modal-tofriend-content h3 {
+    margin-top: 0;
+}
+
+.modal-tofriend-content p {
+    margin: 20px 0;
+}
+
+.modal-tofriend-content button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-tofriend-content button:hover {
+    background-color: #0056b3;
+}
 
 
 @media screen and (max-width: 450px) {

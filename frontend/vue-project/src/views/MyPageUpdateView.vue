@@ -199,7 +199,7 @@ const updateBadge = () => {
     // 서버에 업데이트 요청 보내기
     console.log(dataToUpdate)
     userStore.userUpdate(userId.value, dataToUpdate).then(() => {
-        // router.go(0)
+        router.go(0)
     }).catch((error) => {
         console.log(error)
     });
