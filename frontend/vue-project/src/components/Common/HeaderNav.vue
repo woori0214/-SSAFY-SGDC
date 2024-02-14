@@ -85,30 +85,32 @@
         </div>
       </div>
 
-      
       <PopUpMainMailbox :showModal="showMailBox" :close="closeMailBox" />
     </div>
-    <div class="nav-wrapper">
-      <nav v-if="!closeLogo">
-        <RouterLink to="/">Main</RouterLink>
-        <a href="#" @click="handleNavigation('/competition')">Competition</a>
-        <a href="#" @click="handleNavigation('/solo')">Solo</a>
-        <a href="#" @click="handleNavigation('/feed')">Feed</a>
-        <a href="#" @click="handleNavigation('/MyPage')">MyPage</a>
-        <div class="nav-searchUser">
-          <SearchNickname></SearchNickname>
-        </div>
-      </nav>
-      <div class="animationed-LED" v-if="closeLogo">
-        <div class="LEDtrack">
-          <div class="LEDcontent">
-            &nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
-            피어난다&nbsp;&nbsp;&nbsp;&nbsp;
+    <div class="nav-body">
+      <div class="nav-wrapper">
+        <nav v-if="!closeLogo">
+          <RouterLink to="/">Main</RouterLink>
+          <a href="#" @click="handleNavigation('/competition')">Competition</a>
+          <a href="#" @click="handleNavigation('/solo')">Solo</a>
+          <a href="#" @click="handleNavigation('/feed')">Feed</a>
+          <a href="#" @click="handleNavigation('/MyPage')">MyPage</a>
+        </nav>
+        <div class="animationed-LED" v-if="closeLogo">
+          <div class="LEDtrack">
+            <div class="LEDcontent">
+              &nbsp;싸강두천 - 천재들의 싸움은 외나무다리에서
+              피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은
+              외나무다리에서 피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 -
+              천재들의 싸움은 외나무다리에서
+              피어난다&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;싸강두천 - 천재들의 싸움은
+              외나무다리에서 피어난다&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
           </div>
         </div>
+      </div>
+      <div class="nav-searchUser" v-if="!closeLogo">
+        <SearchNickname></SearchNickname>
       </div>
     </div>
   </header>
@@ -153,6 +155,7 @@ const logout = function () {
   userLoginStore.isLogout();
   isLogined_ref.value = false;
   router.push("/");
+  window.location.reload();
 };
 
 const handleNavigation = (to) => {
@@ -351,11 +354,18 @@ setInterval(function () {
   /* border: 2px solid green; */
 }
 
+.nav-body{
+  display: flex;
+  gap: 5px;
+}
+
 .nav-wrapper {
   background-color: #fff;
   border-radius: 15px;
   overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  /* border: 1px solid green; */
 }
 
 nav {
@@ -381,11 +391,9 @@ nav a {
 
 .nav-searchUser {
   /* border: 1px solid red; */
-  flex: 1;
   display: flex;
   justify-content: end;
-  padding-right: 10px;
-  height: 35px;
+  height: auto;
   align-items: center;
 }
 

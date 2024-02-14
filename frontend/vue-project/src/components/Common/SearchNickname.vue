@@ -1,6 +1,6 @@
 <template>
   <div>
-    <input type="text" v-model="nickname" placeholder="친구 닉네임 검색..." @input="searchFriends">
+    <input type="text" v-model="nickname" class="searchuser_input" placeholder="친구 닉네임 검색..." @input="searchFriends">
     <div v-if="searchResults && searchResults.length > 0" class="search-results">
       <ul>
         <p v-for="result in enhancedSearchResults" :key="result.userId">
@@ -161,6 +161,13 @@ const enhancedSearchResults = computed(() => {
 </script>
 
 <style scoped>
+.searchuser_input{
+  height: 30px;
+  font-size: large;
+  border-radius: 5px;
+  border: 2px solid rgb(204, 204, 204);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
 .main-search-borad {
   height: 100%;
   display: flex;

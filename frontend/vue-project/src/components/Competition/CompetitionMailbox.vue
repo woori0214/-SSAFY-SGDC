@@ -2,20 +2,32 @@
   <div class="mail_box_body">
     <div class="main_box">
       <div class="mailbox_title">
-        <img src="@/assets/mailbox.png" alt="Mailbox Icon" class="mailbox_icon" />
+        <img
+          src="@/assets/mailbox.png"
+          alt="Mailbox Icon"
+          class="mailbox_icon"
+        />
         <span>받은 도전장함 [ {{ mailParameters.length }} / 20 ]</span>
       </div>
       <div class="mail_box">
         <!-- 여기서 v-for 디렉티브를 사용하여 각 메일 항목을 반복 렌더링합니다. -->
-        <CompetitionMailboxItem v-for="(item, index) in mailParameters" :key="index" :mail-sender="item.nickname"
-          :mail-category="item.category" :mail-remain-time="item.remainingTime" :match-kind="item.matchkind"
-          @acceptChallenge="() => acceptChallenge(index)" />
+        <CompetitionMailboxItem
+          v-for="(item, index) in mailParameters"
+          :key="index"
+          :mail-sender="item.nickname"
+          :mail-category="item.category"
+          :mail-remain-time="item.remainingTime"
+          :match-kind="item.matchkind"
+          @acceptChallenge="() => acceptChallenge(index)"
+        />
       </div>
     </div>
-
   </div>
-  <PopUpReceiverCompetitionApprove v-if="showModal" :now-category="selectedCategorytoauth"
-    @close="() => showModal = false" />
+  <PopUpReceiverCompetitionApprove
+    v-if="showModal"
+    :now-category="selectedCategorytoauth"
+    @close="() => (showModal = false)"
+  />
 </template>
 
 <script setup>
@@ -27,53 +39,17 @@ import CompetitionMailboxItem from "./CompetitionMailboxItem.vue";
 import PopUpReceiverCompetitionApprove from "@/components/PopUp/PopUpReceiverCompetitionApprove.vue";
 const competitionStore = useCompetionStore();
 const userStorage = useUserStorageStore();
-const mailParameters = ref([
-  // {
-  //   is_sender: "John Doe",
-  //   category_id: 1,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-  // {
-  //   is_sender: "Alice Smith",
-  //   category_id: 2,
-  //   compet_expiration_time: "02:00",
-  // },
-]);
+const mailParameters = ref([]);
 const userInformation = userStorage.getUserInformation();
 const userId = userInformation.user_id;
-const matchingId = ref(null);
-const category = ref(null);
-const expirationTime = ref(null);
-const nickname = ref(null);
-const matchkind = ref(null);
-const categorynum = ref(null);
-const kind = ref(null);
-const content = ref(null);
+// const matchingId = ref(null);
+// const category = ref(null);
+// const expirationTime = ref(null);
+// const nickname = ref(null);
+// const matchkind = ref(null);
+// const categorynum = ref(null);
+// const kind = ref(null);
+// const content = ref(null);
 
 const mapCategoryIdToName = (categoryId) => {
   const categoryNames = {
@@ -98,35 +74,52 @@ const calculateRemainingTime = (expirationTimeString) => {
   }
 
   const remainingHours = Math.floor(remainingTimeMillis / (1000 * 60 * 60));
-  const remainingMinutes = Math.floor((remainingTimeMillis % (1000 * 60 * 60)) / (1000 * 60));
+  const remainingMinutes = Math.floor(
+    (remainingTimeMillis % (1000 * 60 * 60)) / (1000 * 60)
+  );
   return `${remainingHours}시간 ${remainingMinutes}분`;
 };
 
-onMounted(() => {
+function reset_mailBox() {
+  // console.log('도전장 최신화 하기', new Date());
   const userId = userStorage.getUserInformation().user_id;
-  competitionStore.competitionMailbox(userId)
-    .then(response => {
-      const mailbox = response.data.matching.map(item => ({
-        matchingId: item.matching_id,
-        category: mapCategoryIdToName(item.category_id),
-        categorynum: item.category_id,
-        expirationTime: item.compet_expriation_time,
-        remainingTime: calculateRemainingTime(item.compet_expiration_time),
-        nickname: item.sender_nickname,
-        matchkind: item.compet_kind,
-        kind: 'reciveChallenge',
-        content: `[${item.compet_kind}]${item.user_nickname}님이 당신에게 ${mapCategoryIdToName(item.category_id)}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
-      }));
-      mailParameters.value = mailbox;
-      console.log('도전장 잘 갖고왔다');
-      console.log(matchingId);
-    })
-    .catch(error => {
-      console.error("도전장을 갖고오지 못했습니다", error);
-    });
+  
+  if (userId != null) {
+    competitionStore
+      .competitionMailbox(userId)
+      .then((response) => {
+        const mailbox = response.data.matching.map((item) => ({
+          matchingId: item.matching_id,
+          category: mapCategoryIdToName(item.category_id),
+          categorynum: item.category_id,
+          expirationTime: item.compet_expriation_time,
+          remainingTime: calculateRemainingTime(item.compet_expiration_time),
+          nickname: item.sender_nickname,
+          matchkind: item.compet_kind,
+          kind: "reciveChallenge",
+          content: `[${item.compet_kind}]${
+            item.user_nickname
+          }님이 당신에게 ${mapCategoryIdToName(
+            item.category_id
+          )}를 신청하였습니다. 만료시간: ${item.competExpriationTime}`,
+        }));
+        mailParameters.value = mailbox;
+        // console.log('도전장 잘 갖고왔다');
+        // console.log(matchingId);
+      })
+      .catch((error) => {
+        console.error("도전장을 갖고오지 못했습니다", error);
+      });
+  }
+}
+
+onMounted(() => {
+  // reset_mailBox();
+
+  setInterval(reset_mailBox, 1000);
 });
 const showModal = ref(false);
-const selectedCategorytoauth = ref('');
+const selectedCategorytoauth = ref("");
 
 const acceptChallenge = (index) => {
   return new Promise((resolve, reject) => {
@@ -142,42 +135,39 @@ const acceptChallenge = (index) => {
     }
     let categoryStatus;
     // 도전장의 카테고리 번호와 사용자 ID를 이용하여 경기 상태를 분석
-    competitionStore.competitionAnalysisCategory(userId, item.categorynum)
-      .then(response => {
+    competitionStore
+      .competitionAnalysisCategory(userId, item.categorynum)
+      .then((response) => {
         categoryStatus = response.data.user_category.categoryStatus;
-        console.log(categoryStatus);
+        // console.log(categoryStatus);
         if (categoryStatus === "PLAY_STATUS") {
           // 경기가 이미 진행 중인 경우
           alert("이미 진행 중인 경기입니다. 도전장을 수락할 수 없습니다.");
           reject(new Error("Challenge already in progress"));
         } else {
           // 경기가 진행 중이 아닌 경우, 도전장을 수락하고 팝업을 표시
-          competitionStore.bothAccept(item.matchingId)
+          competitionStore
+            .bothAccept(item.matchingId)
             .then(() => {
               selectedCategorytoauth.value = item.category;
               showModal.value = true;
-              console.log(`showModal is now ${showModal.value}`);
+              // console.log(`showModal is now ${showModal.value}`);
               resolve();
             })
-            .catch(error => {
+            .catch((error) => {
               console.error("Error accepting challenge:", error);
-              alert('유효하지 않은 도전장입니다.')
+              alert("유효하지 않은 도전장입니다.");
               reject(error);
             });
         }
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error analyzing competition status:", error);
-        alert('유효하지 않은 도전장입니다.')
+        alert("유효하지 않은 도전장입니다.");
         reject(error);
       });
   });
 };
-
-
-
-
-
 
 // const acceptChallenge = async (index) => {
 //   const item = mailParameters.value[index];
@@ -250,7 +240,6 @@ const acceptChallenge = (index) => {
   margin-right: 10px;
   width: calc(100% - 24px);
   /*Set width to 100% */
-
 }
 
 .mail_box::-webkit-scrollbar {
@@ -273,7 +262,6 @@ const acceptChallenge = (index) => {
   margin: 0;
   display: flex;
 }
-
 </style>
 
 <!-- display: flex; /* Flex 컨테이너 설정 */
