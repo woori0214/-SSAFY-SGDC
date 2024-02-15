@@ -24,10 +24,10 @@ public class FeedReportService {
     /**
      * 피드 신고하기
      */
-    public FeedReport createFeedReport(int userId, String reportUserNickname, int feedId, String reportDetail) {
+    public FeedReport createFeedReport(int userId, int reportUserId, int feedId, String reportDetail) {
         User user = userRepo.findByUserId(userId)
                 .orElseThrow(() -> new RuntimeException("[FeedReportService][createFeedReport] 신고한 유저를 찾을 수 없습니다."));
-        User reportUser = userRepo.findByUserNickname(reportUserNickname)
+        User reportUser = userRepo.findByUserId(reportUserId)
                 .orElseThrow(() -> new RuntimeException("[FeedReportService][createFeedReport] 신고당한 유저를 찾을 수 없습니다."));
         Feed feed = feedRepo.findByFeedId(feedId)
                 .orElseThrow(() -> new RuntimeException("[FeedReportService][createFeedReport] 해당 피드를 찾을 수 없습니다."));

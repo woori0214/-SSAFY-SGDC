@@ -19,15 +19,15 @@ public class FeedReport {
     @Column(name = "feed_report_id")
     private int feedReportId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_user_id", referencedColumnName = "user_id")
     private User reportUser;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "report_feed_id", referencedColumnName = "feed_id")
     private Feed reportFeed;
 

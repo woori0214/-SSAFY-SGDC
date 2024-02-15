@@ -34,17 +34,17 @@ public class FeedReportController {
     @Operation(summary = "피드 신고하기 기능", description="특정 피드 신고")
     @Parameters({
             @Parameter(name = "userId",  schema=@Schema(implementation = int.class), description = "신고하는 사용자 PK"),
-            @Parameter(name = "reportUserId",  schema=@Schema(implementation = String.class), description = "신고당한 사용자 닉네임"),
+            @Parameter(name = "reportUserId",  schema=@Schema(implementation = int.class), description = "신고당한 사용자 PK"),
             @Parameter(name = "feedId", schema=@Schema(implementation = int.class), description = "신고하는 하는 피드 PK"),
             @Parameter(name = "reportDetail", schema=@Schema(implementation = String.class), description = "신고 사유"),
     })
-    @PostMapping("/")
+    @PostMapping("/report")
     public DataResponseDto<FeedReport> reportFeed(
-            @RequestParam int userId,
-            @RequestParam int feedId,
-            @RequestParam String reportUserNickname,
-            @RequestParam String reportDetail
+            @RequestParam(value = "userId") int userId,
+            @RequestParam(value = "feedId") int feedId,
+            @RequestParam(value = "reportUserId") int reportUserId,
+            @RequestParam(value = "reportDetail") String reportDetail
             ) {
-        return DataResponseDto.of(feedReportService.createFeedReport(userId,reportUserNickname,feedId,reportDetail),"피드 신고 성공");
+        return DataResponseDto.of(feedReportService.createFeedReport(userId,reportUserId,feedId,reportDetail),"피드 신고 성공");
     }
 }

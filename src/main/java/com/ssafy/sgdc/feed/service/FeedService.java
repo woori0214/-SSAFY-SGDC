@@ -76,12 +76,13 @@ public class FeedService {
         // 매치 검색
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
         Matching senderMatching = findSenderMatching(matches);
+        Matching receiverMatching = findReceiverSenderMatching(matches);
 
         // 좋아요 여부 확인
         boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feedId);
 
         // DTO 생성
-        return buildFeedOneDto(feed, senderMatching, isLiked);
+        return buildFeedOneDto(feed, senderMatching, receiverMatching,isLiked);
     }
 
     private Matching findSenderMatching(List<Matching> matches) {
@@ -93,11 +94,24 @@ public class FeedService {
         throw new RuntimeException("송신자 매치를 찾을 수 없습니다.");
     }
 
-    private FeedOneDto buildFeedOneDto(Feed feed, Matching senderMatching, boolean isLiked) {
-        User sender = senderMatching.getUser();
-        Badge badge = sender.getBadgeId();
+    private Matching findReceiverSenderMatching(List<Matching> matches) {
+        for (Matching match : matches) {
+            if (match.getIsSender() == IsSender.N) {
+                return match;
+            }
+        }
+        throw new RuntimeException("수신자 매치를 찾을 수 없습니다.");
+    }
 
-        String badgeImg = (badge == null) ? "null" : badge.getBadgeImg();
+    private FeedOneDto buildFeedOneDto(Feed feed, Matching senderMatching, Matching reveiverMatching, boolean isLiked) {
+        User sender = senderMatching.getUser();
+        Badge senderBadge = sender.getBadgeId();
+
+        User receiver = reveiverMatching.getUser();
+        Badge receiverBadge = receiver.getBadgeId();
+
+        String senderBadgeImg = (senderBadge == null) ? "null" : senderBadge.getBadgeImg();
+        String receiverBadgeImg = (receiverBadge == null) ? "null" : receiverBadge.getBadgeImg();
 
         return new FeedOneDto(
                 feed.getFeedId(),
@@ -112,7 +126,11 @@ public class FeedService {
                 sender.getUserId(),
                 sender.getUserNickname(),
                 sender.getUserImg(),
-                badgeImg,
+                senderBadgeImg,
+                receiver.getUserId(),
+                receiver.getUserNickname(),
+                receiver.getUserImg(),
+                receiverBadgeImg,
                 isLiked
         );
     }
@@ -153,11 +171,37 @@ public class FeedService {
 
     private FeedOneDto convertToDto(Feed feed, int userId) {
         List<Matching> matches = findMatchesByCompetitionId(feed.getCompetId().getCompetId());
-        Matching senderMatching = findMatchingByIsSender(matches, IsSender.Y);
+        Competition competition = findCompetitionById(feed.getCompetId().getCompetId());
         boolean isLiked = feedLikeRepo.existsByUser_UserIdAndFeed_FeedId(userId, feed.getFeedId());
-        Badge badge = senderMatching.getUser().getBadgeId();
-        String badgeImg = (badge == null) ? "null" : badge.getBadgeImg();
+        CompetResult result = competition.getCompetDetail().getCompetResult();
+        Matching winnerMatching;
+        Matching loserMatching;
+        if (result.equals(CompetResult.SEND_WIN)) {
+            winnerMatching = findMatchingByIsSender(matches, IsSender.Y);
+            loserMatching = findMatchingByIsSender(matches, IsSender.N);
+        }
+        else if (result.equals(CompetResult.RECEIVE_WIN)){
+            winnerMatching = findMatchingByIsSender(matches, IsSender.N);
+            loserMatching = findMatchingByIsSender(matches, IsSender.Y);
+        } else {
+            winnerMatching = findMatchingByIsSender(matches, IsSender.Y);
+            loserMatching = findMatchingByIsSender(matches, IsSender.N);
+        }
+        /**
+         *
+         *
+         *
+         *
+         */
 
+        User winner = winnerMatching.getUser();
+        Badge winnerBadge = winner.getBadgeId();
+
+        User loser = loserMatching.getUser();
+        Badge loserBadge = loser.getBadgeId();
+
+        String winnerBadgeImg = (winnerBadge == null) ? "null" : winnerBadge.getBadgeImg();
+        String loserBadgeImg = (loserBadge == null) ? "null" : loserBadge.getBadgeImg();
 
 
         // Feed 엔티티의 데이터를 사용하여 FeedOneDto 객체를 생성합니다.
@@ -172,10 +216,14 @@ public class FeedService {
                 feed.getUpdateAt(),
                 feed.getFeedImg(),
                 // 매칭된 사용자 정보를 설정
-                senderMatching.getUser().getUserId(),
-                senderMatching.getUser().getUserNickname(),
-                senderMatching.getUser().getUserImg(),
-                badgeImg,
+                winner.getUserId(),
+                winner.getUserNickname(),
+                winner.getUserImg(),
+                winnerBadgeImg,
+                loser.getUserId(),
+                loser.getUserNickname(),
+                loser.getUserImg(),
+                loserBadgeImg,
                 isLiked
         );
     }
