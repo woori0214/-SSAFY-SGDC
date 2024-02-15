@@ -54,8 +54,8 @@ public class FeedController {
             @RequestParam(defaultValue = "0") int feedId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, "createAt");
-        return DataResponseDto.of(feedService.findItemsAfter(feedId, userId, pageable),"피드 10개씩 조회");
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createAt", "feedId"));
+        return DataResponseDto.of(feedService.findItemsAfter(feedId, userId, pageable), "피드 10개씩 조회");
     }
 
 

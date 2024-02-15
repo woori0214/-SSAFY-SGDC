@@ -19,7 +19,9 @@ import com.ssafy.sgdc.user.User;
 import com.ssafy.sgdc.user.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -141,16 +143,19 @@ public class FeedService {
      */
 
     public Page<FeedOneDto> findItemsAfter(int feedId, int userId, Pageable pageable) {
-        if (feedId==0) {
-            // 처음 페이지를 로드할 때
-            Page<Feed> feedPage = feedRepo.findAll(pageable);
-            return feedPage.map(item -> convertToDto(item, userId));
+        Page<Feed> feedPage;
+
+        if (feedId == 0) {
+            // 처음 페이지를 로드할 때: 가장 최근의 피드부터 시작
+            feedPage = feedRepo.findAll(PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "feedId")));
         } else {
-            // 커서 기반 페이지네이션: lastId 이후의 아이템을 조회
-            Page<Feed> feedPage = feedRepo.findByFeedIdGreaterThan(feedId, pageable);
-            return feedPage.map(item -> convertToDto(item, userId));
+            // 커서 기반 페이지네이션: 지정된 feedId보다 작은 피드를 내림차순으로 조회
+            feedPage = feedRepo.findByFeedIdLessThan(feedId, PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(Sort.Direction.DESC, "feedId")));
         }
+
+        return feedPage.map(item -> convertToDto(item, userId));
     }
+
 
 
     /**
@@ -187,12 +192,6 @@ public class FeedService {
             winnerMatching = findMatchingByIsSender(matches, IsSender.Y);
             loserMatching = findMatchingByIsSender(matches, IsSender.N);
         }
-        /**
-         *
-         *
-         *
-         *
-         */
 
         User winner = winnerMatching.getUser();
         Badge winnerBadge = winner.getBadgeId();
