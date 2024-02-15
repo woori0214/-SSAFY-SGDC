@@ -262,7 +262,7 @@ public class FeedService {
 
 
     private String createFeedTitle(CompetResult result, Matching sender, Matching receiver) {
-        String category = sender.getCategory().getCategoryName().toString();
+        String category = createCategoryIdToKorean(sender.getCategory().getCategoryId());
         return switch (result) {
             case SEND_WIN -> String.format("[%s] %s님이 %s님과의 경쟁에서 이겼습니다!",
                     category, sender.getUser().getUserNickname(),
@@ -270,10 +270,22 @@ public class FeedService {
             case RECEIVE_WIN -> String.format("[%s] %s님이 %s님과의 경쟁에서 이겼습니다!",
                     category, receiver.getUser().getUserNickname(),
                     sender.getUser().getUserNickname());
-            case BOTH_WIN -> String.format("%s님과 %s님이 공동승리 하였습니다!",
-                    sender.getUser().getUserNickname(),
+            case BOTH_WIN -> String.format("[%s] %s님과 %s님이 공동승리 하였습니다!",
+                    category, sender.getUser().getUserNickname(),
                     receiver.getUser().getUserNickname());
             default -> throw new RuntimeException("CompetResult이 정의되지 않았습니다.");
+        };
+    }
+
+    private String createCategoryIdToKorean(int categoryId) {
+        return switch (categoryId) {
+            case 1 -> "기상";
+            case 2 -> "알고리즘";
+            case 3 -> "운동";
+            case 4 -> "스터디";
+            case 5 -> "식단";
+            case 6 -> "절제";
+            default -> throw new IllegalStateException("해당 카테고리가 없습니다 : " + categoryId);
         };
     }
 
