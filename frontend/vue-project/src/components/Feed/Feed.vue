@@ -11,7 +11,11 @@
     <div class="feed_frame2">
       <div class="feed_profile">
         <div class="user_profile" @click="moveProfile(userId)">
-          <img :src="userImg" class="feed_profile_image" />
+          <!-- <img :src="userImg" class="feed_profile_image" /> -->
+          <div
+            class="feed_profile_image"
+            :style="{ backgroundImage: `url(${userImg})` }"
+          ></div>
           <img
             v-if="userBadgeImg !== 'null'"
             :src="userBadgeImg"
@@ -227,6 +231,12 @@ export default {
   border-radius: 100%;
   width: 50px;
   height: 50px;
+  background: white;
+  background-size: contain;
+  /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
+  background-position: center;
+  /* 이미지 중앙 정렬 */
+  background-repeat: no-repeat;
 }
 
 .feed_profile_badge {
@@ -322,6 +332,9 @@ export default {
   padding: 10px;
   margin: 10px 11px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 /* .material-symbols-outlined {
   font-variation-settings:

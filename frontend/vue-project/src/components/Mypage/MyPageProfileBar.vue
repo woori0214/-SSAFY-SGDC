@@ -11,7 +11,8 @@
       <!--사용자 이미지, 버튼-->
       <div class="middle1">
         <div class="user_img_badge">
-          <img :src="userData.user_img" alt="use_img" class="user_img">
+          <!-- <img :src="userData.user_img" alt="use_img" class="user_img"> -->
+          <div class="user_img" :style="{ backgroundImage: `url(${userData.user_img})` }"></div>
           <img :src="userBadgeImage" alt="badge_img" class="badge_img" v-if="userBadgeImage">
         </div>
         <div v-if="mypageUserId != loginUserId" class="myprofile_btns">
@@ -367,11 +368,16 @@ export default {
 
 .user_img {
   background: #f8f9fb;
-  border: #aecbeb 8px solid;
+  border: #aecbeb 5px solid;
   border-radius: 500px;
   width: 130px;
   height: 130px;
   margin: 10px;
+  background-size: contain;
+  /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
+  background-position: center;
+  /* 이미지 중앙 정렬 */
+  background-repeat: no-repeat;
 }
 
 .badge_img {
