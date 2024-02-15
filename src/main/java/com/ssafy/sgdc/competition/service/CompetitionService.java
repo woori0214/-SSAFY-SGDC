@@ -333,7 +333,7 @@ public class CompetitionService {
 
         // 경기 생성
         Competition competition = Competition.of(LocalDateTime.now(),
-                recieveMatching.getCompetExpirationTime().plusMinutes(4));
+                recieveMatching.getCompetExpirationTime().plusHours(4));
         competitionRepo.save(competition);
 
         //도전장 상태 업데이트

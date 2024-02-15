@@ -65,7 +65,7 @@ public class UserService {
                 .signOut(false)
                 .badgeId(null) //보류
                 .kakaoPush(userSignDto.getKakaoPush())
-                .challengeCnt(3)
+                .challengeCnt(6)
                 .complainCnt(0)
                 .auth("ROLE_USER").build();
         System.out.println("ssafy_user 확인===>");

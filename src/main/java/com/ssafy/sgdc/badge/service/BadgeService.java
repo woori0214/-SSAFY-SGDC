@@ -70,10 +70,10 @@ public class BadgeService {
         // 해당 뱃지를 찾아서 유저 뱃지에 넣어줌
         // 승리 관련
         switch (winCount) {
-            case 5:
+            case 1:
                 addUserBadge(1, userId);
                 break;
-            case 10:
+            case 2:
                 addUserBadge(2, userId);
                 break;
             default:
@@ -81,10 +81,10 @@ public class BadgeService {
         }
 
         switch (failCount) {
-            case 5:
+            case 1:
                 addUserBadge(3, userId);
                 break;
-            case 10:
+            case 2:
                 addUserBadge(4, userId);
                 break;
             default:
@@ -105,7 +105,7 @@ public class BadgeService {
         // 해당 뱃지를 찾아서 유저 뱃지에 넣어줌
         // 승리 관련
         switch (winCount) {
-            case 5:
+            case 1:
                 addUserBadge(5, userId);
                 break;
             default:
@@ -113,7 +113,7 @@ public class BadgeService {
         }
 
         switch (failCount) {
-            case 5:
+            case 1:
                 addUserBadge(6, userId);
                 break;
             default:
@@ -133,10 +133,10 @@ public class BadgeService {
         // 해당 뱃지를 찾아서 유저 뱃지에 넣어줌
         // 승리 관련
         switch (winCount) {
-            case 5:
+            case 1:
                 addUserBadge(12, userId);
                 break;
-            case 10:
+            case 2:
                 addUserBadge(13, userId);
                 break;
             default:
@@ -144,10 +144,10 @@ public class BadgeService {
         }
 
         switch (failCount) {
-            case 5:
+            case 1:
                 addUserBadge(14, userId);
                 break;
-            case 10:
+            case 2:
                 addUserBadge(15, userId);
                 break;
             default:
@@ -167,7 +167,7 @@ public class BadgeService {
         // 해당 뱃지를 찾아서 유저 뱃지에 넣어줌
         // 승리 관련
         switch (winCount) {
-            case 5:
+            case 1:
                 addUserBadge(16, userId);
                 break;
             default:
@@ -187,16 +187,16 @@ public class BadgeService {
         // 해당 뱃지를 찾아서 유저 뱃지에 넣어줌
         // 승리 관련
         switch (winCount) {
-            case 3:
+            case 1:
                 addUserBadge(7, userId);
                 break;
-            case 5:
+            case 2:
                 addUserBadge(8, userId);
                 break;
-            case 7:
+            case 3:
                 addUserBadge(9, userId);
                 break;
-            case 10:
+            case 4:
                 addUserBadge(10, userId);
                 break;
             default:
@@ -204,7 +204,7 @@ public class BadgeService {
         }
 
         switch (failCount) {
-            case 5:
+            case 1:
                 addUserBadge(11, userId);
                 break;
             default:

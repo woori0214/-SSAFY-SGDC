@@ -33,7 +33,7 @@ public interface UserRepo extends JpaRepository<User, Integer> {
     int findMaxUserId();
 
     @Modifying
-    @Query("UPDATE User u SET u.challengeCnt = 3")
+    @Query("UPDATE User u SET u.challengeCnt = 6")
     void updateAllUsersChallengeCount();
 
     // 유저 닉네임 검색
