@@ -105,6 +105,7 @@ public class ImageAuthService {
             receiveUserCategory.updateCategoryStatus(CategoryStatus.NONE_STATUS);
 
             competition.updateCompetitionDetail(competDetail);
+            competition.updateCompetitionDoneAt(LocalDateTime.now());
 
             // 끝난 경기에 뱃지 부여
             badgeService.branchCategory(matching.getUser().getUserId(), matching.getCategory().getCategoryId());

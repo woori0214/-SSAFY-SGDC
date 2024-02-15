@@ -42,4 +42,8 @@ public class Competition {
         this.competDetail = competDetail;
     }
 
+    public void updateCompetitionDoneAt(LocalDateTime doneAt) {
+        this.doneAt = doneAt;
+    }
+
 }
