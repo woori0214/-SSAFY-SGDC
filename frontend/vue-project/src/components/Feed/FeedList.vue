@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- <div>피드 리스트</div> --> 
+    <!-- <div>피드 리스트</div> -->
     <div class="feed_container" ref="feedContainer">
       <Feed
         class="feed"
@@ -15,10 +15,12 @@
         :createAt="item.createAt"
         :updateAt="item.updateAt"
         :feedImg="item.feedImg"
-        :userId="item.userId"
-        :userNickname="item.userNickname"
-        :userImg="item.userImg"
-        :userBadgeImg="item.userBadgeImg"
+        :userId="item.winnerUserId"
+        :userNickname="item.winnerUserNickname"
+        :userImg="item.winnerUserImg"
+        :userBadgeImg="item.winnerUserBadgeImg"
+        :otherUserId="item.loserUserId"
+        :otherUserNickname="item.loserUserNickname"
         :isLiked="item.liked"
       ></Feed>
     </div>
@@ -35,6 +37,8 @@ const feedContainer = ref(null);
 const feeds = ref([]);
 
 const feedjs = useFeedStore();
+
+const loading_feed = ref(false);
 
 onMounted(() => {
   //Feed List 스크롤 핸들러
@@ -57,6 +61,7 @@ const resetFeedList = () => {
   feedjs
     .getFeedListPage(0, 10)
     .then((res) => {
+      // res.data.data.content.reverse();
       feeds.value = [...res.data.data.content];
 
       res.data.data.content.forEach((element) => {
@@ -81,11 +86,15 @@ const resetFeedList = () => {
 
 // 피드 추가 요청할 함수
 const moreFeedList = () => {
+  // console.log(feeds.value);
   // console.log("마지막 피드 아이디 : ");
   // console.log(feeds.value[feeds.value.length - 1].feedId);
   feedjs
     .getFeedListPage(feeds.value[feeds.value.length - 1].feedId)
     .then((res) => {
+      // res.data.data.content.reverse();
+      console.log("거꾸로 받은 추가 피드");
+      console.log(res.data.data.content);
       feeds.value = [...feeds.value, ...res.data.data.content];
 
       res.data.data.content.forEach((element) => {
@@ -105,6 +114,9 @@ const moreFeedList = () => {
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      loading_feed.value = false;
     });
 };
 
@@ -132,7 +144,10 @@ const handleScroll = () => {
 const plusFeedItem = () => {
   // init_feeds.value = [...init_feeds.value, ...plus_feeds.value];
   // console.log("피드 추가 테스트");
-  moreFeedList();
+  if (!loading_feed.value) {
+    loading_feed.value = true;
+    moreFeedList();
+  }
 
   if (feeds.value.length > 30) {
     // init_feeds.value.splice(0, 10);
@@ -180,11 +195,11 @@ const plusFeedItem = () => {
   background-color: #f8f9fb; /* 배경색을 흰색으로 */
   padding: 15px; /* 내부 여백 */
   margin-top: 15px;
-  transition: transform 0.3s ease; /* 호버 시 약간의 변형을 위한 전환 효과 */
+  /* transition: transform 0.3s ease; 호버 시 약간의 변형을 위한 전환 효과 */
 }
-
+/* 
 .feed_frame.feed:hover {
-  transform: translateY(-5px); /* 호버 시 약간 위로 올라가는 효과 */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* 호버 시 그림자를 조금 더 강조 */
-}
+  transform: translateY(-5px); 
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+} */
 </style>

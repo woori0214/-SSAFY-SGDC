@@ -9,8 +9,6 @@ import MyPageUpdateView from '@/views/MyPageUpdateView.vue'
 import SsallowView from '@/views/SsallowView.vue'
 import LoginView from '@/views/LoginView.vue'
 import SignUpView from '@/views/SignUpView.vue'
-import test from '@/components/PopUp/test.vue'
-import test2 from '@/components/PopUp/test2.vue'
 import SearchNickname from '@/components/Common/SearchNickname.vue'
 
 
@@ -21,11 +19,6 @@ const router = createRouter({
       path: '/',
       name: 'Main',
       component: MainView,
-    },
-    {
-      path: '/test',
-      name: 'test',
-      component: test,
     },
 
     {

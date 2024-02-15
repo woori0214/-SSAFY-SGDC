@@ -10,13 +10,14 @@ import { useUserStorageStore } from './userStorage';
 
 export const useFeedStore = defineStore('feed', () => {
     const URL = serverURL + v1_URL + 'feed';
+    const URL2 = serverURL + v1_URL;
 
     const userStorage = useUserStorageStore();
 
     //게시물 한 개
     const getFeed = function (feedId, userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .get(`${URL}/feed-info/${feedId}/${userId}`)
                 .then((response) => {
                     resolve(response);
@@ -68,9 +69,9 @@ export const useFeedStore = defineStore('feed', () => {
         // console.log(authorizationAPI.defaults.headers['Authorization']);
         // console.log('----------------------------------------------');
         return new Promise((resolve, reject) => {
-            authorizationAPI
+            axios
                 .get(`${URL}/feed-list/pages`, {
-                    params: { userId: userStorage.getUserInformation().user_id, feedId: last_feed_id, page: 0, size: list_size }
+                    params: { userId: (userStorage.getUserInformation().user_id != null ? userStorage.getUserInformation().user_id : 0), feedId: last_feed_id, page: 0, size: list_size }
                 })
                 .then((response) => {
                     // console.log('get List : ');
@@ -89,7 +90,7 @@ export const useFeedStore = defineStore('feed', () => {
 
 
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .patch(`${URL}/feed-like/${feedId}`, {})
                 .then((res) => {
                     resolve(res)
@@ -104,7 +105,7 @@ export const useFeedStore = defineStore('feed', () => {
     //피드좋아요한 유저 추가
     const addfeedLikeUser = function (feedId, userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/feed-like/${feedId}/${userId}`, {})
                 .then((response) => {
                     resolve(response);
@@ -119,8 +120,32 @@ export const useFeedStore = defineStore('feed', () => {
     //피드 좋아요했다가 취소한 유저 삭제
     const deleteFeedLikeUser = function (feedId, userId) {
         return new Promise((resolve, reject) => {
-            axios
+            authorizationAPI
                 .post(`${URL}/feed-like/${feedId}/${userId}`)
+                .then((response) => {
+                    resolve(response);
+                })
+                .catch((e) => {
+                    console.log(e)
+                    reject(e);
+                });
+        })
+    };
+
+
+    //신고하기
+    const reportUser = function (feedId, userId, reportUserId, reportDetail) {
+
+        return new Promise((resolve, reject) => {
+            authorizationAPI
+                .post(`${URL2}feed-report/report?userId=${userId}&feedId=${feedId}&reportUserId=${reportUserId}&reportDetail=${reportDetail}`, {
+                    // params: {
+                    //     userId: userId,
+                    //     feedId: feedId,
+                    //     reportUserId: reportUserId,
+                    //     reportDetail: reportDetail
+                    // }
+                })
                 .then((response) => {
                     resolve(response);
                 })
@@ -140,13 +165,6 @@ export const useFeedStore = defineStore('feed', () => {
         getFeedListPage,
         updateFeedView,
         getFeedList,
-
-
-
-
-
-
-
-
+        reportUser,
     }
 })

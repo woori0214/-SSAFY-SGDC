@@ -19,13 +19,7 @@
           />
           <div class="feed_user_name">{{ userNickname }}</div>
         </div>
-        <button @click="handleDeclareClick" class="declare_button">
-          <!-- <img
-            src="@/assets/siren.png"
-            alt="Declare Icon"
-            class="declare_icon"
-          /> -->
-        </button>
+        <button @click="handleDeclareClick" class="declare_button"></button>
       </div>
       <div class="feed_content">{{ feedTitle }}</div>
     </div>
@@ -48,7 +42,15 @@
       </div>
       <div class="feed_view_cnt">조회수 {{ views }}</div>
     </div>
-    <PopUpComplaint :showModal="showComplaintBox" :close="closeComplaintBox" />
+    <PopUpComplaint
+      :showModal="showComplaintBox"
+      :close="closeComplaintBox"
+      :feedId="feedId"
+      :user1_id="userId"
+      :user1_nickname="userNickname"
+      :user2_id="otherUserId"
+      :user2_nickname="otherUserNickname"
+    />
   </div>
 </template>
 
@@ -112,6 +114,8 @@ export default {
       type: String,
       default: "/src/components/Feed/FeedImage/no_image_logo.png",
     },
+    otherUserId: { type: Number, default: 0 },
+    otherUserNickname: { type: String, default: "NULL" },
     userBadgeImg: {
       type: String,
       default: null,
@@ -171,7 +175,6 @@ export default {
             .catch((err) => {
               console.log(err);
             });
-          ////////////////////
         })
         .catch((err) => {
           console.log(err);
@@ -188,8 +191,8 @@ export default {
 
     // 프로필페이지 이동
     const moveProfile = (userId) => {
-      router.push({ name: 'MyPage', params: { userId: userId } });
-    }
+      router.push({ name: "MyPage", params: { userId: userId } });
+    };
     return {
       pushFeedLike,
       handleDeclareClick,
@@ -278,7 +281,7 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url('@/assets/siren.png');
+  background-image: url("@/assets/siren.png");
   background-size: contain;
   /* 이미지가 컴포넌트를 완전히 채우도록 설정 */
   background-position: center;
@@ -286,7 +289,7 @@ export default {
   background-repeat: no-repeat;
   transition: border 0.3s ease;
 }
-.declare_button:hover{
+.declare_button:hover {
   border: 2px solid #ff5c5c;
 }
 
