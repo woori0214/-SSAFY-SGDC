@@ -116,7 +116,7 @@ function reset_mailBox() {
 onMounted(() => {
   // reset_mailBox();
 
-  setInterval(reset_mailBox, 30000);
+  setInterval(reset_mailBox, 1000);
 });
 const showModal = ref(false);
 const selectedCategorytoauth = ref("");
