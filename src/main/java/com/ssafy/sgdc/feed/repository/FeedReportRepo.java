@@ -7,5 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FeedReportRepo extends JpaRepository<FeedReport, Integer> {
 
+    int countFeedReportsByUserUserId(int userId);
+
+    int countFeedReportsByReportUserUserId(int userId);
 
 }
