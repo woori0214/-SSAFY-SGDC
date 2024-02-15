@@ -23,6 +23,7 @@ import breathbadge from '@/assets/badges/breath.png';
 import failbadge from '@/assets/badges/fail.png';
 import studybadge from '@/assets/badges/1t.png';
 import pinokiobadge from '@/assets/badges/pinokio.png';
+import ssafypolicebadge from '@/assets/badges/police.png'
 import fighting1badge from '@/assets/badges/fighting1.png';
 
 
@@ -122,7 +123,7 @@ export const useBadgeStore = defineStore('badge', () => {
           },
         {
             badgeId: 16,
-            badgeName: "엉덩이 1t",
+            badgeName: "엉덩이 1톤",
             badgeDetail: "스터디 경쟁 승리 5회 이상 - 엉덩이가 진짜 무거우시네요.",
             badgeImg: studybadge
           },
@@ -131,6 +132,12 @@ export const useBadgeStore = defineStore('badge', () => {
             badgeName: "피노키오",
             badgeDetail: "거짓 인증 - 우리한테 왜 그랬어요...",
             badgeImg: pinokiobadge
+          },
+        {
+            badgeId: 18,
+            badgeName: "싸피 보안관",
+            badgeDetail: "거짓 인증 신고하기 5회 - 거짓말쟁이 피노키오 발견! 탕!",
+            badgeImg: ssafypolicebadge
           },
           
     ])
