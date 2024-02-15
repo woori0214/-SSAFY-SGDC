@@ -9,7 +9,9 @@
                 <!--승패에 따라 이미지 다르게 보여주기-->
                 <div v-for="competdata in competList" :key="competdata.compet_id" class="result_div">
                     <div class="result_img_div">
-                        <img :src="competdata.compet_result === 'SEND_WIN' || competdata.compet_result === 'BOTH_WIN' ? winimg : loseimg"
+                        <img :src="competdata.is_sender === 'Y' ?
+                            (competdata.compet_result === 'BOTH_WIN' || competdata.compet_result === 'SEND_WIN' ? winimg : loseimg) :
+                            (competdata.compet_result === 'BOTH_WIN' || competdata.compet_result === 'RECEIVE_WIN' ? winimg : loseimg)"
                             alt="" class="result_img" @click="openPopup(competdata)">
                     </div>
                 </div>
@@ -25,7 +27,7 @@
                         <!-- Sender and Receiver with Images -->
                         <div class="match-details">
                             <div class="sender">
-                                <img :src=selectedMatchingData.user_image_auth alt="Sender Image">
+                                <img :src=selectedMatchingData.user_image_auth alt="">
                                 <h3>{{ userNickname }}</h3>
                             </div>
                             <div class="result_category">
@@ -34,7 +36,7 @@
                                 <h2>vs</h2>
                             </div>
                             <div class="receiver">
-                                <img :src=selectedMatchingData.other_image_auth alt="Receiver Image">
+                                <img :src=selectedMatchingData.other_image_auth alt="">
                                 <h3>{{ selectedMatchingData.other_nickname }}</h3>
                             </div>
                         </div>
