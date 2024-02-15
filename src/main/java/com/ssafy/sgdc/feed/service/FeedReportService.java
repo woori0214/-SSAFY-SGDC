@@ -39,6 +39,10 @@ public class FeedReportService {
         Feed feed = feedRepo.findByFeedId(feedId)
                 .orElseThrow(() -> new RuntimeException("[FeedReportService][createFeedReport] 해당 피드를 찾을 수 없습니다."));
 
+        if (feedReportRepo.existsByReportFeedFeedIdAndUserUserIdAndReportUserUserId(feedId, userId, reportUserId)) {
+            throw new RuntimeException("이미 신고한 피드입니다.");
+        }
+
         FeedReport feedReport = FeedReport.of(0,user,reportUser,feed,reportDetail);
 
         feedReportRepo.save(feedReport);

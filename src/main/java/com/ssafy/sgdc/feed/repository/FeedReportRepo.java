@@ -11,4 +11,6 @@ public interface FeedReportRepo extends JpaRepository<FeedReport, Integer> {
 
     int countFeedReportsByReportUserUserId(int userId);
 
+    boolean existsByReportFeedFeedIdAndUserUserIdAndReportUserUserId(int feedId, int userId, int reportUserId);
+
 }
