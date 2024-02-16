@@ -1,8 +1,10 @@
 <template>
-  <div class="view_body">
-    <h1>경쟁모드</h1>
-    <div class="select_body">
-      <CompetitionSelect></CompetitionSelect>
+  <div class="competmode_div">
+    <div class="compet_select">
+      <h1 class="compet_title">경쟁모드</h1>
+      <div class="select_body">
+        <CompetitionSelect></CompetitionSelect>
+      </div>
     </div>
     <div class="mail_box_body">
       <CompetitionMailbox></CompetitionMailbox>
@@ -17,16 +19,60 @@ import CompetitionSelect from "@/components/Competition/CompetitionSelect.vue";
 
 <style scoped>
 .view_body {
-  border: 2px solid red;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex: 1;
 }
+
 .select_body {
-  border: 2px solid rgb(32, 29, 255);
+  display: flex;
+  justify-content: center;
 }
+
 .mail_box_body {
-  border: 2px solid pink;
-  max-height: 520px;
+  max-height: 380px; /* 최대 높이를 380px로 설정 */
+  height: auto; /* 높이를 내용물에 따라 자동으로 조절 */
+  margin: 0;
+  margin-bottom: 5%;
+}
+
+.compet_title {
+  background-color: #83b0e1;
+  border-radius: 10px;
+  width: 60%;
+  color: white;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 20px;
+}
+
+.competmode_div {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* justify-content: center;
+    align-items: center; */
+  /* background-color: #e1ecf7;
+  border-radius: 30px; */
+  text-align: center;
+}
+
+.compet_select{
+  background-color: #e1ecf7;
+  border-radius: 30px;
+}
+
+.main_box {
+  width: calc(100% - 30px);
+  display: flex;
+  flex-direction: column;
+  border: none;
+  border-radius: 25px;
+  margin: 30px 10px;
+  background-color: #e1ecf7;
+  padding: 0px;
 }
 </style>

@@ -2,7 +2,7 @@
     <div class="main_view">
         <MainFeedList />
         <MainChallengeBoard />
-        <MainRanking />
+        <!-- <MainRanking /> -->
         <MainModeButton />
     </div>
 </template>
@@ -21,7 +21,7 @@ import MainModeButton from '@/components/Main/MainModeButton.vue';
     /* border: 2px solid red; */
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 40px;
 
     /* test ccs */
     padding-bottom: 60px;
